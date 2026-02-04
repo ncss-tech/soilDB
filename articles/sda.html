@@ -748,7 +748,7 @@ vintage and patterns in historical data population, to filter by horizon
 designation.</p>
 <p>For instance, a logical statement to exclude the master horizon
 designation “O” for organics:</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" tabindex="-1"></a>AND desgnmaster <span class="sc">!=</span> <span class="st">'O'</span></span></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb25-1"><a href="#cb25-1" tabindex="-1"></a><span class="kw">AND</span> desgnmaster <span class="op">!=</span> <span class="st">'O'</span></span></code></pre></div>
 <p>While using horizon designations is conceptually appealing, it is
 problematic when it is the only logic you are using. Horizon
 designations were not historically populated for the aggregate soil
@@ -1124,22 +1124,20 @@ without the need for chunking or simplification.</p>
 <li>
 <strong>Add WHERE clause</strong> to reduce result set:</li>
 </ol>
-<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Bad: will return &gt;100k records across all of SSURGO</span></span>
-<span><span class="va">q</span> <span class="op">&lt;-</span> <span class="st">"SELECT * FROM component"</span></span>
-<span>   </span>
-<span><span class="co"># Good: specific component name pattern in WHERE clause</span></span>
-<span><span class="va">q</span> <span class="op">&lt;-</span> <span class="st">"SELECT * FROM component </span></span>
-<span><span class="st">      WHERE compname LIKE 'Miami%'"</span></span></code></pre></div>
+<p>This query will return &gt;100k records (all components across all of
+SSURGO and STATSGO) (<strong>bad</strong>):</p>
+<div class="sourceCode" id="cb40"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb40-1"><a href="#cb40-1" tabindex="-1"></a><span class="kw">SELECT</span> <span class="op">*</span> <span class="kw">FROM</span> component</span></code></pre></div>
+<p>This query selects a specific component name pattern in
+<code>WHERE</code> clause (good):</p>
+<div class="sourceCode" id="cb41"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb41-1"><a href="#cb41-1" tabindex="-1"></a><span class="kw">SELECT</span> <span class="op">*</span> <span class="kw">FROM</span> component </span>
+<span id="cb41-2"><a href="#cb41-2" tabindex="-1"></a><span class="kw">WHERE</span> compname <span class="kw">LIKE</span> <span class="st">'Miami%'</span></span></code></pre></div>
 <ol start="2" style="list-style-type: decimal">
 <li>
 <strong>Use TOP clause</strong> to limit number of results (useful
 for testing):</li>
 </ol>
-<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Test with small result set first</span></span>
-<span><span class="va">q</span> <span class="op">&lt;-</span> <span class="st">"SELECT TOP 100 * FROM chorizon"</span></span>
-<span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/SDA_query.html">SDA_query</a></span><span class="op">(</span><span class="va">q</span><span class="op">)</span></span></code></pre></div>
+<p>Use a <code>TOP</code> clause to test with small result set first</p>
+<div class="sourceCode" id="cb42"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb42-1"><a href="#cb42-1" tabindex="-1"></a><span class="kw">SELECT</span> TOP <span class="dv">100</span> <span class="op">*</span> <span class="kw">FROM</span> chorizon</span></code></pre></div>
 <p>TOP can be used after sorting with <code>ORDER BY</code> to easily
 find the values associated with an ordered sequence. For instance, if
 you <code>ORDER BY comppct_r DESC</code> (order by component percentage
@@ -1159,19 +1157,16 @@ query:</li>
 <p>Efficient queries often perform filtering operations as part of their
 JOIN statements. This can improve server-side query planning and reduce
 overhead that is not needed for the final result.</p>
-<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Return aggregated results (fewer rows) instead of raw data</span></span>
-<span><span class="co">#  and constrain musym in join to mapunit instead of WHERE</span></span>
-<span><span class="va">q</span> <span class="op">&lt;-</span> <span class="st">"</span></span>
-<span><span class="st">SELECT mu.mukey, </span></span>
-<span><span class="st">  COUNT(*) AS n_hz,</span></span>
-<span><span class="st">  AVG(ch.claytotal_r) AS avg_clay</span></span>
-<span><span class="st">FROM component co</span></span>
-<span><span class="st">INNER JOIN mapunit mu ON mu.mukey = co.mukey AND mu.musym = '101'</span></span>
-<span><span class="st">INNER JOIN chorizon ch ON ch.cokey = co.cokey</span></span>
-<span><span class="st">GROUP BY mu.mukey</span></span>
-<span><span class="st">WHERE compname LIKE 'Musick%'</span></span>
-<span><span class="st">"</span></span></code></pre></div>
+<p>Return aggregated results (fewer rows) instead of raw data and
+constrain musym in join to mapunit instead of WHERE:</p>
+<div class="sourceCode" id="cb43"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb43-1"><a href="#cb43-1" tabindex="-1"></a><span class="kw">SELECT</span> mu.mukey, </span>
+<span id="cb43-2"><a href="#cb43-2" tabindex="-1"></a>  <span class="fu">COUNT</span>(<span class="op">*</span>) <span class="kw">AS</span> n_hz,</span>
+<span id="cb43-3"><a href="#cb43-3" tabindex="-1"></a>  <span class="fu">AVG</span>(ch.claytotal_r) <span class="kw">AS</span> avg_clay</span>
+<span id="cb43-4"><a href="#cb43-4" tabindex="-1"></a><span class="kw">FROM</span> component co</span>
+<span id="cb43-5"><a href="#cb43-5" tabindex="-1"></a><span class="kw">INNER</span> <span class="kw">JOIN</span> mapunit mu <span class="kw">ON</span> mu.mukey <span class="op">=</span> co.mukey <span class="kw">AND</span></span>
+<span id="cb43-6"><a href="#cb43-6" tabindex="-1"></a><span class="kw">INNER</span> <span class="kw">JOIN</span> chorizon ch <span class="kw">ON</span> ch.cokey <span class="op">=</span> co.cokey</span>
+<span id="cb43-7"><a href="#cb43-7" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> mu.mukey</span>
+<span id="cb43-8"><a href="#cb43-8" tabindex="-1"></a><span class="kw">WHERE</span> compname <span class="kw">LIKE</span> <span class="st">'Musick%'</span></span></code></pre></div>
 <ol start="4" style="list-style-type: decimal">
 <li>
 <strong>Explicitly</strong> select the columns you need:</li>
@@ -1181,22 +1176,19 @@ clause.</p>
 <p>While <code>SELECT *</code> is fine to use for testing, it is prone
 to issues if schemas change, as well as returning more data than is
 necessary in most cases.</p>
-<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># `SELECT *` will return all columns, usually including many columns you do not need</span></span>
-<span><span class="va">q</span> <span class="op">&lt;-</span> <span class="st">"SELECT TOP 1 *</span></span>
-<span><span class="st">      FROM mapunit</span></span>
-<span><span class="st">      INNER JOIN component ON mapunit.mukey = component.mukey</span></span>
-<span><span class="st">WHERE compname LIKE 'Musick%'</span></span>
-<span><span class="st">"</span></span></code></pre></div>
-<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Use `SELECT column1, column2, ...` for concise results, with no duplicated columns in complex joins</span></span>
-<span><span class="va">q</span> <span class="op">&lt;-</span> <span class="st">"</span></span>
-<span><span class="st">SELECT TOP 1 mapunit.mukey, musym, muname, </span></span>
-<span><span class="st">             compname, localphase, comppct_r, majcompflag, compkind, cokey</span></span>
-<span><span class="st">FROM mapunit</span></span>
-<span><span class="st">INNER JOIN component ON mapunit.mukey = component.mukey</span></span>
-<span><span class="st">WHERE compname LIKE 'Musick%'</span></span>
-<span><span class="st">"</span></span></code></pre></div>
+<p><code>SELECT *</code> will return all columns, usually including many
+columns you do not need:</p>
+<div class="sourceCode" id="cb44"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb44-1"><a href="#cb44-1" tabindex="-1"></a><span class="kw">SELECT</span> TOP <span class="dv">1</span> <span class="op">*</span></span>
+<span id="cb44-2"><a href="#cb44-2" tabindex="-1"></a><span class="kw">FROM</span> mapunit</span>
+<span id="cb44-3"><a href="#cb44-3" tabindex="-1"></a><span class="kw">INNER</span> <span class="kw">JOIN</span> component <span class="kw">ON</span> mapunit.mukey <span class="op">=</span> component.mukey</span>
+<span id="cb44-4"><a href="#cb44-4" tabindex="-1"></a><span class="kw">WHERE</span> compname <span class="kw">LIKE</span> <span class="st">'Musick%'</span></span></code></pre></div>
+<p>Use <code>SELECT column1, column2, ...</code> for concise results,
+with no duplicated columns in complex joins:</p>
+<div class="sourceCode" id="cb45"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb45-1"><a href="#cb45-1" tabindex="-1"></a><span class="kw">SELECT</span> TOP <span class="dv">1</span> mapunit.mukey, musym, muname, </span>
+<span id="cb45-2"><a href="#cb45-2" tabindex="-1"></a>             compname, localphase, comppct_r, majcompflag, compkind, cokey</span>
+<span id="cb45-3"><a href="#cb45-3" tabindex="-1"></a><span class="kw">FROM</span> mapunit</span>
+<span id="cb45-4"><a href="#cb45-4" tabindex="-1"></a><span class="kw">INNER</span> <span class="kw">JOIN</span> component <span class="kw">ON</span> mapunit.mukey <span class="op">=</span> component.mukey</span>
+<span id="cb45-5"><a href="#cb45-5" tabindex="-1"></a><span class="kw">WHERE</span> compname <span class="kw">LIKE</span> <span class="st">'Musick%'</span></span></code></pre></div>
 <p>If a column name occurs multiple times in different tables, you need
 specify which one you want it to come from with
 <code>&lt;tablename&gt;.&lt;columname&gt;</code> syntax.</p>
@@ -1204,14 +1196,11 @@ specify which one you want it to come from with
 <code>&lt;tablename&gt;.*</code> syntax, for example here we get all
 columns from <code>chfrags</code>, and specific columns from
 <code>chorizon</code> and <code>component</code>:</p>
-<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">q</span> <span class="op">&lt;-</span> <span class="st">"</span></span>
-<span><span class="st">SELECT hzname, chfrags.*, component.cokey</span></span>
-<span><span class="st">FROM chfrags</span></span>
-<span><span class="st">INNER JOIN chorizon ON chorizon.chkey = chfrags.chkey</span></span>
-<span><span class="st">INNER JOIN component ON component.cokey = chorizon.cokey</span></span>
-<span><span class="st">WHERE compname LIKE 'Musick%'</span></span>
-<span><span class="st">"</span></span></code></pre></div>
+<div class="sourceCode" id="cb46"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb46-1"><a href="#cb46-1" tabindex="-1"></a><span class="kw">SELECT</span> hzname, chfrags.<span class="op">*</span>, component.cokey</span>
+<span id="cb46-2"><a href="#cb46-2" tabindex="-1"></a><span class="kw">FROM</span> chfrags</span>
+<span id="cb46-3"><a href="#cb46-3" tabindex="-1"></a><span class="kw">INNER</span> <span class="kw">JOIN</span> chorizon <span class="kw">ON</span> chorizon.chkey <span class="op">=</span> chfrags.chkey</span>
+<span id="cb46-4"><a href="#cb46-4" tabindex="-1"></a><span class="kw">INNER</span> <span class="kw">JOIN</span> component <span class="kw">ON</span> component.cokey <span class="op">=</span> chorizon.cokey</span>
+<span id="cb46-5"><a href="#cb46-5" tabindex="-1"></a><span class="kw">WHERE</span> compname <span class="kw">LIKE</span> <span class="st">'Musick%'</span></span></code></pre></div>
 <ol start="5" style="list-style-type: decimal">
 <li>
 <strong>Use <code><a href="../reference/makeChunks.html">makeChunks()</a></code> for large vectors</strong>
@@ -1233,26 +1222,23 @@ covered extensively in the next section.</p>
 <div class="section level4">
 <h4 id="null-handling">NULL Handling<a class="anchor" aria-label="anchor" href="#null-handling"></a>
 </h4>
-<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Check and filter for non-NULL - SDA uses IS NULL / IS NOT NULL</span></span>
-<span><span class="va">q</span> <span class="op">&lt;-</span> <span class="st">"SELECT TOP 10 * FROM chorizon WHERE claytotal_r IS NOT NULL"</span></span>
-<span></span>
-<span><span class="co"># Use ISNULL() to provide defaults e.g. convert missing clay content to 0</span></span>
-<span><span class="va">q</span> <span class="op">&lt;-</span> <span class="st">"SELECT TOP 10 chkey, claytotal_r, ISNULL(claytotal_r, 0) AS clay FROM chorizon"</span></span></code></pre></div>
+<p>Check and filter for non-NULL - SDA uses IS NULL / IS NOT NULL:</p>
+<div class="sourceCode" id="cb47"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb47-1"><a href="#cb47-1" tabindex="-1"></a><span class="kw">SELECT</span> TOP <span class="dv">10</span> <span class="op">*</span> <span class="kw">FROM</span> chorizon <span class="kw">WHERE</span> claytotal_r <span class="kw">IS</span> <span class="kw">NOT</span> <span class="kw">NULL</span></span></code></pre></div>
+<p>Use <code>ISNULL()</code> to provide defaults such as converting
+missing clay content to 0</p>
+<div class="sourceCode" id="cb48"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb48-1"><a href="#cb48-1" tabindex="-1"></a><span class="kw">SELECT</span> TOP <span class="dv">10</span> chkey, claytotal_r, ISNULL(claytotal_r, <span class="dv">0</span>) <span class="kw">AS</span> clay </span>
+<span id="cb48-2"><a href="#cb48-2" tabindex="-1"></a><span class="kw">FROM</span> chorizon</span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="type-casting">Type Casting<a class="anchor" aria-label="anchor" href="#type-casting"></a>
 </h4>
-<div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># CAST for explicit type conversion</span></span>
-<span><span class="va">q</span> <span class="op">&lt;-</span> <span class="st">"</span></span>
-<span><span class="st">SELECT TOP 10 </span></span>
-<span><span class="st">  claytotal_r,</span></span>
-<span><span class="st">  CAST(claytotal_r AS INT) AS clay_int,</span></span>
-<span><span class="st">  CAST(chkey AS CHAR(10)) AS chkey_str</span></span>
-<span><span class="st">FROM chorizon</span></span>
-<span><span class="st">WHERE claytotal_r != CAST(claytotal_r AS INT) </span></span>
-<span><span class="st">"</span></span></code></pre></div>
+<p>Use <code>CAST()</code> for explicit type conversion:</p>
+<div class="sourceCode" id="cb49"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb49-1"><a href="#cb49-1" tabindex="-1"></a><span class="kw">SELECT</span> TOP <span class="dv">10</span> </span>
+<span id="cb49-2"><a href="#cb49-2" tabindex="-1"></a>  claytotal_r,</span>
+<span id="cb49-3"><a href="#cb49-3" tabindex="-1"></a>  <span class="fu">CAST</span>(claytotal_r <span class="kw">AS</span> <span class="dt">INT</span>) <span class="kw">AS</span> clay_int,</span>
+<span id="cb49-4"><a href="#cb49-4" tabindex="-1"></a>  <span class="fu">CAST</span>(chkey <span class="kw">AS</span> <span class="dt">CHAR</span>(<span class="dv">10</span>)) <span class="kw">AS</span> chkey_str</span>
+<span id="cb49-5"><a href="#cb49-5" tabindex="-1"></a><span class="kw">FROM</span> chorizon</span>
+<span id="cb49-6"><a href="#cb49-6" tabindex="-1"></a><span class="kw">WHERE</span> claytotal_r <span class="op">!=</span> <span class="fu">CAST</span>(claytotal_r <span class="kw">AS</span> <span class="dt">INT</span>) </span></code></pre></div>
 <p><strong>Note:</strong> in example above, casting to INT is equivalent
 to truncating the value by removing decimals, it does not follow the
 rounding rules that R <code><a href="https://rspatial.github.io/terra/reference/math-generics.html" class="external-link">round()</a></code> does, for example.</p>
@@ -1260,12 +1246,10 @@ rounding rules that R <code><a href="https://rspatial.github.io/terra/reference/
 <div class="section level4">
 <h4 id="string-operations">String Operations<a class="anchor" aria-label="anchor" href="#string-operations"></a>
 </h4>
-<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Wildcards with LIKE</span></span>
-<span><span class="va">q</span> <span class="op">&lt;-</span> <span class="st">"SELECT * FROM mapunit WHERE muname LIKE '%clay%'"</span></span>
-<span></span>
-<span><span class="co"># String concatenation with +</span></span>
-<span><span class="va">q</span> <span class="op">&lt;-</span> <span class="st">"SELECT areasymbol + '-' + musym AS areamusym FROM mapunit"</span></span></code></pre></div>
+<p>You can use wildcards with <code>LIKE</code> operator:</p>
+<div class="sourceCode" id="cb50"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb50-1"><a href="#cb50-1" tabindex="-1"></a><span class="kw">SELECT</span> <span class="op">*</span> <span class="kw">FROM</span> mapunit <span class="kw">WHERE</span> muname <span class="kw">LIKE</span> <span class="st">'%clay%'</span></span></code></pre></div>
+<p>Perform string concatenation with <code>+</code> operator:</p>
+<div class="sourceCode" id="cb51"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb51-1"><a href="#cb51-1" tabindex="-1"></a><span class="kw">SELECT</span> areasymbol <span class="op">+</span> <span class="st">'-'</span> <span class="op">+</span> musym <span class="kw">AS</span> areamusym <span class="kw">FROM</span> mapunit</span></code></pre></div>
 <hr>
 </div>
 </div>
@@ -1293,7 +1277,7 @@ just single chunk, or a result that is truncated using a
 <p>Suppose you have 5000 map unit keys to query. We can break that set
 up into chunks of 1000 map units, and iterate over each chunk using
 <code><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply()</a></code></p>
-<div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">large_mukey_list</span> <span class="op">&lt;-</span> <span class="fl">461994</span><span class="op">:</span><span class="fl">466995</span></span>
 <span></span>
 <span><span class="co"># Divide into chunks of 1000</span></span>
@@ -1318,7 +1302,7 @@ up into chunks of 1000 map units, and iterate over each chunk using
 <pre><code><span><span class="co">## Chunk mukey 464994 to 465993</span></span></code></pre>
 <pre><code><span><span class="co">## Chunk mukey 465994 to 466993</span></span></code></pre>
 <pre><code><span><span class="co">## Chunk mukey 466994 to 466995</span></span></code></pre>
-<div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb59"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Combine results</span></span>
 <span><span class="va">all_results</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">rbind</span>, <span class="va">results_list</span><span class="op">)</span></span></code></pre></div>
 <p>The above approach is readily converted to parallel processing, for
@@ -1336,7 +1320,7 @@ Errors section above).</p>
 </h3>
 <p>Here we query soil properties for 6 soil survey areas in chunks of
 2.</p>
-<div class="sourceCode" id="cb57"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">test_areasymbols</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CA067"</span>, <span class="st">"CA077"</span>, <span class="st">"CA632"</span>, <span class="st">"CA644"</span>, <span class="st">"CA630"</span>, <span class="st">"CA649"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Chunk into groups of 5</span></span>
@@ -1369,7 +1353,7 @@ Errors section above).</p>
 <pre><code><span><span class="co">## Chunk CA067, CA077 completed</span></span></code></pre>
 <pre><code><span><span class="co">## Chunk CA632, CA644 completed</span></span></code></pre>
 <pre><code><span><span class="co">## Chunk CA630, CA649 completed</span></span></code></pre>
-<div class="sourceCode" id="cb61"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb64"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">all_results</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">rbind</span>, <span class="va">results_list</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="va">all_results</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##      mukey musym                                           muname    cokey</span></span>
@@ -1421,6 +1405,269 @@ subqueries, and complex filtering logic. Identify any areas of repeated
 logic and refactor to simplify redundant steps. If your query works as
 expected on a small data set, and you have optimized it, then consider
 breaking your big query up into (more) chunks.</p>
+<hr>
+</div>
+</div>
+<div class="section level2">
+<h2 id="spatial-queries">Spatial Queries<a class="anchor" aria-label="anchor" href="#spatial-queries"></a>
+</h2>
+<p>This document mainly focuses on details of custom spatial queries
+using the low-level <code><a href="../reference/SDA_query.html">SDA_query()</a></code> function, but there are
+several functions that provide high-level convenience interface for
+spatial queries in <code>soilDB</code>. First we will discuss converting
+spatial data to Well-Known Text for use in generating custom queries.
+Then we will discuss the high- and low-level interfaces in
+<code>soilDB</code>.</p>
+<div class="section level3">
+<h3 id="converting-sf-objects-to-wkt">Converting sf Objects to WKT<a class="anchor" aria-label="anchor" href="#converting-sf-objects-to-wkt"></a>
+</h3>
+<p><strong>Important:</strong> SDA requires spatial inputs (WKT) to be
+in <strong>WGS84 (EPSG:4326)</strong> geographic coordinates.</p>
+<p>Passing projected coordinates (like UTM or Albers) will result in
+query failures or zero results.</p>
+<p>SDA does store an alternate projected version of the geometry data
+(e.g. <code>mupolygonproj</code>, rather than
+<code>mupolygongeo</code>). The projection is a Web Mercator projection
+(<code>"EPSG:3857"</code>) so it is best avoided in analysis, though it
+is an option for visualization web map applications that lack capability
+to project the data.</p>
+<p>You can use <code>sf</code> to define a geometry, such as a bounding
+recatangle, and convert it to WKT (Well-Known Text) for spatial
+queries:</p>
+<div class="sourceCode" id="cb66"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Define a bounding box for a region of interest</span></span>
+<span><span class="co"># (xmin, ymin, xmax, ymax)</span></span>
+<span><span class="va">bbox</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">120.9</span>, <span class="fl">37.7</span>, <span class="op">-</span><span class="fl">120.8</span>, <span class="fl">37.8</span><span class="op">)</span></span>
+<span><span class="va">bbox_sf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sfc.html" class="external-link">st_as_sfc</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_bbox.html" class="external-link">st_bbox</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>  xmin <span class="op">=</span> <span class="va">bbox</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,</span>
+<span>  ymin <span class="op">=</span> <span class="va">bbox</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>,</span>
+<span>  xmax <span class="op">=</span> <span class="va">bbox</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span>,</span>
+<span>  ymax <span class="op">=</span> <span class="va">bbox</span><span class="op">[</span><span class="fl">4</span><span class="op">]</span></span>
+<span><span class="op">)</span>, crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">wkt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_text.html" class="external-link">st_as_text</a></span><span class="op">(</span><span class="va">bbox_sf</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">wkt</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] "POLYGON ((-120.9 37.7, -120.8 37.7, -120.8 37.8, -120.9 37.8, -120.9 37.7))"</span></span></code></pre>
+</div>
+<div class="section level3">
+<h3 id="high-level-functions">High-level Functions<a class="anchor" aria-label="anchor" href="#high-level-functions"></a>
+</h3>
+<p>The soilDB package provides two higher-level functions
+(<code><a href="../reference/SDA_spatialQuery.html">SDA_spatialQuery()</a></code> and <code><a href="../reference/fetchSDA_spatial.html">fetchSDA_spatial()</a></code>)
+that make obtaining spatial data easier. Both of these functions
+internally use <code><a href="../reference/SDA_query.html">SDA_query()</a></code> and are often a better option
+for most use cases compared to crafting a custom spatial query.</p>
+<ul>
+<li><p><strong><code><a href="../reference/SDA_spatialQuery.html">SDA_spatialQuery()</a></code></strong>: spatial inputs
+(e.g. point location, AOI rectangle) =&gt; spatial or tabular
+outputs</p></li>
+<li><p><strong><code><a href="../reference/fetchSDA_spatial.html">fetchSDA_spatial()</a></code></strong>: tabular inputs
+(e.g. map unit key, area symbol, ecological site ID) =&gt; spatial
+outputs</p></li>
+</ul>
+<p>The functions take different inputs, and support various outputs
+including SSURGO and STATSGO2 map unit polygon geometry, special feature
+points/lines/polygons, soil survey area boundaries, Major Land Resource
+Area (MLRA) boundaries, or simple tabular information using spatial data
+as input. These functions will handle projection to
+<code>"EPSG:4326"</code> internally as long as the input data has the
+correct CRS metadata.</p>
+<div class="sourceCode" id="cb68"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Example: Retrieve map unit polygons that intersect a bounding box</span></span>
+<span><span class="co"># This handles the WKT conversion and query construction automatically</span></span>
+<span><span class="co"># geomIntersection = TRUE clips the polygons to the bounding box</span></span>
+<span></span>
+<span><span class="va">polygons</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/SDA_spatialQuery.html">SDA_spatialQuery</a></span><span class="op">(</span><span class="va">bbox_sf</span>, what <span class="op">=</span> <span class="st">"mupolygon"</span>, geomIntersection <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">polygons</span></span></code></pre></div>
+<pre><code><span><span class="co">## Simple feature collection with 334 features and 2 fields</span></span>
+<span><span class="co">## Geometry type: GEOMETRY</span></span>
+<span><span class="co">## Dimension:     XY</span></span>
+<span><span class="co">## Bounding box:  xmin: -120.9 ymin: 37.7 xmax: -120.8 ymax: 37.8</span></span>
+<span><span class="co">## Geodetic CRS:  WGS 84</span></span>
+<span><span class="co">## First 10 features:</span></span>
+<span><span class="co">##      mukey   area_ac                           geom</span></span>
+<span><span class="co">## 1  1403416  26.74260 POLYGON ((-120.8998 37.7873...</span></span>
+<span><span class="co">## 2  1403416 325.55235 POLYGON ((-120.8872 37.7893...</span></span>
+<span><span class="co">## 3  1403425  53.06925 POLYGON ((-120.8024 37.7863...</span></span>
+<span><span class="co">## 4  1403413 108.53249 POLYGON ((-120.8788 37.7704...</span></span>
+<span><span class="co">## 5  1403412 527.89351 POLYGON ((-120.8945 37.7695...</span></span>
+<span><span class="co">## 6  1403420  82.85632 POLYGON ((-120.8021 37.7895...</span></span>
+<span><span class="co">## 7  1403421  15.05385 POLYGON ((-120.8565 37.7781...</span></span>
+<span><span class="co">## 8  1403414  22.79950 POLYGON ((-120.851 37.77987...</span></span>
+<span><span class="co">## 9  1403416  31.63604 MULTIPOLYGON (((-120.8985 3...</span></span>
+<span><span class="co">## 10 1403413  20.90871 POLYGON ((-120.8963 37.7686...</span></span></code></pre>
+<p>Note that <code>bbox_sf</code> could be any geometry. Here is is a
+rectangular polygon, but it could be a point, or collection of points,
+or lines, or similar.</p>
+<p><code><a href="../reference/SDA_spatialQuery.html">SDA_spatialQuery()</a></code> allows you to get tabular data based
+on a spatial geometry.</p>
+<p>For instance, to simply identify what soil survey area or map unit a
+single point overlaps with, you can do something like the following.</p>
+<div class="sourceCode" id="cb70"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Example: get some legend and mapunit-level tabular data at a point</span></span>
+<span><span class="va">point_sf</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>wkt <span class="op">=</span> <span class="st">"POINT (-120.85 37.75)"</span><span class="op">)</span>,</span>
+<span>                         wkt <span class="op">=</span> <span class="st">"wkt"</span>,</span>
+<span>                         crs <span class="op">=</span> <span class="st">"EPSG:4236"</span><span class="op">)</span></span>
+<span><span class="va">ssa</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/SDA_spatialQuery.html">SDA_spatialQuery</a></span><span class="op">(</span></span>
+<span>  <span class="va">point_sf</span>,</span>
+<span>  what <span class="op">=</span> <span class="st">"areasymbol"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">ssa</span></span></code></pre></div>
+<pre><code><span><span class="co">##   areasymbol</span></span>
+<span><span class="co">## 1      CA644</span></span></code></pre>
+<div class="sourceCode" id="cb72"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">mu</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/SDA_spatialQuery.html">SDA_spatialQuery</a></span><span class="op">(</span></span>
+<span>  <span class="va">point_sf</span>,</span>
+<span>  what <span class="op">=</span> <span class="st">"mukey"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">mu</span></span></code></pre></div>
+<pre><code><span><span class="co">##    mukey                                   muname</span></span>
+<span><span class="co">## 1 462643 Madera sandy loam, 0 to 2 percent slopes</span></span></code></pre>
+<p>Above we pass a WKT string (the result of
+<code>sf::st_centroid(bbox_sf)</code>) within a data.frame to
+<code><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">sf::st_as_sf()</a></code>. We specify the <code>wkt</code> argument to
+specify which column the WKT string is stored in to construct our
+spatial query object.</p>
+<p>This section will be expanded in the future, but for now an example
+application of the two higher-level functions is available in the <a href="dominant-es.html">“Dominant Ecological Site” vignette</a>.</p>
+</div>
+<div class="section level3">
+<h3 id="spatial-queries-the-two-step-pattern">Spatial Queries: The Two-Step Pattern<a class="anchor" aria-label="anchor" href="#spatial-queries-the-two-step-pattern"></a>
+</h3>
+<p>For optimal performance, separate your spatial and tabular queries.
+Fetch the list of intersecting map unit keys (<code>mukey</code>) first,
+then use those keys to query attribute tables.</p>
+<p>This avoids joining heavy geometry columns with complex attribute
+tables, which can trigger the 32Mb serialization limit. Then we can use
+the WKT in a custom SDA query to get map units intersecting the bounding
+box:</p>
+<div class="sourceCode" id="cb74"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Step 1: Get the mukeys that intersect the bounding box</span></span>
+<span><span class="va">q</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"</span></span>
+<span><span class="st">  SELECT DISTINCT mu.mukey</span></span>
+<span><span class="st">  FROM mapunit AS mu</span></span>
+<span><span class="st">  INNER JOIN mupolygon AS mp ON mp.mukey = mu.mukey</span></span>
+<span><span class="st">  WHERE mp.mupolygongeo.STIntersects(geometry::STGeomFromText('%s', 4326)) = 1</span></span>
+<span><span class="st">"</span>, <span class="va">wkt</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">spatial_result</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/SDA_query.html">SDA_query</a></span><span class="op">(</span><span class="va">q</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="va">spatial_result</span>, <span class="fl">5</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##    mukey</span></span>
+<span><span class="co">## 1 462527</span></span>
+<span><span class="co">## 2 462554</span></span>
+<span><span class="co">## 3 462555</span></span>
+<span><span class="co">## 4 462558</span></span>
+<span><span class="co">## 5 462566</span></span></code></pre>
+<p>This query uses special geospatial functions defined in SQL Server to
+perform the geometric operations (in this case “intersection”)</p>
+</div>
+<div class="section level3">
+<h3 id="sda-spatial-helper-functions">SDA Spatial Helper Functions<a class="anchor" aria-label="anchor" href="#sda-spatial-helper-functions"></a>
+</h3>
+<p>In addition to standard T-SQL spatial functions, SDA provides
+pre-defined <strong>Table-Valued Functions</strong> (TVFs) optimized for
+intersections.</p>
+<ul>
+<li>
+<code>SDA_Get_Mukey_from_intersection_with_WktWgs84(wkt)</code>:
+Returns <code>mukey</code> values intersecting the input WKT.</li>
+<li>
+<code>SDA_Get_MupolygonWktWgs84_from_Mukey(mukey)</code>: Returns
+WKT geometry for a specific <code>mukey</code>.</li>
+</ul>
+<p>This makes the logic much simpler for the common operations of
+finding <code>mukey</code> given a spatial location or geometry:</p>
+<div class="sourceCode" id="cb76"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Input MUST be WKT in WGS84 (EPSG:4326)</span></span>
+<span><span class="va">q</span> <span class="op">&lt;-</span> <span class="st">"SELECT * FROM SDA_Get_Mukey_from_intersection_with_WktWgs84('POINT(-120.9 37.7)')"</span></span>
+<span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/SDA_query.html">SDA_query</a></span><span class="op">(</span><span class="va">q</span><span class="op">)</span></span></code></pre></div>
+<p>Also, you can do the inverse (map unit key to geometry):</p>
+<div class="sourceCode" id="cb77"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Step 2: Get Geometry from Map Unit Key (mukey)</span></span>
+<span><span class="co"># Useful for retrieving the polygon boundary for a specific map unit</span></span>
+<span><span class="va">target_mukey</span> <span class="op">&lt;-</span> <span class="fl">461994</span></span>
+<span></span>
+<span><span class="va">q</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"SELECT * FROM SDA_Get_MupolygonWktWgs84_from_Mukey('%s')"</span>, <span class="va">target_mukey</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Result contains the mukey and the geometry in WKT format</span></span>
+<span><span class="va">geometry_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/SDA_query.html">SDA_query</a></span><span class="op">(</span><span class="va">q</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="va">geometry_df</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           MupolygonWktWgs84</span></span>
+<span><span class="co">## 1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 POLYGON ((-121.032455555662 37.9592152603984, -121.03285202503 37.9591849129885, -121.033072907654 37.9591081653858, -121.033328454278 37.9589770304221, -121.033728769482 37.9588035660117, -121.033900712322 37.9587435334631, -121.034102285527 37.9587105626138, -121.034226937322 37.9587131055087, -121.034372855748 37.9587426135551, -121.034498021914 37.9588254436972, -121.034637122971 37.9588730126591, -121.034725363384 37.9588563818132, -121.034868509489 37.9590389438022, -121.034869562297 37.9591653228325, -121.03475359382 37.9593522473175, -121.034173981163 37.9596399606279, -121.033980610935 37.9597719381858, -121.032316040062 37.961123123151, -121.032060957959 37.9612624734441, -121.031769961277 37.9613566706344, -121.031605303085 37.9614890992556, -121.031372905269 37.961926794296, -121.031278725938 37.962186772691, -121.031253880828 37.9624202209759, -121.030979949929 37.963433991072, -121.030853664442 37.964009330753, -121.030613352925 37.9642666362517, -121.029817684926 37.9645320941986, -121.029575343951 37.9644922710971, -121.029447384597 37.9642917390781, -121.029472874344 37.963967598828, -121.029415124536 37.9637773179969, -121.029447904803 37.9635255769229, -121.029781358193 37.9629641602046, -121.029924150065 37.9626145365407, -121.030001933825 37.9621565455648, -121.029944756724 37.9620021837882, -121.029825937826 37.9618108279156, -121.029767043665 37.9615487094568, -121.029807213431 37.9613148261005, -121.029769648729 37.9610353050336, -121.029996887309 37.9608500418744, -121.030561206747 37.9604805411635, -121.030732846467 37.9602311429487, -121.03109388638 37.9595881670532, -121.031321316698 37.9593760614507, -121.031430649793 37.9592968000317, -121.031652007924 37.9592282724891, -121.031900776861 37.9591872716173, -121.032455555662 37.9592152603984))</span></span>
+<span><span class="co">## 2 POLYGON ((-120.977440277027 37.8400202039719, -120.977735828159 37.8398271562088, -120.977918761599 37.8396863165759, -120.978089096334 37.8394815881836, -120.978189004401 37.839275889939, -120.978286303194 37.8389081212846, -120.978279774157 37.8385389812703, -120.978301713885 37.8381250774638, -120.97823247016 37.8377635179397, -120.978084402863 37.8372290429494, -120.977901893339 37.8370002134407, -120.977557934853 37.8364901013732, -120.97725676047 37.8359525569539, -120.977205941479 37.8357266595, -120.977202148334 37.8355371188211, -120.97746648077 37.834821175063, -120.977614815185 37.8346524635618, -120.977758216532 37.8344385863328, -120.97803793374 37.8342719453342, -120.978248634626 37.8341049638797, -120.978397090106 37.8339537805788, -120.978723965594 37.8335629096373, -120.978804868982 37.8333297714404, -120.978860203523 37.8329162686792, -120.978716374806 37.8325176537409, -120.978649511054 37.8324170767535, -120.978572686261 37.8320644960726, -120.97856319208 37.8318207102925, -120.978589049034 37.8316138758532, -120.978824752425 37.8312032773233, -120.978988121178 37.8309990766935, -120.979217329881 37.8306692963475, -120.979303459649 37.8304821847855, -120.979301423206 37.8302118906905, -120.979187675825 37.830020415361, -120.979112886686 37.8299381289761, -120.978948686889 37.8298274341976, -120.978779132488 37.8296531828803, -120.978529093434 37.8293423995408, -120.978491819954 37.8291247549243, -120.978544129924 37.8289188513919, -120.978646331634 37.8286683190097, -120.978677244149 37.8285241791737, -120.978954614895 37.8278082658793, -120.978977475239 37.8276648871392, -120.978967419536 37.8274572529753, -120.978799771258 37.827147705694, -120.978630303077 37.8270011561598, -120.978480434303 37.826835720976, -120.978024032673 37.8264674195749, -120.977824916161 37.8263381624385, -120.9777613674 37.8261029186895, -120.977793060477 37.8258957866904, -120.97794896038 37.825718095457, -120.978220141663 37.8256779676964, -120.978467354419 37.8257814498629, -120.978692923239 37.8259116369393, -120.978891697534 37.826050203977, -120.979159355796 37.8261715808214, -120.979490920784 37.8262407743618, -120.979836341971 37.8262470092522, -120.980204216951 37.8262254440749, -120.980815245795 37.8261548276568, -120.981098727404 37.8261777203038, -120.981387006712 37.8263003203597, -120.981520421313 37.826572681762, -120.981545320834 37.8266995967704, -120.981532882231 37.8269692269045, -120.981391196465 37.8275347861969, -120.981257240825 37.8279647516823, -120.981217960856 37.8282529354896, -120.98124735985 37.828478696968, -120.981311127445 37.8287591700524, -120.981384021796 37.8289767510116, -120.981387961865 37.8291117492463, -120.981096081815 37.8298371765903, -120.981003698192 37.8300061963217, -120.980539929736 37.830674278857, -120.980135048729 37.8312173090063, -120.98005338666 37.8314413687206, -120.979986486042 37.8320171399379, -120.979941980294 37.8321872243406, -120.979944579446 37.8324213665481, -120.9799007269 37.8325109295029, -120.979918930859 37.8326734324694, -120.979970534168 37.8328363366954, -120.980057707982 37.8330093513418, -120.980312904842 37.8334105279939, -120.980536646829 37.8336658343484, -120.980686751617 37.8338044263142, -120.980912131345 37.8339614495489, -120.981266005293 37.8343456682067, -120.9813572608 37.8345991374574, -120.981449934201 37.8347811646841, -120.981501530914 37.8350161398622, -120.981454115343 37.8352773826639, -120.981359406411 37.8355633074607, -120.981126752857 37.836082299963, -120.980943137716 37.8363138387317, -120.980752540785 37.8365080317902, -120.980296812808 37.8367530942482, -120.980202533009 37.8369853371646, -120.979995036867 37.8373161153888, -120.979824756851 37.8375106736617, -120.979476083896 37.8379827951916, -120.979337943284 37.8383046000667, -120.979065401171 37.8387598625711, -120.978901454605 37.8390002147039, -120.978771674242 37.8392500476565, -120.978666996045 37.8396720268917, -120.978645618909 37.8400497789281, -120.978725416744 37.8402770044867, -120.978556685386 37.840345576608, -120.977994970428 37.8403633352033, -120.977780754313 37.8403416371155, -120.977663765668 37.8403125285352, -120.977602251142 37.8402755073615, -120.977508129714 37.8401030205027, -120.977440277027 37.8400202039719))</span></span>
+<span><span class="co">## 3                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      POLYGON ((-120.985523088218 37.9059362513452, -120.985891567239 37.9059598999602, -120.986299486427 37.9060390524287, -120.986459355563 37.9060508909253, -120.986639996869 37.9060094145871, -120.987041369765 37.9058533983687, -120.987208918771 37.905811887389, -120.987458299277 37.9057800557708, -120.987652493843 37.9058189001273, -120.988233780422 37.906216589848, -120.98843454242 37.9062743869922, -120.988843574818 37.9063532990626, -120.989217084966 37.9064498037916, -120.989389701677 37.9065430539036, -120.989583343109 37.9066180464921, -120.989722527941 37.9067108974974, -120.989854249232 37.906830256895, -120.989915949246 37.9069568710404, -120.989825322146 37.9071449150441, -120.989491922873 37.9073015057732, -120.989436188876 37.9072641929805, -120.989346680326 37.9072357926623, -120.989124330051 37.9073044762055, -120.988895623832 37.9073994359224, -120.988222545241 37.907766589578, -120.987944370208 37.9078423266246, -120.987785562334 37.907840430903, -120.987543137214 37.9077275919775, -120.987376313195 37.9077162847434, -120.987182918211 37.9077484171905, -120.986960133373 37.9078707769975, -120.986835303725 37.907977269445, -120.98664837129 37.9082168655059, -120.986480550665 37.9083674591968, -120.986258536355 37.9084268263362, -120.986092945979 37.9084328143834, -120.985711622244 37.9083721196174, -120.985516856291 37.908441494137, -120.985420000626 37.9085291988148, -120.985342444448 37.908789344077, -120.985127005318 37.9091457732408, -120.984973312415 37.9095225516516, -120.984402502985 37.9105935975282, -120.984131761949 37.9107869589363, -120.984034685975 37.9105513221075, -120.98390352642 37.9103958052679, -120.98346043993 37.9100366434719, -120.983259762883 37.9099344691991, -120.983108389692 37.9097961142513, -120.983018134086 37.909614488707, -120.982984170679 37.9094340275789, -120.982970467749 37.9092262309921, -120.983005464254 37.9090285780751, -120.983069584541 37.908849781913, -120.983118665735 37.9085623317296, -120.983208742576 37.9084825146724, -120.984131089911 37.9082822469208, -120.984526413222 37.9082254475723, -120.984686087165 37.9081199871405, -120.984756252956 37.9079861228242, -120.984707787014 37.9078049983975, -120.984576505041 37.9076319532808, -120.984383351417 37.9074210291711, -120.984286486804 37.9072306229818, -120.984224290109 37.907057913864, -120.984301713878 37.9068523109911, -120.98438517861 37.9067637115338, -120.984550908203 37.9066311133469, -120.984752369443 37.906526152798, -120.985002185842 37.9064406459829, -120.985183304963 37.9063353188541, -120.985294574459 37.9062205763299, -120.985377954947 37.9061042745238, -120.985440400018 37.905961860195, -120.985523088218 37.9059362513452))</span></span>
+<span><span class="co">## 4                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       POLYGON ((-120.98392012538 37.9120092608573, -120.983920116288 37.9120813314766, -120.983877330105 37.9121706626422, -120.983863795059 37.9122963792718, -120.983890819501 37.9124052990935, -120.983876490532 37.9127381482558, -120.983897239166 37.9129010459885, -120.984000810323 37.9130558648315, -120.984068854303 37.9132282760937, -120.984061793966 37.9134173159296, -120.983999205165 37.9136142710604, -120.983970756462 37.9139750195284, -120.983990431669 37.9142000469498, -120.983920114666 37.9144605229553, -120.983733834268 37.9144033823299, -120.983512151504 37.9143813626691, -120.983276402284 37.9143049985795, -120.98315192843 37.9141859642132, -120.983138874876 37.913897647622, -120.983027640279 37.9136520350459, -120.982827089637 37.9134953184344, -120.98263433916 37.9133748528511, -120.982281177519 37.9130624826414, -120.981983911426 37.9125887446493, -120.981831632573 37.9124958505786, -120.981554726659 37.9124826032185, -120.981187656278 37.9125214691775, -120.980937266457 37.9125710487223, -120.980701936796 37.9125851407342, -120.980507772493 37.9125361126669, -120.980501406417 37.9123563496652, -120.980578329891 37.9121767278483, -120.980550867476 37.9119154482948, -120.980717599403 37.9117650946736, -120.981404770214 37.9117406093536, -120.981805901404 37.9117657645214, -120.98213205474 37.9118250747223, -120.982450263095 37.9119747450009, -120.982838978153 37.9120533107828, -120.98311617122 37.9121394874135, -120.983378532244 37.9121622400764, -120.983565925004 37.9121470787842, -120.983726240308 37.9121052406898, -120.98392012538 37.9120092608573))</span></span>
+<span><span class="co">## 5                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                POLYGON ((-120.976618752919 37.8950135458249, -120.976335244308 37.8948917321003, -120.976321844539 37.8947568666454, -120.97644103155 37.8943078568389, -120.976406106564 37.8941451541604, -120.97632346141 37.8940266151981, -120.97582601447 37.8935134340163, -120.975695104895 37.8934031386057, -120.975515164428 37.8932920075564, -120.975141114774 37.8931318394823, -120.974835950129 37.893036726673, -120.974399641239 37.8929302273106, -120.974137351298 37.8929074553091, -120.973776312456 37.8929016327187, -120.97339529942 37.8928140592313, -120.973090825587 37.8927003197221, -120.972862223499 37.8925069662265, -120.972606115165 37.8923406135282, -120.972392314346 37.8922827548895, -120.972128697888 37.8922870504914, -120.971414098739 37.8923828538791, -120.97071429361 37.8926141490595, -120.970346506972 37.8927880449445, -120.970089249558 37.8927660604654, -120.970090747333 37.8926123758252, -120.970194007042 37.8924882346052, -120.970312007212 37.8923998167057, -120.970659111067 37.8922348638255, -120.971117728715 37.8919902380063, -120.971339361943 37.8919402093411, -120.971651463785 37.8919008329444, -120.971922028594 37.891896009406, -120.972254025244 37.8919106798158, -120.972593814151 37.8919616014651, -120.973140557808 37.8921605087601, -120.973556944765 37.8922850354301, -120.973806065242 37.892280071726, -120.974054984254 37.8922298767936, -120.974444063149 37.8921106474734, -120.974707678843 37.8921063468797, -120.975143842044 37.8922673870532, -120.976831996534 37.8932153157039, -120.976970295455 37.8932714003401, -120.97713624351 37.8934279569021, -120.977364047673 37.8938284355726, -120.977314296968 37.8941964046634, -120.977237165285 37.894402865158, -120.977251411437 37.8945745116158, -120.977465674558 37.8947126503714, -120.977803670201 37.8948544825232, -120.978116546977 37.8950302087813, -120.978205525081 37.8952666121033, -120.978108538929 37.8954088530654, -120.977989558961 37.8955150392216, -120.97784419553 37.8955759250091, -120.977635660701 37.8955539294061, -120.977484187976 37.8954701090048, -120.97694512638 37.8950737316129, -120.976618752919 37.8950135458249))</span></span>
+<span><span class="co">## 6                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             POLYGON ((-120.958148228164 37.8929009967531, -120.958257566342 37.89339922832, -120.958242554141 37.8937682268486, -120.958152399799 37.893992167427, -120.958207050548 37.8941913968848, -120.958255178651 37.894299599785, -120.958337901348 37.8943737818444, -120.958406631387 37.8945552874435, -120.95827453497 37.8946614175666, -120.957956155354 37.8946826657254, -120.957588087146 37.8946496217747, -120.957192552933 37.8946334017232, -120.956721843593 37.894544192444, -120.956410676599 37.8944659975247, -120.956058396377 37.8940730302104, -120.956079378789 37.8938931079596, -120.956371088193 37.8938256981606, -120.956911733464 37.8938799710885, -120.95711167439 37.8939287402782, -120.957326802893 37.8939595538745, -120.957569551839 37.8939190001486, -120.957736981051 37.8937500551254, -120.957757993901 37.8934980617213, -120.957702914505 37.8932185433083, -120.957663591713 37.8927130748242, -120.957693027833 37.8921451979903, -120.957590286763 37.8915938506515, -120.957549456741 37.8914758081609, -120.957486835947 37.8913669379693, -120.957135291263 37.89088328039, -120.957128531351 37.8907571957377, -120.957185224437 37.8906049191925, -120.957268166577 37.8904804183495, -120.957282434107 37.8903360819168, -120.957138383743 37.8899642861266, -120.956883152836 37.8894909945394, -120.957056677266 37.8893946863583, -120.957257940983 37.8894163835871, -120.957568148277 37.8896740078802, -120.957623281227 37.8897474865796, -120.957809306399 37.8901650217306, -120.957896776288 37.8913561222369, -120.957875227461 37.8915721961394, -120.957929495688 37.8918528078143, -120.957962159765 37.8925555331955, -120.958010396191 37.8927912105813, -120.958148228164 37.8929009967531))</span></span></code></pre>
+<p>Using the <code>sf</code> (or <code>terra</code>) package, you can
+convert the resulting text WKT column to a spatial object:</p>
+<div class="sourceCode" id="cb79"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"sf"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">&amp;&amp;</span></span>
+<span>   <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">geometry_df</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="co"># Parse WKT column (usually named 'mupolygongeo' in mupolygon table, but 'MupolygonWktWgs84' in TVF result)</span></span>
+<span>  <span class="va">poly_sf</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sfc.html" class="external-link">st_as_sfc</a></span><span class="op">(</span><span class="va">geometry_df</span><span class="op">$</span><span class="va">MupolygonWktWgs84</span>, crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">poly_sf</span>, main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"Geometry for mukey="</span>, <span class="va">target_mukey</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+<p><img src="sda_files/figure-html/unnamed-chunk-1-1.png" class="r-plt" alt="" width="672"></p>
+<p><strong>Note:</strong> The TVF function name implies the CRS is WGS84
+(authority:code <code>EPSG:4326</code>, SRS ID <code>4326</code>; or,
+more correctly, <code>OGC:CRS84</code>).</p>
+<p>See the <a href="https://sdmdataaccess.nrcs.usda.gov/documents/AdvancedQueries.html" class="external-link">SDA
+Advanced Query Guide</a> for more details on TVF functions and other
+high-level features built into SDA.</p>
+</div>
+<div class="section level3">
+<h3 id="spatial-and-tabular-property-integration">Spatial and Tabular Property Integration<a class="anchor" aria-label="anchor" href="#spatial-and-tabular-property-integration"></a>
+</h3>
+<p>We can use the result of our spatial filtering with property
+queries.</p>
+<p>Here we extract the unique map unit keys and pass as
+<code>mukeys</code> argument to <code><a href="../reference/get_SDA_property.html">get_SDA_property()</a></code></p>
+<div class="sourceCode" id="cb80"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Step 2: Use the mukeys to fetch tabular data</span></span>
+<span><span class="co"># First, get mukeys in bounding box</span></span>
+<span><span class="va">spatial_mukeys</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">spatial_result</span><span class="op">$</span><span class="va">mukey</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Then query properties for those mukeys</span></span>
+<span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">spatial_mukeys</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">clay_in_bbox</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_SDA_property.html">get_SDA_property</a></span><span class="op">(</span></span>
+<span>    property <span class="op">=</span> <span class="st">"Total Clay - Rep Value"</span>,</span>
+<span>    method <span class="op">=</span> <span class="st">"Weighted Average"</span>,</span>
+<span>    mukeys <span class="op">=</span> <span class="va">spatial_mukeys</span>,</span>
+<span>    top_depth <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>    bottom_depth <span class="op">=</span> <span class="fl">50</span></span>
+<span>  <span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="fu"><a href="https://rspatial.github.io/terra/reference/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="va">clay_in_bbox</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+<pre><code><span><span class="co">##     mukey areasymbol musym</span></span>
+<span><span class="co">## 1 1403410      CA632   127</span></span>
+<span><span class="co">## 2 1403412      CA632   130</span></span>
+<span><span class="co">## 3 1403413      CA632   131</span></span>
+<span><span class="co">## 4 1403414      CA632   134</span></span>
+<span><span class="co">## 5 2766111      CA632   142</span></span>
+<span><span class="co">## 6 1403416      CA632   157</span></span>
+<span><span class="co">##                                                                                muname</span></span>
+<span><span class="co">## 1                                           Chuloak sandy loam, 0 to 2 percent slopes</span></span>
+<span><span class="co">## 2                 Columbia sandy loam, drained, 0 to 2 percent slopes, rarely flooded</span></span>
+<span><span class="co">## 3 Columbia sandy loam, partially drained, 0 to 2 percent slopes, occasionally flooded</span></span>
+<span><span class="co">## 4                                            Cometa sandy loam, 2 to 8 percent slopes</span></span>
+<span><span class="co">## 5                                    Delhi loamy sand, 0 to 2 percent slopes, MLRA 17</span></span>
+<span><span class="co">## 6                                       Exeter sandy clay loam, 0 to 2 percent slopes</span></span>
+<span><span class="co">##   claytotal_r</span></span>
+<span><span class="co">## 1       17.80</span></span>
+<span><span class="co">## 2       17.08</span></span>
+<span><span class="co">## 3       15.38</span></span>
+<span><span class="co">## 4       20.00</span></span>
+<span><span class="co">## 5        2.22</span></span>
+<span><span class="co">## 6       18.60</span></span></code></pre>
+<p>This shows how to get the data, see the <a href="local-ssurgo.html">Local SSURGO vignette</a> for more spatial
+visualization examples using <code>sf</code>.</p>
 <hr>
 </div>
 </div>
@@ -1496,7 +1743,7 @@ SSURGO schema like <code>"claytotal_r"</code>,
 dominant soil component. This query is a distinct method as categorical
 data need to be handled differently from numeric data; the numeric
 method is described below.</p>
-<div class="sourceCode" id="cb63"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb82"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Get taxonomic classification from dominant component</span></span>
 <span><span class="va">tax_order</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_SDA_property.html">get_SDA_property</a></span><span class="op">(</span></span>
 <span>  property <span class="op">=</span> <span class="st">"Taxonomic Suborder"</span>,</span>
@@ -1525,7 +1772,7 @@ method is described below.</p>
 </h3>
 <p>Dominant component (numeric) retrieves properties from the dominant
 component, optionally averaged over a depth range (in centimeters):</p>
-<div class="sourceCode" id="cb65"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb84"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Get bulk density at 0-25 cm depth</span></span>
 <span><span class="va">bulk_density</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_SDA_property.html">get_SDA_property</a></span><span class="op">(</span></span>
 <span>  property <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"dbthirdbar_l"</span>, <span class="st">"dbthirdbar_r"</span>, <span class="st">"dbthirdbar_h"</span><span class="op">)</span>,</span>
@@ -1565,7 +1812,7 @@ component, optionally averaged over a depth range (in centimeters):</p>
 depth-weighted average across all components in a map unit. In this
 example we explicitly exclude minor components by changing the default
 <code>include_minors</code> argument.</p>
-<div class="sourceCode" id="cb67"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb86"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Get weighted average clay content (0-50 cm)</span></span>
 <span><span class="va">clay_avg</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_SDA_property.html">get_SDA_property</a></span><span class="op">(</span></span>
 <span>  property <span class="op">=</span> <span class="st">"Total Clay - Rep Value"</span>,</span>
@@ -1604,7 +1851,7 @@ example we explicitly exclude minor components by changing the default
 </h3>
 <p>Method `“Min/Max” is used to get minimum or maximum values across all
 components in a mapunit.</p>
-<div class="sourceCode" id="cb69"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb88"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Get maximum sand content in any component</span></span>
 <span><span class="va">sand_max</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_SDA_property.html">get_SDA_property</a></span><span class="op">(</span></span>
 <span>  property <span class="op">=</span> <span class="st">"Total Sand - Rep Value"</span>,</span>
@@ -1638,7 +1885,7 @@ components in a mapunit.</p>
 for the properties of interest, then picks the dominant percentage. This
 gives extra weight to categories where multiple soils in the same map
 unit have the same value.</p>
-<div class="sourceCode" id="cb71"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb90"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Get dominant drainage class condition</span></span>
 <span><span class="va">drain_dominant</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_SDA_property.html">get_SDA_property</a></span><span class="op">(</span></span>
 <span>  property <span class="op">=</span> <span class="st">"Drainage Class"</span>,</span>
@@ -1684,7 +1931,7 @@ the <code>cokey</code> column to get a single data frame.</p>
 <p>Also, the <code>top_depth</code> and <code>bottom_depth</code>
 arguments are deliberately ignored with this method. Apply your own
 filtering to the result if you only need a specific depth range.</p>
-<div class="sourceCode" id="cb73"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb92"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Get all pH values by component and horizon</span></span>
 <span><span class="va">ph_all</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_SDA_property.html">get_SDA_property</a></span><span class="op">(</span></span>
 <span>  property <span class="op">=</span> <span class="st">"pH 1:1 water - Rep Value"</span>,</span>
@@ -1727,7 +1974,7 @@ filtering to the result if you only need a specific depth range.</p>
 </h3>
 <p>We can use <code>query_string = TRUE</code> to see the SQL generated
 by <code><a href="../reference/get_SDA_property.html">get_SDA_property()</a></code>:</p>
-<div class="sourceCode" id="cb75"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb94"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">q</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_SDA_property.html">get_SDA_property</a></span><span class="op">(</span></span>
 <span>  property <span class="op">=</span> <span class="st">"Taxonomic Suborder"</span>,</span>
 <span>  method <span class="op">=</span> <span class="st">"Dominant Component (Category)"</span>,</span>
@@ -1815,7 +2062,7 @@ Foundations, Dam Sites</td>
 <h3 id="method-dominant-component">Method: Dominant Component<a class="anchor" aria-label="anchor" href="#method-dominant-component"></a>
 </h3>
 <p>Get the rating from the dominant soil component:</p>
-<div class="sourceCode" id="cb77"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb96"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Get forestry ratings for dominant component</span></span>
 <span><span class="va">for_ratings</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_SDA_interpretation.html">get_SDA_interpretation</a></span><span class="op">(</span></span>
 <span>  rulename <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"FOR - Potential Seedling Mortality"</span>,</span>
@@ -1886,7 +2133,7 @@ Foundations, Dam Sites</td>
 <h3 id="method-dominant-condition-1">Method: Dominant Condition<a class="anchor" aria-label="anchor" href="#method-dominant-condition-1"></a>
 </h3>
 <p>Aggregate similar ratings, then return the dominant:</p>
-<div class="sourceCode" id="cb79"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb98"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Get dominant engineering interpretation</span></span>
 <span><span class="va">eng_ratings</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_SDA_interpretation.html">get_SDA_interpretation</a></span><span class="op">(</span></span>
 <span>  rulename <span class="op">=</span> <span class="st">"ENG - Septic Tank Absorption Fields"</span>,</span>
@@ -1942,7 +2189,7 @@ Foundations, Dam Sites</td>
 <h3 id="method-weighted-average-1">Method: Weighted Average<a class="anchor" aria-label="anchor" href="#method-weighted-average-1"></a>
 </h3>
 <p>Component-percentage-weighted average of ratings:</p>
-<div class="sourceCode" id="cb81"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb100"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Get weighted average agricultural rating</span></span>
 <span><span class="va">agr_weighted</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_SDA_interpretation.html">get_SDA_interpretation</a></span><span class="op">(</span></span>
 <span>  rulename <span class="op">=</span> <span class="st">"AGR - Winter Wheat Yield (MT)"</span>,</span>
@@ -1982,7 +2229,7 @@ survey areas.</p>
 <h3 id="method-none-1">Method: None<a class="anchor" aria-label="anchor" href="#method-none-1"></a>
 </h3>
 <p>Return one row per component with no map unit aggregation:</p>
-<div class="sourceCode" id="cb83"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb102"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Get all component-level ratings</span></span>
 <span><span class="va">all_ratings</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_SDA_interpretation.html">get_SDA_interpretation</a></span><span class="op">(</span></span>
 <span>  rulename <span class="op">=</span> <span class="st">"FOR - Mechanical Planting Suitability"</span>,</span>
@@ -2032,7 +2279,7 @@ survey areas.</p>
 </h3>
 <p>Use <code>wide_reason = TRUE</code> to pivot reason columns into
 separate sub-rule columns:</p>
-<div class="sourceCode" id="cb85"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb104"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Get detailed ratings with reasons pivoted</span></span>
 <span><span class="va">detailed</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_SDA_interpretation.html">get_SDA_interpretation</a></span><span class="op">(</span></span>
 <span>  rulename <span class="op">=</span> <span class="st">"FOR - Mechanical Planting Suitability"</span>,</span>
@@ -2183,7 +2430,7 @@ hydric components in a map unit.</p>
 <h3 id="method-mapunit-default">Method: MAPUNIT (Default)<a class="anchor" aria-label="anchor" href="#method-mapunit-default"></a>
 </h3>
 <p>Returns an overall classification for each map unit:</p>
-<div class="sourceCode" id="cb87"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb106"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">hydric_class</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_SDA_hydric.html">get_SDA_hydric</a></span><span class="op">(</span></span>
 <span>  areasymbols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CA077"</span>, <span class="st">"CA630"</span><span class="op">)</span>,</span>
 <span>  method <span class="op">=</span> <span class="st">"MAPUNIT"</span></span>
@@ -2211,7 +2458,7 @@ hydric components in a map unit.</p>
 <span><span class="co">## 4           100             0                 0               Nonhydric</span></span>
 <span><span class="co">## 5           100             0                 4 Predominantly Nonhydric</span></span>
 <span><span class="co">## 6           100             0                 0               Nonhydric</span></span></code></pre>
-<div class="sourceCode" id="cb89"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb108"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Check unique ratings</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">hydric_class</span><span class="op">$</span><span class="va">HYDRIC_RATING</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] "Predominantly Nonhydric" "Predominantly Hydric"   </span></span>
@@ -2242,7 +2489,7 @@ sum to 100)</p></li>
 <h3 id="method-dominant-component-1">Method: DOMINANT COMPONENT<a class="anchor" aria-label="anchor" href="#method-dominant-component-1"></a>
 </h3>
 <p>Get hydric status of the dominant component only:</p>
-<div class="sourceCode" id="cb91"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb110"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">hydric_dom</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_SDA_hydric.html">get_SDA_hydric</a></span><span class="op">(</span></span>
 <span>  areasymbols <span class="op">=</span> <span class="st">"CA630"</span>,</span>
 <span>  method <span class="op">=</span> <span class="st">"DOMINANT COMPONENT"</span></span>
@@ -2268,7 +2515,7 @@ sum to 100)</p></li>
 <h3 id="method-dominant-condition-2">Method: DOMINANT CONDITION<a class="anchor" aria-label="anchor" href="#method-dominant-condition-2"></a>
 </h3>
 <p>Aggregate by hydric condition (Yes/No), then pick the dominant:</p>
-<div class="sourceCode" id="cb93"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb112"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">hydric_cond</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_SDA_hydric.html">get_SDA_hydric</a></span><span class="op">(</span></span>
 <span>  mukeys <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">461994</span>, <span class="fl">461995</span>, <span class="fl">462205</span><span class="op">)</span>,</span>
 <span>  method <span class="op">=</span> <span class="st">"DOMINANT CONDITION"</span></span>
@@ -2292,7 +2539,7 @@ sum to 100)</p></li>
 <h3 id="method-none-2">Method: NONE<a class="anchor" aria-label="anchor" href="#method-none-2"></a>
 </h3>
 <p>Return one row per component (component-level hydric status):</p>
-<div class="sourceCode" id="cb95"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb114"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">hydric_all</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_SDA_hydric.html">get_SDA_hydric</a></span><span class="op">(</span></span>
 <span>  areasymbols <span class="op">=</span> <span class="st">"CA630"</span>,</span>
 <span>  method <span class="op">=</span> <span class="st">"NONE"</span></span>
@@ -2323,7 +2570,7 @@ sum to 100)</p></li>
 <p>Map unit aggregate attributes are pre-computed statistics summarizing
 the components in a map unit. These include surface texture, slope
 range, permeability, and other physical properties.</p>
-<div class="sourceCode" id="cb97"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb116"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">muagg</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_SDA_muaggatt.html">get_SDA_muaggatt</a></span><span class="op">(</span></span>
 <span>  areasymbols <span class="op">=</span> <span class="st">"CA630"</span></span>
 <span><span class="op">)</span></span>
@@ -2385,7 +2632,7 @@ range, permeability, and other physical properties.</p>
 <span><span class="co">## 4        2      1.000</span></span>
 <span><span class="co">## 5        0      0.996</span></span>
 <span><span class="co">## 6        3      1.000</span></span></code></pre>
-<div class="sourceCode" id="cb99"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb118"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">muagg</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## 'data.frame':    129 obs. of  40 variables:</span></span>
 <span><span class="co">##  $ mukey         : int  2924907 2924879 2924880 2924881 2924882 2924883 2924913 2924908 2924884 2924885 ...</span></span>
@@ -2438,7 +2685,7 @@ available columns.</p>
 </h3>
 <p>You can filter by area symbol, map unit key, or custom WHERE
 clause:</p>
-<div class="sourceCode" id="cb101"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb120"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Get aggregate attributes for specific mukeys</span></span>
 <span><span class="va">muagg_filtered</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_SDA_muaggatt.html">get_SDA_muaggatt</a></span><span class="op">(</span></span>
 <span>  mukeys <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">461994</span>, <span class="fl">461995</span>, <span class="fl">463264</span><span class="op">)</span></span>
@@ -2487,7 +2734,7 @@ retrieves parent material classifications by component.</p>
 <h3 id="method-dominant-component-2">Method: DOMINANT COMPONENT<a class="anchor" aria-label="anchor" href="#method-dominant-component-2"></a>
 </h3>
 <p>Get parent material from the dominant component:</p>
-<div class="sourceCode" id="cb103"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb122"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pm_dom</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_SDA_pmgroupname.html">get_SDA_pmgroupname</a></span><span class="op">(</span></span>
 <span>  areasymbols <span class="op">=</span> <span class="st">"CA630"</span>,</span>
 <span>  method <span class="op">=</span> <span class="st">"DOMINANT COMPONENT"</span>,</span>
@@ -2528,7 +2775,7 @@ retrieves parent material classifications by component.</p>
 <h3 id="method-dominant-condition-3">Method: DOMINANT CONDITION<a class="anchor" aria-label="anchor" href="#method-dominant-condition-3"></a>
 </h3>
 <p>Aggregate parent materials by group, then return the dominant:</p>
-<div class="sourceCode" id="cb105"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb124"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pm_cond</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_SDA_pmgroupname.html">get_SDA_pmgroupname</a></span><span class="op">(</span></span>
 <span>  mukeys <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">461994</span>, <span class="fl">461995</span>, <span class="fl">462205</span><span class="op">)</span>,</span>
 <span>  method <span class="op">=</span> <span class="st">"DOMINANT CONDITION"</span></span>
@@ -2554,7 +2801,7 @@ retrieves parent material classifications by component.</p>
 <p>By default, <code>simplify = TRUE</code> groups parent materials into
 broader categories. Set <code>simplify = FALSE</code> to get detailed
 group names:</p>
-<div class="sourceCode" id="cb107"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb126"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Simplified (broader groups)</span></span>
 <span><span class="va">pm_simple</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_SDA_pmgroupname.html">get_SDA_pmgroupname</a></span><span class="op">(</span></span>
 <span>  mukeys <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">461994</span>, <span class="fl">461995</span><span class="op">)</span>,</span>
@@ -2568,7 +2815,7 @@ group names:</p>
 <span><span class="co">##   compname compkind comppct_r majcompflag                         pmgroupname</span></span>
 <span><span class="co">## 1    Alamo   Series        85         Yes Waterlaid (or Transported) Deposits</span></span>
 <span><span class="co">## 2      Alo   Series        45         Yes  In-Place Deposits (nontransported)</span></span></code></pre>
-<div class="sourceCode" id="cb109"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb128"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Detailed (specific groups)</span></span>
 <span><span class="va">pm_detailed</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_SDA_pmgroupname.html">get_SDA_pmgroupname</a></span><span class="op">(</span></span>
 <span>  mukeys <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">461994</span>, <span class="fl">461995</span><span class="op">)</span>,</span>
@@ -2600,7 +2847,7 @@ retrieves ecological site classifications by component.</p>
 <h3 id="method-none-default">Method: NONE (Default)<a class="anchor" aria-label="anchor" href="#method-none-default"></a>
 </h3>
 <p>Return component-level ecological classes without aggregation:</p>
-<div class="sourceCode" id="cb111"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb130"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">eco_none</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_SDA_coecoclass.html">get_SDA_coecoclass</a></span><span class="op">(</span></span>
 <span>  method <span class="op">=</span> <span class="st">"None"</span>,</span>
 <span>  areasymbols <span class="op">=</span> <span class="st">"CA630"</span></span>
@@ -2652,7 +2899,7 @@ class types in SSURGO.</p>
 <h3 id="method-dominant-component-3">Method: DOMINANT COMPONENT<a class="anchor" aria-label="anchor" href="#method-dominant-component-3"></a>
 </h3>
 <p>Get ecological site from the dominant component only:</p>
-<div class="sourceCode" id="cb113"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb132"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">eco_dom</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_SDA_coecoclass.html">get_SDA_coecoclass</a></span><span class="op">(</span></span>
 <span>  method <span class="op">=</span> <span class="st">"Dominant Component"</span>,</span>
 <span>  areasymbols <span class="op">=</span> <span class="st">"CA630"</span></span>
@@ -2692,7 +2939,7 @@ class types in SSURGO.</p>
 <h3 id="method-dominant-condition-4">Method: DOMINANT CONDITION<a class="anchor" aria-label="anchor" href="#method-dominant-condition-4"></a>
 </h3>
 <p>Aggregate ecological classes by ID, then return the dominant:</p>
-<div class="sourceCode" id="cb115"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb134"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">eco_cond</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_SDA_coecoclass.html">get_SDA_coecoclass</a></span><span class="op">(</span></span>
 <span>  method <span class="op">=</span> <span class="st">"Dominant Condition"</span>,</span>
 <span>  mukeys <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">461994</span>, <span class="fl">461995</span>, <span class="fl">462205</span><span class="op">)</span>,</span>
@@ -2725,7 +2972,7 @@ class types in SSURGO.</p>
 <h3 id="method-all">Method: ALL<a class="anchor" aria-label="anchor" href="#method-all"></a>
 </h3>
 <p>Return all ecological sites per map unit in wide format:</p>
-<div class="sourceCode" id="cb117"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb136"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">eco_all</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_SDA_coecoclass.html">get_SDA_coecoclass</a></span><span class="op">(</span></span>
 <span>  method <span class="op">=</span> <span class="st">"All"</span>,</span>
 <span>  mukeys <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">461994</span>, <span class="fl">461995</span><span class="op">)</span>,</span>
@@ -2750,7 +2997,7 @@ class types in SSURGO.</p>
 <span><span class="co">## 1: Not assigned  Alamo, Madera, San Joaquin, Redding         15      &lt;NA&gt;</span></span>
 <span><span class="co">## 2: Not assigned Arburua, Wisflat, San Timoteo, Calla         15      &lt;NA&gt;</span></span></code></pre>
 <p>Filtering by ecological class type:</p>
-<div class="sourceCode" id="cb119"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb138"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Get rangeland sites only</span></span>
 <span><span class="va">eco_range</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_SDA_coecoclass.html">get_SDA_coecoclass</a></span><span class="op">(</span></span>
 <span>  method <span class="op">=</span> <span class="st">"Dominant Condition"</span>,</span>
@@ -2846,7 +3093,7 @@ ways.</p>
 <div class="section level3">
 <h3 id="example-3d-geomorphic-classification">Example: 3D Geomorphic Classification<a class="anchor" aria-label="anchor" href="#example-3d-geomorphic-classification"></a>
 </h3>
-<div class="sourceCode" id="cb121"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb140"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Get geomorphic position by component name</span></span>
 <span><span class="va">geom_3d</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_SDA_cosurfmorph.html">get_SDA_cosurfmorph</a></span><span class="op">(</span></span>
 <span>  table <span class="op">=</span> <span class="st">"cosurfmorphgc"</span>,</span>
@@ -2887,7 +3134,7 @@ proportion</p></li>
 <div class="section level3">
 <h3 id="example-hillslope-position-by-area">Example: Hillslope Position by Area<a class="anchor" aria-label="anchor" href="#example-hillslope-position-by-area"></a>
 </h3>
-<div class="sourceCode" id="cb123"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb142"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Get hillslope position aggregated by area symbol</span></span>
 <span><span class="va">geom_hill</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_SDA_cosurfmorph.html">get_SDA_cosurfmorph</a></span><span class="op">(</span></span>
 <span>  table <span class="op">=</span> <span class="st">"cosurfmorphhpp"</span>,</span>
@@ -2906,7 +3153,7 @@ proportion</p></li>
 <div class="section level3">
 <h3 id="example-surface-shape">Example: Surface Shape<a class="anchor" aria-label="anchor" href="#example-surface-shape"></a>
 </h3>
-<div class="sourceCode" id="cb125"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb144"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Get surface shape classes</span></span>
 <span><span class="va">geom_shape</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_SDA_cosurfmorph.html">get_SDA_cosurfmorph</a></span><span class="op">(</span></span>
 <span>  table <span class="op">=</span> <span class="st">"cosurfmorphss"</span>,</span>
@@ -2932,7 +3179,7 @@ proportion</p></li>
 <div class="section level3">
 <h3 id="example-microrelief">Example: Microrelief<a class="anchor" aria-label="anchor" href="#example-microrelief"></a>
 </h3>
-<div class="sourceCode" id="cb127"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb146"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Get microrelief by component name</span></span>
 <span><span class="va">geom_micro</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_SDA_cosurfmorph.html">get_SDA_cosurfmorph</a></span><span class="op">(</span></span>
 <span>  table <span class="op">=</span> <span class="st">"cosurfmorphmr"</span>,</span>
@@ -2964,14 +3211,14 @@ complex joins between map unit, component, and horizon tables.</p>
 </h3>
 <p>You can fetch all components and horizons for a specific area or set
 of map units using the <code>WHERE</code> argument:</p>
-<div class="sourceCode" id="cb129"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb148"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ncss-tech.github.io/aqp/" class="external-link">aqp</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Query soil components by areasymbol and musym</span></span>
 <span><span class="va">s</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fetchSDA.html">fetchSDA</a></span><span class="op">(</span>WHERE <span class="op">=</span> <span class="st">"areasymbol = 'IN005' AND musym = 'MnpB2'"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># The result is a SoilProfileCollection</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">s</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">s</span></span></code></pre></div>
 <pre><code><span><span class="co">## SoilProfileCollection with 4 profiles and 20 horizons</span></span>
 <span><span class="co">## profile ID: cokey  |  horizon ID: chkey </span></span>
 <span><span class="co">## Depth range: 200 - 200 cm</span></span>
@@ -3007,7 +3254,7 @@ of map units using the <code>WHERE</code> argument:</p>
 <span><span class="co">## </span></span>
 <span><span class="co">## Spatial Data:</span></span>
 <span><span class="co">## [EMPTY]</span></span></code></pre>
-<div class="sourceCode" id="cb131"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb150"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Check the horizon data</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="https://ncss-tech.github.io/aqp/reference/horizons.html" class="external-link">horizons</a></span><span class="op">(</span><span class="va">s</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##      chkey hzname hzdept_r hzdepb_r texture           texcl lieutex fragvol_l</span></span>
@@ -3117,14 +3364,14 @@ for querying laboratory data by various criteria and returning it as a
 <p>You can fetch lab data by specifying an identifier (like an area
 symbol) and the column it corresponds to (<code>what</code>
 argument):</p>
-<div class="sourceCode" id="cb133"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb152"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Fetch KSSL data for a specific soil survey area (CA630)</span></span>
 <span><span class="co"># 'what' argument specifies we are searching by 'area_code'</span></span>
 <span><span class="co"># 'tables' argument specifies which data tables to include (defaults to core tables)</span></span>
 <span><span class="va">ldm_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fetchLDM.html">fetchLDM</a></span><span class="op">(</span><span class="st">"CA630"</span>, what <span class="op">=</span> <span class="st">"area_code"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># The result is a SoilProfileCollection</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">ldm_data</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">ldm_data</span></span></code></pre></div>
 <pre><code><span><span class="co">## SoilProfileCollection with 175 profiles and 800 horizons</span></span>
 <span><span class="co">## profile ID: pedon_key  |  horizon ID: hzID </span></span>
 <span><span class="co">## Depth range: 13 - 321 cm</span></span>
@@ -3165,7 +3412,7 @@ argument):</p>
 <span><span class="co">## </span></span>
 <span><span class="co">## Spatial Data:</span></span>
 <span><span class="co">## [EMPTY]</span></span></code></pre>
-<div class="sourceCode" id="cb135"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb154"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Inspect site data</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="https://ncss-tech.github.io/aqp/reference/site.html" class="external-link">site</a></span><span class="op">(</span><span class="va">ldm_data</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##   pedon_key site_key pedlabsampnum pedoniid      upedonid labdatadescflag</span></span>
@@ -3447,7 +3694,7 @@ argument):</p>
 </h3>
 <p>You can also search by correlated or sampled-as taxon names using a
 custom <code>WHERE</code> clause:</p>
-<div class="sourceCode" id="cb137"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb156"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Fetch lab data where the correlated or sampled name is 'Musick' or 'Holland'</span></span>
 <span><span class="co"># CASE statement handles differences between correlated and sampled names</span></span>
 <span><span class="va">ldm_taxon</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fetchLDM.html">fetchLDM</a></span><span class="op">(</span>WHERE <span class="op">=</span> <span class="st">"(CASE WHEN corr_name IS NOT NULL </span></span>
@@ -3455,7 +3702,7 @@ custom <code>WHERE</code> clause:</p>
 <span><span class="st">                                ELSE LOWER(samp_name) </span></span>
 <span><span class="st">                            END) IN ('musick', 'holland')"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">ldm_taxon</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">ldm_taxon</span></span></code></pre></div>
 <pre><code><span><span class="co">## SoilProfileCollection with 40 profiles and 259 horizons</span></span>
 <span><span class="co">## profile ID: pedon_key  |  horizon ID: hzID </span></span>
 <span><span class="co">## Depth range: 107 - 371 cm</span></span>
@@ -3503,7 +3750,7 @@ custom <code>WHERE</code> clause:</p>
 <p>By default, <code><a href="../reference/fetchLDM.html">fetchLDM()</a></code> retrieves a standard set of
 tables. You can request specific data, such as physical properties,
 using the <code>tables</code> argument:</p>
-<div class="sourceCode" id="cb139"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb158"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Fetch physical properties for soils correlated as "Typic Argialbolls"</span></span>
 <span><span class="va">ldm_phys</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fetchLDM.html">fetchLDM</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Typic Argialbolls"</span>, </span>
 <span>                     what <span class="op">=</span> <span class="st">"corr_taxsubgrp"</span>, </span>
@@ -3589,244 +3836,13 @@ analysis.</p>
 </div>
 </div>
 <div class="section level2">
-<h2 id="spatial-queries">Spatial Queries<a class="anchor" aria-label="anchor" href="#spatial-queries"></a>
-</h2>
-<p>This document mainly focuses on details of custom spatial queries
-using the low-level <code><a href="../reference/SDA_query.html">SDA_query()</a></code> function, but there are
-several functions that provide high-level convenience interface for
-spatial queries in <code>soilDB</code>. First we will discuss converting
-spatial data to Well-Known Text for use in generating custom queries.
-Then we will discuss the high- and low-level interfaces in
-<code>soilDB</code>.</p>
-<div class="section level3">
-<h3 id="converting-sf-objects-to-wkt">Converting sf Objects to WKT<a class="anchor" aria-label="anchor" href="#converting-sf-objects-to-wkt"></a>
-</h3>
-<p><strong>Important:</strong> SDA requires spatial inputs (WKT) to be
-in <strong>WGS84 (EPSG:4326)</strong> geographic coordinates.</p>
-<p>Passing projected coordinates (like UTM or Albers) will result in
-query failures or zero results.</p>
-<p>SDA does store an alternate projected version of the geometry data
-(e.g. <code>mupolygonproj</code>, rather than
-<code>mupolygongeo</code>). The projection is a Web Mercator projection
-(<code>"EPSG:3857"</code>) so it is best avoided in analysis, though it
-is an option for visualization web map applications that lack capability
-to project the data.</p>
-<p>You can use <code>sf</code> to define a geometry, such as a bounding
-recatangle, and convert it to WKT (Well-Known Text) for spatial
-queries:</p>
-<div class="sourceCode" id="cb141"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Define a bounding box for a region of interest</span></span>
-<span><span class="co"># (xmin, ymin, xmax, ymax)</span></span>
-<span><span class="va">bbox</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">120.9</span>, <span class="fl">37.7</span>, <span class="op">-</span><span class="fl">120.8</span>, <span class="fl">37.8</span><span class="op">)</span></span>
-<span><span class="va">bbox_sf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sfc.html" class="external-link">st_as_sfc</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_bbox.html" class="external-link">st_bbox</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span>  xmin <span class="op">=</span> <span class="va">bbox</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,</span>
-<span>  ymin <span class="op">=</span> <span class="va">bbox</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>,</span>
-<span>  xmax <span class="op">=</span> <span class="va">bbox</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span>,</span>
-<span>  ymax <span class="op">=</span> <span class="va">bbox</span><span class="op">[</span><span class="fl">4</span><span class="op">]</span></span>
-<span><span class="op">)</span>, crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">wkt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_text.html" class="external-link">st_as_text</a></span><span class="op">(</span><span class="va">bbox_sf</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">wkt</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] "POLYGON ((-120.9 37.7, -120.8 37.7, -120.8 37.8, -120.9 37.8, -120.9 37.7))"</span></span></code></pre>
-</div>
-<div class="section level3">
-<h3 id="high-level-functions">High-level Functions<a class="anchor" aria-label="anchor" href="#high-level-functions"></a>
-</h3>
-<p>The soilDB package provides two higher-level functions
-(<code><a href="../reference/SDA_spatialQuery.html">SDA_spatialQuery()</a></code> and <code><a href="../reference/fetchSDA_spatial.html">fetchSDA_spatial()</a></code>)
-that make obtaining spatial data easier. Both of these functions
-internally use <code><a href="../reference/SDA_query.html">SDA_query()</a></code> and are often a better option
-for most use cases compared to crafting a custom spatial query.</p>
-<ul>
-<li><p><strong><code><a href="../reference/SDA_spatialQuery.html">SDA_spatialQuery()</a></code></strong>: spatial inputs
-(e.g. point location, AOI rectangle) =&gt; spatial or tabular
-outputs</p></li>
-<li><p><strong><code><a href="../reference/fetchSDA_spatial.html">fetchSDA_spatial()</a></code></strong>: tabular inputs
-(e.g. map unit key, area symbol, ecological site ID) =&gt; spatial
-outputs</p></li>
-</ul>
-<p>The functions take different inputs, and support various outputs
-including SSURGO and STATSGO2 map unit polygon geometry, special feature
-points/lines/polygons, soil survey area boundaries, Major Land Resource
-Area (MLRA) boundaries, or simple tabular information using spatial data
-as input. These functions will handle projection to
-<code>"EPSG:4326"</code> internally as long as the input data has the
-correct CRS metadata.</p>
-<div class="sourceCode" id="cb143"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Example: Retrieve map unit polygons that intersect a bounding box</span></span>
-<span><span class="co"># This handles the WKT conversion and query construction automatically</span></span>
-<span><span class="co"># geomIntersection = TRUE clips the polygons to the bounding box</span></span>
-<span></span>
-<span><span class="va">polygons</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/SDA_spatialQuery.html">SDA_spatialQuery</a></span><span class="op">(</span><span class="va">bbox_sf</span>, what <span class="op">=</span> <span class="st">"mupolygon"</span>, geomIntersection <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="va">polygons</span></span></code></pre></div>
-<pre><code><span><span class="co">## Simple feature collection with 334 features and 2 fields</span></span>
-<span><span class="co">## Geometry type: GEOMETRY</span></span>
-<span><span class="co">## Dimension:     XY</span></span>
-<span><span class="co">## Bounding box:  xmin: -120.9 ymin: 37.7 xmax: -120.8 ymax: 37.8</span></span>
-<span><span class="co">## Geodetic CRS:  WGS 84</span></span>
-<span><span class="co">## First 10 features:</span></span>
-<span><span class="co">##      mukey   area_ac                           geom</span></span>
-<span><span class="co">## 1  1403416  26.74260 POLYGON ((-120.8998 37.7873...</span></span>
-<span><span class="co">## 2  1403416 325.55235 POLYGON ((-120.8872 37.7893...</span></span>
-<span><span class="co">## 3  1403425  53.06925 POLYGON ((-120.8024 37.7863...</span></span>
-<span><span class="co">## 4  1403413 108.53249 POLYGON ((-120.8788 37.7704...</span></span>
-<span><span class="co">## 5  1403412 527.89351 POLYGON ((-120.8945 37.7695...</span></span>
-<span><span class="co">## 6  1403420  82.85632 POLYGON ((-120.8021 37.7895...</span></span>
-<span><span class="co">## 7  1403421  15.05385 POLYGON ((-120.8565 37.7781...</span></span>
-<span><span class="co">## 8  1403414  22.79950 POLYGON ((-120.851 37.77987...</span></span>
-<span><span class="co">## 9  1403416  31.63604 MULTIPOLYGON (((-120.8985 3...</span></span>
-<span><span class="co">## 10 1403413  20.90871 POLYGON ((-120.8963 37.7686...</span></span></code></pre>
-<p>This section will be expanded in the future, but for now an example
-application of the two higher-level function is available in the <a href="dominant-es.html">“Dominant Ecological Site” vignette</a>.</p>
-</div>
-<div class="section level3">
-<h3 id="spatial-queries-the-two-step-pattern">Spatial Queries: The Two-Step Pattern<a class="anchor" aria-label="anchor" href="#spatial-queries-the-two-step-pattern"></a>
-</h3>
-<p>For optimal performance, separate your spatial and tabular queries.
-Fetch the list of intersecting map unit keys (<code>mukey</code>) first,
-then use those keys to query attribute tables.</p>
-<p>This avoids joining heavy geometry columns with complex attribute
-tables, which can trigger the 32Mb serialization limit. Then we can use
-the WKT in a custom SDA query to get map units intersecting the bounding
-box:</p>
-<div class="sourceCode" id="cb145"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Step 1: Get the mukeys that intersect the bounding box</span></span>
-<span><span class="va">q</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"</span></span>
-<span><span class="st">  SELECT DISTINCT mu.mukey</span></span>
-<span><span class="st">  FROM mapunit AS mu</span></span>
-<span><span class="st">  INNER JOIN mupolygon AS mp ON mp.mukey = mu.mukey</span></span>
-<span><span class="st">  WHERE mp.mupolygongeo.STIntersects(geometry::STGeomFromText('%s', 4326)) = 1</span></span>
-<span><span class="st">"</span>, <span class="va">wkt</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">spatial_result</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/SDA_query.html">SDA_query</a></span><span class="op">(</span><span class="va">q</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="va">spatial_result</span>, <span class="fl">5</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##    mukey</span></span>
-<span><span class="co">## 1 462527</span></span>
-<span><span class="co">## 2 462554</span></span>
-<span><span class="co">## 3 462555</span></span>
-<span><span class="co">## 4 462558</span></span>
-<span><span class="co">## 5 462566</span></span></code></pre>
-<p>This query uses special geospatial functions defined in SQL Server to
-perform the geometric operations (in this case “intersection”)</p>
-</div>
-<div class="section level3">
-<h3 id="sda-spatial-helper-functions">SDA Spatial Helper Functions<a class="anchor" aria-label="anchor" href="#sda-spatial-helper-functions"></a>
-</h3>
-<p>In addition to standard T-SQL spatial functions, SDA provides
-pre-defined <strong>Table-Valued Functions</strong> (TVFs) optimized for
-intersections.</p>
-<ul>
-<li>
-<code>SDA_Get_Mukey_from_intersection_with_WktWgs84(wkt)</code>:
-Returns <code>mukey</code> values intersecting the input WKT.</li>
-<li>
-<code>SDA_Get_MupolygonWktWgs84_from_Mukey(mukey)</code>: Returns
-WKT geometry for a specific <code>mukey</code>.</li>
-</ul>
-<p>This makes the logic much simpler for the common operations of
-finding <code>mukey</code> given a spatial location or geometry:</p>
-<div class="sourceCode" id="cb147"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Input MUST be WKT in WGS84 (EPSG:4326)</span></span>
-<span><span class="va">q</span> <span class="op">&lt;-</span> <span class="st">"SELECT * FROM SDA_Get_Mukey_from_intersection_with_WktWgs84('POINT(-120.9 37.7)')"</span></span>
-<span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/SDA_query.html">SDA_query</a></span><span class="op">(</span><span class="va">q</span><span class="op">)</span></span></code></pre></div>
-<p>Also, you can do the inverse (map unit key to geometry):</p>
-<div class="sourceCode" id="cb148"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Step 2: Get Geometry from Map Unit Key (mukey)</span></span>
-<span><span class="co"># Useful for retrieving the polygon boundary for a specific map unit</span></span>
-<span><span class="va">target_mukey</span> <span class="op">&lt;-</span> <span class="fl">461994</span></span>
-<span></span>
-<span><span class="va">q</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"SELECT * FROM SDA_Get_MupolygonWktWgs84_from_Mukey('%s')"</span>, <span class="va">target_mukey</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Result contains the mukey and the geometry in WKT format</span></span>
-<span><span class="va">geometry_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/SDA_query.html">SDA_query</a></span><span class="op">(</span><span class="va">q</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="va">geometry_df</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           MupolygonWktWgs84</span></span>
-<span><span class="co">## 1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 POLYGON ((-121.032455555662 37.9592152603984, -121.03285202503 37.9591849129885, -121.033072907654 37.9591081653858, -121.033328454278 37.9589770304221, -121.033728769482 37.9588035660117, -121.033900712322 37.9587435334631, -121.034102285527 37.9587105626138, -121.034226937322 37.9587131055087, -121.034372855748 37.9587426135551, -121.034498021914 37.9588254436972, -121.034637122971 37.9588730126591, -121.034725363384 37.9588563818132, -121.034868509489 37.9590389438022, -121.034869562297 37.9591653228325, -121.03475359382 37.9593522473175, -121.034173981163 37.9596399606279, -121.033980610935 37.9597719381858, -121.032316040062 37.961123123151, -121.032060957959 37.9612624734441, -121.031769961277 37.9613566706344, -121.031605303085 37.9614890992556, -121.031372905269 37.961926794296, -121.031278725938 37.962186772691, -121.031253880828 37.9624202209759, -121.030979949929 37.963433991072, -121.030853664442 37.964009330753, -121.030613352925 37.9642666362517, -121.029817684926 37.9645320941986, -121.029575343951 37.9644922710971, -121.029447384597 37.9642917390781, -121.029472874344 37.963967598828, -121.029415124536 37.9637773179969, -121.029447904803 37.9635255769229, -121.029781358193 37.9629641602046, -121.029924150065 37.9626145365407, -121.030001933825 37.9621565455648, -121.029944756724 37.9620021837882, -121.029825937826 37.9618108279156, -121.029767043665 37.9615487094568, -121.029807213431 37.9613148261005, -121.029769648729 37.9610353050336, -121.029996887309 37.9608500418744, -121.030561206747 37.9604805411635, -121.030732846467 37.9602311429487, -121.03109388638 37.9595881670532, -121.031321316698 37.9593760614507, -121.031430649793 37.9592968000317, -121.031652007924 37.9592282724891, -121.031900776861 37.9591872716173, -121.032455555662 37.9592152603984))</span></span>
-<span><span class="co">## 2 POLYGON ((-120.977440277027 37.8400202039719, -120.977735828159 37.8398271562088, -120.977918761599 37.8396863165759, -120.978089096334 37.8394815881836, -120.978189004401 37.839275889939, -120.978286303194 37.8389081212846, -120.978279774157 37.8385389812703, -120.978301713885 37.8381250774638, -120.97823247016 37.8377635179397, -120.978084402863 37.8372290429494, -120.977901893339 37.8370002134407, -120.977557934853 37.8364901013732, -120.97725676047 37.8359525569539, -120.977205941479 37.8357266595, -120.977202148334 37.8355371188211, -120.97746648077 37.834821175063, -120.977614815185 37.8346524635618, -120.977758216532 37.8344385863328, -120.97803793374 37.8342719453342, -120.978248634626 37.8341049638797, -120.978397090106 37.8339537805788, -120.978723965594 37.8335629096373, -120.978804868982 37.8333297714404, -120.978860203523 37.8329162686792, -120.978716374806 37.8325176537409, -120.978649511054 37.8324170767535, -120.978572686261 37.8320644960726, -120.97856319208 37.8318207102925, -120.978589049034 37.8316138758532, -120.978824752425 37.8312032773233, -120.978988121178 37.8309990766935, -120.979217329881 37.8306692963475, -120.979303459649 37.8304821847855, -120.979301423206 37.8302118906905, -120.979187675825 37.830020415361, -120.979112886686 37.8299381289761, -120.978948686889 37.8298274341976, -120.978779132488 37.8296531828803, -120.978529093434 37.8293423995408, -120.978491819954 37.8291247549243, -120.978544129924 37.8289188513919, -120.978646331634 37.8286683190097, -120.978677244149 37.8285241791737, -120.978954614895 37.8278082658793, -120.978977475239 37.8276648871392, -120.978967419536 37.8274572529753, -120.978799771258 37.827147705694, -120.978630303077 37.8270011561598, -120.978480434303 37.826835720976, -120.978024032673 37.8264674195749, -120.977824916161 37.8263381624385, -120.9777613674 37.8261029186895, -120.977793060477 37.8258957866904, -120.97794896038 37.825718095457, -120.978220141663 37.8256779676964, -120.978467354419 37.8257814498629, -120.978692923239 37.8259116369393, -120.978891697534 37.826050203977, -120.979159355796 37.8261715808214, -120.979490920784 37.8262407743618, -120.979836341971 37.8262470092522, -120.980204216951 37.8262254440749, -120.980815245795 37.8261548276568, -120.981098727404 37.8261777203038, -120.981387006712 37.8263003203597, -120.981520421313 37.826572681762, -120.981545320834 37.8266995967704, -120.981532882231 37.8269692269045, -120.981391196465 37.8275347861969, -120.981257240825 37.8279647516823, -120.981217960856 37.8282529354896, -120.98124735985 37.828478696968, -120.981311127445 37.8287591700524, -120.981384021796 37.8289767510116, -120.981387961865 37.8291117492463, -120.981096081815 37.8298371765903, -120.981003698192 37.8300061963217, -120.980539929736 37.830674278857, -120.980135048729 37.8312173090063, -120.98005338666 37.8314413687206, -120.979986486042 37.8320171399379, -120.979941980294 37.8321872243406, -120.979944579446 37.8324213665481, -120.9799007269 37.8325109295029, -120.979918930859 37.8326734324694, -120.979970534168 37.8328363366954, -120.980057707982 37.8330093513418, -120.980312904842 37.8334105279939, -120.980536646829 37.8336658343484, -120.980686751617 37.8338044263142, -120.980912131345 37.8339614495489, -120.981266005293 37.8343456682067, -120.9813572608 37.8345991374574, -120.981449934201 37.8347811646841, -120.981501530914 37.8350161398622, -120.981454115343 37.8352773826639, -120.981359406411 37.8355633074607, -120.981126752857 37.836082299963, -120.980943137716 37.8363138387317, -120.980752540785 37.8365080317902, -120.980296812808 37.8367530942482, -120.980202533009 37.8369853371646, -120.979995036867 37.8373161153888, -120.979824756851 37.8375106736617, -120.979476083896 37.8379827951916, -120.979337943284 37.8383046000667, -120.979065401171 37.8387598625711, -120.978901454605 37.8390002147039, -120.978771674242 37.8392500476565, -120.978666996045 37.8396720268917, -120.978645618909 37.8400497789281, -120.978725416744 37.8402770044867, -120.978556685386 37.840345576608, -120.977994970428 37.8403633352033, -120.977780754313 37.8403416371155, -120.977663765668 37.8403125285352, -120.977602251142 37.8402755073615, -120.977508129714 37.8401030205027, -120.977440277027 37.8400202039719))</span></span>
-<span><span class="co">## 3                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      POLYGON ((-120.985523088218 37.9059362513452, -120.985891567239 37.9059598999602, -120.986299486427 37.9060390524287, -120.986459355563 37.9060508909253, -120.986639996869 37.9060094145871, -120.987041369765 37.9058533983687, -120.987208918771 37.905811887389, -120.987458299277 37.9057800557708, -120.987652493843 37.9058189001273, -120.988233780422 37.906216589848, -120.98843454242 37.9062743869922, -120.988843574818 37.9063532990626, -120.989217084966 37.9064498037916, -120.989389701677 37.9065430539036, -120.989583343109 37.9066180464921, -120.989722527941 37.9067108974974, -120.989854249232 37.906830256895, -120.989915949246 37.9069568710404, -120.989825322146 37.9071449150441, -120.989491922873 37.9073015057732, -120.989436188876 37.9072641929805, -120.989346680326 37.9072357926623, -120.989124330051 37.9073044762055, -120.988895623832 37.9073994359224, -120.988222545241 37.907766589578, -120.987944370208 37.9078423266246, -120.987785562334 37.907840430903, -120.987543137214 37.9077275919775, -120.987376313195 37.9077162847434, -120.987182918211 37.9077484171905, -120.986960133373 37.9078707769975, -120.986835303725 37.907977269445, -120.98664837129 37.9082168655059, -120.986480550665 37.9083674591968, -120.986258536355 37.9084268263362, -120.986092945979 37.9084328143834, -120.985711622244 37.9083721196174, -120.985516856291 37.908441494137, -120.985420000626 37.9085291988148, -120.985342444448 37.908789344077, -120.985127005318 37.9091457732408, -120.984973312415 37.9095225516516, -120.984402502985 37.9105935975282, -120.984131761949 37.9107869589363, -120.984034685975 37.9105513221075, -120.98390352642 37.9103958052679, -120.98346043993 37.9100366434719, -120.983259762883 37.9099344691991, -120.983108389692 37.9097961142513, -120.983018134086 37.909614488707, -120.982984170679 37.9094340275789, -120.982970467749 37.9092262309921, -120.983005464254 37.9090285780751, -120.983069584541 37.908849781913, -120.983118665735 37.9085623317296, -120.983208742576 37.9084825146724, -120.984131089911 37.9082822469208, -120.984526413222 37.9082254475723, -120.984686087165 37.9081199871405, -120.984756252956 37.9079861228242, -120.984707787014 37.9078049983975, -120.984576505041 37.9076319532808, -120.984383351417 37.9074210291711, -120.984286486804 37.9072306229818, -120.984224290109 37.907057913864, -120.984301713878 37.9068523109911, -120.98438517861 37.9067637115338, -120.984550908203 37.9066311133469, -120.984752369443 37.906526152798, -120.985002185842 37.9064406459829, -120.985183304963 37.9063353188541, -120.985294574459 37.9062205763299, -120.985377954947 37.9061042745238, -120.985440400018 37.905961860195, -120.985523088218 37.9059362513452))</span></span>
-<span><span class="co">## 4                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       POLYGON ((-120.98392012538 37.9120092608573, -120.983920116288 37.9120813314766, -120.983877330105 37.9121706626422, -120.983863795059 37.9122963792718, -120.983890819501 37.9124052990935, -120.983876490532 37.9127381482558, -120.983897239166 37.9129010459885, -120.984000810323 37.9130558648315, -120.984068854303 37.9132282760937, -120.984061793966 37.9134173159296, -120.983999205165 37.9136142710604, -120.983970756462 37.9139750195284, -120.983990431669 37.9142000469498, -120.983920114666 37.9144605229553, -120.983733834268 37.9144033823299, -120.983512151504 37.9143813626691, -120.983276402284 37.9143049985795, -120.98315192843 37.9141859642132, -120.983138874876 37.913897647622, -120.983027640279 37.9136520350459, -120.982827089637 37.9134953184344, -120.98263433916 37.9133748528511, -120.982281177519 37.9130624826414, -120.981983911426 37.9125887446493, -120.981831632573 37.9124958505786, -120.981554726659 37.9124826032185, -120.981187656278 37.9125214691775, -120.980937266457 37.9125710487223, -120.980701936796 37.9125851407342, -120.980507772493 37.9125361126669, -120.980501406417 37.9123563496652, -120.980578329891 37.9121767278483, -120.980550867476 37.9119154482948, -120.980717599403 37.9117650946736, -120.981404770214 37.9117406093536, -120.981805901404 37.9117657645214, -120.98213205474 37.9118250747223, -120.982450263095 37.9119747450009, -120.982838978153 37.9120533107828, -120.98311617122 37.9121394874135, -120.983378532244 37.9121622400764, -120.983565925004 37.9121470787842, -120.983726240308 37.9121052406898, -120.98392012538 37.9120092608573))</span></span>
-<span><span class="co">## 5                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                POLYGON ((-120.976618752919 37.8950135458249, -120.976335244308 37.8948917321003, -120.976321844539 37.8947568666454, -120.97644103155 37.8943078568389, -120.976406106564 37.8941451541604, -120.97632346141 37.8940266151981, -120.97582601447 37.8935134340163, -120.975695104895 37.8934031386057, -120.975515164428 37.8932920075564, -120.975141114774 37.8931318394823, -120.974835950129 37.893036726673, -120.974399641239 37.8929302273106, -120.974137351298 37.8929074553091, -120.973776312456 37.8929016327187, -120.97339529942 37.8928140592313, -120.973090825587 37.8927003197221, -120.972862223499 37.8925069662265, -120.972606115165 37.8923406135282, -120.972392314346 37.8922827548895, -120.972128697888 37.8922870504914, -120.971414098739 37.8923828538791, -120.97071429361 37.8926141490595, -120.970346506972 37.8927880449445, -120.970089249558 37.8927660604654, -120.970090747333 37.8926123758252, -120.970194007042 37.8924882346052, -120.970312007212 37.8923998167057, -120.970659111067 37.8922348638255, -120.971117728715 37.8919902380063, -120.971339361943 37.8919402093411, -120.971651463785 37.8919008329444, -120.971922028594 37.891896009406, -120.972254025244 37.8919106798158, -120.972593814151 37.8919616014651, -120.973140557808 37.8921605087601, -120.973556944765 37.8922850354301, -120.973806065242 37.892280071726, -120.974054984254 37.8922298767936, -120.974444063149 37.8921106474734, -120.974707678843 37.8921063468797, -120.975143842044 37.8922673870532, -120.976831996534 37.8932153157039, -120.976970295455 37.8932714003401, -120.97713624351 37.8934279569021, -120.977364047673 37.8938284355726, -120.977314296968 37.8941964046634, -120.977237165285 37.894402865158, -120.977251411437 37.8945745116158, -120.977465674558 37.8947126503714, -120.977803670201 37.8948544825232, -120.978116546977 37.8950302087813, -120.978205525081 37.8952666121033, -120.978108538929 37.8954088530654, -120.977989558961 37.8955150392216, -120.97784419553 37.8955759250091, -120.977635660701 37.8955539294061, -120.977484187976 37.8954701090048, -120.97694512638 37.8950737316129, -120.976618752919 37.8950135458249))</span></span>
-<span><span class="co">## 6                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             POLYGON ((-120.958148228164 37.8929009967531, -120.958257566342 37.89339922832, -120.958242554141 37.8937682268486, -120.958152399799 37.893992167427, -120.958207050548 37.8941913968848, -120.958255178651 37.894299599785, -120.958337901348 37.8943737818444, -120.958406631387 37.8945552874435, -120.95827453497 37.8946614175666, -120.957956155354 37.8946826657254, -120.957588087146 37.8946496217747, -120.957192552933 37.8946334017232, -120.956721843593 37.894544192444, -120.956410676599 37.8944659975247, -120.956058396377 37.8940730302104, -120.956079378789 37.8938931079596, -120.956371088193 37.8938256981606, -120.956911733464 37.8938799710885, -120.95711167439 37.8939287402782, -120.957326802893 37.8939595538745, -120.957569551839 37.8939190001486, -120.957736981051 37.8937500551254, -120.957757993901 37.8934980617213, -120.957702914505 37.8932185433083, -120.957663591713 37.8927130748242, -120.957693027833 37.8921451979903, -120.957590286763 37.8915938506515, -120.957549456741 37.8914758081609, -120.957486835947 37.8913669379693, -120.957135291263 37.89088328039, -120.957128531351 37.8907571957377, -120.957185224437 37.8906049191925, -120.957268166577 37.8904804183495, -120.957282434107 37.8903360819168, -120.957138383743 37.8899642861266, -120.956883152836 37.8894909945394, -120.957056677266 37.8893946863583, -120.957257940983 37.8894163835871, -120.957568148277 37.8896740078802, -120.957623281227 37.8897474865796, -120.957809306399 37.8901650217306, -120.957896776288 37.8913561222369, -120.957875227461 37.8915721961394, -120.957929495688 37.8918528078143, -120.957962159765 37.8925555331955, -120.958010396191 37.8927912105813, -120.958148228164 37.8929009967531))</span></span></code></pre>
-<p>Using the <code>sf</code> (or <code>terra</code>) package, you can
-convert the resulting text WKT column to a spatial object:</p>
-<div class="sourceCode" id="cb150"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"sf"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">&amp;&amp;</span></span>
-<span>   <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">geometry_df</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="co"># Parse WKT column (usually named 'mupolygongeo' in mupolygon table, but 'MupolygonWktWgs84' in TVF result)</span></span>
-<span>  <span class="va">poly_sf</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sfc.html" class="external-link">st_as_sfc</a></span><span class="op">(</span><span class="va">geometry_df</span><span class="op">$</span><span class="va">MupolygonWktWgs84</span>, crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span></span>
-<span>  </span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">poly_sf</span>, main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"Geometry for mukey="</span>, <span class="va">target_mukey</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="op">}</span></span></code></pre></div>
-<p><img src="sda_files/figure-html/unnamed-chunk-1-1.png" class="r-plt" alt="" width="672"></p>
-<p><strong>Note:</strong> The TVF function name implies the CRS is WGS84
-(authority:code <code>EPSG:4326</code>, SRS ID <code>4326</code>; or,
-more correctly, <code>OGC:CRS84</code>).</p>
-<p>See the <a href="https://sdmdataaccess.nrcs.usda.gov/documents/AdvancedQueries.html" class="external-link">SDA
-Advanced Query Guide</a> for more details on TVF functions and other
-high-level features built into SDA.</p>
-</div>
-<div class="section level3">
-<h3 id="spatial-and-tabular-property-integration">Spatial and Tabular Property Integration<a class="anchor" aria-label="anchor" href="#spatial-and-tabular-property-integration"></a>
-</h3>
-<p>We can use the result of our spatial filtering with property
-queries.</p>
-<p>Here we extract the unique map unit keys and pass as
-<code>mukeys</code> argument to <code><a href="../reference/get_SDA_property.html">get_SDA_property()</a></code></p>
-<div class="sourceCode" id="cb151"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Step 2: Use the mukeys to fetch tabular data</span></span>
-<span><span class="co"># First, get mukeys in bounding box</span></span>
-<span><span class="va">spatial_mukeys</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ncss-tech.github.io/aqp/reference/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">spatial_result</span><span class="op">$</span><span class="va">mukey</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Then query properties for those mukeys</span></span>
-<span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">spatial_mukeys</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">clay_in_bbox</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_SDA_property.html">get_SDA_property</a></span><span class="op">(</span></span>
-<span>    property <span class="op">=</span> <span class="st">"Total Clay - Rep Value"</span>,</span>
-<span>    method <span class="op">=</span> <span class="st">"Weighted Average"</span>,</span>
-<span>    mukeys <span class="op">=</span> <span class="va">spatial_mukeys</span>,</span>
-<span>    top_depth <span class="op">=</span> <span class="fl">0</span>,</span>
-<span>    bottom_depth <span class="op">=</span> <span class="fl">50</span></span>
-<span>  <span class="op">)</span></span>
-<span>  </span>
-<span>  <span class="fu"><a href="https://rspatial.github.io/terra/reference/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="va">clay_in_bbox</span><span class="op">)</span></span>
-<span><span class="op">}</span></span></code></pre></div>
-<pre><code><span><span class="co">##     mukey areasymbol musym</span></span>
-<span><span class="co">## 1 1403410      CA632   127</span></span>
-<span><span class="co">## 2 1403412      CA632   130</span></span>
-<span><span class="co">## 3 1403413      CA632   131</span></span>
-<span><span class="co">## 4 1403414      CA632   134</span></span>
-<span><span class="co">## 5 2766111      CA632   142</span></span>
-<span><span class="co">## 6 1403416      CA632   157</span></span>
-<span><span class="co">##                                                                                muname</span></span>
-<span><span class="co">## 1                                           Chuloak sandy loam, 0 to 2 percent slopes</span></span>
-<span><span class="co">## 2                 Columbia sandy loam, drained, 0 to 2 percent slopes, rarely flooded</span></span>
-<span><span class="co">## 3 Columbia sandy loam, partially drained, 0 to 2 percent slopes, occasionally flooded</span></span>
-<span><span class="co">## 4                                            Cometa sandy loam, 2 to 8 percent slopes</span></span>
-<span><span class="co">## 5                                    Delhi loamy sand, 0 to 2 percent slopes, MLRA 17</span></span>
-<span><span class="co">## 6                                       Exeter sandy clay loam, 0 to 2 percent slopes</span></span>
-<span><span class="co">##   claytotal_r</span></span>
-<span><span class="co">## 1       17.80</span></span>
-<span><span class="co">## 2       17.08</span></span>
-<span><span class="co">## 3       15.38</span></span>
-<span><span class="co">## 4       20.00</span></span>
-<span><span class="co">## 5        2.22</span></span>
-<span><span class="co">## 6       18.60</span></span></code></pre>
-<p>This shows how to get the data, see the <a href="local-ssurgo.html">Local SSURGO vignette</a> for more spatial
-visualization examples using <code>sf</code>.</p>
-<hr>
-</div>
-</div>
-<div class="section level2">
 <h2 id="integration-examples-combining-multiple-functions">Integration Examples: Combining Multiple Functions<a class="anchor" aria-label="anchor" href="#integration-examples-combining-multiple-functions"></a>
 </h2>
 <div class="section level3">
 <h3 id="example-1-multi-method-property-comparison">Example 1: Multi-Method Property Comparison<a class="anchor" aria-label="anchor" href="#example-1-multi-method-property-comparison"></a>
 </h3>
 <p>Compare the same property using different aggregation methods:</p>
-<div class="sourceCode" id="cb153"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb160"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Get clay content using three different methods</span></span>
 <span><span class="va">methods</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Dominant Component (Numeric)"</span>, <span class="st">"Weighted Average"</span>, <span class="st">"Max"</span><span class="op">)</span></span>
 <span></span>
@@ -3865,7 +3881,7 @@ visualization examples using <code>sf</code>.</p>
 </h3>
 <p>Combine soil properties and interpretations for a land use
 suitability assessment:</p>
-<div class="sourceCode" id="cb155"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb162"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Get drainage class and hydrologic group</span></span>
 <span><span class="va">drain_hydro</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_SDA_property.html">get_SDA_property</a></span><span class="op">(</span></span>
 <span>  property <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Drainage Class"</span>, <span class="st">"Hydrologic Group"</span><span class="op">)</span>,</span>
@@ -3933,7 +3949,7 @@ suitability assessment:</p>
 </h3>
 <p>Combine hydric classifications with wetland-related
 interpretations:</p>
-<div class="sourceCode" id="cb157"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb164"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Get a generalized mapunit-level hydric classification</span></span>
 <span><span class="co"># see ?get_SDA_hydric for details on method="mapunit"</span></span>
 <span><span class="va">hydric_stat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_SDA_hydric.html">get_SDA_hydric</a></span><span class="op">(</span></span>
@@ -4032,7 +4048,7 @@ interpretations:</p>
 your favorite R aggregation method e.g. <code>dplyr</code>,
 <code>data.table</code>, or <code>collapse</code>) to summarize across
 survey areas:</p>
-<div class="sourceCode" id="cb159"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb166"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Get properties for two areas</span></span>
 <span><span class="va">props_ca630</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_SDA_property.html">get_SDA_property</a></span><span class="op">(</span></span>
 <span>  property <span class="op">=</span> <span class="st">"Total Clay - Rep Value"</span>,</span>
@@ -4073,7 +4089,7 @@ survey areas:</p>
 </h3>
 <p>Use <code>method = "None"</code> to perform custom component-level
 analysis:</p>
-<div class="sourceCode" id="cb161"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb168"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Get all component properties without aggregation</span></span>
 <span><span class="va">clay_by_comp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_SDA_property.html">get_SDA_property</a></span><span class="op">(</span></span>
 <span>  property <span class="op">=</span> <span class="st">"Total Clay - Rep Value"</span>,</span>
@@ -4113,7 +4129,7 @@ analysis:</p>
 <span><span class="co">## 4          12</span></span>
 <span><span class="co">## 5          NA</span></span>
 <span><span class="co">## 6          15</span></span></code></pre>
-<div class="sourceCode" id="cb163"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb170"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Calculate average clay by major vs. minor components</span></span>
 <span><span class="va">clay_summary</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/aggregate.html" class="external-link">aggregate</a></span><span class="op">(</span></span>
 <span>  <span class="va">claytotal_r</span> <span class="op">~</span> <span class="va">majcompflag</span>,</span>

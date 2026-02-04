@@ -674,7 +674,7 @@ designation.
 For instance, a logical statement to exclude the master horizon
 designation “O” for organics:
 
-``` r
+``` sql
 AND desgnmaster != 'O'
 ```
 
@@ -1077,21 +1077,27 @@ locally without the need for chunking or simplification.
 
 1.  **Add WHERE clause** to reduce result set:
 
-``` r
-# Bad: will return >100k records across all of SSURGO
-q <- "SELECT * FROM component"
-   
-# Good: specific component name pattern in WHERE clause
-q <- "SELECT * FROM component 
-      WHERE compname LIKE 'Miami%'"
+This query will return \>100k records (all components across all of
+SSURGO and STATSGO) (**bad**):
+
+``` sql
+SELECT * FROM component
+```
+
+This query selects a specific component name pattern in `WHERE` clause
+(good):
+
+``` sql
+SELECT * FROM component 
+WHERE compname LIKE 'Miami%'
 ```
 
 2.  **Use TOP clause** to limit number of results (useful for testing):
 
-``` r
-# Test with small result set first
-q <- "SELECT TOP 100 * FROM chorizon"
-result <- SDA_query(q)
+Use a `TOP` clause to test with small result set first
+
+``` sql
+SELECT TOP 100 * FROM chorizon
 ```
 
 TOP can be used after sorting with `ORDER BY` to easily find the values
@@ -1112,19 +1118,18 @@ Efficient queries often perform filtering operations as part of their
 JOIN statements. This can improve server-side query planning and reduce
 overhead that is not needed for the final result.
 
-``` r
-# Return aggregated results (fewer rows) instead of raw data
-#  and constrain musym in join to mapunit instead of WHERE
-q <- "
+Return aggregated results (fewer rows) instead of raw data and constrain
+musym in join to mapunit instead of WHERE:
+
+``` sql
 SELECT mu.mukey, 
   COUNT(*) AS n_hz,
   AVG(ch.claytotal_r) AS avg_clay
 FROM component co
-INNER JOIN mapunit mu ON mu.mukey = co.mukey AND mu.musym = '101'
+INNER JOIN mapunit mu ON mu.mukey = co.mukey AND
 INNER JOIN chorizon ch ON ch.cokey = co.cokey
 GROUP BY mu.mukey
 WHERE compname LIKE 'Musick%'
-"
 ```
 
 4.  **Explicitly** select the columns you need:
@@ -1135,24 +1140,25 @@ While `SELECT *` is fine to use for testing, it is prone to issues if
 schemas change, as well as returning more data than is necessary in most
 cases.
 
-``` r
-# `SELECT *` will return all columns, usually including many columns you do not need
-q <- "SELECT TOP 1 *
-      FROM mapunit
-      INNER JOIN component ON mapunit.mukey = component.mukey
+`SELECT *` will return all columns, usually including many columns you
+do not need:
+
+``` sql
+SELECT TOP 1 *
+FROM mapunit
+INNER JOIN component ON mapunit.mukey = component.mukey
 WHERE compname LIKE 'Musick%'
-"
 ```
 
-``` r
-# Use `SELECT column1, column2, ...` for concise results, with no duplicated columns in complex joins
-q <- "
+Use `SELECT column1, column2, ...` for concise results, with no
+duplicated columns in complex joins:
+
+``` sql
 SELECT TOP 1 mapunit.mukey, musym, muname, 
              compname, localphase, comppct_r, majcompflag, compkind, cokey
 FROM mapunit
 INNER JOIN component ON mapunit.mukey = component.mukey
 WHERE compname LIKE 'Musick%'
-"
 ```
 
 If a column name occurs multiple times in different tables, you need
@@ -1163,14 +1169,12 @@ If you do need all columns from a specific table use `<tablename>.*`
 syntax, for example here we get all columns from `chfrags`, and specific
 columns from `chorizon` and `component`:
 
-``` r
-q <- "
+``` sql
 SELECT hzname, chfrags.*, component.cokey
 FROM chfrags
 INNER JOIN chorizon ON chorizon.chkey = chfrags.chkey
 INNER JOIN component ON component.cokey = chorizon.cokey
 WHERE compname LIKE 'Musick%'
-"
 ```
 
 5.  **Use
@@ -1190,26 +1194,31 @@ section.
 
 #### NULL Handling
 
-``` r
-# Check and filter for non-NULL - SDA uses IS NULL / IS NOT NULL
-q <- "SELECT TOP 10 * FROM chorizon WHERE claytotal_r IS NOT NULL"
+Check and filter for non-NULL - SDA uses IS NULL / IS NOT NULL:
 
-# Use ISNULL() to provide defaults e.g. convert missing clay content to 0
-q <- "SELECT TOP 10 chkey, claytotal_r, ISNULL(claytotal_r, 0) AS clay FROM chorizon"
+``` sql
+SELECT TOP 10 * FROM chorizon WHERE claytotal_r IS NOT NULL
+```
+
+Use `ISNULL()` to provide defaults such as converting missing clay
+content to 0
+
+``` sql
+SELECT TOP 10 chkey, claytotal_r, ISNULL(claytotal_r, 0) AS clay 
+FROM chorizon
 ```
 
 #### Type Casting
 
-``` r
-# CAST for explicit type conversion
-q <- "
+Use `CAST()` for explicit type conversion:
+
+``` sql
 SELECT TOP 10 
   claytotal_r,
   CAST(claytotal_r AS INT) AS clay_int,
   CAST(chkey AS CHAR(10)) AS chkey_str
 FROM chorizon
 WHERE claytotal_r != CAST(claytotal_r AS INT) 
-"
 ```
 
 **Note:** in example above, casting to INT is equivalent to truncating
@@ -1220,12 +1229,16 @@ does, for example.
 
 #### String Operations
 
-``` r
-# Wildcards with LIKE
-q <- "SELECT * FROM mapunit WHERE muname LIKE '%clay%'"
+You can use wildcards with `LIKE` operator:
 
-# String concatenation with +
-q <- "SELECT areasymbol + '-' + musym AS areamusym FROM mapunit"
+``` sql
+SELECT * FROM mapunit WHERE muname LIKE '%clay%'
+```
+
+Perform string concatenation with `+` operator:
+
+``` sql
+SELECT areasymbol + '-' + musym AS areamusym FROM mapunit
 ```
 
 ------------------------------------------------------------------------
@@ -1398,6 +1411,310 @@ and complex filtering logic. Identify any areas of repeated logic and
 refactor to simplify redundant steps. If your query works as expected on
 a small data set, and you have optimized it, then consider breaking your
 big query up into (more) chunks.
+
+------------------------------------------------------------------------
+
+## Spatial Queries
+
+This document mainly focuses on details of custom spatial queries using
+the low-level
+[`SDA_query()`](http://ncss-tech.github.io/soilDB/reference/SDA_query.md)
+function, but there are several functions that provide high-level
+convenience interface for spatial queries in `soilDB`. First we will
+discuss converting spatial data to Well-Known Text for use in generating
+custom queries. Then we will discuss the high- and low-level interfaces
+in `soilDB`.
+
+### Converting sf Objects to WKT
+
+**Important:** SDA requires spatial inputs (WKT) to be in **WGS84
+(EPSG:4326)** geographic coordinates.
+
+Passing projected coordinates (like UTM or Albers) will result in query
+failures or zero results.
+
+SDA does store an alternate projected version of the geometry data (e.g.
+`mupolygonproj`, rather than `mupolygongeo`). The projection is a Web
+Mercator projection (`"EPSG:3857"`) so it is best avoided in analysis,
+though it is an option for visualization web map applications that lack
+capability to project the data.
+
+You can use `sf` to define a geometry, such as a bounding recatangle,
+and convert it to WKT (Well-Known Text) for spatial queries:
+
+``` r
+library(sf)
+
+# Define a bounding box for a region of interest
+# (xmin, ymin, xmax, ymax)
+bbox <- c(-120.9, 37.7, -120.8, 37.8)
+bbox_sf <- st_as_sfc(st_bbox(c(
+  xmin = bbox[1],
+  ymin = bbox[2],
+  xmax = bbox[3],
+  ymax = bbox[4]
+), crs = 4326))
+
+wkt <- st_as_text(bbox_sf)
+
+wkt
+```
+
+    ## [1] "POLYGON ((-120.9 37.7, -120.8 37.7, -120.8 37.8, -120.9 37.8, -120.9 37.7))"
+
+### High-level Functions
+
+The soilDB package provides two higher-level functions
+([`SDA_spatialQuery()`](http://ncss-tech.github.io/soilDB/reference/SDA_spatialQuery.md)
+and
+[`fetchSDA_spatial()`](http://ncss-tech.github.io/soilDB/reference/fetchSDA_spatial.md))
+that make obtaining spatial data easier. Both of these functions
+internally use
+[`SDA_query()`](http://ncss-tech.github.io/soilDB/reference/SDA_query.md)
+and are often a better option for most use cases compared to crafting a
+custom spatial query.
+
+- **[`SDA_spatialQuery()`](http://ncss-tech.github.io/soilDB/reference/SDA_spatialQuery.md)**:
+  spatial inputs (e.g. point location, AOI rectangle) =\> spatial or
+  tabular outputs
+
+- **[`fetchSDA_spatial()`](http://ncss-tech.github.io/soilDB/reference/fetchSDA_spatial.md)**:
+  tabular inputs (e.g. map unit key, area symbol, ecological site ID)
+  =\> spatial outputs
+
+The functions take different inputs, and support various outputs
+including SSURGO and STATSGO2 map unit polygon geometry, special feature
+points/lines/polygons, soil survey area boundaries, Major Land Resource
+Area (MLRA) boundaries, or simple tabular information using spatial data
+as input. These functions will handle projection to `"EPSG:4326"`
+internally as long as the input data has the correct CRS metadata.
+
+``` r
+# Example: Retrieve map unit polygons that intersect a bounding box
+# This handles the WKT conversion and query construction automatically
+# geomIntersection = TRUE clips the polygons to the bounding box
+
+polygons <- SDA_spatialQuery(bbox_sf, what = "mupolygon", geomIntersection = TRUE)
+polygons
+```
+
+    ## Simple feature collection with 334 features and 2 fields
+    ## Geometry type: GEOMETRY
+    ## Dimension:     XY
+    ## Bounding box:  xmin: -120.9 ymin: 37.7 xmax: -120.8 ymax: 37.8
+    ## Geodetic CRS:  WGS 84
+    ## First 10 features:
+    ##      mukey   area_ac                           geom
+    ## 1  1403416  26.74260 POLYGON ((-120.8998 37.7873...
+    ## 2  1403416 325.55235 POLYGON ((-120.8872 37.7893...
+    ## 3  1403425  53.06925 POLYGON ((-120.8024 37.7863...
+    ## 4  1403413 108.53249 POLYGON ((-120.8788 37.7704...
+    ## 5  1403412 527.89351 POLYGON ((-120.8945 37.7695...
+    ## 6  1403420  82.85632 POLYGON ((-120.8021 37.7895...
+    ## 7  1403421  15.05385 POLYGON ((-120.8565 37.7781...
+    ## 8  1403414  22.79950 POLYGON ((-120.851 37.77987...
+    ## 9  1403416  31.63604 MULTIPOLYGON (((-120.8985 3...
+    ## 10 1403413  20.90871 POLYGON ((-120.8963 37.7686...
+
+Note that `bbox_sf` could be any geometry. Here is is a rectangular
+polygon, but it could be a point, or collection of points, or lines, or
+similar.
+
+[`SDA_spatialQuery()`](http://ncss-tech.github.io/soilDB/reference/SDA_spatialQuery.md)
+allows you to get tabular data based on a spatial geometry.
+
+For instance, to simply identify what soil survey area or map unit a
+single point overlaps with, you can do something like the following.
+
+``` r
+# Example: get some legend and mapunit-level tabular data at a point
+point_sf <- sf::st_as_sf(data.frame(wkt = "POINT (-120.85 37.75)"),
+                         wkt = "wkt",
+                         crs = "EPSG:4236")
+ssa <- SDA_spatialQuery(
+  point_sf,
+  what = "areasymbol"
+)
+ssa
+```
+
+    ##   areasymbol
+    ## 1      CA644
+
+``` r
+mu <- SDA_spatialQuery(
+  point_sf,
+  what = "mukey"
+)
+mu
+```
+
+    ##    mukey                                   muname
+    ## 1 462643 Madera sandy loam, 0 to 2 percent slopes
+
+Above we pass a WKT string (the result of `sf::st_centroid(bbox_sf)`)
+within a data.frame to
+[`sf::st_as_sf()`](https://r-spatial.github.io/sf/reference/st_as_sf.html).
+We specify the `wkt` argument to specify which column the WKT string is
+stored in to construct our spatial query object.
+
+This section will be expanded in the future, but for now an example
+application of the two higher-level functions is available in the
+[“Dominant Ecological Site”
+vignette](http://ncss-tech.github.io/soilDB/articles/dominant-es.md).
+
+### Spatial Queries: The Two-Step Pattern
+
+For optimal performance, separate your spatial and tabular queries.
+Fetch the list of intersecting map unit keys (`mukey`) first, then use
+those keys to query attribute tables.
+
+This avoids joining heavy geometry columns with complex attribute
+tables, which can trigger the 32Mb serialization limit. Then we can use
+the WKT in a custom SDA query to get map units intersecting the bounding
+box:
+
+``` r
+# Step 1: Get the mukeys that intersect the bounding box
+q <- sprintf("
+  SELECT DISTINCT mu.mukey
+  FROM mapunit AS mu
+  INNER JOIN mupolygon AS mp ON mp.mukey = mu.mukey
+  WHERE mp.mupolygongeo.STIntersects(geometry::STGeomFromText('%s', 4326)) = 1
+", wkt)
+
+spatial_result <- SDA_query(q)
+head(spatial_result, 5)
+```
+
+    ##    mukey
+    ## 1 462527
+    ## 2 462554
+    ## 3 462555
+    ## 4 462558
+    ## 5 462566
+
+This query uses special geospatial functions defined in SQL Server to
+perform the geometric operations (in this case “intersection”)
+
+### SDA Spatial Helper Functions
+
+In addition to standard T-SQL spatial functions, SDA provides
+pre-defined **Table-Valued Functions** (TVFs) optimized for
+intersections.
+
+- `SDA_Get_Mukey_from_intersection_with_WktWgs84(wkt)`: Returns `mukey`
+  values intersecting the input WKT.
+- `SDA_Get_MupolygonWktWgs84_from_Mukey(mukey)`: Returns WKT geometry
+  for a specific `mukey`.
+
+This makes the logic much simpler for the common operations of finding
+`mukey` given a spatial location or geometry:
+
+``` r
+# Input MUST be WKT in WGS84 (EPSG:4326)
+q <- "SELECT * FROM SDA_Get_Mukey_from_intersection_with_WktWgs84('POINT(-120.9 37.7)')"
+result <- SDA_query(q)
+```
+
+Also, you can do the inverse (map unit key to geometry):
+
+``` r
+# Step 2: Get Geometry from Map Unit Key (mukey)
+# Useful for retrieving the polygon boundary for a specific map unit
+target_mukey <- 461994
+
+q <- sprintf("SELECT * FROM SDA_Get_MupolygonWktWgs84_from_Mukey('%s')", target_mukey)
+
+# Result contains the mukey and the geometry in WKT format
+geometry_df <- SDA_query(q)
+
+head(geometry_df)
+```
+
+    ##                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           MupolygonWktWgs84
+    ## 1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 POLYGON ((-121.032455555662 37.9592152603984, -121.03285202503 37.9591849129885, -121.033072907654 37.9591081653858, -121.033328454278 37.9589770304221, -121.033728769482 37.9588035660117, -121.033900712322 37.9587435334631, -121.034102285527 37.9587105626138, -121.034226937322 37.9587131055087, -121.034372855748 37.9587426135551, -121.034498021914 37.9588254436972, -121.034637122971 37.9588730126591, -121.034725363384 37.9588563818132, -121.034868509489 37.9590389438022, -121.034869562297 37.9591653228325, -121.03475359382 37.9593522473175, -121.034173981163 37.9596399606279, -121.033980610935 37.9597719381858, -121.032316040062 37.961123123151, -121.032060957959 37.9612624734441, -121.031769961277 37.9613566706344, -121.031605303085 37.9614890992556, -121.031372905269 37.961926794296, -121.031278725938 37.962186772691, -121.031253880828 37.9624202209759, -121.030979949929 37.963433991072, -121.030853664442 37.964009330753, -121.030613352925 37.9642666362517, -121.029817684926 37.9645320941986, -121.029575343951 37.9644922710971, -121.029447384597 37.9642917390781, -121.029472874344 37.963967598828, -121.029415124536 37.9637773179969, -121.029447904803 37.9635255769229, -121.029781358193 37.9629641602046, -121.029924150065 37.9626145365407, -121.030001933825 37.9621565455648, -121.029944756724 37.9620021837882, -121.029825937826 37.9618108279156, -121.029767043665 37.9615487094568, -121.029807213431 37.9613148261005, -121.029769648729 37.9610353050336, -121.029996887309 37.9608500418744, -121.030561206747 37.9604805411635, -121.030732846467 37.9602311429487, -121.03109388638 37.9595881670532, -121.031321316698 37.9593760614507, -121.031430649793 37.9592968000317, -121.031652007924 37.9592282724891, -121.031900776861 37.9591872716173, -121.032455555662 37.9592152603984))
+    ## 2 POLYGON ((-120.977440277027 37.8400202039719, -120.977735828159 37.8398271562088, -120.977918761599 37.8396863165759, -120.978089096334 37.8394815881836, -120.978189004401 37.839275889939, -120.978286303194 37.8389081212846, -120.978279774157 37.8385389812703, -120.978301713885 37.8381250774638, -120.97823247016 37.8377635179397, -120.978084402863 37.8372290429494, -120.977901893339 37.8370002134407, -120.977557934853 37.8364901013732, -120.97725676047 37.8359525569539, -120.977205941479 37.8357266595, -120.977202148334 37.8355371188211, -120.97746648077 37.834821175063, -120.977614815185 37.8346524635618, -120.977758216532 37.8344385863328, -120.97803793374 37.8342719453342, -120.978248634626 37.8341049638797, -120.978397090106 37.8339537805788, -120.978723965594 37.8335629096373, -120.978804868982 37.8333297714404, -120.978860203523 37.8329162686792, -120.978716374806 37.8325176537409, -120.978649511054 37.8324170767535, -120.978572686261 37.8320644960726, -120.97856319208 37.8318207102925, -120.978589049034 37.8316138758532, -120.978824752425 37.8312032773233, -120.978988121178 37.8309990766935, -120.979217329881 37.8306692963475, -120.979303459649 37.8304821847855, -120.979301423206 37.8302118906905, -120.979187675825 37.830020415361, -120.979112886686 37.8299381289761, -120.978948686889 37.8298274341976, -120.978779132488 37.8296531828803, -120.978529093434 37.8293423995408, -120.978491819954 37.8291247549243, -120.978544129924 37.8289188513919, -120.978646331634 37.8286683190097, -120.978677244149 37.8285241791737, -120.978954614895 37.8278082658793, -120.978977475239 37.8276648871392, -120.978967419536 37.8274572529753, -120.978799771258 37.827147705694, -120.978630303077 37.8270011561598, -120.978480434303 37.826835720976, -120.978024032673 37.8264674195749, -120.977824916161 37.8263381624385, -120.9777613674 37.8261029186895, -120.977793060477 37.8258957866904, -120.97794896038 37.825718095457, -120.978220141663 37.8256779676964, -120.978467354419 37.8257814498629, -120.978692923239 37.8259116369393, -120.978891697534 37.826050203977, -120.979159355796 37.8261715808214, -120.979490920784 37.8262407743618, -120.979836341971 37.8262470092522, -120.980204216951 37.8262254440749, -120.980815245795 37.8261548276568, -120.981098727404 37.8261777203038, -120.981387006712 37.8263003203597, -120.981520421313 37.826572681762, -120.981545320834 37.8266995967704, -120.981532882231 37.8269692269045, -120.981391196465 37.8275347861969, -120.981257240825 37.8279647516823, -120.981217960856 37.8282529354896, -120.98124735985 37.828478696968, -120.981311127445 37.8287591700524, -120.981384021796 37.8289767510116, -120.981387961865 37.8291117492463, -120.981096081815 37.8298371765903, -120.981003698192 37.8300061963217, -120.980539929736 37.830674278857, -120.980135048729 37.8312173090063, -120.98005338666 37.8314413687206, -120.979986486042 37.8320171399379, -120.979941980294 37.8321872243406, -120.979944579446 37.8324213665481, -120.9799007269 37.8325109295029, -120.979918930859 37.8326734324694, -120.979970534168 37.8328363366954, -120.980057707982 37.8330093513418, -120.980312904842 37.8334105279939, -120.980536646829 37.8336658343484, -120.980686751617 37.8338044263142, -120.980912131345 37.8339614495489, -120.981266005293 37.8343456682067, -120.9813572608 37.8345991374574, -120.981449934201 37.8347811646841, -120.981501530914 37.8350161398622, -120.981454115343 37.8352773826639, -120.981359406411 37.8355633074607, -120.981126752857 37.836082299963, -120.980943137716 37.8363138387317, -120.980752540785 37.8365080317902, -120.980296812808 37.8367530942482, -120.980202533009 37.8369853371646, -120.979995036867 37.8373161153888, -120.979824756851 37.8375106736617, -120.979476083896 37.8379827951916, -120.979337943284 37.8383046000667, -120.979065401171 37.8387598625711, -120.978901454605 37.8390002147039, -120.978771674242 37.8392500476565, -120.978666996045 37.8396720268917, -120.978645618909 37.8400497789281, -120.978725416744 37.8402770044867, -120.978556685386 37.840345576608, -120.977994970428 37.8403633352033, -120.977780754313 37.8403416371155, -120.977663765668 37.8403125285352, -120.977602251142 37.8402755073615, -120.977508129714 37.8401030205027, -120.977440277027 37.8400202039719))
+    ## 3                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      POLYGON ((-120.985523088218 37.9059362513452, -120.985891567239 37.9059598999602, -120.986299486427 37.9060390524287, -120.986459355563 37.9060508909253, -120.986639996869 37.9060094145871, -120.987041369765 37.9058533983687, -120.987208918771 37.905811887389, -120.987458299277 37.9057800557708, -120.987652493843 37.9058189001273, -120.988233780422 37.906216589848, -120.98843454242 37.9062743869922, -120.988843574818 37.9063532990626, -120.989217084966 37.9064498037916, -120.989389701677 37.9065430539036, -120.989583343109 37.9066180464921, -120.989722527941 37.9067108974974, -120.989854249232 37.906830256895, -120.989915949246 37.9069568710404, -120.989825322146 37.9071449150441, -120.989491922873 37.9073015057732, -120.989436188876 37.9072641929805, -120.989346680326 37.9072357926623, -120.989124330051 37.9073044762055, -120.988895623832 37.9073994359224, -120.988222545241 37.907766589578, -120.987944370208 37.9078423266246, -120.987785562334 37.907840430903, -120.987543137214 37.9077275919775, -120.987376313195 37.9077162847434, -120.987182918211 37.9077484171905, -120.986960133373 37.9078707769975, -120.986835303725 37.907977269445, -120.98664837129 37.9082168655059, -120.986480550665 37.9083674591968, -120.986258536355 37.9084268263362, -120.986092945979 37.9084328143834, -120.985711622244 37.9083721196174, -120.985516856291 37.908441494137, -120.985420000626 37.9085291988148, -120.985342444448 37.908789344077, -120.985127005318 37.9091457732408, -120.984973312415 37.9095225516516, -120.984402502985 37.9105935975282, -120.984131761949 37.9107869589363, -120.984034685975 37.9105513221075, -120.98390352642 37.9103958052679, -120.98346043993 37.9100366434719, -120.983259762883 37.9099344691991, -120.983108389692 37.9097961142513, -120.983018134086 37.909614488707, -120.982984170679 37.9094340275789, -120.982970467749 37.9092262309921, -120.983005464254 37.9090285780751, -120.983069584541 37.908849781913, -120.983118665735 37.9085623317296, -120.983208742576 37.9084825146724, -120.984131089911 37.9082822469208, -120.984526413222 37.9082254475723, -120.984686087165 37.9081199871405, -120.984756252956 37.9079861228242, -120.984707787014 37.9078049983975, -120.984576505041 37.9076319532808, -120.984383351417 37.9074210291711, -120.984286486804 37.9072306229818, -120.984224290109 37.907057913864, -120.984301713878 37.9068523109911, -120.98438517861 37.9067637115338, -120.984550908203 37.9066311133469, -120.984752369443 37.906526152798, -120.985002185842 37.9064406459829, -120.985183304963 37.9063353188541, -120.985294574459 37.9062205763299, -120.985377954947 37.9061042745238, -120.985440400018 37.905961860195, -120.985523088218 37.9059362513452))
+    ## 4                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       POLYGON ((-120.98392012538 37.9120092608573, -120.983920116288 37.9120813314766, -120.983877330105 37.9121706626422, -120.983863795059 37.9122963792718, -120.983890819501 37.9124052990935, -120.983876490532 37.9127381482558, -120.983897239166 37.9129010459885, -120.984000810323 37.9130558648315, -120.984068854303 37.9132282760937, -120.984061793966 37.9134173159296, -120.983999205165 37.9136142710604, -120.983970756462 37.9139750195284, -120.983990431669 37.9142000469498, -120.983920114666 37.9144605229553, -120.983733834268 37.9144033823299, -120.983512151504 37.9143813626691, -120.983276402284 37.9143049985795, -120.98315192843 37.9141859642132, -120.983138874876 37.913897647622, -120.983027640279 37.9136520350459, -120.982827089637 37.9134953184344, -120.98263433916 37.9133748528511, -120.982281177519 37.9130624826414, -120.981983911426 37.9125887446493, -120.981831632573 37.9124958505786, -120.981554726659 37.9124826032185, -120.981187656278 37.9125214691775, -120.980937266457 37.9125710487223, -120.980701936796 37.9125851407342, -120.980507772493 37.9125361126669, -120.980501406417 37.9123563496652, -120.980578329891 37.9121767278483, -120.980550867476 37.9119154482948, -120.980717599403 37.9117650946736, -120.981404770214 37.9117406093536, -120.981805901404 37.9117657645214, -120.98213205474 37.9118250747223, -120.982450263095 37.9119747450009, -120.982838978153 37.9120533107828, -120.98311617122 37.9121394874135, -120.983378532244 37.9121622400764, -120.983565925004 37.9121470787842, -120.983726240308 37.9121052406898, -120.98392012538 37.9120092608573))
+    ## 5                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                POLYGON ((-120.976618752919 37.8950135458249, -120.976335244308 37.8948917321003, -120.976321844539 37.8947568666454, -120.97644103155 37.8943078568389, -120.976406106564 37.8941451541604, -120.97632346141 37.8940266151981, -120.97582601447 37.8935134340163, -120.975695104895 37.8934031386057, -120.975515164428 37.8932920075564, -120.975141114774 37.8931318394823, -120.974835950129 37.893036726673, -120.974399641239 37.8929302273106, -120.974137351298 37.8929074553091, -120.973776312456 37.8929016327187, -120.97339529942 37.8928140592313, -120.973090825587 37.8927003197221, -120.972862223499 37.8925069662265, -120.972606115165 37.8923406135282, -120.972392314346 37.8922827548895, -120.972128697888 37.8922870504914, -120.971414098739 37.8923828538791, -120.97071429361 37.8926141490595, -120.970346506972 37.8927880449445, -120.970089249558 37.8927660604654, -120.970090747333 37.8926123758252, -120.970194007042 37.8924882346052, -120.970312007212 37.8923998167057, -120.970659111067 37.8922348638255, -120.971117728715 37.8919902380063, -120.971339361943 37.8919402093411, -120.971651463785 37.8919008329444, -120.971922028594 37.891896009406, -120.972254025244 37.8919106798158, -120.972593814151 37.8919616014651, -120.973140557808 37.8921605087601, -120.973556944765 37.8922850354301, -120.973806065242 37.892280071726, -120.974054984254 37.8922298767936, -120.974444063149 37.8921106474734, -120.974707678843 37.8921063468797, -120.975143842044 37.8922673870532, -120.976831996534 37.8932153157039, -120.976970295455 37.8932714003401, -120.97713624351 37.8934279569021, -120.977364047673 37.8938284355726, -120.977314296968 37.8941964046634, -120.977237165285 37.894402865158, -120.977251411437 37.8945745116158, -120.977465674558 37.8947126503714, -120.977803670201 37.8948544825232, -120.978116546977 37.8950302087813, -120.978205525081 37.8952666121033, -120.978108538929 37.8954088530654, -120.977989558961 37.8955150392216, -120.97784419553 37.8955759250091, -120.977635660701 37.8955539294061, -120.977484187976 37.8954701090048, -120.97694512638 37.8950737316129, -120.976618752919 37.8950135458249))
+    ## 6                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             POLYGON ((-120.958148228164 37.8929009967531, -120.958257566342 37.89339922832, -120.958242554141 37.8937682268486, -120.958152399799 37.893992167427, -120.958207050548 37.8941913968848, -120.958255178651 37.894299599785, -120.958337901348 37.8943737818444, -120.958406631387 37.8945552874435, -120.95827453497 37.8946614175666, -120.957956155354 37.8946826657254, -120.957588087146 37.8946496217747, -120.957192552933 37.8946334017232, -120.956721843593 37.894544192444, -120.956410676599 37.8944659975247, -120.956058396377 37.8940730302104, -120.956079378789 37.8938931079596, -120.956371088193 37.8938256981606, -120.956911733464 37.8938799710885, -120.95711167439 37.8939287402782, -120.957326802893 37.8939595538745, -120.957569551839 37.8939190001486, -120.957736981051 37.8937500551254, -120.957757993901 37.8934980617213, -120.957702914505 37.8932185433083, -120.957663591713 37.8927130748242, -120.957693027833 37.8921451979903, -120.957590286763 37.8915938506515, -120.957549456741 37.8914758081609, -120.957486835947 37.8913669379693, -120.957135291263 37.89088328039, -120.957128531351 37.8907571957377, -120.957185224437 37.8906049191925, -120.957268166577 37.8904804183495, -120.957282434107 37.8903360819168, -120.957138383743 37.8899642861266, -120.956883152836 37.8894909945394, -120.957056677266 37.8893946863583, -120.957257940983 37.8894163835871, -120.957568148277 37.8896740078802, -120.957623281227 37.8897474865796, -120.957809306399 37.8901650217306, -120.957896776288 37.8913561222369, -120.957875227461 37.8915721961394, -120.957929495688 37.8918528078143, -120.957962159765 37.8925555331955, -120.958010396191 37.8927912105813, -120.958148228164 37.8929009967531))
+
+Using the `sf` (or `terra`) package, you can convert the resulting text
+WKT column to a spatial object:
+
+``` r
+if (requireNamespace("sf", quietly = TRUE) &&
+   !is.null(geometry_df)) {
+  # Parse WKT column (usually named 'mupolygongeo' in mupolygon table, but 'MupolygonWktWgs84' in TVF result)
+  poly_sf <- sf::st_as_sfc(geometry_df$MupolygonWktWgs84, crs = 4326)
+  
+  plot(poly_sf, main = paste("Geometry for mukey=", target_mukey))
+}
+```
+
+![](sda_files/figure-html/unnamed-chunk-1-1.png)
+
+**Note:** The TVF function name implies the CRS is WGS84 (authority:code
+`EPSG:4326`, SRS ID `4326`; or, more correctly, `OGC:CRS84`).
+
+See the [SDA Advanced Query
+Guide](https://sdmdataaccess.nrcs.usda.gov/documents/AdvancedQueries.html)
+for more details on TVF functions and other high-level features built
+into SDA.
+
+### Spatial and Tabular Property Integration
+
+We can use the result of our spatial filtering with property queries.
+
+Here we extract the unique map unit keys and pass as `mukeys` argument
+to
+[`get_SDA_property()`](http://ncss-tech.github.io/soilDB/reference/get_SDA_property.md)
+
+``` r
+# Step 2: Use the mukeys to fetch tabular data
+# First, get mukeys in bounding box
+spatial_mukeys <- unique(spatial_result$mukey)
+
+# Then query properties for those mukeys
+if (length(spatial_mukeys) > 0) {
+  clay_in_bbox <- get_SDA_property(
+    property = "Total Clay - Rep Value",
+    method = "Weighted Average",
+    mukeys = spatial_mukeys,
+    top_depth = 0,
+    bottom_depth = 50
+  )
+  
+  head(clay_in_bbox)
+}
+```
+
+    ##     mukey areasymbol musym
+    ## 1 1403410      CA632   127
+    ## 2 1403412      CA632   130
+    ## 3 1403413      CA632   131
+    ## 4 1403414      CA632   134
+    ## 5 2766111      CA632   142
+    ## 6 1403416      CA632   157
+    ##                                                                                muname
+    ## 1                                           Chuloak sandy loam, 0 to 2 percent slopes
+    ## 2                 Columbia sandy loam, drained, 0 to 2 percent slopes, rarely flooded
+    ## 3 Columbia sandy loam, partially drained, 0 to 2 percent slopes, occasionally flooded
+    ## 4                                            Cometa sandy loam, 2 to 8 percent slopes
+    ## 5                                    Delhi loamy sand, 0 to 2 percent slopes, MLRA 17
+    ## 6                                       Exeter sandy clay loam, 0 to 2 percent slopes
+    ##   claytotal_r
+    ## 1       17.80
+    ## 2       17.08
+    ## 3       15.38
+    ## 4       20.00
+    ## 5        2.22
+    ## 6       18.60
+
+This shows how to get the data, see the [Local SSURGO
+vignette](http://ncss-tech.github.io/soilDB/articles/local-ssurgo.md)
+for more spatial visualization examples using `sf`.
 
 ------------------------------------------------------------------------
 
@@ -2937,7 +3254,7 @@ library(aqp)
 s <- fetchSDA(WHERE = "areasymbol = 'IN005' AND musym = 'MnpB2'")
 
 # The result is a SoilProfileCollection
-print(s)
+s
 ```
 
     ## SoilProfileCollection with 4 profiles and 20 horizons
@@ -3091,7 +3408,7 @@ and the column it corresponds to (`what` argument):
 ldm_data <- fetchLDM("CA630", what = "area_code")
 
 # The result is a SoilProfileCollection
-print(ldm_data)
+ldm_data
 ```
 
     ## SoilProfileCollection with 175 profiles and 800 horizons
@@ -3427,7 +3744,7 @@ ldm_taxon <- fetchLDM(WHERE = "(CASE WHEN corr_name IS NOT NULL
                                 ELSE LOWER(samp_name) 
                             END) IN ('musick', 'holland')")
 
-print(ldm_taxon)
+ldm_taxon
 ```
 
     ## SoilProfileCollection with 40 profiles and 259 horizons
@@ -3562,268 +3879,6 @@ names(horizons(ldm_phys))
 
 `fetchLDM` supports retrieving data from various KSSL tables, including
 chemical properties, mineralogy, and x-ray analysis.
-
-------------------------------------------------------------------------
-
-## Spatial Queries
-
-This document mainly focuses on details of custom spatial queries using
-the low-level
-[`SDA_query()`](http://ncss-tech.github.io/soilDB/reference/SDA_query.md)
-function, but there are several functions that provide high-level
-convenience interface for spatial queries in `soilDB`. First we will
-discuss converting spatial data to Well-Known Text for use in generating
-custom queries. Then we will discuss the high- and low-level interfaces
-in `soilDB`.
-
-### Converting sf Objects to WKT
-
-**Important:** SDA requires spatial inputs (WKT) to be in **WGS84
-(EPSG:4326)** geographic coordinates.
-
-Passing projected coordinates (like UTM or Albers) will result in query
-failures or zero results.
-
-SDA does store an alternate projected version of the geometry data (e.g.
-`mupolygonproj`, rather than `mupolygongeo`). The projection is a Web
-Mercator projection (`"EPSG:3857"`) so it is best avoided in analysis,
-though it is an option for visualization web map applications that lack
-capability to project the data.
-
-You can use `sf` to define a geometry, such as a bounding recatangle,
-and convert it to WKT (Well-Known Text) for spatial queries:
-
-``` r
-library(sf)
-
-# Define a bounding box for a region of interest
-# (xmin, ymin, xmax, ymax)
-bbox <- c(-120.9, 37.7, -120.8, 37.8)
-bbox_sf <- st_as_sfc(st_bbox(c(
-  xmin = bbox[1],
-  ymin = bbox[2],
-  xmax = bbox[3],
-  ymax = bbox[4]
-), crs = 4326))
-
-wkt <- st_as_text(bbox_sf)
-
-wkt
-```
-
-    ## [1] "POLYGON ((-120.9 37.7, -120.8 37.7, -120.8 37.8, -120.9 37.8, -120.9 37.7))"
-
-### High-level Functions
-
-The soilDB package provides two higher-level functions
-([`SDA_spatialQuery()`](http://ncss-tech.github.io/soilDB/reference/SDA_spatialQuery.md)
-and
-[`fetchSDA_spatial()`](http://ncss-tech.github.io/soilDB/reference/fetchSDA_spatial.md))
-that make obtaining spatial data easier. Both of these functions
-internally use
-[`SDA_query()`](http://ncss-tech.github.io/soilDB/reference/SDA_query.md)
-and are often a better option for most use cases compared to crafting a
-custom spatial query.
-
-- **[`SDA_spatialQuery()`](http://ncss-tech.github.io/soilDB/reference/SDA_spatialQuery.md)**:
-  spatial inputs (e.g. point location, AOI rectangle) =\> spatial or
-  tabular outputs
-
-- **[`fetchSDA_spatial()`](http://ncss-tech.github.io/soilDB/reference/fetchSDA_spatial.md)**:
-  tabular inputs (e.g. map unit key, area symbol, ecological site ID)
-  =\> spatial outputs
-
-The functions take different inputs, and support various outputs
-including SSURGO and STATSGO2 map unit polygon geometry, special feature
-points/lines/polygons, soil survey area boundaries, Major Land Resource
-Area (MLRA) boundaries, or simple tabular information using spatial data
-as input. These functions will handle projection to `"EPSG:4326"`
-internally as long as the input data has the correct CRS metadata.
-
-``` r
-# Example: Retrieve map unit polygons that intersect a bounding box
-# This handles the WKT conversion and query construction automatically
-# geomIntersection = TRUE clips the polygons to the bounding box
-
-polygons <- SDA_spatialQuery(bbox_sf, what = "mupolygon", geomIntersection = TRUE)
-polygons
-```
-
-    ## Simple feature collection with 334 features and 2 fields
-    ## Geometry type: GEOMETRY
-    ## Dimension:     XY
-    ## Bounding box:  xmin: -120.9 ymin: 37.7 xmax: -120.8 ymax: 37.8
-    ## Geodetic CRS:  WGS 84
-    ## First 10 features:
-    ##      mukey   area_ac                           geom
-    ## 1  1403416  26.74260 POLYGON ((-120.8998 37.7873...
-    ## 2  1403416 325.55235 POLYGON ((-120.8872 37.7893...
-    ## 3  1403425  53.06925 POLYGON ((-120.8024 37.7863...
-    ## 4  1403413 108.53249 POLYGON ((-120.8788 37.7704...
-    ## 5  1403412 527.89351 POLYGON ((-120.8945 37.7695...
-    ## 6  1403420  82.85632 POLYGON ((-120.8021 37.7895...
-    ## 7  1403421  15.05385 POLYGON ((-120.8565 37.7781...
-    ## 8  1403414  22.79950 POLYGON ((-120.851 37.77987...
-    ## 9  1403416  31.63604 MULTIPOLYGON (((-120.8985 3...
-    ## 10 1403413  20.90871 POLYGON ((-120.8963 37.7686...
-
-This section will be expanded in the future, but for now an example
-application of the two higher-level function is available in the
-[“Dominant Ecological Site”
-vignette](http://ncss-tech.github.io/soilDB/articles/dominant-es.md).
-
-### Spatial Queries: The Two-Step Pattern
-
-For optimal performance, separate your spatial and tabular queries.
-Fetch the list of intersecting map unit keys (`mukey`) first, then use
-those keys to query attribute tables.
-
-This avoids joining heavy geometry columns with complex attribute
-tables, which can trigger the 32Mb serialization limit. Then we can use
-the WKT in a custom SDA query to get map units intersecting the bounding
-box:
-
-``` r
-# Step 1: Get the mukeys that intersect the bounding box
-q <- sprintf("
-  SELECT DISTINCT mu.mukey
-  FROM mapunit AS mu
-  INNER JOIN mupolygon AS mp ON mp.mukey = mu.mukey
-  WHERE mp.mupolygongeo.STIntersects(geometry::STGeomFromText('%s', 4326)) = 1
-", wkt)
-
-spatial_result <- SDA_query(q)
-head(spatial_result, 5)
-```
-
-    ##    mukey
-    ## 1 462527
-    ## 2 462554
-    ## 3 462555
-    ## 4 462558
-    ## 5 462566
-
-This query uses special geospatial functions defined in SQL Server to
-perform the geometric operations (in this case “intersection”)
-
-### SDA Spatial Helper Functions
-
-In addition to standard T-SQL spatial functions, SDA provides
-pre-defined **Table-Valued Functions** (TVFs) optimized for
-intersections.
-
-- `SDA_Get_Mukey_from_intersection_with_WktWgs84(wkt)`: Returns `mukey`
-  values intersecting the input WKT.
-- `SDA_Get_MupolygonWktWgs84_from_Mukey(mukey)`: Returns WKT geometry
-  for a specific `mukey`.
-
-This makes the logic much simpler for the common operations of finding
-`mukey` given a spatial location or geometry:
-
-``` r
-# Input MUST be WKT in WGS84 (EPSG:4326)
-q <- "SELECT * FROM SDA_Get_Mukey_from_intersection_with_WktWgs84('POINT(-120.9 37.7)')"
-result <- SDA_query(q)
-```
-
-Also, you can do the inverse (map unit key to geometry):
-
-``` r
-# Step 2: Get Geometry from Map Unit Key (mukey)
-# Useful for retrieving the polygon boundary for a specific map unit
-target_mukey <- 461994
-
-q <- sprintf("SELECT * FROM SDA_Get_MupolygonWktWgs84_from_Mukey('%s')", target_mukey)
-
-# Result contains the mukey and the geometry in WKT format
-geometry_df <- SDA_query(q)
-
-head(geometry_df)
-```
-
-    ##                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           MupolygonWktWgs84
-    ## 1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 POLYGON ((-121.032455555662 37.9592152603984, -121.03285202503 37.9591849129885, -121.033072907654 37.9591081653858, -121.033328454278 37.9589770304221, -121.033728769482 37.9588035660117, -121.033900712322 37.9587435334631, -121.034102285527 37.9587105626138, -121.034226937322 37.9587131055087, -121.034372855748 37.9587426135551, -121.034498021914 37.9588254436972, -121.034637122971 37.9588730126591, -121.034725363384 37.9588563818132, -121.034868509489 37.9590389438022, -121.034869562297 37.9591653228325, -121.03475359382 37.9593522473175, -121.034173981163 37.9596399606279, -121.033980610935 37.9597719381858, -121.032316040062 37.961123123151, -121.032060957959 37.9612624734441, -121.031769961277 37.9613566706344, -121.031605303085 37.9614890992556, -121.031372905269 37.961926794296, -121.031278725938 37.962186772691, -121.031253880828 37.9624202209759, -121.030979949929 37.963433991072, -121.030853664442 37.964009330753, -121.030613352925 37.9642666362517, -121.029817684926 37.9645320941986, -121.029575343951 37.9644922710971, -121.029447384597 37.9642917390781, -121.029472874344 37.963967598828, -121.029415124536 37.9637773179969, -121.029447904803 37.9635255769229, -121.029781358193 37.9629641602046, -121.029924150065 37.9626145365407, -121.030001933825 37.9621565455648, -121.029944756724 37.9620021837882, -121.029825937826 37.9618108279156, -121.029767043665 37.9615487094568, -121.029807213431 37.9613148261005, -121.029769648729 37.9610353050336, -121.029996887309 37.9608500418744, -121.030561206747 37.9604805411635, -121.030732846467 37.9602311429487, -121.03109388638 37.9595881670532, -121.031321316698 37.9593760614507, -121.031430649793 37.9592968000317, -121.031652007924 37.9592282724891, -121.031900776861 37.9591872716173, -121.032455555662 37.9592152603984))
-    ## 2 POLYGON ((-120.977440277027 37.8400202039719, -120.977735828159 37.8398271562088, -120.977918761599 37.8396863165759, -120.978089096334 37.8394815881836, -120.978189004401 37.839275889939, -120.978286303194 37.8389081212846, -120.978279774157 37.8385389812703, -120.978301713885 37.8381250774638, -120.97823247016 37.8377635179397, -120.978084402863 37.8372290429494, -120.977901893339 37.8370002134407, -120.977557934853 37.8364901013732, -120.97725676047 37.8359525569539, -120.977205941479 37.8357266595, -120.977202148334 37.8355371188211, -120.97746648077 37.834821175063, -120.977614815185 37.8346524635618, -120.977758216532 37.8344385863328, -120.97803793374 37.8342719453342, -120.978248634626 37.8341049638797, -120.978397090106 37.8339537805788, -120.978723965594 37.8335629096373, -120.978804868982 37.8333297714404, -120.978860203523 37.8329162686792, -120.978716374806 37.8325176537409, -120.978649511054 37.8324170767535, -120.978572686261 37.8320644960726, -120.97856319208 37.8318207102925, -120.978589049034 37.8316138758532, -120.978824752425 37.8312032773233, -120.978988121178 37.8309990766935, -120.979217329881 37.8306692963475, -120.979303459649 37.8304821847855, -120.979301423206 37.8302118906905, -120.979187675825 37.830020415361, -120.979112886686 37.8299381289761, -120.978948686889 37.8298274341976, -120.978779132488 37.8296531828803, -120.978529093434 37.8293423995408, -120.978491819954 37.8291247549243, -120.978544129924 37.8289188513919, -120.978646331634 37.8286683190097, -120.978677244149 37.8285241791737, -120.978954614895 37.8278082658793, -120.978977475239 37.8276648871392, -120.978967419536 37.8274572529753, -120.978799771258 37.827147705694, -120.978630303077 37.8270011561598, -120.978480434303 37.826835720976, -120.978024032673 37.8264674195749, -120.977824916161 37.8263381624385, -120.9777613674 37.8261029186895, -120.977793060477 37.8258957866904, -120.97794896038 37.825718095457, -120.978220141663 37.8256779676964, -120.978467354419 37.8257814498629, -120.978692923239 37.8259116369393, -120.978891697534 37.826050203977, -120.979159355796 37.8261715808214, -120.979490920784 37.8262407743618, -120.979836341971 37.8262470092522, -120.980204216951 37.8262254440749, -120.980815245795 37.8261548276568, -120.981098727404 37.8261777203038, -120.981387006712 37.8263003203597, -120.981520421313 37.826572681762, -120.981545320834 37.8266995967704, -120.981532882231 37.8269692269045, -120.981391196465 37.8275347861969, -120.981257240825 37.8279647516823, -120.981217960856 37.8282529354896, -120.98124735985 37.828478696968, -120.981311127445 37.8287591700524, -120.981384021796 37.8289767510116, -120.981387961865 37.8291117492463, -120.981096081815 37.8298371765903, -120.981003698192 37.8300061963217, -120.980539929736 37.830674278857, -120.980135048729 37.8312173090063, -120.98005338666 37.8314413687206, -120.979986486042 37.8320171399379, -120.979941980294 37.8321872243406, -120.979944579446 37.8324213665481, -120.9799007269 37.8325109295029, -120.979918930859 37.8326734324694, -120.979970534168 37.8328363366954, -120.980057707982 37.8330093513418, -120.980312904842 37.8334105279939, -120.980536646829 37.8336658343484, -120.980686751617 37.8338044263142, -120.980912131345 37.8339614495489, -120.981266005293 37.8343456682067, -120.9813572608 37.8345991374574, -120.981449934201 37.8347811646841, -120.981501530914 37.8350161398622, -120.981454115343 37.8352773826639, -120.981359406411 37.8355633074607, -120.981126752857 37.836082299963, -120.980943137716 37.8363138387317, -120.980752540785 37.8365080317902, -120.980296812808 37.8367530942482, -120.980202533009 37.8369853371646, -120.979995036867 37.8373161153888, -120.979824756851 37.8375106736617, -120.979476083896 37.8379827951916, -120.979337943284 37.8383046000667, -120.979065401171 37.8387598625711, -120.978901454605 37.8390002147039, -120.978771674242 37.8392500476565, -120.978666996045 37.8396720268917, -120.978645618909 37.8400497789281, -120.978725416744 37.8402770044867, -120.978556685386 37.840345576608, -120.977994970428 37.8403633352033, -120.977780754313 37.8403416371155, -120.977663765668 37.8403125285352, -120.977602251142 37.8402755073615, -120.977508129714 37.8401030205027, -120.977440277027 37.8400202039719))
-    ## 3                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      POLYGON ((-120.985523088218 37.9059362513452, -120.985891567239 37.9059598999602, -120.986299486427 37.9060390524287, -120.986459355563 37.9060508909253, -120.986639996869 37.9060094145871, -120.987041369765 37.9058533983687, -120.987208918771 37.905811887389, -120.987458299277 37.9057800557708, -120.987652493843 37.9058189001273, -120.988233780422 37.906216589848, -120.98843454242 37.9062743869922, -120.988843574818 37.9063532990626, -120.989217084966 37.9064498037916, -120.989389701677 37.9065430539036, -120.989583343109 37.9066180464921, -120.989722527941 37.9067108974974, -120.989854249232 37.906830256895, -120.989915949246 37.9069568710404, -120.989825322146 37.9071449150441, -120.989491922873 37.9073015057732, -120.989436188876 37.9072641929805, -120.989346680326 37.9072357926623, -120.989124330051 37.9073044762055, -120.988895623832 37.9073994359224, -120.988222545241 37.907766589578, -120.987944370208 37.9078423266246, -120.987785562334 37.907840430903, -120.987543137214 37.9077275919775, -120.987376313195 37.9077162847434, -120.987182918211 37.9077484171905, -120.986960133373 37.9078707769975, -120.986835303725 37.907977269445, -120.98664837129 37.9082168655059, -120.986480550665 37.9083674591968, -120.986258536355 37.9084268263362, -120.986092945979 37.9084328143834, -120.985711622244 37.9083721196174, -120.985516856291 37.908441494137, -120.985420000626 37.9085291988148, -120.985342444448 37.908789344077, -120.985127005318 37.9091457732408, -120.984973312415 37.9095225516516, -120.984402502985 37.9105935975282, -120.984131761949 37.9107869589363, -120.984034685975 37.9105513221075, -120.98390352642 37.9103958052679, -120.98346043993 37.9100366434719, -120.983259762883 37.9099344691991, -120.983108389692 37.9097961142513, -120.983018134086 37.909614488707, -120.982984170679 37.9094340275789, -120.982970467749 37.9092262309921, -120.983005464254 37.9090285780751, -120.983069584541 37.908849781913, -120.983118665735 37.9085623317296, -120.983208742576 37.9084825146724, -120.984131089911 37.9082822469208, -120.984526413222 37.9082254475723, -120.984686087165 37.9081199871405, -120.984756252956 37.9079861228242, -120.984707787014 37.9078049983975, -120.984576505041 37.9076319532808, -120.984383351417 37.9074210291711, -120.984286486804 37.9072306229818, -120.984224290109 37.907057913864, -120.984301713878 37.9068523109911, -120.98438517861 37.9067637115338, -120.984550908203 37.9066311133469, -120.984752369443 37.906526152798, -120.985002185842 37.9064406459829, -120.985183304963 37.9063353188541, -120.985294574459 37.9062205763299, -120.985377954947 37.9061042745238, -120.985440400018 37.905961860195, -120.985523088218 37.9059362513452))
-    ## 4                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       POLYGON ((-120.98392012538 37.9120092608573, -120.983920116288 37.9120813314766, -120.983877330105 37.9121706626422, -120.983863795059 37.9122963792718, -120.983890819501 37.9124052990935, -120.983876490532 37.9127381482558, -120.983897239166 37.9129010459885, -120.984000810323 37.9130558648315, -120.984068854303 37.9132282760937, -120.984061793966 37.9134173159296, -120.983999205165 37.9136142710604, -120.983970756462 37.9139750195284, -120.983990431669 37.9142000469498, -120.983920114666 37.9144605229553, -120.983733834268 37.9144033823299, -120.983512151504 37.9143813626691, -120.983276402284 37.9143049985795, -120.98315192843 37.9141859642132, -120.983138874876 37.913897647622, -120.983027640279 37.9136520350459, -120.982827089637 37.9134953184344, -120.98263433916 37.9133748528511, -120.982281177519 37.9130624826414, -120.981983911426 37.9125887446493, -120.981831632573 37.9124958505786, -120.981554726659 37.9124826032185, -120.981187656278 37.9125214691775, -120.980937266457 37.9125710487223, -120.980701936796 37.9125851407342, -120.980507772493 37.9125361126669, -120.980501406417 37.9123563496652, -120.980578329891 37.9121767278483, -120.980550867476 37.9119154482948, -120.980717599403 37.9117650946736, -120.981404770214 37.9117406093536, -120.981805901404 37.9117657645214, -120.98213205474 37.9118250747223, -120.982450263095 37.9119747450009, -120.982838978153 37.9120533107828, -120.98311617122 37.9121394874135, -120.983378532244 37.9121622400764, -120.983565925004 37.9121470787842, -120.983726240308 37.9121052406898, -120.98392012538 37.9120092608573))
-    ## 5                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                POLYGON ((-120.976618752919 37.8950135458249, -120.976335244308 37.8948917321003, -120.976321844539 37.8947568666454, -120.97644103155 37.8943078568389, -120.976406106564 37.8941451541604, -120.97632346141 37.8940266151981, -120.97582601447 37.8935134340163, -120.975695104895 37.8934031386057, -120.975515164428 37.8932920075564, -120.975141114774 37.8931318394823, -120.974835950129 37.893036726673, -120.974399641239 37.8929302273106, -120.974137351298 37.8929074553091, -120.973776312456 37.8929016327187, -120.97339529942 37.8928140592313, -120.973090825587 37.8927003197221, -120.972862223499 37.8925069662265, -120.972606115165 37.8923406135282, -120.972392314346 37.8922827548895, -120.972128697888 37.8922870504914, -120.971414098739 37.8923828538791, -120.97071429361 37.8926141490595, -120.970346506972 37.8927880449445, -120.970089249558 37.8927660604654, -120.970090747333 37.8926123758252, -120.970194007042 37.8924882346052, -120.970312007212 37.8923998167057, -120.970659111067 37.8922348638255, -120.971117728715 37.8919902380063, -120.971339361943 37.8919402093411, -120.971651463785 37.8919008329444, -120.971922028594 37.891896009406, -120.972254025244 37.8919106798158, -120.972593814151 37.8919616014651, -120.973140557808 37.8921605087601, -120.973556944765 37.8922850354301, -120.973806065242 37.892280071726, -120.974054984254 37.8922298767936, -120.974444063149 37.8921106474734, -120.974707678843 37.8921063468797, -120.975143842044 37.8922673870532, -120.976831996534 37.8932153157039, -120.976970295455 37.8932714003401, -120.97713624351 37.8934279569021, -120.977364047673 37.8938284355726, -120.977314296968 37.8941964046634, -120.977237165285 37.894402865158, -120.977251411437 37.8945745116158, -120.977465674558 37.8947126503714, -120.977803670201 37.8948544825232, -120.978116546977 37.8950302087813, -120.978205525081 37.8952666121033, -120.978108538929 37.8954088530654, -120.977989558961 37.8955150392216, -120.97784419553 37.8955759250091, -120.977635660701 37.8955539294061, -120.977484187976 37.8954701090048, -120.97694512638 37.8950737316129, -120.976618752919 37.8950135458249))
-    ## 6                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             POLYGON ((-120.958148228164 37.8929009967531, -120.958257566342 37.89339922832, -120.958242554141 37.8937682268486, -120.958152399799 37.893992167427, -120.958207050548 37.8941913968848, -120.958255178651 37.894299599785, -120.958337901348 37.8943737818444, -120.958406631387 37.8945552874435, -120.95827453497 37.8946614175666, -120.957956155354 37.8946826657254, -120.957588087146 37.8946496217747, -120.957192552933 37.8946334017232, -120.956721843593 37.894544192444, -120.956410676599 37.8944659975247, -120.956058396377 37.8940730302104, -120.956079378789 37.8938931079596, -120.956371088193 37.8938256981606, -120.956911733464 37.8938799710885, -120.95711167439 37.8939287402782, -120.957326802893 37.8939595538745, -120.957569551839 37.8939190001486, -120.957736981051 37.8937500551254, -120.957757993901 37.8934980617213, -120.957702914505 37.8932185433083, -120.957663591713 37.8927130748242, -120.957693027833 37.8921451979903, -120.957590286763 37.8915938506515, -120.957549456741 37.8914758081609, -120.957486835947 37.8913669379693, -120.957135291263 37.89088328039, -120.957128531351 37.8907571957377, -120.957185224437 37.8906049191925, -120.957268166577 37.8904804183495, -120.957282434107 37.8903360819168, -120.957138383743 37.8899642861266, -120.956883152836 37.8894909945394, -120.957056677266 37.8893946863583, -120.957257940983 37.8894163835871, -120.957568148277 37.8896740078802, -120.957623281227 37.8897474865796, -120.957809306399 37.8901650217306, -120.957896776288 37.8913561222369, -120.957875227461 37.8915721961394, -120.957929495688 37.8918528078143, -120.957962159765 37.8925555331955, -120.958010396191 37.8927912105813, -120.958148228164 37.8929009967531))
-
-Using the `sf` (or `terra`) package, you can convert the resulting text
-WKT column to a spatial object:
-
-``` r
-if (requireNamespace("sf", quietly = TRUE) &&
-   !is.null(geometry_df)) {
-  # Parse WKT column (usually named 'mupolygongeo' in mupolygon table, but 'MupolygonWktWgs84' in TVF result)
-  poly_sf <- sf::st_as_sfc(geometry_df$MupolygonWktWgs84, crs = 4326)
-  
-  plot(poly_sf, main = paste("Geometry for mukey=", target_mukey))
-}
-```
-
-![](sda_files/figure-html/unnamed-chunk-1-1.png)
-
-**Note:** The TVF function name implies the CRS is WGS84 (authority:code
-`EPSG:4326`, SRS ID `4326`; or, more correctly, `OGC:CRS84`).
-
-See the [SDA Advanced Query
-Guide](https://sdmdataaccess.nrcs.usda.gov/documents/AdvancedQueries.html)
-for more details on TVF functions and other high-level features built
-into SDA.
-
-### Spatial and Tabular Property Integration
-
-We can use the result of our spatial filtering with property queries.
-
-Here we extract the unique map unit keys and pass as `mukeys` argument
-to
-[`get_SDA_property()`](http://ncss-tech.github.io/soilDB/reference/get_SDA_property.md)
-
-``` r
-# Step 2: Use the mukeys to fetch tabular data
-# First, get mukeys in bounding box
-spatial_mukeys <- unique(spatial_result$mukey)
-
-# Then query properties for those mukeys
-if (length(spatial_mukeys) > 0) {
-  clay_in_bbox <- get_SDA_property(
-    property = "Total Clay - Rep Value",
-    method = "Weighted Average",
-    mukeys = spatial_mukeys,
-    top_depth = 0,
-    bottom_depth = 50
-  )
-  
-  head(clay_in_bbox)
-}
-```
-
-    ##     mukey areasymbol musym
-    ## 1 1403410      CA632   127
-    ## 2 1403412      CA632   130
-    ## 3 1403413      CA632   131
-    ## 4 1403414      CA632   134
-    ## 5 2766111      CA632   142
-    ## 6 1403416      CA632   157
-    ##                                                                                muname
-    ## 1                                           Chuloak sandy loam, 0 to 2 percent slopes
-    ## 2                 Columbia sandy loam, drained, 0 to 2 percent slopes, rarely flooded
-    ## 3 Columbia sandy loam, partially drained, 0 to 2 percent slopes, occasionally flooded
-    ## 4                                            Cometa sandy loam, 2 to 8 percent slopes
-    ## 5                                    Delhi loamy sand, 0 to 2 percent slopes, MLRA 17
-    ## 6                                       Exeter sandy clay loam, 0 to 2 percent slopes
-    ##   claytotal_r
-    ## 1       17.80
-    ## 2       17.08
-    ## 3       15.38
-    ## 4       20.00
-    ## 5        2.22
-    ## 6       18.60
-
-This shows how to get the data, see the [Local SSURGO
-vignette](http://ncss-tech.github.io/soilDB/articles/local-ssurgo.md)
-for more spatial visualization examples using `sf`.
 
 ------------------------------------------------------------------------
 
