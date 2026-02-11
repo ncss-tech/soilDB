@@ -115,7 +115,7 @@ ORDER BY siteobs_View_1.siteobsiid;")
 	  stop('error in SQL')
 
 	# uncode domain columns
-	d <- data.table::data.table(uncode(unique(d), dsn = dsn))
+	d <- uncode(unique(d), dsn = dsn)
 	
 	# surface fragments
 	sfr <- dbQueryNASIS(channel, q2, close = FALSE)
@@ -218,7 +218,7 @@ ORDER BY siteobs_View_1.siteobsiid;")
   ss.levels <- apply(ss.grid, 1, function(i) { paste(rev(i), collapse = ' / ')})
   d2$slope_shape <- factor(d2$slope_shape, levels = ss.levels)
 
-	return(data.frame(d2))
+	return(d2)
 }
 
 #' @description `get_site_association_from_NASIS()`: Get Associated User Site IDs for each Site.
