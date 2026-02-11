@@ -115,7 +115,7 @@ ORDER BY siteobs_View_1.siteobsiid;")
 	  stop('error in SQL')
 
 	# uncode domain columns
-	d <- uncode(unique(d), dsn = dsn)
+	d <- uncode(d, dsn = dsn)
 	
 	# surface fragments
 	sfr <- dbQueryNASIS(channel, q2, close = FALSE)
@@ -143,7 +143,7 @@ ORDER BY siteobs_View_1.siteobsiid;")
 	    phs <- phs[seq_len(nrow(d)), ]
 	    phs$siteobsiid <- d$siteobsiid
 	  } else {
-	    phs_null <- phs[0, ][1:sum(ldx), ]
+	    phs_null <- phs[0, ][rep(NA_integer_, sum(ldx)), ]
 	    phs_null$siteobsiid <- d$siteobsiid[ldx]
 	    phs <- rbind(phs, phs_null)
 	  }
@@ -154,7 +154,7 @@ ORDER BY siteobs_View_1.siteobsiid;")
   	} 
   	d2 <- merge(d, phs, by = "siteobsiid", all.x = TRUE, sort = FALSE)
 	} else {
-	  d2 <- cbind(d, phs[0,])
+	  d2 <- cbind(d, phs[0, ])
 	}
 	
 	# short-circuit: 0 rows means nothing in the selected set and thus we stop here
