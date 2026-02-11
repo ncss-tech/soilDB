@@ -39,12 +39,13 @@ get_site_data_from_NASIS_db <- function(SS = TRUE, include_pedon = TRUE, nullFra
   
   .SD <- NULL
   
-	q <- paste0("SELECT siteiid, siteobsiid, usiteid, 
+	q <- paste0("SELECT DISTINCT siteiid, siteobsiid, usiteid, 
   	", ifelse(include_pedon, "peiid, upedonid, ", ""), "
   	obsdate, utmzone, utmeasting, utmnorthing, horizdatnm,
   	longstddecimaldegrees, latstddecimaldegrees, gpspositionalerror, 
     ", ifelse(include_pedon, "descname, pedonpurpose, pedontype, pedlabsampnum, labdatadescflag, 
-    tsectstopnum, tsectinterval, utransectid, tsectkind, tsectselmeth, erocl,", ""), "
+    tsectstopnum, tsectinterval, utransectid, tsectkind, tsectselmeth,
+    erocl,", ""), "
     elev, slope, aspect, 
     ecostatename, ecostateid, commphasename, commphaseid, plantassocnm, 
     siteobs_View_1.earthcovkind1, siteobs_View_1.earthcovkind2, 
@@ -53,19 +54,20 @@ get_site_data_from_NASIS_db <- function(SS = TRUE, include_pedon = TRUE, nullFra
     geomposhill, geomposmntn, geompostrce, geomposflats, swaterdepth,
     flodfreqcl, floddurcl, flodmonthbeg, pondfreqcl, ponddurcl, pondmonthbeg, 
     climstaid, climstanm, climstatype, ffd, map, reannualprecip, airtempa, soiltempa, airtemps, soiltemps, airtempw, soiltempw
-
-  FROM
-  
-  site_View_1 INNER JOIN siteobs_View_1 ON site_View_1.siteiid = siteobs_View_1.siteiidref
-  ", ifelse(include_pedon, "LEFT OUTER JOIN pedon_View_1 ON siteobs_View_1.siteobsiid = pedon_View_1.siteobsiidref
-  LEFT OUTER JOIN transect_View_1 ON pedon_View_1.tsectiidref = transect_View_1.tsectiid", ""),"
+  FROM site_View_1 
+  INNER JOIN siteobs_View_1 ON site_View_1.siteiid = siteobs_View_1.siteiidref
+  ", ifelse(
+    include_pedon,
+    "LEFT OUTER JOIN pedon_View_1 ON siteobs_View_1.siteobsiid = pedon_View_1.siteobsiidref
+     LEFT OUTER JOIN transect_View_1 ON pedon_View_1.tsectiidref = transect_View_1.tsectiid",
+    ""
+  ), "
   LEFT OUTER JOIN
   (
-        SELECT siteiidref, bedrckdepth, bedrckkind, bedrckhardness, ROW_NUMBER() OVER(PARTITION BY siteiidref ORDER BY bedrckdepth ASC) as rn
-        FROM sitebedrock_View_1
+    SELECT siteiidref, bedrckdepth, bedrckkind, bedrckhardness, ROW_NUMBER() OVER(PARTITION BY siteiidref ORDER BY bedrckdepth ASC) as rn
+    FROM sitebedrock_View_1
   ) as sb ON site_View_1.siteiid = sb.siteiidref
-
-WHERE sb.rn IS NULL OR sb.rn = 1
+  WHERE sb.rn IS NULL OR sb.rn = 1
 
 ORDER BY siteobs_View_1.siteobsiid;")
       
@@ -113,7 +115,7 @@ ORDER BY siteobs_View_1.siteobsiid;")
 	  stop('error in SQL')
 
 	# uncode domain columns
-	d <- uncode(d, dsn = dsn)
+	d <- data.table::data.table(uncode(unique(d), dsn = dsn))
 	
 	# surface fragments
 	sfr <- dbQueryNASIS(channel, q2, close = FALSE)
@@ -216,8 +218,7 @@ ORDER BY siteobs_View_1.siteobsiid;")
   ss.levels <- apply(ss.grid, 1, function(i) { paste(rev(i), collapse = ' / ')})
   d2$slope_shape <- factor(d2$slope_shape, levels = ss.levels)
 
-	# done
-	return(d2)
+	return(data.frame(d2))
 }
 
 #' @description `get_site_association_from_NASIS()`: Get Associated User Site IDs for each Site.
