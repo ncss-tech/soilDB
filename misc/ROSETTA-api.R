@@ -19,7 +19,7 @@ x <- SDA_query(q)
 
 x
 
-# sprinkle NA
+# # sprinkle NA
 x$dbthirdbar_r[1] <- NA
 x$wthirdbar_decimal[2] <- NA
 x$wfifteenbar_decimal[3] <- NA
@@ -28,6 +28,9 @@ x[10, ] <- NA
 
 # attempting to use all possible soil properties
 vars <- c('sandtotal_r', 'silttotal_r', 'claytotal_r', 'dbthirdbar_r', 'wthirdbar_decimal', 'wfifteenbar_decimal')
+
+
+rr <- ROSETTA(x, vars = vars, include.sd = TRUE)
 
 
 rr <- ROSETTA(x, vars = vars)
@@ -107,8 +110,10 @@ vars <- c(
 
 # automatic model selection: 
 # 50k records: ~ 39 seconds
-r <- ROSETTA(s, vars = vars)
-
+# 2026-02-27 update: 9 minutes !?
+system.time(
+  r <- ROSETTA(s, vars = vars)
+)
 
 
 str(r)
@@ -135,6 +140,7 @@ s <- SDA_query(q)
 nrow(s)
 head(s)
 
+# 2026-02-27 update: 14 minutes
 
 # 60 seconds for 84k records
 # ~ 1 second per 1k records
@@ -152,7 +158,6 @@ str(r)
 
 library(latticeExtra)
 library(hexbin)
-library(viridisLite)
 
 # lots of data, some with missing values
 qq <- "SELECT TOP 25000 
@@ -187,13 +192,15 @@ names(w3) <- sprintf("%s.3", names(w3))
 
 w <- cbind(w1, w2, w3)
 
+cr <- colorRampPalette(hcl.colors(100, palette = 'mako'))
+
 hexbinplot(
   theta_r.1 ~ theta_r.3, 
   data = w, 
   asp=1, xbins=60,
   xlab = 'Model v3', ylab = 'Model v1',
   main = 'theta_r',
-  colramp=viridis, trans=log, inv=exp, colorkey=FALSE,
+  colramp = cr, trans=log, inv=exp, colorkey=FALSE,
   panel = function(...) {
     panel.grid(-1, -1)
     panel.hexbinplot(...)

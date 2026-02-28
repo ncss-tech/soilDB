@@ -60,7 +60,7 @@ test_that("ROSETTA() works", {
   expect_true(nrow(r) == nrow(x))
 
   # output contains new columns
-  expect_true(all(c('theta_r', 'theta_s', 'alpha', 'npar', 'ksat') %in% names(r)))
+  expect_true(all(c('theta_r', 'theta_s', 'alpha', 'npar', 'ksat', 'Ko', 'L') %in% names(r)))
 
 })
 
@@ -87,7 +87,7 @@ test_that("bootstrap standard deviation", {
   expect_true(nrow(r) == nrow(x))
   
   # output contains new columns
-  expect_true(all(c('sd_theta_r', 'sd_theta_s', 'sd_alpha', 'sd_npar', 'sd_ksat') %in% names(r)))
+  expect_true(all(c('sd_theta_r', 'sd_theta_s', 'sd_alpha', 'sd_npar', 'sd_ksat', 'sd_Ko', 'sd_L') %in% names(r)))
   
 })
 
@@ -133,7 +133,7 @@ test_that("correct model selection in the presence of NA", {
   expect_true(is.na(r$theta_r[9]) & (r$.rosetta.model[9] == -1))
 
   # all NA
-  expect_true(all(is.na(r[10, c('theta_r', 'theta_s', 'alpha', 'npar', 'ksat')])))
+  expect_true(all(is.na(r[10, c('theta_r', 'theta_s', 'alpha', 'npar', 'ksat', 'Ko', 'L')])))
 
 
 })

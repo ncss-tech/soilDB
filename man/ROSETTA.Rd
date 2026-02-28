@@ -26,6 +26,9 @@ ROSETTA(
 
 \item{conf}{configuration passed to \code{httr::POST()} such as \code{verbose()}.}
 }
+\value{
+a \code{data.frame} with as many rows as \code{x}
+}
 \description{
 A simple interface to the \href{https://www.ars.usda.gov/pacific-west-area/riverside-ca/agricultural-water-efficiency-and-salinity-research-unit/docs/model/rosetta-model/}{ROSETTA model} for predicting hydraulic parameters from soil properties. The ROSETTA API was developed by Dr. Todd Skaggs (USDA-ARS) and links to the work of Zhang and Schaap, (2017). See the \href{http://ncss-tech.github.io/AQP/soilDB/ROSETTA-API.html}{related tutorial} for additional examples.
 }
@@ -40,13 +43,15 @@ The ROSETTA model relies on a minimum of 3 soil properties, with increasing (exp
 \item optional, volumetric water content at 1500 kPa: roughly "permanent wilting point" for most plants, units of cm^3/cm^3
 }
 
-The Rosetta pedotransfer function predicts five parameters for the van Genuchten model of unsaturated soil hydraulic properties
+The Rosetta pedotransfer function predicts the following parameters for the Mualem-van Genuchten model of unsaturated soil hydraulic properties:
 \itemize{
 \item theta_r : residual volumetric water content
 \item theta_s : saturated volumetric water content
 \item log10(alpha) : retention shape parameter \verb{[log10(1/cm)]}
 \item log10(npar) : retention shape parameter
 \item log10(ksat) : saturated hydraulic conductivity \verb{[log10(cm/d)]}
+\item log10(Ko): "matching point" hydraulic conductivity\verb{[log10(cm/d)]}
+\item L: fitting parameter, describing pore tortuosity and pore connectivity
 }
 
 Column names not specified in \code{vars} are retained in the output.
@@ -90,5 +95,5 @@ Schaap, M.G., A. Nemes, and M.T. van Genuchten. 2004. Comparison of Models for I
 Zhang, Y., and M.G. Schaap. 2017. Weighted recalibration of the Rosetta pedotransfer model with improved estimates of hydraulic parameter distributions and summary statistics (Rosetta3). Journal of Hydrology 547: 39-53. doi: \doi{10.1016/j.jhydrol.2017.01.004}.
 }
 \author{
-D.E. Beaudette, Todd Skaggs (ARS), Richard Reid
+D.E. Beaudette (NRCS), Todd Skaggs (ARS), Richard Reid (Ret. NRCS)
 }

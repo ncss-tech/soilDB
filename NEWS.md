@@ -1,3 +1,9 @@
+# soilDB 2.9.1 (development)
+
+## Improvements
+ - `ROSETTA()` updates
+
+
 # soilDB 2.9.0 (2026-01-22)
 
 ## Breaking Changes

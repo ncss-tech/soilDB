@@ -61,7 +61,7 @@
   # extract VG parameters, may include NA
   vg <- as.data.frame(d[['van_genuchten_params']])
   # set names
-  vg.names <- c('theta_r', 'theta_s', 'alpha', 'npar', 'ksat')
+  vg.names <- c('theta_r', 'theta_s', 'alpha', 'npar', 'ksat', 'Ko', 'L')
   names(vg) <- vg.names
 
   # add model code
@@ -91,16 +91,19 @@
 # * model selection is automatic when model code = 0
 # * work with Todd to determine the optimal request / record count trade-off
 
-# 2021-01-06
+# 2021-01-06:
 # * best model (0) is always used, API no longer accepts `model` as a parameter
 # * versions 1,2,3 supported
+
+# 2026-02-27:
+# * Ko and L parameters added to back-end models, python module, and API
 
 
 #' @title Query USDA-ARS ROSETTA Model API
 #'
 #' @description A simple interface to the \href{https://www.ars.usda.gov/pacific-west-area/riverside-ca/agricultural-water-efficiency-and-salinity-research-unit/docs/model/rosetta-model/}{ROSETTA model} for predicting hydraulic parameters from soil properties. The ROSETTA API was developed by Dr. Todd Skaggs (USDA-ARS) and links to the work of Zhang and Schaap, (2017). See the \href{http://ncss-tech.github.io/AQP/soilDB/ROSETTA-API.html}{related tutorial} for additional examples.
 #'
-#' @author D.E. Beaudette, Todd Skaggs (ARS), Richard Reid
+#' @author D.E. Beaudette (NRCS), Todd Skaggs (ARS), Richard Reid (Ret. NRCS)
 #'
 #' @param x a `data.frame` of required soil properties, may contain other columns, see details
 #'
@@ -122,13 +125,15 @@
 #'  - optional, volumetric water content at 33 kPa: roughly "field capacity" for most soils, units of cm^3/cm^3
 #'  - optional, volumetric water content at 1500 kPa: roughly "permanent wilting point" for most plants, units of cm^3/cm^3
 #'  
-#' The Rosetta pedotransfer function predicts five parameters for the van Genuchten model of unsaturated soil hydraulic properties
+#' The Rosetta pedotransfer function predicts the following parameters for the Mualem-van Genuchten model of unsaturated soil hydraulic properties:
 #' 
 #'  - theta_r : residual volumetric water content
 #'  - theta_s : saturated volumetric water content
 #'  - log10(alpha) : retention shape parameter `[log10(1/cm)]`
 #'  - log10(npar) : retention shape parameter
 #'  - log10(ksat) : saturated hydraulic conductivity `[log10(cm/d)]`
+#'  - log10(Ko): "matching point" hydraulic conductivity`[log10(cm/d)]`
+#'  - L: fitting parameter, describing pore tortuosity and pore connectivity
 #' 
 #' Column names not specified in `vars` are retained in the output.
 #'
@@ -139,6 +144,9 @@
 #'  - version 2 - Schaap, M.G., A. Nemes, and M.T. van Genuchten. 2004. Comparison of Models for Indirect Estimation of Water Retention and Available Water in Surface Soils. Vadose Zone Journal 3(4): 1455-1463. doi: \doi{10.2136/vzj2004.1455}.
 #'
 #'  - version 3 - Zhang, Y., and M.G. Schaap. 2017. Weighted recalibration of the Rosetta pedotransfer model with improved estimates of hydraulic parameter distributions and summary statistics (Rosetta3). Journal of Hydrology 547: 39-53. doi: \doi{10.1016/j.jhydrol.2017.01.004}.
+#'
+#'
+#' @return a `data.frame` with as many rows as `x`
 #'
 #' @references
 #' Consider using the interactive version, with copy/paste functionality at: \url{https://www.handbook60.org/rosetta}.
