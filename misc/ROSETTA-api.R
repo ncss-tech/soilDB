@@ -110,7 +110,8 @@ vars <- c(
 
 # automatic model selection: 
 # 50k records: ~ 39 seconds
-# 2026-02-27 update: 9 minutes !?
+# 2026-02-27 update: 9 minutes
+# 2026-03-02: 12 seconds
 system.time(
   r <- ROSETTA(s, vars = vars)
 )
@@ -141,6 +142,7 @@ nrow(s)
 head(s)
 
 # 2026-02-27 update: 14 minutes
+# 2026-03-02: 19 seconds
 
 # 60 seconds for 84k records
 # ~ 1 second per 1k records

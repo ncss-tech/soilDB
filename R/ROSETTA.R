@@ -1,7 +1,7 @@
 
 # handle a single ROSETTA API request
 # x.chunk: single set of data to be processed, a data.frame
-# vars: column names of those soil propertie passed to API
+# vars: column names of those soil properties passed to API
 # v: model version
 # conf: configuration
 # include.sd: include bootstrapped standard deviation?
@@ -121,19 +121,22 @@
 #'
 #' The ROSETTA model relies on a minimum of 3 soil properties, with increasing (expected) accuracy as additional properties are included:
 #'  - required, sand, silt, clay: USDA soil texture separates (percentages) that sum to 100 percent
-#'  - optional, bulk density (any moisture basis): mass per volume after accounting for >2mm fragments, units of gm/cm3
+#'  - optional, bulk density (any moisture basis): mass per volume after accounting for >2mm fragments, units of g/cm3
 #'  - optional, volumetric water content at 33 kPa: roughly "field capacity" for most soils, units of cm^3/cm^3
 #'  - optional, volumetric water content at 1500 kPa: roughly "permanent wilting point" for most plants, units of cm^3/cm^3
 #'  
-#' The Rosetta pedotransfer function predicts the following parameters for the Mualem-van Genuchten model of unsaturated soil hydraulic properties:
+#' Model results include estimated mean parameters of the Mualem-van Genuchten model of unsaturated soil hydraulic properties:
 #' 
 #'  - theta_r : residual volumetric water content
 #'  - theta_s : saturated volumetric water content
 #'  - log10(alpha) : retention shape parameter `[log10(1/cm)]`
 #'  - log10(npar) : retention shape parameter
 #'  - log10(ksat) : saturated hydraulic conductivity `[log10(cm/d)]`
-#'  - log10(Ko): "matching point" hydraulic conductivity`[log10(cm/d)]`
+#'  - log10(Ko): "matching point" hydraulic conductivity `[log10(cm/d)]`
 #'  - L: fitting parameter, describing pore tortuosity and pore connectivity
+#' 
+#' Standard deviations of these parameters are included if `include.sd = TRUE`.
+#' 
 #' 
 #' Column names not specified in `vars` are retained in the output.
 #'
