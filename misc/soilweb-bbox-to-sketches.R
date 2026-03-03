@@ -12,6 +12,11 @@ library(soilDB)
 ## press 'b', BBOX is copied to the clipboard
 
 
+## OK051
+# https://casoilresource.lawr.ucdavis.edu/gmap/?loc=34.80891,-98.02792,z15
+bb <- '-98.0683 34.7920,-98.0683 34.8250,-98.0032 34.8250,-98.0032 34.7920,-98.0683 34.7920'
+
+
 ## TX Edwards Plateau
 bb <- '-101.1297 30.9521,-101.1297 31.0276,-101.0067 31.0276,-101.0067 30.9521,-101.1297 30.9521'
 
@@ -196,9 +201,9 @@ plotGeomorphCrossSection(osd, type = 'bar', clust = FALSE)
 
 
 
-## TODO: combine 2D hillsope + flats
+## TODO: combine multiple geomorphic descriptions
 o1 <- reconcileOSDGeomorph(osd, selection = 'geomcomp')
-o2 <- reconcileOSDGeomorph(osd, selection = 'flats')
+o2 <- reconcileOSDGeomorph(osd, selection = 'terrace')
 # http://127.0.0.1:27837/graphics/8f1172c7-7e9e-49dd-9f4f-df3118a383b8.png
 # safely combine SPCs, recognizing that there will be duplication
 o1 <- o1$geom
@@ -250,6 +255,7 @@ g <- cbind(series = g[, 1], g2)
 # check:
 nrow(g) == length(o)
 
+options(.aqp.plotSPC.args = NULL)
 plotSPC(o)
 
 knitr::kable(g, row.names = FALSE, digits = 2)
