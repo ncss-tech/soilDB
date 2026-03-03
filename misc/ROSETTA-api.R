@@ -31,9 +31,11 @@ vars <- c('sandtotal_r', 'silttotal_r', 'claytotal_r', 'dbthirdbar_r', 'wthirdba
 
 
 rr <- ROSETTA(x, vars = vars, include.sd = TRUE)
-
+str(rr)
 
 rr <- ROSETTA(x, vars = vars)
+str(rr)
+
 
 # missing 1/3 bar Db -> model 2
 rr$.rosetta.model[1] == 2
@@ -78,9 +80,13 @@ ROSETTA(x, vars = c('sand', 'silt', 'clay'))
 
 
 # try using class centroids
-x <- texcl_to_ssc(SoilTextureLevels())
+x <- texcl_to_ssc(SoilTextureLevels(simplify = TRUE))
 
 ROSETTA(x, vars = c('sand', 'silt', 'clay'))
+
+ROSETTA(x, vars = c('sand', 'silt', 'clay'), est.type = 'arith')
+ROSETTA(x, vars = c('sand', 'silt', 'clay'), est.type = 'geo')
+
 ROSETTA(x, vars = c('sand', 'silt', 'clay'), chunkSize = 10)
 
 
@@ -183,7 +189,7 @@ r3 <- ROSETTA(s, vars = vars, v = "3")
 
 g <- make.groups(v1 = r1, v2 = r2, v3 = r3)
 
-v <- c('theta_r', 'theta_s', 'alpha', 'npar', 'ksat')
+v <- c('theta_r', 'theta_s', 'alpha', 'npar', 'ksat', 'Ko', 'L')
 w1 <- r1[, v]
 w2 <- r2[, v]
 w3 <- r3[, v]
@@ -199,10 +205,10 @@ cr <- colorRampPalette(hcl.colors(100, palette = 'mako'))
 hexbinplot(
   theta_r.1 ~ theta_r.3, 
   data = w, 
-  asp=1, xbins=60,
+  asp = 1, xbins = 60,
   xlab = 'Model v3', ylab = 'Model v1',
   main = 'theta_r',
-  colramp = cr, trans=log, inv=exp, colorkey=FALSE,
+  colramp = cr, trans = log, inv = exp, colorkey = FALSE,
   panel = function(...) {
     panel.grid(-1, -1)
     panel.hexbinplot(...)
@@ -213,10 +219,10 @@ hexbinplot(
 hexbinplot(
   theta_s.1 ~ theta_s.3, 
   data = w, 
-  asp=1, xbins=60,
+  asp = 1, xbins = 60,
   xlab = 'Model v3', ylab = 'Model v1',
-  main = 'theta_r',
-  colramp=viridis, trans=log, inv=exp, colorkey=FALSE,
+  main = 'theta_s',
+  colramp = cr, trans = log, inv = exp, colorkey = FALSE,
   panel = function(...) {
     panel.grid(-1, -1)
     panel.hexbinplot(...)
@@ -227,10 +233,10 @@ hexbinplot(
 hexbinplot(
   alpha.1 ~ alpha.3, 
   data = w, 
-  asp=1, xbins=60,
+  asp = 1, xbins = 60,
   xlab = 'Model v3', ylab = 'Model v1',
-  main = 'theta_r',
-  colramp=viridis, trans=log, inv=exp, colorkey=FALSE,
+  main = 'alpha',
+  colramp = cr, trans = log, inv = exp, colorkey = FALSE,
   panel = function(...) {
     panel.grid(-1, -1)
     panel.hexbinplot(...)
@@ -243,8 +249,8 @@ hexbinplot(
   data = w, 
   asp=1, xbins=60,
   xlab = 'Model v3', ylab = 'Model v1',
-  main = 'theta_r',
-  colramp=viridis, trans=log, inv=exp, colorkey=FALSE,
+  main = 'npar',
+  colramp = cr, trans = log, inv = exp, colorkey = FALSE,
   panel = function(...) {
     panel.grid(-1, -1)
     panel.hexbinplot(...)
@@ -256,10 +262,40 @@ hexbinplot(
 hexbinplot(
   ksat.1 ~ ksat.3, 
   data = w, 
-  asp=1, xbins=60,
+  asp = 1, xbins = 60,
   xlab = 'Model v3', ylab = 'Model v1',
-  main = 'theta_r',
-  colramp=viridis, trans=log, inv=exp, colorkey=FALSE,
+  main = 'Ksat',
+  colramp = cr, trans = log, inv = exp, colorkey = FALSE,
+  panel = function(...) {
+    panel.grid(-1, -1)
+    panel.hexbinplot(...)
+    panel.abline(a = 0, b = 1, lwd = 2)
+    
+  }
+)
+
+hexbinplot(
+  Ko.1 ~ Ko.3, 
+  data = w, 
+  asp = 1, xbins = 60,
+  xlab = 'Model v3', ylab = 'Model v1',
+  main = 'Ko',
+  colramp = cr, trans = log, inv = exp, colorkey = FALSE,
+  panel = function(...) {
+    panel.grid(-1, -1)
+    panel.hexbinplot(...)
+    panel.abline(a = 0, b = 1, lwd = 2)
+    
+  }
+)
+
+hexbinplot(
+  L.1 ~ L.3, 
+  data = w, 
+  asp = 1, xbins = 60,
+  xlab = 'Model v3', ylab = 'Model v1',
+  main = 'L',
+  colramp = cr, trans = log, inv = exp, colorkey = FALSE,
   panel = function(...) {
     panel.grid(-1, -1)
     panel.hexbinplot(...)
@@ -269,10 +305,12 @@ hexbinplot(
 )
 
 
+
+
 hexplom(
   w[, c('theta_r.1', 'theta_r.2', 'theta_r.3')], 
   trans = log, 
-  colramp = viridis, 
+  colramp = cr, 
   upper.panel = panel.hexboxplot,
   main = 'ROSETTA Evaluation: theta_r',
   xlab = ''
@@ -281,7 +319,7 @@ hexplom(
 hexplom(
   w[, c('theta_s.1', 'theta_s.2', 'theta_s.3')], 
   trans = log, 
-  colramp = viridis, 
+  colramp = cr, 
   upper.panel = panel.hexboxplot,
   main = 'ROSETTA Evaluation: theta_s',
   xlab = ''
@@ -290,7 +328,7 @@ hexplom(
 hexplom(
   w[, c('alpha.1', 'alpha.2', 'alpha.3')], 
   trans = log, 
-  colramp = viridis, 
+  colramp = cr, 
   upper.panel = panel.hexboxplot,
   main = 'ROSETTA Evaluation: alpha',
   xlab = ''
@@ -299,8 +337,29 @@ hexplom(
 hexplom(
   w[, c('npar.1', 'npar.2', 'npar.3')], 
   trans = log, 
-  colramp = viridis, 
+  colramp = cr, 
   upper.panel = panel.hexboxplot,
   main = 'ROSETTA Evaluation: npar',
   xlab = ''
 )
+
+hexplom(
+  w[, c('Ko.1', 'Ko.2', 'Ko.3')], 
+  trans = log, 
+  colramp = cr, 
+  upper.panel = panel.hexboxplot,
+  main = 'ROSETTA Evaluation: Ko',
+  xlab = ''
+)
+
+hexplom(
+  w[, c('L.1', 'L.2', 'L.3')], 
+  trans = log, 
+  colramp = cr, 
+  upper.panel = panel.hexboxplot,
+  main = 'ROSETTA Evaluation: L',
+  xlab = ''
+)
+
+
+
