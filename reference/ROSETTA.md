@@ -16,6 +16,7 @@ ROSETTA(
   vars,
   v = c("1", "2", "3"),
   include.sd = FALSE,
+  est.type = c("log", "arith", "geo"),
   chunkSize = 10000,
   conf = NULL
 )
@@ -25,13 +26,13 @@ ROSETTA(
 
 - x:
 
-  a `data.frame` of required soil properties, may contain other columns,
+  a `data.frame` of required soil properties, may contain other columns;
   see details
 
 - vars:
 
   character vector of column names in `x` containing relevant soil
-  property values, see details
+  property values; see details
 
 - v:
 
@@ -41,6 +42,10 @@ ROSETTA(
 - include.sd:
 
   logical, include bootstrap standard deviation for estimated parameters
+
+- est.type:
+
+  character, one of 'log' (default), 'arith', or 'geo'; see details
 
 - chunkSize:
 
@@ -52,12 +57,18 @@ ROSETTA(
   [`httr::POST()`](https://httr.r-lib.org/reference/POST.html) such as
   `verbose()`.
 
+## Value
+
+a `data.frame` with as many rows as `x`
+
 ## Details
 
 Soil properties supplied in `x` must be described, in order, via `vars`
 argument. The API does not use the names but column ordering must
 follow: sand, silt, clay, bulk density, volumetric water content at
 33kPa (1/3 bar), and volumetric water content at 1500kPa (15 bar).
+
+Column names not specified in `vars` are retained in the output.
 
 The ROSETTA model relies on a minimum of 3 soil properties, with
 increasing (expected) accuracy as additional properties are included:
@@ -66,7 +77,7 @@ increasing (expected) accuracy as additional properties are included:
   that sum to 100 percent
 
 - optional, bulk density (any moisture basis): mass per volume after
-  accounting for \>2mm fragments, units of gm/cm3
+  accounting for \>2mm fragments, units of g/cm3
 
 - optional, volumetric water content at 33 kPa: roughly "field capacity"
   for most soils, units of cm^3/cm^3
@@ -74,20 +85,41 @@ increasing (expected) accuracy as additional properties are included:
 - optional, volumetric water content at 1500 kPa: roughly "permanent
   wilting point" for most plants, units of cm^3/cm^3
 
-The Rosetta pedotransfer function predicts five parameters for the van
-Genuchten model of unsaturated soil hydraulic properties
+Model results include estimated mean parameters of the Mualem-van
+Genuchten model of unsaturated soil hydraulic properties:
 
-- theta_r : residual volumetric water content
+- `theta_r`: residual volumetric water content
 
-- theta_s : saturated volumetric water content
+- `theta_s`: saturated volumetric water content
 
-- log10(alpha) : retention shape parameter `[log10(1/cm)]`
+- `alpha`: retention shape parameter `[1/cm]`
 
-- log10(npar) : retention shape parameter
+- `npar`: retention shape parameter
 
-- log10(ksat) : saturated hydraulic conductivity `[log10(cm/d)]`
+- `ksat` : saturated hydraulic conductivity `[cm/d]`
 
-Column names not specified in `vars` are retained in the output.
+- `Ko`: "matching point" hydraulic conductivity `[cm/d]`
+
+- `L`: fitting parameter, describing pore tortuosity and pore
+  connectivity
+
+Standard deviations of these parameters are included if
+`include.sd = TRUE`.
+
+The `est.type` argument selects from the following summary styles (note
+units):
+
+- `log` (default and historically used by USDA-NRCS staff): estimates
+  represent ensemble mean values for theta_s, theta_r, log10(alpha)
+  `[log10(1/cm)]`, log10(npar), log10(ksat) `[log10(cm/d)]`, log10(Ko)
+  `[log10(cm/d)]`, and log10(L)
+
+- `arith`: estimates represent ensemble mean values for theta_s,
+  theta_r, alpha `[1/cm]`, npar, ksat `[cm/d]`, Ko `[cm/d]`, and L
+
+- `geo`: estimates represent ensemble mean values for theta_s, theta_r,
+  L, and *geometric mean* values for alpha `[1/cm]`, npar, ksat
+  `[cm/d]`, and Ko `[cm/d]`
 
 Three versions of the ROSETTA model are available, selected using "v =
 1", "v = 2", or "v = 3".
@@ -182,4 +214,4 @@ distributions and summary statistics (Rosetta3). Journal of Hydrology
 
 ## Author
 
-D.E. Beaudette, Todd Skaggs (ARS), Richard Reid
+D.E. Beaudette (NRCS), Todd Skaggs (ARS), Richard Reid (Ret. NRCS)
