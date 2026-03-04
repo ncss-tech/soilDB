@@ -23,7 +23,7 @@ ROSETTA(
 
 \item{include.sd}{logical, include bootstrap standard deviation for estimated parameters}
 
-\item{est.type}{character, one of 'log' (default), 'arith', or 'geo; see details}
+\item{est.type}{character, one of 'log' (default), 'arith', or 'geo'; see details}
 
 \item{chunkSize}{number of records per API call}
 

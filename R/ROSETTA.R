@@ -119,7 +119,7 @@
 #' 
 #' @param include.sd logical, include bootstrap standard deviation for estimated parameters
 #' 
-#' @param est.type character, one of 'log' (default), 'arith', or 'geo; see details
+#' @param est.type character, one of 'log' (default), 'arith', or 'geo'; see details
 #'
 #' @param chunkSize number of records per API call
 #'
@@ -205,7 +205,7 @@ ROSETTA <- function(x, vars, v = c('1', '2', '3'), include.sd = FALSE, est.type 
     stop('please install the `httr` and `jsonlite` packages', call. = FALSE)
 
   # ROSETTA version check
-  v <- match.arg(v)
+  v <- match.arg(as.character(v))
   
   # estimate type check
   est.type <- match.arg(est.type)
