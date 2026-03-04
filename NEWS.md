@@ -1,3 +1,13 @@
+# soilDB 2.9.1 (development)
+
+## Improvements
+ - `ROSETTA()` updates thanks to Todd Skaggs (ARS):
+   - now using version 2 of the ROSETTA API (https://www.handbook60.org/rosetta)
+   - new argument `est.type` for selecting ensemble summary method and resulting units of measure
+   - $Ko$ and $L$ parameters now included in model output
+   - significantly faster performance of python module running the API (@brownag)
+
+
 # soilDB 2.9.0 (2026-01-22)
 
 ## Breaking Changes

@@ -60,7 +60,7 @@ test_that("ROSETTA() works", {
   expect_true(nrow(r) == nrow(x))
 
   # output contains new columns
-  expect_true(all(c('theta_r', 'theta_s', 'alpha', 'npar', 'ksat') %in% names(r)))
+  expect_true(all(c('theta_r', 'theta_s', 'alpha', 'npar', 'ksat', 'Ko', 'L') %in% names(r)))
 
 })
 
@@ -87,7 +87,7 @@ test_that("bootstrap standard deviation", {
   expect_true(nrow(r) == nrow(x))
   
   # output contains new columns
-  expect_true(all(c('sd_theta_r', 'sd_theta_s', 'sd_alpha', 'sd_npar', 'sd_ksat') %in% names(r)))
+  expect_true(all(c('sd_theta_r', 'sd_theta_s', 'sd_alpha', 'sd_npar', 'sd_ksat', 'sd_Ko', 'sd_L') %in% names(r)))
   
 })
 
@@ -133,7 +133,64 @@ test_that("correct model selection in the presence of NA", {
   expect_true(is.na(r$theta_r[9]) & (r$.rosetta.model[9] == -1))
 
   # all NA
-  expect_true(all(is.na(r[10, c('theta_r', 'theta_s', 'alpha', 'npar', 'ksat')])))
+  expect_true(all(is.na(r[10, c('theta_r', 'theta_s', 'alpha', 'npar', 'ksat', 'Ko', 'L')])))
 
 
 })
+
+
+test_that("API v2 updates", {
+  
+  skip_if_not_installed("httr")
+  
+  skip_if_not_installed("jsonlite")
+  
+  skip_if_offline()
+  
+  skip_on_cran()
+  
+  # attempting to use all possible soil properties
+  vars <- c('sandtotal_r', 'silttotal_r', 'claytotal_r', 'dbthirdbar_r', 'wthirdbar_decimal', 'wfifteenbar_decimal')
+  
+  # results are not log10-transformed, arithmetic mean
+  r <- ROSETTA(x, vars = vars, include.sd = FALSE, est.type = 'arith')
+  
+  # correct object
+  skip_if_not(inherits(r, 'data.frame'))
+  
+  # input / output are conformal
+  expect_true(nrow(r) == nrow(x))
+  
+  # model results
+  expect_equal(round(r$Ko[1:3]), c(46, 48, 56))
+  
+  # results are not log10-transformed, geometric mean
+  r <- ROSETTA(x, vars = vars, include.sd = FALSE, est.type = 'geo')
+  
+  # correct object
+  skip_if_not(inherits(r, 'data.frame'))
+  
+  # input / output are conformal
+  expect_true(nrow(r) == nrow(x))
+  
+  # model results
+  expect_equal(round(r$Ko[1:3]), c(39, 41, 47))
+  
+  # results are arithmetic mean of log10-transformed values
+  r <- ROSETTA(x, vars = vars, include.sd = FALSE, est.type = 'log')
+  
+  # correct object
+  skip_if_not(inherits(r, 'data.frame'))
+  
+  # input / output are conformal
+  expect_true(nrow(r) == nrow(x))
+  
+  # model results
+  expect_equal(round(r$Ko[1:3], 2), c(1.59, 1.61, 1.68), tolerance = 0.05)
+  
+})
+
+
+
+
+

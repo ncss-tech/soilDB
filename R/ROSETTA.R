@@ -1,11 +1,12 @@
 
 # handle a single ROSETTA API request
 # x.chunk: single set of data to be processed, a data.frame
-# vars: column names of those soil propertie passed to API
+# vars: column names of those soil properties passed to API
 # v: model version
 # conf: configuration
 # include.sd: include bootstrapped standard deviation?
-.ROSETTA_request <- function(x.chunk, vars, v, conf, include.sd = FALSE) {
+# est.type: "arith", "log", or "geo" 
+.ROSETTA_request <- function(x.chunk, vars, v, conf, include.sd = FALSE, est.type = 'arith') {
 
   # save a copy of columns not used by API
   x.chunk.other <- x.chunk[, which(!names(x.chunk) %in% vars), drop = FALSE]
@@ -19,13 +20,13 @@
   x.chunk.mat <- as.matrix(x.chunk)
 
   # API url: version / model code
-  u <- sprintf("https://www.handbook60.org/api/v1/rosetta/%s", v)
+  u <- sprintf("https://www.handbook60.org/api/v2/rosetta/%s", v)
 
   # submit request
   # note: JSON is composed at function eval time
   r <- httr::POST(
     url = u,
-    body = list(X = x.chunk.mat),
+    body = list(soildata = x.chunk.mat, estimate_type = est.type),
     encode = "json",
     config = conf
   )
@@ -34,34 +35,39 @@
   request.status <- try(httr::stop_for_status(r), silent = TRUE)
 
   # return the error object so calling function/user can handle it
-  if (inherits(request.status, 'try-error'))
+  if (inherits(request.status, 'try-error')) {
     return(request.status)
-
+  }
+  
   # the result is JSON
   r.content <- try(httr::content(r, as = 'text', encoding = 'UTF-8'), silent = TRUE)
 
   # error trapping
-  if (inherits(r.content,'try-error'))
+  if (inherits(r.content,'try-error')) {
     return(r.content)
-
+  }
+  
   # convert JSON -> list(van_genuchten_params = [numeric matrix])
   # note that NA / errors will result in 'null' -> translated to NA by fromJSON()
   d <- try(jsonlite::fromJSON(r.content))
 
-  # error trapping
-  if (inherits(d, 'try-error'))
+  if (inherits(d, 'try-error')) {
     return(d)
+  }
+    
 
   # a valid result will contain a list with the following:
   # "model_code" (results from automatic model selection, -1 means no prediction / error)
   # "rosetta_version" (1, 2, 3)
+  # "model_codes" sub-model selection (-1, 1, 2, 3, 4, 5)
   # "stdev" (bootstrapped standard deviation)
-  # "van_genuchten_params" (standard output)
+  # "hydparams" (standard output)
+  # "estimate_type": "arith", "log", or "geo" 
 
   # extract VG parameters, may include NA
-  vg <- as.data.frame(d[['van_genuchten_params']])
+  vg <- as.data.frame(d[['hydparams']])
   # set names
-  vg.names <- c('theta_r', 'theta_s', 'alpha', 'npar', 'ksat')
+  vg.names <- c('theta_r', 'theta_s', 'alpha', 'npar', 'ksat', 'Ko', 'L')
   names(vg) <- vg.names
 
   # add model code
@@ -91,24 +97,29 @@
 # * model selection is automatic when model code = 0
 # * work with Todd to determine the optimal request / record count trade-off
 
-# 2021-01-06
+# 2021-01-06:
 # * best model (0) is always used, API no longer accepts `model` as a parameter
 # * versions 1,2,3 supported
+
+# 2026-02-27:
+# * Ko and L parameters added to back-end models, python module, and API
 
 
 #' @title Query USDA-ARS ROSETTA Model API
 #'
 #' @description A simple interface to the \href{https://www.ars.usda.gov/pacific-west-area/riverside-ca/agricultural-water-efficiency-and-salinity-research-unit/docs/model/rosetta-model/}{ROSETTA model} for predicting hydraulic parameters from soil properties. The ROSETTA API was developed by Dr. Todd Skaggs (USDA-ARS) and links to the work of Zhang and Schaap, (2017). See the \href{http://ncss-tech.github.io/AQP/soilDB/ROSETTA-API.html}{related tutorial} for additional examples.
 #'
-#' @author D.E. Beaudette, Todd Skaggs (ARS), Richard Reid
+#' @author D.E. Beaudette (NRCS), Todd Skaggs (ARS), Richard Reid (Ret. NRCS)
 #'
-#' @param x a `data.frame` of required soil properties, may contain other columns, see details
+#' @param x a `data.frame` of required soil properties, may contain other columns; see details
 #'
-#' @param vars character vector of column names in `x` containing relevant soil property values, see details
+#' @param vars character vector of column names in `x` containing relevant soil property values; see details
 #'
 #' @param v ROSETTA model version number: '1', '2', or '3', see details and references.
 #' 
 #' @param include.sd logical, include bootstrap standard deviation for estimated parameters
+#' 
+#' @param est.type character, one of 'log' (default), 'arith', or 'geo'; see details
 #'
 #' @param chunkSize number of records per API call
 #'
@@ -116,21 +127,33 @@
 #'
 #' @details Soil properties supplied in `x` must be described, in order, via `vars` argument. The API does not use the names but column ordering must follow: sand, silt, clay, bulk density, volumetric water content at 33kPa (1/3 bar), and volumetric water content at 1500kPa (15 bar).
 #'
+#' Column names not specified in `vars` are retained in the output.
+#'
 #' The ROSETTA model relies on a minimum of 3 soil properties, with increasing (expected) accuracy as additional properties are included:
 #'  - required, sand, silt, clay: USDA soil texture separates (percentages) that sum to 100 percent
-#'  - optional, bulk density (any moisture basis): mass per volume after accounting for >2mm fragments, units of gm/cm3
+#'  - optional, bulk density (any moisture basis): mass per volume after accounting for >2mm fragments, units of g/cm3
 #'  - optional, volumetric water content at 33 kPa: roughly "field capacity" for most soils, units of cm^3/cm^3
 #'  - optional, volumetric water content at 1500 kPa: roughly "permanent wilting point" for most plants, units of cm^3/cm^3
 #'  
-#' The Rosetta pedotransfer function predicts five parameters for the van Genuchten model of unsaturated soil hydraulic properties
+#' Model results include estimated mean parameters of the Mualem-van Genuchten model of unsaturated soil hydraulic properties:
 #' 
-#'  - theta_r : residual volumetric water content
-#'  - theta_s : saturated volumetric water content
-#'  - log10(alpha) : retention shape parameter `[log10(1/cm)]`
-#'  - log10(npar) : retention shape parameter
-#'  - log10(ksat) : saturated hydraulic conductivity `[log10(cm/d)]`
+#'  - `theta_r`: residual volumetric water content
+#'  - `theta_s`: saturated volumetric water content
+#'  - `alpha`: retention shape parameter `[1/cm]`
+#'  - `npar`: retention shape parameter
+#'  - `ksat` : saturated hydraulic conductivity `[cm/d]`
+#'  - `Ko`: "matching point" hydraulic conductivity `[cm/d]`
+#'  - `L`: fitting parameter, describing pore tortuosity and pore connectivity
 #' 
-#' Column names not specified in `vars` are retained in the output.
+#' Standard deviations of these parameters are included if `include.sd = TRUE`.
+#' 
+#' The `est.type` argument selects from the following summary styles (note units):
+#' 
+#'  - `log` (default and historically used by USDA-NRCS staff): estimates represent ensemble mean values for theta_s, theta_r, log10(alpha) `[log10(1/cm)]`, log10(npar), log10(ksat) `[log10(cm/d)]`, log10(Ko) `[log10(cm/d)]`, and log10(L)
+#'  - `arith`: estimates represent ensemble mean values for theta_s, theta_r, alpha `[1/cm]`, npar, ksat `[cm/d]`, Ko `[cm/d]`, and L
+#'  - `geo`: estimates represent ensemble mean values for theta_s, theta_r, L, and *geometric mean* values for alpha `[1/cm]`, npar, ksat `[cm/d]`, and Ko `[cm/d]`
+#' 
+#' 
 #'
 #' Three versions of the ROSETTA model are available, selected using "v = 1", "v = 2", or "v = 3".
 #'
@@ -139,6 +162,9 @@
 #'  - version 2 - Schaap, M.G., A. Nemes, and M.T. van Genuchten. 2004. Comparison of Models for Indirect Estimation of Water Retention and Available Water in Surface Soils. Vadose Zone Journal 3(4): 1455-1463. doi: \doi{10.2136/vzj2004.1455}.
 #'
 #'  - version 3 - Zhang, Y., and M.G. Schaap. 2017. Weighted recalibration of the Rosetta pedotransfer model with improved estimates of hydraulic parameter distributions and summary statistics (Rosetta3). Journal of Hydrology 547: 39-53. doi: \doi{10.1016/j.jhydrol.2017.01.004}.
+#'
+#'
+#' @return a `data.frame` with as many rows as `x`
 #'
 #' @references
 #' Consider using the interactive version, with copy/paste functionality at: \url{https://www.handbook60.org/rosetta}.
@@ -172,14 +198,18 @@
 #' Zhang, Y., and M.G. Schaap. 2017. Weighted recalibration of the Rosetta pedotransfer model with improved estimates of hydraulic parameter distributions and summary statistics (Rosetta3). Journal of Hydrology 547: 39-53. doi: \doi{10.1016/j.jhydrol.2017.01.004}.
 #'
 #' @export
-ROSETTA <- function(x, vars, v = c('1', '2', '3'), include.sd = FALSE, chunkSize = 10000, conf = NULL) {
+ROSETTA <- function(x, vars, v = c('1', '2', '3'), include.sd = FALSE, est.type = c('log', 'arith', 'geo'), chunkSize = 10000, conf = NULL) {
 
   # check for required packages
   if (!requireNamespace('httr', quietly = TRUE) | !requireNamespace('jsonlite', quietly = TRUE))
     stop('please install the `httr` and `jsonlite` packages', call. = FALSE)
 
   # ROSETTA version check
+  v <- as.character(v)
   v <- match.arg(v)
+  
+  # estimate type check
+  est.type <- match.arg(est.type)
 
   if( ! inherits(x, c('data.frame')) ) {
     stop('x must be a data.frame')
@@ -212,7 +242,7 @@ ROSETTA <- function(x, vars, v = c('1', '2', '3'), include.sd = FALSE, chunkSize
 
   # iterate over chunks
   # results may contain try-errors
-  res <- lapply(x, FUN = .ROSETTA_request, vars = vars, v = v, conf = conf, include.sd = include.sd)
+  res <- lapply(x, FUN = .ROSETTA_request, vars = vars, v = v, conf = conf, include.sd = include.sd, est.type = est.type)
 
   ## TODO: think about error handling...
   # most likely a curl time-out
