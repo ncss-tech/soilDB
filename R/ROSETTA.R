@@ -205,7 +205,8 @@ ROSETTA <- function(x, vars, v = c('1', '2', '3'), include.sd = FALSE, est.type 
     stop('please install the `httr` and `jsonlite` packages', call. = FALSE)
 
   # ROSETTA version check
-  v <- match.arg(as.character(v))
+  v <- as.character(v)
+  v <- match.arg(v)
   
   # estimate type check
   est.type <- match.arg(est.type)
