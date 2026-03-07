@@ -78,20 +78,3 @@ jobs:
       - uses: r-lib/actions/check-r-package@v2
         with:
           upload-snapshots: true
-          
-      - name: Render README
-        if: runner.os == 'Windows' && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')
-        run: |
-          install.packages(c("rmarkdown", "devtools", "pkgdown", "aqp"))
-          remotes::install_github(c("ncss-tech/aqp"), dependencies = FALSE)
-          rmarkdown::render("README.Rmd")
-        shell: Rscript {0}
-
-      - name: Commit and push results
-        if: runner.os == 'Windows' && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')
-        run: |
-          git add README.md 
-          git commit -m 'Render README.Rmd' || echo "No changes to commit"
-          git add inst/\*
-          git commit -m 'Update inst' || echo "No changes to commit"
-          git push origin HEAD:${{ env.BRANCH_NAME }} 
