@@ -70,8 +70,8 @@ mukey.wcs <- function(aoi, db = c('gNATSGO', 'gSSURGO', 'RSS', 'STATSGO', 'PR_SS
   if (db %in% c('gnatsgo', 'gssurgo', 'rss', 'statsgo')) {
     # CONUS
     .crs <- 'EPSG:5070'
-    .grid <- terra::rast(nrows = 96754, ncols = 153999, crs = .crs, 
-                         extent = terra::ext(-2356155, 2263815, 270015, 3172635))
+    .grid <- terra::rast(nrows = 97053, ncols = 153996, crs = .crs, 
+                         extent = terra::ext(-2356125, 2263755, 260985, 3172575))
   } else if (db == 'pr_ssurgo') {
     # PR
     .crs <- 'EPSG:32161'

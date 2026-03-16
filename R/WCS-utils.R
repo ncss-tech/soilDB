@@ -695,8 +695,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     vintage = 'FY2026',
     grid = list(
       crs = 'EPSG:5070',
-      dim = c(nrows = 96754, ncols = 153999),
-      ext = c(-2356155, 2263815, 270015, 3172635)
+      dim = c(nrows = 97053, ncols = 153996),
+      ext = c(-2356125, 2263755, 260985, 3172575)
     ),
     na = 2147483647L,
     res = 30,
@@ -740,8 +740,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     vintage = 'FY2026',
     grid = list(
       crs = 'EPSG:32161',
-      dim = c(nrows = 2229, ncols = 9608),
-      ext = c(39905, 328145, 208815, 275685)
+      dim = c(nrows = 97053, ncols = 153996),
+      ext = c(-2356125, 2263755, 260985, 3172575)
     ),
     na = 4294967295,
     res = 30,
@@ -755,8 +755,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     vintage = 'FY2026',
     grid = list(
       crs = 'EPSG:5070',
-      dim = c(nrows = 96754, ncols = 153999),
-      ext = c(-2356155, 2263815, 270015, 3172635)
+      dim = c(nrows = 97053, ncols = 153996),
+      ext = c(-2356125, 2263755, 260985, 3172575)
     ),
     na = 0L,
     res = 30,
