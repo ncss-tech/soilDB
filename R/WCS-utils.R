@@ -668,16 +668,21 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
 ##  * top-level names in specs via JSON are used to determine available products
 ##  * are we just re-inventing a crummy version of STAC?
 ##
+# ext(xmin, xmax, ymin, ymax)
+
 
 .mukey.spec <- list(
   
-  # FY24 data were exported as INT32 instead of UINT32
-  # NODATA is -2147483648
   'gnatsgo' = list(
     dsn = 'gnatsgo',
     type = 'GEOTIFF_FLOAT',
     desc = 'gNATSGO map unit keys',
     vintage = 'FY2024',
+    grid = list(
+      crs = 'EPSG:5070',
+      dim = c(nrows = 96754, ncols = 153999),
+      ext = c(-2356155, 2263815, 270015, 3172635)
+    ),
     na = 2147483647L,
     res = 30,
     rat = NULL
@@ -687,7 +692,27 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     dsn = 'gssurgo',
     type = 'GEOTIFF_FLOAT',
     desc = 'gSSURGO map unit keys',
-    vintage = 'FY2024',
+    vintage = 'FY2026',
+    grid = list(
+      crs = 'EPSG:5070',
+      dim = c(nrows = 96754, ncols = 153999),
+      ext = c(-2356155, 2263815, 270015, 3172635)
+    ),
+    na = 2147483647L,
+    res = 30,
+    rat = NULL
+  ),
+  
+  'fssurgo' = list(
+    dsn = 'fssurgo',
+    type = 'GEOTIFF_FLOAT',
+    desc = 'SSURGO/STATSGO2 map unit keys',
+    vintage = 'FY2026',
+    grid = list(
+      crs = 'EPSG:5070',
+      dim = c(nrows = 96754, ncols = 153999),
+      ext = c(-2356155, 2263815, 270015, 3172635)
+    ),
     na = 2147483647L,
     res = 30,
     rat = NULL
@@ -697,7 +722,12 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     dsn = 'hi_ssurgo',
     type = 'GEOTIFF_FLOAT',
     desc = 'HI map unit keys',
-    vintage = 'FY2024',
+    vintage = 'FY2026',
+    grid = list(
+      crs = 'EPSG:6628',
+      dim = c(nrows = 12441, ncols = 17193),
+      ext = c(56992, 572782, 8585, 381815)
+    ),
     na = 4294967295,
     res = 30,
     rat = NULL
@@ -707,7 +737,12 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     dsn = 'pr_ssurgo',
     type = 'GEOTIFF_FLOAT',
     desc = 'PR map unit keys',
-    vintage = 'FY2024',
+    vintage = 'FY2026',
+    grid = list(
+      crs = 'EPSG:32161',
+      dim = c(nrows = 2229, ncols = 9608),
+      ext = c(39905, 328145, 208815, 275685)
+    ),
     na = 4294967295,
     res = 30,
     rat = NULL
@@ -717,9 +752,14 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     dsn = 'statsgo',
     type = 'GEOTIFF_FLOAT',
     desc = 'STATSGO2 map unit keys',
-    vintage = 'FY2023',
+    vintage = 'FY2026',
+    grid = list(
+      crs = 'EPSG:5070',
+      dim = c(nrows = 96754, ncols = 153999),
+      ext = c(-2356155, 2263815, 270015, 3172635)
+    ),
     na = 0L,
-    res = 300,
+    res = 30,
     rat = NULL
   ),
   
@@ -728,6 +768,11 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_FLOAT',
     desc = 'RSS map unit keys',
     vintage = 'FY2023',
+    grid = list(
+      crs = 'EPSG:5070',
+      dim = c(nrows = 96754, ncols = 153999),
+      ext = c(-2356155, 2263815, 270015, 3172635)
+    ),
     na = 0L,
     res = 10,
     rat = NULL
