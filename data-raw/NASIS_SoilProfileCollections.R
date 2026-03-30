@@ -55,6 +55,6 @@ if (all(profile_id(mineralKing) %in% profile_id(mineralKing2)))
   mineralKing <- mineralKing2
 
 # save to .rda
-usethis::use_data(loafercreek, overwrite = TRUE, compress = 'xz')
-usethis::use_data(gopheridge, overwrite = TRUE, compress = 'xz')
-usethis::use_data(mineralKing, overwrite = TRUE, compress = 'xz')
+save(loafercreek, file = "inst/extdata/loafercreek.rda", compress = "xz")
+save(gopheridge, file = "inst/extdata/gopheridge.rda", compress = "xz")
+save(mineralKing, file = "inst/extdata/mineralKing.rda", compress = "xz")
