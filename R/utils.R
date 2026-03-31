@@ -1047,6 +1047,9 @@
   idx_key   <- grep(key, names(data))
   names(data)[c(idx_key)] <- c("key")
   
+  key_dt <- class(data$key)
+  if (!is.character(data$key)) data$key <- as.character(data$key) 
+  
   
   # find sites with overlapping landforms ----
   n_bot <- NULL
@@ -1236,6 +1239,7 @@
   } else data_comb <- data_comb[, vars, with = FALSE]
   
   data <- as.data.frame(rbind(data_simp, data_mis, data_comb))
+  if (key_dt %in% c("numeric", "integer")) data$key <- as.integer(data$key)
   names(data)[names(data) == "key"] <- key
   
   
