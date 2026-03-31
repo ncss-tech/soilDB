@@ -465,9 +465,11 @@ get_mapunit_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb",
     ch <- do.call("rbind", ch)
 
   } else ch <- sf::read_sf(dsn = dsn, query = "SELECT * FROM chorizon", as_tibble = FALSE, fid_column_name = "chkey")
+  ch$chkey.1 <- NULL
 
   
   # iterate over the threshold
+  vars_rf <- c('texture', 'texcl', 'fine_gravel', 'gravel', 'cobbles', 'stones', 'boulders', 'channers', 'flagstones', 'parafine_gravel', 'paragravel', 'paracobbles', 'parastones', 'paraboulders', 'parachanners', 'paraflagstones', 'unspecified', 'total_frags_pct_nopf', 'total_frags_pct')
   if (isTRUE(childs) && nrow(ch) > 0) {
     
     idx <- seq(0, 2e8, 3000)
@@ -518,17 +520,14 @@ get_mapunit_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb",
     ch <- do.call("rbind", temp)
     ch$idx <- NULL
   } else {
-    vars <- c('texture', 'texcl', 'fine_gravel', 'gravel', 'cobbles', 'stones', 'boulders', 'channers', 'flagstones', 'parafine_gravel', 'paragravel', 'paracobbles', 'parastones', 'paraboulders', 'parachanners', 'paraflagstones', 'unspecified', 'total_frags_pct_nopf', 'total_frags_pct')
     mis_df <- as.data.frame(matrix(ncol = 19, nrow = nrow(ch)))
-    names(mis_df) <- vars
+    names(mis_df) <- vars_rf
     ch <- cbind(ch, mis_df)
   }
   
- 
-  
-  vars <- vars_le <- sf::read_sf(dsn = dsn, query = "SELECT * FROM chorizon LIMIT 0", as_tibble = FALSE, fid_column_name = "lkey") |> names()
-  idx <- unlist(lapply(vars, function(x) which(names(ch) %in% x)))
-  ch <- ch[idx]
+  # vars <- sf::read_sf(dsn = dsn, query = "SELECT * FROM chorizon LIMIT 0", as_tibble = FALSE, fid_column_name = "lkey") |> names() |> c(vars_rf)
+  # idx <- unlist(lapply(vars, function(x) which(names(ch) %in% x)))
+  # ch <- ch[idx]
   
   # # append missing columns from ch LIMIT 0
   # if (ncol(ch) < length(vars)) {
