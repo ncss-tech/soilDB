@@ -32,8 +32,8 @@ Get the development version from GitHub:
 
     ## To cite soilDB in publications use:
     ## 
-    ##   Beaudette D, Skovlin J, Roecker S, Brown A (2025). _soilDB: Soil
-    ##   Database Interface_. R package version 2.8.13,
+    ##   Beaudette D, Skovlin J, Roecker S, Brown A (2026). _soilDB: Soil
+    ##   Database Interface_. R package version 2.9.1,
     ##   <https://CRAN.R-project.org/package=soilDB>.
     ## 
     ## A BibTeX entry for LaTeX users is
@@ -41,12 +41,12 @@ Get the development version from GitHub:
     ##   @Manual{,
     ##     title = {soilDB: Soil Database Interface},
     ##     author = {Dylan Beaudette and Jay Skovlin and Stephen Roecker and Andrew Brown},
-    ##     note = {R package version 2.8.13},
+    ##     note = {R package version 2.9.1},
     ##     url = {https://CRAN.R-project.org/package=soilDB},
-    ##     year = {2025},
+    ##     year = {2026},
     ##   }
 
-## soilDB 2.8.13
+## soilDB 2.9.1
 
 <!-- ### Notices on Database Interfaces -->
 <!-- #### NASIS -->
