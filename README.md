@@ -59,6 +59,7 @@ Get the development version from GitHub:
 -   Soil Data Access (SDA)
     -   [`fetchSDA`](http://ncss-tech.github.io/soilDB/reference/fetchSDA.html)
     -   [`fetchSDA_spatial`](http://ncss-tech.github.io/soilDB/reference/fetchSDA_spatial.html)
+    -   [`fetchLDM`](http://ncss-tech.github.io/soilDB/reference/fetchLDM.html)
     -   [`SDA_query`](http://ncss-tech.github.io/soilDB/reference/SDA_query.html)
     -   [`SDA_spatialQuery`](http://ncss-tech.github.io/soilDB/reference/SDA_spatialQuery.html)
     -   “SSURGO On Demand” Queries
@@ -77,8 +78,16 @@ Get the development version from GitHub:
     -   [`fetchGDB`](http://ncss-tech.github.io/soilDB/reference/fetchGDB.html)
 -   ROSETTA
     -   [`ROSETTA`](http://ncss-tech.github.io/soilDB/reference/ROSETTA.html)
--   SSURGO/KSSL via SoilWeb
-    -   [`fetchKSSL`](http://ncss-tech.github.io/soilDB/reference/fetchKSSL.html)
+-   NASIS local database
+    -   [`fetchNASIS`](http://ncss-tech.github.io/soilDB/reference/fetchNASIS.html)
+    -   [`dbConnectNASIS`](http://ncss-tech.github.io/soilDB/reference/dbConnectNASIS.html)
+        (alias `NASIS()`)
+    -   [`dbQueryNASIS`](http://ncss-tech.github.io/soilDB/reference/dbQueryNASIS.html)
+    -   [`createStaticNASIS`](http://ncss-tech.github.io/soilDB/reference/createStaticNASIS.html)
+-   Digital Soil Mapping (DSM) Products
+    -   [`fetchSOLUS`](http://ncss-tech.github.io/soilDB/reference/fetchSOLUS.html)
+    -   [`fetchSoilGrids`](http://ncss-tech.github.io/soilDB/reference/fetchSoilGrids.html)
+-   SoilWeb
     -   [`fetchOSD`](http://ncss-tech.github.io/soilDB/reference/fetchOSD.html)
     -   [`siblings`](http://ncss-tech.github.io/soilDB/reference/siblings.html)
     -   [`OSDquery`](http://ncss-tech.github.io/soilDB/reference/OSDquery.html)
@@ -94,36 +103,3 @@ Get the development version from GitHub:
     -   [`SCAN_SNOTEL_metadata`](http://ncss-tech.github.io/soilDB/reference/SCAN_SNOTEL_metadata.html)
 -   Henry Mount Soil and Water Database
     -   [`fetchHenry`](http://ncss-tech.github.io/soilDB/reference/fetchHenry.html)
--   NASIS local database
-    -   [`fetchNASIS`](http://ncss-tech.github.io/soilDB/reference/fetchNASIS.html)
-    -   [`dbConnectNASIS`](http://ncss-tech.github.io/soilDB/reference/dbConnectNASIS.html)
-        (alias `NASIS()`)
-    -   [`dbQueryNASIS`](http://ncss-tech.github.io/soilDB/reference/dbQueryNASIS.html)
-    -   [`createStaticNASIS`](http://ncss-tech.github.io/soilDB/reference/createStaticNASIS.html)
--   SoilGrids
-    -   [`fetchSoilGrids`](http://ncss-tech.github.io/soilDB/reference/fetchSoilGrids.html)
-
-## Miscellaneous Functions
-
--   [`estimateSTR`](http://ncss-tech.github.io/soilDB/reference/estimateSTR.html)
--   [`STRplot`](http://ncss-tech.github.io/soilDB/reference/STRplot.html)
--   [`KSSL_VG_model`](http://ncss-tech.github.io/soilDB/reference/KSSL_VG_model.html)
--   [`simplifyFragmentData`](http://ncss-tech.github.io/soilDB/reference/simplifyFragmentData.html)
--   [`simplifyColorData`](http://ncss-tech.github.io/soilDB/reference/simplifyColorData.html)
--   [`uncode`](http://ncss-tech.github.io/soilDB/reference/uncode.html)
--   [`code`](http://ncss-tech.github.io/soilDB/reference/code.html)
--   [`get_NOAA_GHCND`](http://ncss-tech.github.io/soilDB/reference/get_NOAA_GHCND.html)
-
-## Tutorials and Demonstrations
-
--   [fetchKSSL](http://ncss-tech.github.io/AQP/soilDB/KSSL-demo.html)
--   [SDA\_query](http://ncss-tech.github.io/AQP/soilDB/SDA-tutorial.html)
--   [fetchOSD](http://ncss-tech.github.io/AQP/sharpshootR/OSD-dendrogram.html)
--   [SCAN/SNOTEL
-    Data](http://ncss-tech.github.io/AQP/soilDB/fetchSCAN-demo.html)
-
-## Related Packages
-
--   [aqp](https://github.com/ncss-tech/aqp)
--   [sharpshootR](https://github.com/ncss-tech/sharpshootR)
--   [SoilTaxonomy](https://github.com/ncss-tech/SoilTaxonomy)
