@@ -1,18 +1,22 @@
 # Changelog
 
-## soilDB 2.9.1 (development)
-
-### Improvements
+## soilDB 2.9.1 (2026-04-01)
 
 - [`ROSETTA()`](http://ncss-tech.github.io/soilDB/reference/ROSETTA.md)
-  updates thanks to Todd Skaggs (ARS):
-  - now using version 2 of the ROSETTA API
+  updates thanks to Todd Skaggs (USDA-ARS):
+  - Now using version 2 of the ROSETTA API
     (<https://www.handbook60.org/rosetta>)
-  - new argument `est.type` for selecting ensemble summary method and
+  - New argument `est.type` for selecting ensemble summary method and
     resulting units of measure
   - $Ko$ and $L$ parameters now included in model output
-  - significantly faster performance of python module running the API
-    ([@brownag](https://github.com/brownag))
+- [`fetchGDB()`](http://ncss-tech.github.io/soilDB/reference/fetchGDB.md)
+  now supports passing path to SSURGO GeoPackage file via `dsn` argument
+- Breaking change: sample SoilProfileCollection datasets (`loafercreek`,
+  `gopheridge`, `mineralKing`) updated to 2.9.x
+  [`fetchNASIS()`](http://ncss-tech.github.io/soilDB/reference/fetchNASIS.md)
+  schema
+  - Deprecated columns have been removed, following the corresponding
+    changes in 2.9.0
 
 ## soilDB 2.9.0 (2026-01-22)
 
@@ -52,11 +56,9 @@
 
 ## soilDB 2.8.14 (2025-12-04)
 
-- [`taxaExtent()`](http://ncss-tech.github.io/soilDB/reference/taxaExtent.md)
-  updates:
-  - Added family mineralogy class grids
-  - Added argument `type` for selecting the type of query; replaces
-    deprecated `formativeElement`
+- Added family mineralogy class grids
+- Added argument `type` for selecting the type of query; replaces
+  deprecated `formativeElement`
 - [`SDA_query()`](http://ncss-tech.github.io/soilDB/reference/SDA_query.md)
   now includes additional metadata (comment header in SQL) to inform
   usage metrics of various access points to SDA

@@ -2783,33 +2783,33 @@ head(pm_dom)
 ```
 
     ##     mukey areasymbol musym
-    ## 1 3225132      CA630  7065
-    ## 2 3356289      CA630  6206
-    ## 3 2600458      CA630  7212
-    ## 4 2450845      CA630  3058
-    ## 5 2924913      CA630   220
-    ## 6 2403696      CA630  5100
-    ##                                                                                            muname
-    ## 1                          Bonanza-Loafercreek complex, 3 to 15 percent slopes, low precipitation
-    ## 2                                                    Musick-Hotaw complex, 8 to 30 percent slopes
-    ## 3                                           Wardsferry-Millvilla complex, 30 to 60 percent slopes
-    ## 4                                          Shawsflat-Angelscreek complex, 25 to 60 percent slopes
-    ## 5                                               Redding gravelly loam, 0 to 8 percent slopes, dry
-    ## 6 Mokelumne-Buenavista-Aquultic Haploxeralfs, occasionally ponded complex, 1 to 12 percent slopes
+    ## 1 2600458      CA630  7212
+    ## 2 2766850      CA630  5015
+    ## 3 2924913      CA630   220
+    ## 4 3225132      CA630  7065
+    ## 5 3356289      CA630  6206
+    ## 6 1913602      CA630  8160
+    ##                                                                   muname
+    ## 1                  Wardsferry-Millvilla complex, 30 to 60 percent slopes
+    ## 2                      Ospital-Jennylind complex, 2 to 15 percent slopes
+    ## 3                      Redding gravelly loam, 0 to 8 percent slopes, dry
+    ## 4 Bonanza-Loafercreek complex, 3 to 15 percent slopes, low precipitation
+    ## 5                           Musick-Hotaw complex, 8 to 30 percent slopes
+    ## 6                        Nedsgulch-Sites complex, 3 to 15 percent slopes
     ##     compname compkind comppct_r majcompflag
-    ## 1    Bonanza   Series        70         Yes
-    ## 2     Musick   Series        64         Yes
-    ## 3 Wardsferry   Series        50         Yes
-    ## 4  Shawsflat   Series        65         Yes
-    ## 5    Redding   Series        85         Yes
-    ## 6  Mokelumne   Series        40         Yes
+    ## 1 Wardsferry   Series        50         Yes
+    ## 2    Ospital   Series        60         Yes
+    ## 3    Redding   Series        85         Yes
+    ## 4    Bonanza   Series        70         Yes
+    ## 5     Musick   Series        64         Yes
+    ## 6  Nedsgulch   Series        65         Yes
     ##                                                                                                                                                                                                                       pmgroupname
-    ## 1                                                                                                                                                                              colluvium over residuum derived from metavolcanics
-    ## 2                                                                                                                                                                                    colluvium over residuum derived from diorite
-    ## 3                                                                                                                                                                       colluvium over residuum derived from metasedimentary rock
-    ## 4                                                                                                                                                        colluvium derived from latite over residuum weathered from volcanic rock
-    ## 5 loamy alluvium derived from igneous, metamorphic and sedimentary rock over clayey alluvium derived from igneous, metamorphic and sedimentary rock over cemented alluvium derived from igneous, metamorphic and sedimentary rock
-    ## 6                                                                                                                                                    slope alluvium derived from sandstone over residuum weathered from sandstone
+    ## 1                                                                                                                                                                       colluvium over residuum derived from metasedimentary rock
+    ## 2                                                                                                                                                                                             residuum weathered from acidic tuff
+    ## 3 loamy alluvium derived from igneous, metamorphic and sedimentary rock over clayey alluvium derived from igneous, metamorphic and sedimentary rock over cemented alluvium derived from igneous, metamorphic and sedimentary rock
+    ## 4                                                                                                                                                                              colluvium over residuum derived from metavolcanics
+    ## 5                                                                                                                                                                                    colluvium over residuum derived from diorite
+    ## 6                                                                                                                                                                       colluvium over residuum derived from metasedimentary rock
 
 ### Method: DOMINANT CONDITION
 

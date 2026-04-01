@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">soilDB</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.9.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.9.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -42,19 +42,20 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="2.9.1" id="soildb-291-development">soilDB 2.9.1 (development)<a class="anchor" aria-label="anchor" href="#soildb-291-development"></a></h2>
-<div class="section level3">
-<h3 id="improvements-2-9-1">Improvements<a class="anchor" aria-label="anchor" href="#improvements-2-9-1"></a></h3>
+<h2 class="pkg-version" data-toc-text="2.9.1" id="soildb-291-2026-04-01">soilDB 2.9.1 (2026-04-01)<a class="anchor" aria-label="anchor" href="#soildb-291-2026-04-01"></a></h2>
 <ul><li>
-<code><a href="../reference/ROSETTA.html">ROSETTA()</a></code> updates thanks to Todd Skaggs (ARS):
-<ul><li>now using version 2 of the ROSETTA API (<a href="https://www.handbook60.org/rosetta" class="external-link uri">https://www.handbook60.org/rosetta</a>)</li>
-<li>new argument <code>est.type</code> for selecting ensemble summary method and resulting units of measure</li>
+<code><a href="../reference/ROSETTA.html">ROSETTA()</a></code> updates thanks to Todd Skaggs (USDA-ARS):
+<ul><li>Now using version 2 of the ROSETTA API (<a href="https://www.handbook60.org/rosetta" class="external-link uri">https://www.handbook60.org/rosetta</a>)</li>
+<li>New argument <code>est.type</code> for selecting ensemble summary method and resulting units of measure</li>
 <li>
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>K</mi><mi>o</mi></mrow><annotation encoding="application/x-tex">Ko</annotation></semantics></math> and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>L</mi><annotation encoding="application/x-tex">L</annotation></semantics></math> parameters now included in model output</li>
-<li>significantly faster performance of python module running the API (<a href="https://github.com/brownag" class="external-link">@brownag</a>)</li>
+</ul></li>
+<li>
+<code><a href="../reference/fetchGDB.html">fetchGDB()</a></code> now supports passing path to SSURGO GeoPackage file via <code>dsn</code> argument</li>
+<li>Breaking change: sample SoilProfileCollection datasets (<code>loafercreek</code>, <code>gopheridge</code>, <code>mineralKing</code>) updated to 2.9.x <code><a href="../reference/fetchNASIS.html">fetchNASIS()</a></code> schema
+<ul><li>Deprecated columns have been removed, following the corresponding changes in 2.9.0</li>
 </ul></li>
 </ul></div>
-</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="2.9.0" id="soildb-290-2026-01-22">soilDB 2.9.0 (2026-01-22)<a class="anchor" aria-label="anchor" href="#soildb-290-2026-01-22"></a></h2>
 <div class="section level3">
@@ -80,12 +81,9 @@
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="2.8.14" id="soildb-2814-2025-12-04">soilDB 2.8.14 (2025-12-04)<a class="anchor" aria-label="anchor" href="#soildb-2814-2025-12-04"></a></h2>
-<ul><li>
-<code><a href="../reference/taxaExtent.html">taxaExtent()</a></code> updates:
 <ul><li>Added family mineralogy class grids</li>
 <li>Added argument <code>type</code> for selecting the type of query; replaces deprecated <code>formativeElement</code>
 </li>
-</ul></li>
 <li>
 <code><a href="../reference/SDA_query.html">SDA_query()</a></code> now includes additional metadata (comment header in SQL) to inform usage metrics of various access points to SDA</li>
 <li>
