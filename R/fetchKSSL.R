@@ -233,7 +233,7 @@
 #' the link below for the live data.
 #' @author D.E. Beaudette and A.G. Brown
 #' @seealso \code{\link{fetchOSD}}
-#' @references \url{http://ncsslabdatamart.sc.egov.usda.gov/}
+#' @references National Cooperative Soil Survey Soil Characterization Database: <https://ncsslabdatamart.sc.egov.usda.gov/>.
 #' @keywords utilities
 #' @examplesIf curl::has_internet() && requireNamespace("httr", quietly = TRUE) && requireNamespace("aqp", quietly = TRUE) && as.logical(Sys.getenv("R_SOILDB_SKIP_LONG_EXAMPLES", unset = TRUE))
 #' \donttest{

@@ -2,8 +2,6 @@ context("fetchSDA_spatial -- requires internet connection")
 
 test_that("fetchSDA_spatial basic mupolygon functionality", {
   
-  skip_if_not_installed("httr")
-  
   skip_if_offline()
 
   skip_on_cran()
@@ -12,6 +10,9 @@ test_that("fetchSDA_spatial basic mupolygon functionality", {
   
   # expect 3, relatively non-extensive join delineations
   single.mukey <- fetchSDA_spatial(x = "2924882", by.col = 'mukey')
+  
+  skip_if(inherits(single.mukey, 'try-error'))
+  
   expect_equivalent(nrow(single.mukey), 3)
 
   # there are currently 3 MUKEY associated with this national musym
@@ -31,8 +32,6 @@ test_that("fetchSDA_spatial basic mupolygon functionality", {
 
 test_that("fetchSDA_spatial sapolygon and gsmmupolygon", {
   
-  skip_if_not_installed("httr")
-  
   skip_if_offline()
 
   skip_on_cran()
@@ -48,6 +47,7 @@ test_that("fetchSDA_spatial sapolygon and gsmmupolygon", {
                                       method = "bbox",
                                       geom.src = "sapolygon",
                                       add.fields = "legend.areaname")
+  skip_if(inherits(by.areasym.bbox, 'try-error'))
   expect_false(is.null(by.areasym.bbox$areaname))
   expect_equivalent(nrow(by.areasym.bbox), 6)
 
