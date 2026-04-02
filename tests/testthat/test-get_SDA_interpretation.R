@@ -3,8 +3,6 @@ target_mukeys <- c(463263, 463264)
   
 test_that("dynamically determine target row counts", {
 
-  skip_if_not_installed("httr")
-  
   skip_if_offline()
 
   skip_on_cran()
@@ -29,8 +27,6 @@ test_that("dynamically determine target row counts", {
 
 test_that("SDA interpretations (dominant component) works", {
   
-  skip_if_not_installed("httr")
-  
   skip_if_offline()
 
   skip_on_cran()
@@ -48,8 +44,6 @@ test_that("SDA interpretations (dominant component) works", {
 })
 
 test_that("SDA interpretations (dominant condition) works", {
-  
-  skip_if_not_installed("httr")
   
   skip_if_offline()
 
@@ -70,8 +64,6 @@ test_that("SDA interpretations (dominant condition) works", {
 
 test_that("SDA interpretations (weighted average) works", {
   
-  skip_if_not_installed("httr")
-  
   skip_if_offline()
 
   skip_on_cran()
@@ -90,8 +82,6 @@ test_that("SDA interpretations (weighted average) works", {
 })
 
 test_that("SDA interpretations (no aggregation) works", {
-  
-  skip_if_not_installed("httr")
   
   skip_if_offline()
 

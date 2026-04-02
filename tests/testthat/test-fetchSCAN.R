@@ -67,7 +67,7 @@ test_that("timezone check", {
   skip_on_cran()
   
   # skip on error
-  skip_if(inherits(x, 'try-error') || is.null(x))
+  skip_if(inherits(z, 'try-error') || is.null(z))
   
   # default target timezone is US/Central, including CDT (-0500) and CST (-0600)
   .tz <- table(format(z$SMS$datetime, format = '%z'))

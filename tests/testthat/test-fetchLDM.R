@@ -6,8 +6,6 @@ test_that("fetchLDM works", {
   
   skip_if_not_installed("aqp")
   
-  skip_if_not_installed("httr")
-  
   # physical and chemical properties tables are 1:1 with lab_layer
   res <- suppressWarnings(
     fetchLDM(
