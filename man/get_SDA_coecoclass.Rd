@@ -57,6 +57,9 @@ summary. Used only for \code{method="all"}.}
 \item{dsn}{Path to local SQLite database or a DBIConnection object. If \code{NULL}
 (default) use Soil Data Access API via \code{SDA_query()}.}
 }
+\value{
+data.frame. \code{NULL} if no results, and a \code{try-error} (invisibly) on error.
+}
 \description{
 \code{get_SDA_coecoclass()} retrieves ecological site information from the Soil
 Data Access (SDA) database for a given set of map unit keys (mukeys). It
