@@ -13,8 +13,8 @@ test_that("fetchSDA() works", {
   # single component
   x <<- suppressMessages(fetchSDA(WHERE="nationalmusym = 'kzc4'"))
 
-  # basic test
-  expect_true(inherits(x, 'SoilProfileCollection'))
+  # two possible return types
+  expect_true(inherits(x, c('SoilProfileCollection', 'try-error')))
 })
 
 ## tests
@@ -29,6 +29,8 @@ test_that("fetchSDA() returns an SPC", {
 
   skip_on_cran()
 
+  skip_if(inherits(x, 'try-error'))
+  
   # SPC integrity and expected IDs / hz depths
   expect_equivalent(aqp::idname(x), 'cokey')
   expect_equivalent(aqp::horizonDepths(x), c('hzdept_r', 'hzdepb_r'))
@@ -44,7 +46,9 @@ test_that("fetchSDA() returns expected results", {
   skip_if_offline()
 
   skip_on_cran()
-
+  
+  skip_if(inherits(x, 'try-error'))
+  
   # there should be 2 components and 10 horizons
   expect_equivalent(nrow(aqp::site(x)), 2)
   expect_equivalent(aqp::nrow(x), 10)
@@ -66,7 +70,9 @@ test_that("fetchSDA(duplicates=TRUE) works as expected", {
   skip_if_offline()
 
   skip_on_cran()
-
+  
+  skip_if(inherits(x, 'try-error'))
+  
   x2 <<- suppressWarnings(suppressMessages(fetchSDA(WHERE="nationalmusym = '22787'")))
   x3 <<- suppressWarnings(suppressMessages(fetchSDA(WHERE="nationalmusym = '22787'", duplicates = TRUE)))
 

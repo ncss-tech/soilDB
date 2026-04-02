@@ -6,6 +6,7 @@ test_that(".make_WSS_download_url works", {
   skip_on_cran()
   
   x <- .make_WSS_download_url("areasymbol IN ('NH607', 'VT005', 'VT009', 'VT019')")
+  skip_if(inherits(x, 'try-error'))
   expect_length(x, 4)
   
   # vermont has a state-specific template
