@@ -127,10 +127,7 @@ There are currently no replacements for full functionality provided by `fetchKSS
 
 
 ## Related Web Applications
-The [`OSDquery()`](https://ncss-tech.github.io/soilDB/reference/OSDquery.html) function provides a convenient interface to the API behind the SoilWeb OSD Search applications:
-
- * https://soilmap4-1.lawr.ucdavis.edu/osd-search/index.php
- * https://casoilresource.lawr.ucdavis.edu/osd-search/search-entire-osd.php
+The [`OSDquery()`](https://ncss-tech.github.io/soilDB/reference/OSDquery.html) function provides a convenient interface to the API behind the SoilWeb OSD Search applications.
  
 The web-based version of this search is limited to 100 records but `OSDquery()` has no record limit.
 
