@@ -114,6 +114,7 @@
 <ul>
 <li><a href="http://ncss-tech.github.io/soilDB/reference/fetchSDA.html"><code>fetchSDA</code></a></li>
 <li><a href="http://ncss-tech.github.io/soilDB/reference/fetchSDA_spatial.html"><code>fetchSDA_spatial</code></a></li>
+<li><a href="http://ncss-tech.github.io/soilDB/reference/fetchLDM.html"><code>fetchLDM</code></a></li>
 <li><a href="http://ncss-tech.github.io/soilDB/reference/SDA_query.html"><code>SDA_query</code></a></li>
 <li><a href="http://ncss-tech.github.io/soilDB/reference/SDA_spatialQuery.html"><code>SDA_spatialQuery</code></a></li>
 <li>“SSURGO On Demand” Queries
@@ -146,9 +147,23 @@
 <li><a href="http://ncss-tech.github.io/soilDB/reference/ROSETTA.html"><code>ROSETTA</code></a></li>
 </ul>
 </li>
-<li>SSURGO/KSSL via SoilWeb
+<li>NASIS local database
 <ul>
-<li><a href="http://ncss-tech.github.io/soilDB/reference/fetchKSSL.html"><code>fetchKSSL</code></a></li>
+<li><a href="http://ncss-tech.github.io/soilDB/reference/fetchNASIS.html"><code>fetchNASIS</code></a></li>
+<li>
+<a href="http://ncss-tech.github.io/soilDB/reference/dbConnectNASIS.html"><code>dbConnectNASIS</code></a> (alias <code><a href="reference/dbConnectNASIS.html">NASIS()</a></code>)</li>
+<li><a href="http://ncss-tech.github.io/soilDB/reference/dbQueryNASIS.html"><code>dbQueryNASIS</code></a></li>
+<li><a href="http://ncss-tech.github.io/soilDB/reference/createStaticNASIS.html"><code>createStaticNASIS</code></a></li>
+</ul>
+</li>
+<li>Digital Soil Mapping (DSM) Products
+<ul>
+<li><a href="http://ncss-tech.github.io/soilDB/reference/fetchSOLUS.html"><code>fetchSOLUS</code></a></li>
+<li><a href="http://ncss-tech.github.io/soilDB/reference/fetchSoilGrids.html"><code>fetchSoilGrids</code></a></li>
+</ul>
+</li>
+<li>SoilWeb
+<ul>
 <li><a href="http://ncss-tech.github.io/soilDB/reference/fetchOSD.html"><code>fetchOSD</code></a></li>
 <li><a href="http://ncss-tech.github.io/soilDB/reference/siblings.html"><code>siblings</code></a></li>
 <li><a href="http://ncss-tech.github.io/soilDB/reference/OSDquery.html"><code>OSDquery</code></a></li>
@@ -175,53 +190,6 @@
 <li><a href="http://ncss-tech.github.io/soilDB/reference/fetchHenry.html"><code>fetchHenry</code></a></li>
 </ul>
 </li>
-<li>NASIS local database
-<ul>
-<li><a href="http://ncss-tech.github.io/soilDB/reference/fetchNASIS.html"><code>fetchNASIS</code></a></li>
-<li>
-<a href="http://ncss-tech.github.io/soilDB/reference/dbConnectNASIS.html"><code>dbConnectNASIS</code></a> (alias <code><a href="reference/dbConnectNASIS.html">NASIS()</a></code>)</li>
-<li><a href="http://ncss-tech.github.io/soilDB/reference/dbQueryNASIS.html"><code>dbQueryNASIS</code></a></li>
-<li><a href="http://ncss-tech.github.io/soilDB/reference/createStaticNASIS.html"><code>createStaticNASIS</code></a></li>
-</ul>
-</li>
-<li>SoilGrids
-<ul>
-<li><a href="http://ncss-tech.github.io/soilDB/reference/fetchSoilGrids.html"><code>fetchSoilGrids</code></a></li>
-</ul>
-</li>
-</ul>
-</div>
-<div class="section level2">
-<h2 id="miscellaneous-functions">Miscellaneous Functions<a class="anchor" aria-label="anchor" href="#miscellaneous-functions"></a>
-</h2>
-<ul>
-<li><a href="http://ncss-tech.github.io/soilDB/reference/estimateSTR.html"><code>estimateSTR</code></a></li>
-<li><a href="http://ncss-tech.github.io/soilDB/reference/STRplot.html"><code>STRplot</code></a></li>
-<li><a href="http://ncss-tech.github.io/soilDB/reference/KSSL_VG_model.html"><code>KSSL_VG_model</code></a></li>
-<li><a href="http://ncss-tech.github.io/soilDB/reference/simplifyFragmentData.html"><code>simplifyFragmentData</code></a></li>
-<li><a href="http://ncss-tech.github.io/soilDB/reference/simplifyColorData.html"><code>simplifyColorData</code></a></li>
-<li><a href="http://ncss-tech.github.io/soilDB/reference/uncode.html"><code>uncode</code></a></li>
-<li><a href="http://ncss-tech.github.io/soilDB/reference/code.html"><code>code</code></a></li>
-<li><a href="http://ncss-tech.github.io/soilDB/reference/get_NOAA_GHCND.html"><code>get_NOAA_GHCND</code></a></li>
-</ul>
-</div>
-<div class="section level2">
-<h2 id="tutorials-and-demonstrations">Tutorials and Demonstrations<a class="anchor" aria-label="anchor" href="#tutorials-and-demonstrations"></a>
-</h2>
-<ul>
-<li><a href="http://ncss-tech.github.io/AQP/soilDB/KSSL-demo.html" class="external-link">fetchKSSL</a></li>
-<li><a href="http://ncss-tech.github.io/AQP/soilDB/SDA-tutorial.html" class="external-link">SDA_query</a></li>
-<li><a href="http://ncss-tech.github.io/AQP/sharpshootR/OSD-dendrogram.html" class="external-link">fetchOSD</a></li>
-<li><a href="http://ncss-tech.github.io/AQP/soilDB/fetchSCAN-demo.html" class="external-link">SCAN/SNOTEL Data</a></li>
-</ul>
-</div>
-<div class="section level2">
-<h2 id="related-packages">Related Packages<a class="anchor" aria-label="anchor" href="#related-packages"></a>
-</h2>
-<ul>
-<li><a href="https://github.com/ncss-tech/aqp" class="external-link">aqp</a></li>
-<li><a href="https://github.com/ncss-tech/sharpshootR" class="external-link">sharpshootR</a></li>
-<li><a href="https://github.com/ncss-tech/SoilTaxonomy" class="external-link">SoilTaxonomy</a></li>
 </ul>
 </div>
 

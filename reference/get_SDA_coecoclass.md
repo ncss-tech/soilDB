@@ -90,6 +90,11 @@ get_SDA_coecoclass(
   (default) use Soil Data Access API via
   [`SDA_query()`](http://ncss-tech.github.io/soilDB/reference/SDA_query.md).
 
+## Value
+
+data.frame. `NULL` if no results, and a `try-error` (invisibly) on
+error.
+
 ## Details
 
 When `method="Dominant Condition"` an additional field `ecoclasspct_r`

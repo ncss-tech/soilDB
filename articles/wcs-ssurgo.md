@@ -331,7 +331,7 @@ print(mu)
 #> extent      : -1365495, -1358925, 2869245, 2873655  (xmin, xmax, ymin, ymax)
 #> coord. ref. : NAD83 / Conus Albers (EPSG:5070) 
 #> source(s)   : memory
-#> varname     : file27792fab6478 
+#> varname     : file271436cb9983 
 #> categories  : mukey 
 #> name        :   mukey 
 #> min value   :  144983 
@@ -455,7 +455,7 @@ a <- st_as_sfc(a)
 #> extent      : 1129005, 1135005, 1402995, 1411005  (xmin, xmax, ymin, ymax)
 #> coord. ref. : NAD83 / Conus Albers (EPSG:5070) 
 #> source(s)   : memory
-#> varname     : file2779235371e9 
+#> varname     : file2714368ac3ac 
 #> categories  : mukey 
 #> name        :  mukey 
 #> min value   : 545800 
@@ -469,7 +469,7 @@ a <- st_as_sfc(a)
 #> extent      : 1129005, 1135005, 1402995, 1411005  (xmin, xmax, ymin, ymax)
 #> coord. ref. : NAD83 / Conus Albers (EPSG:5070) 
 #> source(s)   : memory
-#> varname     : file2779243d7e8a 
+#> varname     : file27146c7dd9d 
 #> categories  : mukey 
 #> name        :   mukey 
 #> min value   :  545800 
@@ -483,7 +483,7 @@ a <- st_as_sfc(a)
 #> extent      : 1129005, 1135005, 1402995, 1411005  (xmin, xmax, ymin, ymax)
 #> coord. ref. : NAD83 / Conus Albers (EPSG:5070) 
 #> source(s)   : memory
-#> varname     : file277937921c39 
+#> varname     : file27147ca6137 
 #> categories  : mukey 
 #> name        :   mukey 
 #> min value   : 3244721 
@@ -540,7 +540,7 @@ product.
 #> extent      : 1129005, 1135005, 1402995, 1411095  (xmin, xmax, ymin, ymax)
 #> coord. ref. : NAD83 / Conus Albers (EPSG:5070) 
 #> source(s)   : memory
-#> varname     : file277935c75a85 
+#> varname     : file27142a6679f2 
 #> categories  : mukey 
 #> name        :  mukey 
 #> min value   : 659074 

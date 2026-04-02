@@ -41,4 +41,5 @@ A list with a data.frame element for each element of `WHERE` containing
 `"attributetablename"`, `"attributecolumnname"`,
 `"attributedescription"`, `"nasisrulename"`, `"label"`, `"order"`,
 `"value"`, `"lower_value"`, `"upper_value"`,`"red"`, `"green"`, `"blue"`
-and `"hex"` columns.
+and `"hex"` columns. A `try-error` is returned invisibly, with a
+message, on error.

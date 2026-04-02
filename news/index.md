@@ -1051,10 +1051,6 @@ CRAN release: 2022-05-18
     [`createSSURGO()`](http://ncss-tech.github.io/soilDB/reference/createSSURGO.md)
     for building of local databases as SQLite/Geopackage from one or
     more SSURGO exports.
-    - Exports can be obtained via
-      [`downloadSSURGO()`](http://ncss-tech.github.io/soilDB/reference/downloadSSURGO.md),
-      from NASIS or downloaded from other sources such as
-      <https://datagateway.nrcs.usda.gov/GDGHome_DirectDownLoad.aspx>.
 
 ## soilDB 2.6.15 (2022-04-13)
 
