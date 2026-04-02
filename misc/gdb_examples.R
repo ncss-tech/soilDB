@@ -93,8 +93,10 @@ test0[test0[3] != test0[5] & !is.na(test0[5]), ] |> View()
 
 
 # fetchGDB ----
-f0  <- fetchGDB(dsn = "D:/geodata/soils/gSSURGO_RI_202110/gSSURGO_RI.gdb")
-f00 <- fetchGDB(dsn = "D:/geodata/soils/gSSURGO_RI_202110/gSSURGO_RI.gdb", childs = TRUE)
+dsn <- "D:/geodata/soils/SSURGO/gSSURGO_CONUS_20251001.gdb"
+dsn <- "D:/geodata/soils/SSURGO/gSSURGO_RI/gSSURGO_RI.gdb"
+f0  <- fetchGDB(dsn)
+f00 <- fetchGDB(dsn, childs = TRUE)
 f1 <- fetchGDB(dsn, WHERE = "areasymbol = 'IN001'")
 f2 <- fetchGDB(dsn, WHERE = "areasymbol = 'IN001'", childs = TRUE)
 # f3 <- fetchGDB(dsn, WHERE = "areasymbol LIKE 'CA%'", childs = TRUE)

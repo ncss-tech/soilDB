@@ -3,8 +3,6 @@ target_mukeys <- c(463263, 463264)
   
 test_that("dynamically determine target row counts", {
 
-  skip_if_not_installed("httr")
-  
   skip_if_offline()
 
   skip_on_cran()
@@ -26,8 +24,8 @@ test_that("dynamically determine target row counts", {
   r3a <- SDA_query(sprintf(q, chor_in[1]))
   r3b <- SDA_query(sprintf(q, chor_in[2]))
 
-  expect_false(inherits(r1, 'try-error'))
-
+  expect_true(inherits(r1, 'data.frame') || is.null(r1))
+  
   target_area_rows <<- nrow(r1) # 1:1 with mukey
   target_area_rows_all <<- nrow(r2a) # 1:1 with component
   target_area_rows_all_chorizon <<- nrow(r3a) # 1:1 with chorizon
@@ -43,11 +41,11 @@ test_that("dynamically determine target row counts", {
 
 test_that("SDA properties (dominant condition) works", {
   
-  skip_if_not_installed("httr")
-  
   skip_if_offline()
 
   skip_on_cran()
+  
+  skip_if(is.null(target_area_rows))
 
   x <- get_SDA_property(property = "Taxonomic Suborder",
                         method = "Dominant Condition",
@@ -72,32 +70,30 @@ test_that("SDA properties (dominant condition) works", {
 
 test_that("SDA properties (dominant component category) works", {
   
-  skip_if_not_installed("httr")
-  
   skip_if_offline()
 
   skip_on_cran()
   
+  skip_if(is.null(target_area_rows))
+  
   x <- get_SDA_property(property = "Taxonomic Suborder",
                         method = "Dominant Component (Category)",
                         areasymbols = target_areas)
-  skip_if(is.null(x))
   expect_equivalent(nrow(x), target_area_rows - n_misc_area_rows)
 
   x <- get_SDA_property(property = c("Taxonomic Suborder","Taxonomic Order"),
                         method = "Dominant Component (Category)",
                         mukeys = target_mukeys)
-  skip_if(is.null(x))
   expect_equivalent(x$mukey, target_mukeys)
 })
 
 test_that("SDA properties (dominant component numeric) works", {
   
-  skip_if_not_installed("httr")
-  
   skip_if_offline()
 
   skip_on_cran()
+  
+  skip_if(is.null(target_area_rows))
 
   x <- get_SDA_property(
     property = "Very Coarse Sand - Rep Value",
@@ -106,7 +102,6 @@ test_that("SDA properties (dominant component numeric) works", {
     top_depth = 25,
     bottom_depth = 50
   )
-  skip_if(is.null(x))
   expect_equivalent(nrow(x), target_area_rows)
 
   x <- get_SDA_property(
@@ -116,7 +111,6 @@ test_that("SDA properties (dominant component numeric) works", {
     top_depth = 25,
     bottom_depth = 50
   )
-  skip_if(is.null(x))
   expect_equivalent(x$mukey, target_mukeys)
 
   # dominant component of 1st mapunit is rock outcrop (excluded), pH 5 from Thermalrocks 10-13cm
@@ -134,11 +128,11 @@ test_that("SDA properties (dominant component numeric) works", {
 
 test_that("SDA properties (weighted average) works", {
   
-  skip_if_not_installed("httr")
-  
   skip_if_offline()
 
   skip_on_cran()
+  
+  skip_if(is.null(target_area_rows))
 
   x <- get_SDA_property(property = 'ph1to1h2o_r',
                    method = "Weighted Average",
@@ -156,7 +150,6 @@ test_that("SDA properties (weighted average) works", {
     top_depth = 25,
     bottom_depth = 50
   )
-  skip_if(is.null(x))
   expect_equivalent(nrow(x), target_area_rows)
 
   x <- get_SDA_property(
@@ -167,7 +160,6 @@ test_that("SDA properties (weighted average) works", {
     bottom_depth = 50
   )
 
-  skip_if(is.null(x))
   expect_equivalent(x$mukey, target_mukeys)
 
   # check miscellaneous areas and NULL data in horizons
@@ -192,8 +184,8 @@ test_that("SDA properties (weighted average) works", {
   noagg <- get_SDA_property(property = c("sandtotal_r","silttotal_r","claytotal_r"),
                             method = "None",
                             mukeys = 545857)
-  skip_if(is.null(agg))
-  skip_if(is.null(noagg))
+  skip_if(inherits(agg, 'try-error'))
+  skip_if(inherits(noagg, 'try-error'))
 
   aqp::depths(noagg) <- cokey ~ hzdept_r + hzdepb_r
   aqp::site(noagg) <- ~ comppct_r
@@ -227,6 +219,10 @@ test_that("SDA properties (weighted average) works", {
     )
 
   noagg <- get_SDA_property("om_r", mukeys = 286248, method = "None", include_minors = TRUE)
+  
+  skip_if(inherits(agg, 'try-error'))
+  skip_if(inherits(noagg, 'try-error'))
+  
   aqp::depths(noagg) <- cokey ~ hzdept_r + hzdepb_r
   aqp::site(noagg) <- ~ comppct_r
 
@@ -253,21 +249,17 @@ test_that("SDA properties (weighted average) works", {
   noagg2 <- get_SDA_property("ph1to1h2o_r", mukeys = 466601, method = "weighted average", include_minors = FALSE, miscellaneous_areas = TRUE)
   noagg3 <- get_SDA_property("ph1to1h2o_r", mukeys = 466601, method = "weighted average", include_minors = TRUE, miscellaneous_areas = TRUE)
 
-  skip_if(is.null(noagg1))
-  skip_if(is.null(noagg2))
-  skip_if(is.null(noagg3))
-
   expect_equal(c(noagg1$ph1to1h2o_r, noagg2$ph1to1h2o_r, noagg3$ph1to1h2o_r),
                rep(7, 3), tolerance = 1e-5)
 })
 
 test_that("SDA properties (min/max) works", {
   
-  skip_if_not_installed("httr")
-  
   skip_if_offline()
 
   skip_on_cran()
+  
+  skip_if(is.null(target_area_rows))
 
   x <- get_SDA_property(
     property = "Saturated Hydraulic Conductivity - Rep Value",
@@ -276,7 +268,6 @@ test_that("SDA properties (min/max) works", {
     FUN = "MIN",
     miscellaneous_areas = TRUE
   )
-  skip_if(is.null(x))
   expect_equivalent(nrow(x), target_area_rows)
 
   x <- get_SDA_property(
@@ -285,7 +276,6 @@ test_that("SDA properties (min/max) works", {
     areasymbols = target_areas,
     FUN = "MIN"
   )
-  skip_if(is.null(x))
   expect_equivalent(nrow(x), target_area_rows)
   
   # 463263      Daulton loam, 15 to 30 percent slopes
@@ -298,17 +288,16 @@ test_that("SDA properties (min/max) works", {
     FUN = "MAX", 
     miscellaneous_areas = TRUE
   )
-  skip_if(is.null(x))
   expect_equivalent(x$mukey, target_mukeys)
 })
 
 test_that("SDA properties (no aggregation) works", {
   
-  skip_if_not_installed("httr")
-  
   skip_if_offline()
 
   skip_on_cran()
+  
+  skip_if(is.null(target_area_rows_all))
 
   # return results 1:1 with component for component properties
   x <- get_SDA_property(
@@ -317,7 +306,6 @@ test_that("SDA properties (no aggregation) works", {
       areasymbols = target_areas,
       miscellaneous_areas = FALSE
     )
-  skip_if(is.null(x))
   expect_equivalent(nrow(x), target_area_rows_all - n_misc_area_rows_all)
 
   x <- get_SDA_property(
@@ -326,7 +314,6 @@ test_that("SDA properties (no aggregation) works", {
     areasymbols = target_areas,
     miscellaneous_areas = TRUE
   )
-  skip_if(is.null(x))
   expect_equivalent(nrow(x), target_area_rows_all)
 
 
@@ -336,7 +323,6 @@ test_that("SDA properties (no aggregation) works", {
     method = "NONE",
     areasymbols = target_areas
   )
-  skip_if(is.null(x))
   expect_equivalent(nrow(x), target_area_rows_all_chorizon - n_misc_area_rows_all_chorizon)
 
   x <- get_SDA_property(
@@ -345,6 +331,5 @@ test_that("SDA properties (no aggregation) works", {
     areasymbols = target_areas,
     miscellaneous_areas = TRUE
   )
-  skip_if(is.null(x))
   expect_equivalent(nrow(x), target_area_rows_all_chorizon)
 })
