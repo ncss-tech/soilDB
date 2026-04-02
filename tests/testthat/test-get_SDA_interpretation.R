@@ -19,6 +19,8 @@ test_that("dynamically determine target row counts", {
   r1 <- SDA_query(sprintf(q, area_in))
   r2a <- SDA_query(sprintf(q, comp_in[1]))
   
+  expect_true(inherits(r1, 'data.frame') || is.null(r1))
+  
   target_area_rows <<- nrow(r1) # 1:1 with mukey
   target_area_rows_all <<- nrow(r2a) # 1:1 with component
 
