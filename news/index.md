@@ -2,6 +2,8 @@
 
 ## soilDB 2.9.1 (2026-04-01)
 
+CRAN release: 2026-04-03
+
 - [`ROSETTA()`](http://ncss-tech.github.io/soilDB/reference/ROSETTA.md)
   updates thanks to Todd Skaggs (USDA-ARS):
   - Now using version 2 of the ROSETTA API

@@ -14,7 +14,7 @@
 ## Citation
 
 Source:
-[`inst/CITATION`](https://github.com/ncss-tech/soilDB/blob/master/inst/CITATION)
+[`inst/CITATION`](https://github.com/ncss-tech/soilDB/blob/2.9.1/inst/CITATION)
 
 Beaudette D, Skovlin J, Roecker S, Brown A (2026). *soilDB: Soil
 Database Interface*. R package version 2.9.1,
