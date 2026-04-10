@@ -43,25 +43,14 @@
 #' plot(res, col = cats(res)[[1]]$col, axes = FALSE, legend = FALSE)
 #' }
 #' @export
-soilColor.wcs <- function(aoi, var, res = 270, quiet = FALSE) {
+soilColor.wcs <- function(aoi, var, res = NULL, quiet = FALSE) {
   
   ## vintage of source data
-  
-  # TODO: use remote metadata
-  #  --> must add to load-balancer
-  # .vintage <- readLines('http://casoilresource.lawr.ucdavis.edu/wcs-files/soilcolor/vintage')
-  
-  # hard-coded
-  .vintage <- 'FY2023'
+  .vintage <- 'FY2026'
   
   # sanity check: AOI specification
   if (!inherits(aoi, c('list', 'Spatial', 'sf', 'sfc', 'bbox', 'RasterLayer', 'SpatRaster', 'SpatVector'))) { 
     stop('invalid `aoi` specification', call. = FALSE)
-  }
-  
-  # reasonable resolution
-  if (res < 30 || res > 1000) {
-    stop('`res` should be within 30 <= res <= 1000 meters')
   }
   
   # match variable name in catalog
@@ -71,8 +60,23 @@ soilColor.wcs <- function(aoi, var, res = 270, quiet = FALSE) {
   # get variable specs
   var.spec <- .soilColor.spec[[var]]
   
+  # use native resolution of DSN
+  if(is.null(res)) {
+    res <- var.spec$res
+  } else {
+    # user-defined resolution
+    
+    # NOTE: this doesn't apply to WGS84 grids like PW, AS, MI
+    # ensure reasonable resolution
+    if (res < 30 || res > 1000) {
+      stop('`res` should be within 30 <= res <= 1000 meters')
+    }
+  }
+  
+  # browser()
+  
   # compute BBOX / IMG geometry in native CRS
-  wcs.geom <- .prepare_AEA_AOI(aoi, res = res, native_crs = 'EPSG:5070')
+  wcs.geom <- .prepare_AEA_AOI(aoi, res = res, native_crs = var.spec$crs)
   
   ## TODO: investigate why this is so
   # sanity check: a 1x1 pixel request to WCS results in a corrupt GeoTiff 
@@ -98,8 +102,8 @@ soilColor.wcs <- function(aoi, var, res = 270, quiet = FALSE) {
   }
   
   # base URL + parameters
-  base.url <- 'http://casoilresource.lawr.ucdavis.edu/cgi-bin/mapserv?'
-  service.url <- 'map=/data1/website/wcs/color.map&SERVICE=WCS&VERSION=2.0.1&REQUEST=GetCoverage'
+  base.url <- 'http://soilmap4-1.lawr.ucdavis.edu/cgi-bin/mapserv?'
+  service.url <- 'map=/data1/website/wcs/soilcolor.map&SERVICE=WCS&VERSION=2.0.1&REQUEST=GetCoverage'
   
   # unpack BBOX for WCS 2.0
   xmin <- wcs.geom$bbox[1]
@@ -122,7 +126,7 @@ soilColor.wcs <- function(aoi, var, res = 270, quiet = FALSE) {
     '&COVERAGEID=', var.spec$dsn,
     '&FORMAT=image/tiff',
     '&GEOTIFF:COMPRESSION=LZW',
-    '&SUBSETTINGCRS=EPSG:5070',
+    '&SUBSETTINGCRS=', var.spec$crs,
     '&FORMAT=', var.spec$type,
     '&SUBSET=x(', xmin, ',', xmax2, ')',
     '&SUBSET=y(', ymin, ',', ymax2, ')',
@@ -174,7 +178,11 @@ soilColor.wcs <- function(aoi, var, res = 270, quiet = FALSE) {
   if (!is.null(var.spec$rat)) {
     
     # get color LUT
-    lut <- read.csv(var.spec$rat, stringsAsFactors = FALSE)
+    lut <- try(read.csv(var.spec$rat, stringsAsFactors = FALSE), silent = TRUE)
+    
+    if(inherits(lut, 'try-error')) {
+      stop('cannot access soil color lookup table')
+    }
     
     # color ID is always in the first column
     # use the name expected by terra::levels() and terra::cats()

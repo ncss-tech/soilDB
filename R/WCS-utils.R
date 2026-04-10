@@ -126,7 +126,7 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
   # 
   # NOTE: EPSG:6350 NAD83 (2011) v.s. EPSG:5070 NAD83
   # we use EPSG:5070 (https://github.com/ncss-tech/soilDB/issues/205)
-  # NOTE: +init=epsg:XXXX syntax is deprecated in GDAL. It might return a CRS with a non-EPSG compliant axis order.
+  # NOTE: +init=EPSG:XXXX syntax is deprecated in GDAL. It might return a CRS with a non-EPSG compliant axis order.
   
   
   
@@ -169,16 +169,51 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
 
 ## moist soil colors
 # these are 16bit (unsigned) integers
-# TODO: consider moving soil color LUT to wcs-files
 # these maps all share the same RAT
-.soilColorRAT <- 'http://casoilresource.lawr.ucdavis.edu/wcs/soilcolor/unique-moist-color-LUT.csv'
+.soilColorRAT <- 'http://soilmap4-1.lawr.ucdavis.edu/wcs-files/soilcolor/current/unique-moist-color-LUT.csv'
 .soilColor.spec <- list(
+  
+  'pr_sc005cm' = list(
+    dsn = 'pr_sc005cm',
+    type = 'GEOTIFF_16',
+    desc = 'Puerto Rico, moist soil colors, 5cm (30m resolution)',
+    na = 0,
+    crs = 'EPSG:32161',
+    res = 30,
+    rat = .soilColorRAT
+  ),
+  
+  'ak_sc005cm' = list(
+    dsn = 'ak_sc005cm',
+    type = 'GEOTIFF_16',
+    desc = 'Alaska, moist soil colors, 5cm (90m resolution)',
+    na = 0,
+    crs = 'EPSG:3338',
+    res = 90,
+    rat = .soilColorRAT
+  ),
+  
+  
+  # TODO: these are geographic coordinates, will this work?
+  'pw_sc005cm' = list(
+    dsn = 'pw_sc005cm',
+    type = 'GEOTIFF_16',
+    desc = 'Palau, moist soil colors, 5cm (approx. 30m resolution)',
+    na = 0,
+    crs = 'EPSG:4326',
+    res = 0.000277786077614,
+    rat = .soilColorRAT
+  ),
+  
+  
   
   'sc005cm' = list(
     dsn = 'sc005cm',
     type = 'GEOTIFF_16',
     desc = 'Moist soil color, 5cm (270m)',
     na = 0,
+    crs = 'EPSG:5070',
+    res = 270,
     rat = .soilColorRAT
   ),
   
@@ -187,6 +222,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_16',
     desc = 'Moist soil color, 10cm (270m)',
     na = 0,
+    crs = 'EPSG:5070',
+    res = 270,
     rat = .soilColorRAT
   ),
   
@@ -195,6 +232,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_16',
     desc = 'Moist soil color, 15cm (270m)',
     na = 0,
+    crs = 'EPSG:5070',
+    res = 270,
     rat = .soilColorRAT
   ),
   
@@ -203,6 +242,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_16',
     desc = 'Moist soil color, 25cm (270m)',
     na = 0,
+    crs = 'EPSG:5070',
+    res = 270,
     rat = .soilColorRAT
   ),
   
@@ -211,6 +252,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_16',
     desc = 'Moist soil color, 50cm (270m)',
     na = 0,
+    crs = 'EPSG:5070',
+    res = 270,
     rat = .soilColorRAT
   ),
   
@@ -219,6 +262,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_16',
     desc = 'Moist soil color, 75cm (270m)',
     na = 0,
+    crs = 'EPSG:5070',
+    res = 270,
     rat = .soilColorRAT
   ),
   
@@ -227,6 +272,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_16',
     desc = 'Moist soil color, 100cm (270m)',
     na = 0,
+    crs = 'EPSG:5070',
+    res = 270,
     rat = .soilColorRAT
   ),
   
@@ -235,6 +282,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_16',
     desc = 'Moist soil color, 125cm (270m)',
     na = 0,
+    crs = 'EPSG:5070',
+    res = 270,
     rat = .soilColorRAT
   ),
   
@@ -244,6 +293,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_16',
     desc = 'Moist soil color, 5cm (30m)',
     na = 0,
+    crs = 'EPSG:5070',
+    res = 30,
     rat = .soilColorRAT
   ),
   
@@ -252,6 +303,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_16',
     desc = 'Moist soil color, 10cm (30m)',
     na = 0,
+    crs = 'EPSG:5070',
+    res = 30,
     rat = .soilColorRAT
   ),
   
@@ -260,6 +313,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_16',
     desc = 'Moist soil color, 15cm (30m)',
     na = 0,
+    crs = 'EPSG:5070',
+    res = 30,
     rat = .soilColorRAT
   ),
   
@@ -268,6 +323,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_16',
     desc = 'Moist soil color, 25cm (30m)',
     na = 0,
+    crs = 'EPSG:5070',
+    res = 30,
     rat = .soilColorRAT
   ),
   
@@ -276,6 +333,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_16',
     desc = 'Moist soil color, 50cm (30m)',
     na = 0,
+    crs = 'EPSG:5070',
+    res = 30,
     rat = .soilColorRAT
   ),
   
@@ -284,6 +343,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_16',
     desc = 'Moist soil color, 75cm (30m)',
     na = 0,
+    crs = 'EPSG:5070',
+    res = 30,
     rat = .soilColorRAT
   ),
   
@@ -292,6 +353,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_16',
     desc = 'Moist soil color, 100cm (30m)',
     na = 0,
+    crs = 'EPSG:5070',
+    res = 30,
     rat = .soilColorRAT
   ),
   
@@ -300,6 +363,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_16',
     desc = 'Moist soil color, 125cm (30m)',
     na = 0,
+    crs = 'EPSG:5070',
+    res = 30,
     rat = .soilColorRAT
   )
 )
