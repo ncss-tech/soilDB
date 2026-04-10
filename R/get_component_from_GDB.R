@@ -148,6 +148,11 @@ get_mapunit_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb",
                                  droplevels = TRUE,
                                  stats = FALSE) {
   
+  vars_le <- sf::read_sf(dsn = dsn, query = "SELECT * FROM legend LIMIT 0", as_tibble = FALSE, fid_column_name = "lkey") |>
+    names()
+  vars_mu <- sf::read_sf(dsn = dsn, query = "SELECT * FROM mapunit LIMIT 0", as_tibble = FALSE, fid_column_name = "mukey") |>
+    names()
+  
   # tests
   if (!is.null(WHERE)) {
     
