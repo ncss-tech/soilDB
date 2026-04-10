@@ -41,7 +41,7 @@
 #'   summary. Used only for `method="all"`.
 #' @param dsn Path to local SQLite database or a DBIConnection object. If `NULL`
 #'   (default) use Soil Data Access API via `SDA_query()`.
-#'
+#' @returns data.frame. `NULL` if no results, and a `try-error` (invisibly) on error.
 #' @export
 #' @examplesIf !as.logical(Sys.getenv("R_SOILDB_SKIP_LONG_EXAMPLES", unset = TRUE)) 
 #' # Basic usage with a vector of mukeys
@@ -132,6 +132,11 @@ get_SDA_coecoclass <- function(method = "None",
   if (length(res) == 0) {
     message('query returned no results')
     return(NULL)
+  }
+  
+  if (inherits(res, 'try-error')) {
+    message(res[1])
+    return(invisible(res))
   }
   
   .I <- NULL

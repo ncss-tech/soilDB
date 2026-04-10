@@ -1,13 +1,12 @@
 test_that("get_SDA_coecoclass works", {
   
-  skip_if_not_installed("httr")
-  
   skip_if_offline()
   
   skip_on_cran()
   
   res0 <- get_SDA_coecoclass(method = "dominant condition", 
                              areasymbols = "foo")
+  skip_if(inherits(res0, 'try-error'))
   expect_null(res0)
   
   res1 <- get_SDA_coecoclass(method = "dominant condition", 

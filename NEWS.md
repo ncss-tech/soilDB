@@ -1,13 +1,12 @@
-# soilDB 2.9.1 (development)
-
-## Improvements
- - `ROSETTA()` updates thanks to Todd Skaggs (ARS):
-   - now using version 2 of the ROSETTA API (https://www.handbook60.org/rosetta)
-   - new argument `est.type` for selecting ensemble summary method and resulting units of measure
+# soilDB 2.9.1 (2026-04-01)
+ - `ROSETTA()` updates thanks to Todd Skaggs (USDA-ARS):
+   - Now using version 2 of the ROSETTA API (<https://www.handbook60.org/rosetta>)
+   - New argument `est.type` for selecting ensemble summary method and resulting units of measure
    - $Ko$ and $L$ parameters now included in model output
-   - significantly faster performance of python module running the API (@brownag)
-
-
+ - `fetchGDB()` now supports passing path to SSURGO GeoPackage file via `dsn` argument
+ - Breaking change: sample SoilProfileCollection datasets (`loafercreek`, `gopheridge`, `mineralKing`) updated to 2.9.x `fetchNASIS()` schema
+   - Deprecated columns have been removed, following the corresponding changes in 2.9.0
+   
 # soilDB 2.9.0 (2026-01-22)
 
 ## Breaking Changes
@@ -25,7 +24,7 @@
  - `OSDquery()` gains `remarks` argument for searching the REMARKS section of OSDs
  
 # soilDB 2.8.14 (2025-12-04)
- - `taxaExtent()` updates:
+ 
    - Added family mineralogy class grids 
    - Added argument `type` for selecting the type of query; replaces deprecated `formativeElement`
  - `SDA_query()` now includes additional metadata (comment header in SQL) to inform usage metrics of various access points to SDA
@@ -425,8 +424,6 @@ and in concatenation of reason string when `wide_reason=TRUE`
    * All  `get_SDA_*()` methods (except `get_SDA_metrics()`) now support input of custom `WHERE` clause in lieu of `mukeys`/`areasymbols` arguments and gain a `dsn` argument for specifying a local SQLite database or DBIConnection.
    * Added `downloadSSURGO()` for downloading/extraction of the SSURGO data by survey area from Web Soil Survey. 
    * Added `createSSURGO()` for building of local databases as SQLite/Geopackage from one or more SSURGO exports.
-      * Exports can be obtained via `downloadSSURGO()`, from NASIS or downloaded from other sources such as  <https://datagateway.nrcs.usda.gov/GDGHome_DirectDownLoad.aspx>. 
- 
 
 # soilDB 2.6.15 (2022-04-13) 
  * `fetchNASIS()`
