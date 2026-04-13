@@ -76,7 +76,7 @@ ISSR800.wcs <- function(aoi, var, res = 800, quiet = FALSE) {
                        extent = terra::ext(-2356800, 2258400, 276800, 3172800))
   
   # compute BBOX / IMG geometry in native CRS
-  wcs.geom <- .prepare_AEA_AOI(aoi, res = res, native_crs = .crs)
+  wcs.geom <- .prepare_AOI(aoi, res = res, native_crs = .crs)
   
   ## TODO: investigate why this is so
   # sanity check: a 1x1 pixel request to WCS results in a corrupt GeoTiff 

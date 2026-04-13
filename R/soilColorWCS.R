@@ -76,7 +76,7 @@ soilColor.wcs <- function(aoi, var, res = NULL, quiet = FALSE) {
   # browser()
   
   # compute BBOX / IMG geometry in native CRS
-  wcs.geom <- .prepare_AEA_AOI(aoi, res = res, native_crs = var.spec$crs)
+  wcs.geom <- .prepare_AOI(aoi, res = res, native_crs = var.spec$crs)
   
   ## TODO: investigate why this is so
   # sanity check: a 1x1 pixel request to WCS results in a corrupt GeoTiff 

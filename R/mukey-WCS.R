@@ -109,7 +109,7 @@ mukey.wcs <- function(aoi, db = c('gNATSGO', 'gSSURGO', 'RSS', 'STATSGO', 'PR_SS
   }
   
   # prepare AOI in native CRS
-  wcs.geom <- .prepare_AEA_AOI(obj = aoi, res = res, native_crs = .crs)
+  wcs.geom <- .prepare_AOI(obj = aoi, res = res, native_crs = .crs)
   
   ## TODO: investigate why
   # sanity check: a 1x1 pixel request to WCS results in a corrupt GeoTiff 
