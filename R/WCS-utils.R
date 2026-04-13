@@ -910,6 +910,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_FLOAT',
     desc = 'STATSGO data available, fraction of 800x800m grid cell',
     na = -9999,
+    crs = 'EPSG:5070',
+    res = 800,
     rat = NULL
   ),
   
@@ -918,6 +920,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_FLOAT',
     desc = 'SSURGO data available, fraction of 800x800m grid cell',
     na = -9999,
+    crs = 'EPSG:5070',
+    res = 800,
     rat = NULL
   ),
   
@@ -926,6 +930,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_FLOAT',
     desc = 'Total Soil Organic Matter (kg/m^2)',
     na = -9999,
+    crs = 'EPSG:5070',
+    res = 800,
     rat = NULL
   ),
   
@@ -934,6 +940,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_FLOAT',
     desc = 'Total CaCO3 (kg/m^2)',
     na = -9999,
+    crs = 'EPSG:5070',
+    res = 800,
     rat = NULL
   ),
   
@@ -942,6 +950,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_FLOAT',
     desc = 'EC 0-5cm depth (dS/m)',
     na = -9999,
+    crs = 'EPSG:5070',
+    res = 800,
     rat = NULL
   ),
   
@@ -950,6 +960,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_FLOAT',
     desc = 'EC 0-25cm depth (dS/m)',
     na = -9999,
+    crs = 'EPSG:5070',
+    res = 800,
     rat = NULL
   ),
   
@@ -958,6 +970,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_FLOAT',
     desc = 'CEC at pH 7 0-5cm depth (cmol[+]/kg)',
     na = -9999,
+    crs = 'EPSG:5070',
+    res = 800,
     rat = NULL
   ),
   
@@ -966,6 +980,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_FLOAT',
     desc = 'CEC at pH 7 0-25cm depth (cmol[+]/kg)',
     na = -9999,
+    crs = 'EPSG:5070',
+    res = 800,
     rat = NULL
   ),
   
@@ -974,6 +990,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_FLOAT',
     desc = 'CEC at pH 7 0-50cm depth (cmol[+]/kg)',
     na = -9999,
+    crs = 'EPSG:5070',
+    res = 800,
     rat = NULL
   ),
   
@@ -982,6 +1000,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_FLOAT',
     desc = 'total plant available water storage (cm water)',
     na = -9999,
+    crs = 'EPSG:5070',
+    res = 800,
     rat = NULL
   ),
   
@@ -990,6 +1010,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_FLOAT',
     desc = 'plant available water storage 0-50cm depth (cm water)',
     na = -9999,
+    crs = 'EPSG:5070',
+    res = 800,
     rat = NULL
   ),
   
@@ -998,6 +1020,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_FLOAT',
     desc = 'plant available water storage 0-25cm depth (cm water)',
     na = -9999,
+    crs = 'EPSG:5070',
+    res = 800,
     rat = NULL
   ),
   
@@ -1006,6 +1030,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_FLOAT',
     desc = 'pH 1:1 H2O 0-5cm depth',
     na = -9999,
+    crs = 'EPSG:5070',
+    res = 800,
     rat = NULL
   ),
   
@@ -1014,6 +1040,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_FLOAT',
     desc = 'pH 1:1 H2O 0-25cm depth',
     na = -9999,
+    crs = 'EPSG:5070',
+    res = 800,
     rat = NULL
   ),
   
@@ -1022,6 +1050,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_FLOAT',
     desc = 'pH 1:1 H2O 25-50cm depth',
     na = -9999,
+    crs = 'EPSG:5070',
+    res = 800,
     rat = NULL
   ),
   
@@ -1030,6 +1060,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_FLOAT',
     desc = 'pH 1:1 H2O 30-60cm depth',
     na = -9999,
+    crs = 'EPSG:5070',
+    res = 800,
     rat = NULL
   ),
   
@@ -1038,6 +1070,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_FLOAT',
     desc = 'clay percent 0-5cm depth',
     na = -9999,
+    crs = 'EPSG:5070',
+    res = 800,
     rat = NULL
   ),
   
@@ -1046,6 +1080,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_FLOAT',
     desc = 'clay percent 0-25cm depth',
     na = -9999,
+    crs = 'EPSG:5070',
+    res = 800,
     rat = NULL
   ),
   
@@ -1054,6 +1090,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_FLOAT',
     desc = 'clay percent 25-50cm depth',
     na = -9999,
+    crs = 'EPSG:5070',
+    res = 800,
     rat = NULL
   ),
   
@@ -1062,6 +1100,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_FLOAT',
     desc = 'clay percent 30-60cm depth',
     na = -9999,
+    crs = 'EPSG:5070',
+    res = 800,
     rat = NULL
   ),
   
@@ -1070,6 +1110,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_FLOAT',
     desc = 'sand percent 0-5cm depth',
     na = -9999,
+    crs = 'EPSG:5070',
+    res = 800,
     rat = NULL
   ),
   
@@ -1078,6 +1120,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_FLOAT',
     desc = 'sand percent 0-25cm depth',
     na = -9999,
+    crs = 'EPSG:5070',
+    res = 800,
     rat = NULL
   ),
   
@@ -1086,6 +1130,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_FLOAT',
     desc = 'sand percent 25-50cm depth',
     na = -9999,
+    crs = 'EPSG:5070',
+    res = 800,
     rat = NULL
   ),
   
@@ -1094,6 +1140,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_FLOAT',
     desc = 'sand percent 30-60cm depth',
     na = -9999,
+    crs = 'EPSG:5070',
+    res = 800,
     rat = NULL
   ),
   
@@ -1102,6 +1150,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_FLOAT',
     desc = 'silt percent 0-5cm depth',
     na = -9999,
+    crs = 'EPSG:5070',
+    res = 800,
     rat = NULL
   ),
   
@@ -1110,6 +1160,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_FLOAT',
     desc = 'silt percent 0-25cm depth',
     na = -9999,
+    crs = 'EPSG:5070',
+    res = 800,
     rat = NULL
   ),
   
@@ -1118,6 +1170,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_FLOAT',
     desc = 'silt percent 25-50cm depth',
     na = -9999,
+    crs = 'EPSG:5070',
+    res = 800,
     rat = NULL
   ),
   
@@ -1126,6 +1180,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_FLOAT',
     desc = 'silt percent 30-60cm depth',
     na = -9999,
+    crs = 'EPSG:5070',
+    res = 800,
     rat = NULL
   ),
   
@@ -1134,6 +1190,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_FLOAT',
     desc = 'SAR, entire profile',
     na = -9999,
+    crs = 'EPSG:5070',
+    res = 800,
     rat = NULL
   ),
   
@@ -1142,6 +1200,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_16',
     desc = 'Soil Series Name',
     na = 0,
+    crs = 'EPSG:5070',
+    res = 800,
     rat = 'http://casoilresource.lawr.ucdavis.edu/800m_grids/RAT/series_name.csv'
   ),
   
@@ -1150,6 +1210,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_BYTE',
     desc = 'Hydrologic Soil Group',
     na = 0,
+    crs = 'EPSG:5070',
+    res = 800,
     rat = 'http://casoilresource.lawr.ucdavis.edu/800m_grids/RAT/hydgrp.csv'
   ),
   
@@ -1159,6 +1221,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_BYTE',
     desc = 'Soil Drainage Class',
     na = 0,
+    crs = 'EPSG:5070',
+    res = 800,
     rat = 'http://casoilresource.lawr.ucdavis.edu/800m_grids/RAT/drainage_class.csv'
   ),
   
@@ -1167,6 +1231,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_BYTE',
     desc = 'Wind Erodibility Group',
     na = 0,
+    crs = 'EPSG:5070',
+    res = 800,
     rat = 'http://casoilresource.lawr.ucdavis.edu/800m_grids/RAT/weg.csv'
   ),
   
@@ -1174,6 +1240,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     dsn = 'wei',
     type = 'GEOTIFF_16',
     na = 0,
+    crs = 'EPSG:5070',
+    res = 800,
     desc = 'Wind Erodibility Index',
     rat = NULL
   ),
@@ -1183,6 +1251,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_BYTE',
     desc = 'Soil Temperature Regime',
     na = 0,
+    crs = 'EPSG:5070',
+    res = 800,
     rat = 'http://casoilresource.lawr.ucdavis.edu/800m_grids/RAT/str.csv'
   ),
   
@@ -1191,6 +1261,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_BYTE',
     desc = 'Soil Taxonomy: Soil Order',
     na = 0,
+    crs = 'EPSG:5070',
+    res = 800,
     rat = 'http://casoilresource.lawr.ucdavis.edu/800m_grids/RAT/soilorder.csv'
   ),
   
@@ -1199,6 +1271,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_BYTE',
     desc = 'Soil Taxonomy: Suborder',
     na = 0,
+    crs = 'EPSG:5070',
+    res = 800,
     rat = 'http://casoilresource.lawr.ucdavis.edu/800m_grids/RAT/suborder.csv'
   ),
   
@@ -1207,6 +1281,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_BYTE',
     desc = 'Soil Taxonomy: Greatgroup',
     na = 0,
+    crs = 'EPSG:5070',
+    res = 800,
     rat = 'http://casoilresource.lawr.ucdavis.edu/800m_grids/RAT/greatgroup.csv'
   ),
   
@@ -1215,6 +1291,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_BYTE',
     desc = 'Soil Texture Class, 0-5cm',
     na = 0,
+    crs = 'EPSG:5070',
+    res = 800,
     rat = 'http://casoilresource.lawr.ucdavis.edu/800m_grids/RAT/texture_05.csv'
   ),
   
@@ -1223,6 +1301,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_BYTE',
     desc = 'Soil Texture Class, 0-25cm',
     na = 0,
+    crs = 'EPSG:5070',
+    res = 800,
     rat = 'http://casoilresource.lawr.ucdavis.edu/800m_grids/RAT/texture_025.csv'
   ),
   
@@ -1231,6 +1311,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_BYTE',
     desc = 'Soil Texture Class, 25-50cm',
     na = 0,
+    crs = 'EPSG:5070',
+    res = 800,
     rat = 'http://casoilresource.lawr.ucdavis.edu/800m_grids/RAT/texture_2550.csv'
   ),
   
@@ -1239,6 +1321,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_BYTE',
     desc = 'Land Capability Class, irrigated',
     na = 0,
+    crs = 'EPSG:5070',
+    res = 800,
     rat = 'http://casoilresource.lawr.ucdavis.edu/800m_grids/RAT/lcc.csv'
   ),
   
@@ -1247,6 +1331,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_BYTE',
     desc = 'Land Capability Class, non-irrigated',
     na = 0,
+    crs = 'EPSG:5070',
+    res = 800,
     rat = 'http://casoilresource.lawr.ucdavis.edu/800m_grids/RAT/lcc.csv'
   )
   
