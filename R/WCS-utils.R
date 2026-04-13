@@ -415,6 +415,86 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     rat = .soilColorRAT
   ),
   
+  'hi_sc005cm' = list(
+    dsn = 'hi_sc005cm',
+    type = 'GEOTIFF_16',
+    desc = 'Hawaii, moist soil colors, 5cm (30m resolution)',
+    na = 0,
+    crs = 'EPSG:6628',
+    res = 30,
+    rat = .soilColorRAT
+  ),
+  
+  'hi_sc010cm' = list(
+    dsn = 'hi_sc010cm',
+    type = 'GEOTIFF_16',
+    desc = 'Hawaii, moist soil colors, 10cm (30m resolution)',
+    na = 0,
+    crs = 'EPSG:6628',
+    res = 30,
+    rat = .soilColorRAT
+  ),
+  
+  'hi_sc015cm' = list(
+    dsn = 'hi_sc015cm',
+    type = 'GEOTIFF_16',
+    desc = 'Hawaii, moist soil colors, 15cm (30m resolution)',
+    na = 0,
+    crs = 'EPSG:6628',
+    res = 30,
+    rat = .soilColorRAT
+  ),
+  
+  'hi_sc025cm' = list(
+    dsn = 'hi_sc025cm',
+    type = 'GEOTIFF_16',
+    desc = 'Hawaii, moist soil colors, 25cm (30m resolution)',
+    na = 0,
+    crs = 'EPSG:6628',
+    res = 30,
+    rat = .soilColorRAT
+  ),
+  
+  'hi_sc050cm' = list(
+    dsn = 'hi_sc050cm',
+    type = 'GEOTIFF_16',
+    desc = 'Hawaii, moist soil colors, 50cm (30m resolution)',
+    na = 0,
+    crs = 'EPSG:6628',
+    res = 30,
+    rat = .soilColorRAT
+  ),
+  
+  'hi_sc075cm' = list(
+    dsn = 'hi_sc075cm',
+    type = 'GEOTIFF_16',
+    desc = 'Hawaii, moist soil colors, 75cm (30m resolution)',
+    na = 0,
+    crs = 'EPSG:6628',
+    res = 30,
+    rat = .soilColorRAT
+  ),
+  
+  'hi_sc100cm' = list(
+    dsn = 'hi_sc100cm',
+    type = 'GEOTIFF_16',
+    desc = 'Hawaii, moist soil colors, 100cm (30m resolution)',
+    na = 0,
+    crs = 'EPSG:6628',
+    res = 30,
+    rat = .soilColorRAT
+  ),
+  
+  'hi_sc125cm' = list(
+    dsn = 'hi_sc125cm',
+    type = 'GEOTIFF_16',
+    desc = 'Hawaii, moist soil colors, 125cm (30m resolution)',
+    na = 0,
+    crs = 'EPSG:6628',
+    res = 30,
+    rat = .soilColorRAT
+  ),
+  
   'sc005cm' = list(
     dsn = 'sc005cm',
     type = 'GEOTIFF_16',
