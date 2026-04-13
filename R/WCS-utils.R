@@ -655,6 +655,86 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     rat = .soilColorRAT
   ),
   
+  'mp_sc005cm' = list(
+    dsn = 'mp_sc005cm',
+    type = 'GEOTIFF_16',
+    desc = 'Northern Mariana Islands, moist soil colors, 5cm (approx. 30m resolution)',
+    na = 0,
+    crs = 'EPSG:4326',
+    res = 0.000277791905324,
+    rat = .soilColorRAT
+  ),
+  
+  'mp_sc010cm' = list(
+    dsn = 'mp_sc010cm',
+    type = 'GEOTIFF_16',
+    desc = 'Northern Mariana Islands, moist soil colors, 10cm (approx. 30m resolution)',
+    na = 0,
+    crs = 'EPSG:4326',
+    res = 0.000277791905324,
+    rat = .soilColorRAT
+  ),
+  
+  'mp_sc015cm' = list(
+    dsn = 'mp_sc015cm',
+    type = 'GEOTIFF_16',
+    desc = 'Northern Mariana Islands, moist soil colors, 15cm (approx. 30m resolution)',
+    na = 0,
+    crs = 'EPSG:4326',
+    res = 0.000277791905324,
+    rat = .soilColorRAT
+  ),
+  
+  'mp_sc025cm' = list(
+    dsn = 'mp_sc025cm',
+    type = 'GEOTIFF_16',
+    desc = 'Northern Mariana Islands, moist soil colors, 25cm (approx. 30m resolution)',
+    na = 0,
+    crs = 'EPSG:4326',
+    res = 0.000277791905324,
+    rat = .soilColorRAT
+  ),
+  
+  'mp_sc050cm' = list(
+    dsn = 'mp_sc050cm',
+    type = 'GEOTIFF_16',
+    desc = 'Northern Mariana Islands, moist soil colors, 50cm (approx. 30m resolution)',
+    na = 0,
+    crs = 'EPSG:4326',
+    res = 0.000277791905324,
+    rat = .soilColorRAT
+  ),
+  
+  'mp_sc075cm' = list(
+    dsn = 'mp_sc075cm',
+    type = 'GEOTIFF_16',
+    desc = 'Northern Mariana Islands, moist soil colors, 75cm (approx. 30m resolution)',
+    na = 0,
+    crs = 'EPSG:4326',
+    res = 0.000277791905324,
+    rat = .soilColorRAT
+  ),
+  
+  'mp_sc100cm' = list(
+    dsn = 'mp_sc100cm',
+    type = 'GEOTIFF_16',
+    desc = 'Northern Mariana Islands, moist soil colors, 100cm (approx. 30m resolution)',
+    na = 0,
+    crs = 'EPSG:4326',
+    res = 0.000277791905324,
+    rat = .soilColorRAT
+  ),
+  
+  'mp_sc125cm' = list(
+    dsn = 'mp_sc125cm',
+    type = 'GEOTIFF_16',
+    desc = 'Northern Mariana Islands, moist soil colors, 125cm (approx. 30m resolution)',
+    na = 0,
+    crs = 'EPSG:4326',
+    res = 0.000277791905324,
+    rat = .soilColorRAT
+  ),
+  
   
   
   'sc005cm' = list(
