@@ -495,6 +495,168 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     rat = .soilColorRAT
   ),
   
+  'gu_sc005cm' = list(
+    dsn = 'gu_sc005cm',
+    type = 'GEOTIFF_16',
+    desc = 'Guam, moist soil colors, 5cm (approx. 30m resolution)',
+    na = 0,
+    crs = 'EPSG:4326',
+    res = 0.000277776150910,
+    rat = .soilColorRAT
+  ),
+  
+  'gu_sc010cm' = list(
+    dsn = 'gu_sc010cm',
+    type = 'GEOTIFF_16',
+    desc = 'Guam, moist soil colors, 10cm (approx. 30m resolution)',
+    na = 0,
+    crs = 'EPSG:4326',
+    res = 0.000277776150910,
+    rat = .soilColorRAT
+  ),
+  
+  'gu_sc015cm' = list(
+    dsn = 'gu_sc015cm',
+    type = 'GEOTIFF_16',
+    desc = 'Guam, moist soil colors, 15cm (approx. 30m resolution)',
+    na = 0,
+    crs = 'EPSG:4326',
+    res = 0.000277776150910,
+    rat = .soilColorRAT
+  ),
+  
+  'gu_sc025cm' = list(
+    dsn = 'gu_sc025cm',
+    type = 'GEOTIFF_16',
+    desc = 'Guam, moist soil colors, 25cm (approx. 30m resolution)',
+    na = 0,
+    crs = 'EPSG:4326',
+    res = 0.000277776150910,
+    rat = .soilColorRAT
+  ),
+  
+  'gu_sc050cm' = list(
+    dsn = 'gu_sc050cm',
+    type = 'GEOTIFF_16',
+    desc = 'Guam, moist soil colors, 50cm (approx. 30m resolution)',
+    na = 0,
+    crs = 'EPSG:4326',
+    res = 0.000277776150910,
+    rat = .soilColorRAT
+  ),
+  
+  'gu_sc075cm' = list(
+    dsn = 'gu_sc075cm',
+    type = 'GEOTIFF_16',
+    desc = 'Guam, moist soil colors, 75cm (approx. 30m resolution)',
+    na = 0,
+    crs = 'EPSG:4326',
+    res = 0.000277776150910,
+    rat = .soilColorRAT
+  ),
+  
+  'gu_sc100cm' = list(
+    dsn = 'gu_sc100cm',
+    type = 'GEOTIFF_16',
+    desc = 'Guam, moist soil colors, 100cm (approx. 30m resolution)',
+    na = 0,
+    crs = 'EPSG:4326',
+    res = 0.000277776150910,
+    rat = .soilColorRAT
+  ),
+  
+  'gu_sc125cm' = list(
+    dsn = 'gu_sc125cm',
+    type = 'GEOTIFF_16',
+    desc = 'Guam, moist soil colors, 125cm (approx. 30m resolution)',
+    na = 0,
+    crs = 'EPSG:4326',
+    res = 0.000277776150910,
+    rat = .soilColorRAT
+  ),
+  
+  'as_sc005cm' = list(
+    dsn = 'as_sc005cm',
+    type = 'GEOTIFF_16',
+    desc = 'American Samoa, moist soil colors, 5cm (approx. 30m resolution)',
+    na = 0,
+    crs = 'EPSG:4326',
+    res = 0.000277756381372,
+    rat = .soilColorRAT
+  ),
+  
+  'as_sc010cm' = list(
+    dsn = 'as_sc010cm',
+    type = 'GEOTIFF_16',
+    desc = 'American Samoa, moist soil colors, 10cm (approx. 30m resolution)',
+    na = 0,
+    crs = 'EPSG:4326',
+    res = 0.000277756381372,
+    rat = .soilColorRAT
+  ),
+  
+  'as_sc015cm' = list(
+    dsn = 'as_sc015cm',
+    type = 'GEOTIFF_16',
+    desc = 'American Samoa, moist soil colors, 15cm (approx. 30m resolution)',
+    na = 0,
+    crs = 'EPSG:4326',
+    res = 0.000277756381372,
+    rat = .soilColorRAT
+  ),
+  
+  'as_sc025cm' = list(
+    dsn = 'as_sc025cm',
+    type = 'GEOTIFF_16',
+    desc = 'American Samoa, moist soil colors, 25cm (approx. 30m resolution)',
+    na = 0,
+    crs = 'EPSG:4326',
+    res = 0.000277756381372,
+    rat = .soilColorRAT
+  ),
+  
+  'as_sc050cm' = list(
+    dsn = 'as_sc050cm',
+    type = 'GEOTIFF_16',
+    desc = 'American Samoa, moist soil colors, 50cm (approx. 30m resolution)',
+    na = 0,
+    crs = 'EPSG:4326',
+    res = 0.000277756381372,
+    rat = .soilColorRAT
+  ),
+  
+  'as_sc075cm' = list(
+    dsn = 'as_sc075cm',
+    type = 'GEOTIFF_16',
+    desc = 'American Samoa, moist soil colors, 75cm (approx. 30m resolution)',
+    na = 0,
+    crs = 'EPSG:4326',
+    res = 0.000277756381372,
+    rat = .soilColorRAT
+  ),
+  
+  'as_sc100cm' = list(
+    dsn = 'as_sc100cm',
+    type = 'GEOTIFF_16',
+    desc = 'American Samoa, moist soil colors, 100cm (approx. 30m resolution)',
+    na = 0,
+    crs = 'EPSG:4326',
+    res = 0.000277756381372,
+    rat = .soilColorRAT
+  ),
+  
+  'as_sc125cm' = list(
+    dsn = 'as_sc125cm',
+    type = 'GEOTIFF_16',
+    desc = 'American Samoa, moist soil colors, 125cm (approx. 30m resolution)',
+    na = 0,
+    crs = 'EPSG:4326',
+    res = 0.000277756381372,
+    rat = .soilColorRAT
+  ),
+  
+  
+  
   'sc005cm' = list(
     dsn = 'sc005cm',
     type = 'GEOTIFF_16',
