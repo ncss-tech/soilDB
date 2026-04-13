@@ -183,6 +183,76 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     rat = .soilColorRAT
   ),
   
+  'pr_sc010cm' = list(
+    dsn = 'pr_sc010cm',
+    type = 'GEOTIFF_16',
+    desc = 'Puerto Rico, moist soil colors, 10cm (30m resolution)',
+    na = 0,
+    crs = 'EPSG:32161',
+    res = 30,
+    rat = .soilColorRAT
+  ),
+  
+  'pr_sc015cm' = list(
+    dsn = 'pr_sc015cm',
+    type = 'GEOTIFF_16',
+    desc = 'Puerto Rico, moist soil colors, 15cm (30m resolution)',
+    na = 0,
+    crs = 'EPSG:32161',
+    res = 30,
+    rat = .soilColorRAT
+  ),
+  
+  'pr_sc025cm' = list(
+    dsn = 'pr_sc025cm',
+    type = 'GEOTIFF_16',
+    desc = 'Puerto Rico, moist soil colors, 25cm (30m resolution)',
+    na = 0,
+    crs = 'EPSG:32161',
+    res = 30,
+    rat = .soilColorRAT
+  ),
+  
+  'pr_sc050cm' = list(
+    dsn = 'pr_sc050cm',
+    type = 'GEOTIFF_16',
+    desc = 'Puerto Rico, moist soil colors, 50cm (30m resolution)',
+    na = 0,
+    crs = 'EPSG:32161',
+    res = 30,
+    rat = .soilColorRAT
+  ),
+  
+  'pr_sc075cm' = list(
+    dsn = 'pr_sc075cm',
+    type = 'GEOTIFF_16',
+    desc = 'Puerto Rico, moist soil colors, 75cm (30m resolution)',
+    na = 0,
+    crs = 'EPSG:32161',
+    res = 30,
+    rat = .soilColorRAT
+  ),
+  
+  'pr_sc100cm' = list(
+    dsn = 'pr_sc100cm',
+    type = 'GEOTIFF_16',
+    desc = 'Puerto Rico, moist soil colors, 100cm (30m resolution)',
+    na = 0,
+    crs = 'EPSG:32161',
+    res = 30,
+    rat = .soilColorRAT
+  ),
+  
+  'pr_sc125cm' = list(
+    dsn = 'pr_sc125cm',
+    type = 'GEOTIFF_16',
+    desc = 'Puerto Rico, moist soil colors, 125cm (30m resolution)',
+    na = 0,
+    crs = 'EPSG:32161',
+    res = 30,
+    rat = .soilColorRAT
+  ),
+  
   'ak_sc005cm' = list(
     dsn = 'ak_sc005cm',
     type = 'GEOTIFF_16',
@@ -193,8 +263,78 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     rat = .soilColorRAT
   ),
   
+  'ak_sc010cm' = list(
+    dsn = 'ak_sc010cm',
+    type = 'GEOTIFF_16',
+    desc = 'Alaska, moist soil colors, 10cm (90m resolution)',
+    na = 0,
+    crs = 'EPSG:3338',
+    res = 90,
+    rat = .soilColorRAT
+  ),
   
-  # TODO: these are geographic coordinates, will this work?
+  'ak_sc015cm' = list(
+    dsn = 'ak_sc015cm',
+    type = 'GEOTIFF_16',
+    desc = 'Alaska, moist soil colors, 15cm (90m resolution)',
+    na = 0,
+    crs = 'EPSG:3338',
+    res = 90,
+    rat = .soilColorRAT
+  ),
+  
+  'ak_sc025cm' = list(
+    dsn = 'ak_sc025cm',
+    type = 'GEOTIFF_16',
+    desc = 'Alaska, moist soil colors, 25cm (90m resolution)',
+    na = 0,
+    crs = 'EPSG:3338',
+    res = 90,
+    rat = .soilColorRAT
+  ),
+  
+  'ak_sc050cm' = list(
+    dsn = 'ak_sc050cm',
+    type = 'GEOTIFF_16',
+    desc = 'Alaska, moist soil colors, 50cm (90m resolution)',
+    na = 0,
+    crs = 'EPSG:3338',
+    res = 90,
+    rat = .soilColorRAT
+  ),
+  
+  'ak_sc075cm' = list(
+    dsn = 'ak_sc075cm',
+    type = 'GEOTIFF_16',
+    desc = 'Alaska, moist soil colors, 75cm (90m resolution)',
+    na = 0,
+    crs = 'EPSG:3338',
+    res = 90,
+    rat = .soilColorRAT
+  ),
+  
+  'ak_sc100cm' = list(
+    dsn = 'ak_sc100cm',
+    type = 'GEOTIFF_16',
+    desc = 'Alaska, moist soil colors, 100cm (90m resolution)',
+    na = 0,
+    crs = 'EPSG:3338',
+    res = 90,
+    rat = .soilColorRAT
+  ),
+  
+  'ak_sc125cm' = list(
+    dsn = 'ak_sc125cm',
+    type = 'GEOTIFF_16',
+    desc = 'Alaska, moist soil colors, 125cm (90m resolution)',
+    na = 0,
+    crs = 'EPSG:3338',
+    res = 90,
+    rat = .soilColorRAT
+  ),
+  
+  # these are geographic coordinates, must specify resolution in DD
+  # approximately 30m
   'pw_sc005cm' = list(
     dsn = 'pw_sc005cm',
     type = 'GEOTIFF_16',
@@ -205,7 +345,75 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     rat = .soilColorRAT
   ),
   
+  'pw_sc010cm' = list(
+    dsn = 'pw_sc010cm',
+    type = 'GEOTIFF_16',
+    desc = 'Palau, moist soil colors, 10cm (approx. 30m resolution)',
+    na = 0,
+    crs = 'EPSG:4326',
+    res = 0.000277786077614,
+    rat = .soilColorRAT
+  ),
   
+  'pw_sc015cm' = list(
+    dsn = 'pw_sc015cm',
+    type = 'GEOTIFF_16',
+    desc = 'Palau, moist soil colors, 15cm (approx. 30m resolution)',
+    na = 0,
+    crs = 'EPSG:4326',
+    res = 0.000277786077614,
+    rat = .soilColorRAT
+  ),
+  
+  'pw_sc025cm' = list(
+    dsn = 'pw_sc025cm',
+    type = 'GEOTIFF_16',
+    desc = 'Palau, moist soil colors, 25cm (approx. 30m resolution)',
+    na = 0,
+    crs = 'EPSG:4326',
+    res = 0.000277786077614,
+    rat = .soilColorRAT
+  ),
+  
+  'pw_sc050cm' = list(
+    dsn = 'pw_sc050cm',
+    type = 'GEOTIFF_16',
+    desc = 'Palau, moist soil colors, 50cm (approx. 30m resolution)',
+    na = 0,
+    crs = 'EPSG:4326',
+    res = 0.000277786077614,
+    rat = .soilColorRAT
+  ),
+  
+  'pw_sc075cm' = list(
+    dsn = 'pw_sc075cm',
+    type = 'GEOTIFF_16',
+    desc = 'Palau, moist soil colors, 75cm (approx. 30m resolution)',
+    na = 0,
+    crs = 'EPSG:4326',
+    res = 0.000277786077614,
+    rat = .soilColorRAT
+  ),
+  
+  'pw_sc100cm' = list(
+    dsn = 'pw_sc100cm',
+    type = 'GEOTIFF_16',
+    desc = 'Palau, moist soil colors, 100cm (approx. 30m resolution)',
+    na = 0,
+    crs = 'EPSG:4326',
+    res = 0.000277786077614,
+    rat = .soilColorRAT
+  ),
+  
+  'pw_sc125cm' = list(
+    dsn = 'pw_sc125cm',
+    type = 'GEOTIFF_16',
+    desc = 'Palau, moist soil colors, 125cm (approx. 30m resolution)',
+    na = 0,
+    crs = 'EPSG:4326',
+    res = 0.000277786077614,
+    rat = .soilColorRAT
+  ),
   
   'sc005cm' = list(
     dsn = 'sc005cm',
