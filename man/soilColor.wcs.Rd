@@ -2,9 +2,9 @@
 % Please edit documentation in R/soilColorWCS.R
 \name{soilColor.wcs}
 \alias{soilColor.wcs}
-\title{Get 30m or 270m gridded soil soil color data from SoilWeb Web Coverage Service (WCS)}
+\title{Access gridded soil color data from the SoilWeb Web Coverage Service (WCS)}
 \usage{
-soilColor.wcs(aoi, var, res = 270, quiet = FALSE)
+soilColor.wcs(aoi, var, res = NULL, quiet = FALSE)
 }
 \arguments{
 \item{aoi}{area of interest (AOI) defined using a \code{Spatial*}, \code{RasterLayer}, \code{sf}, \code{sfc} or \code{bbox} object, OR a \code{list}, see details}
@@ -19,7 +19,7 @@ soilColor.wcs(aoi, var, res = 270, quiet = FALSE)
 A \code{SpatRaster} (or \code{RasterLayer}) object containing indexed map unit keys and associated raster attribute table or a try-error if request fails. By default, spatial classes from the \code{terra} package are returned. If the input object class is from the \code{raster} or \code{sp} packages a \code{RasterLayer} is returned.
 }
 \description{
-Moist soil colors, 2022.
+Moist soil colors, FY2026.
 }
 \details{
 \code{aoi} should be specified as a \code{SpatRaster}, \code{Spatial*}, \code{RasterLayer}, \code{SpatRaster}/\code{SpatVector}, \code{sf}, \code{sfc}, or \code{bbox} object or a \code{list} containing:
@@ -46,7 +46,7 @@ res <- soilColor.wcs(list(aoi = c(-116, 35, -115.5, 35.5), crs = "EPSG:4326"),
 
 # note colors and other metadata are stored
 # in raster attribute table
-plot(res, col = cats(res)[[1]]$col, axes = FALSE, legend = FALSE)
+terra::plot(res, col = cats(res)[[1]]$col, axes = FALSE, legend = FALSE)
 }
 }
 \author{

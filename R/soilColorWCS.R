@@ -1,9 +1,9 @@
 
-#' @title Get 30m or 270m gridded soil soil color data from SoilWeb Web Coverage Service (WCS)
+#' @title Access gridded soil color data from the SoilWeb Web Coverage Service (WCS)
 #' 
 #' @author D.E. Beaudette and A.G. Brown
 #' 
-#' @description Moist soil colors, 2022.
+#' @description Moist soil colors, FY2026.
 #' 
 #' @param aoi area of interest (AOI) defined using a \code{Spatial*}, \code{RasterLayer}, \code{sf}, \code{sfc} or \code{bbox} object, OR a \code{list}, see details
 #' 
@@ -40,12 +40,12 @@
 #'
 #' # note colors and other metadata are stored
 #' # in raster attribute table
-#' plot(res, col = cats(res)[[1]]$col, axes = FALSE, legend = FALSE)
+#' terra::plot(res, col = cats(res)[[1]]$col, axes = FALSE, legend = FALSE)
 #' }
 #' @export
 soilColor.wcs <- function(aoi, var, res = NULL, quiet = FALSE) {
   
-  ## vintage of source data
+  # vintage of source data
   .vintage <- 'FY2026'
   
   # sanity check: AOI specification
@@ -72,8 +72,6 @@ soilColor.wcs <- function(aoi, var, res = NULL, quiet = FALSE) {
       stop('`res` should be within 30 <= res <= 1000 meters')
     }
   }
-  
-  # browser()
   
   # compute BBOX / IMG geometry in native CRS
   wcs.geom <- .prepare_AOI(aoi, res = res, native_crs = var.spec$crs)
@@ -117,7 +115,8 @@ soilColor.wcs <- function(aoi, var, res = NULL, quiet = FALSE) {
   xmax2 <- xmin + res * wcs.geom$width
   ymax2 <- ymin + res * wcs.geom$height
   
-  ## TODO: source data are LZW compressed, does it make sense to alter the compression (e.g. Deflate) for delivery?
+  # WCS notes:
+  # https://github.com/geographika/wcs-test
   
   # compile WCS 2.0 style URL
   u <- paste0(
@@ -149,17 +148,13 @@ soilColor.wcs <- function(aoi, var, res = NULL, quiet = FALSE) {
   }
   
   # load pointer to file and return
+  # NODATA correctly interpreted when it is max(Int16) --> 32767
   r <- try(terra::rast(tf), silent = TRUE)
   
   if (inherits(r, 'try-error')) {
     message(attr(r, 'condition'))
     stop('result is not a valid GeoTIFF', call. = FALSE)
   }
-  
-  ## TODO: this isn't quite right... '0' is returned by the WCS sometimes
-  # specification of NODATA using local definitions
-  # NAvalue(r) <- var.spec$na
-  terra::NAflag(r) <- 0
   
   # load all values into memory
   terra::values(r) <- terra::values(r)
