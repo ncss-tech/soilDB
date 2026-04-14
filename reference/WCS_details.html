@@ -38,7 +38,7 @@
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Web Coverage Services Details</h1>
-      <small class="dont-index">Source: <a href="https://github.com/ncss-tech/soilDB/blob/2.9.1/R/WCS-utils.R" class="external-link"><code>R/WCS-utils.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/ncss-tech/soilDB/blob/master/R/WCS-utils.R" class="external-link"><code>R/WCS-utils.R</code></a></small>
       <div class="d-none name"><code>WCS_details.Rd</code></div>
     </div>
 
@@ -68,50 +68,94 @@
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">WCS_details</span><span class="op">(</span>wcs <span class="op">=</span> <span class="st">'ISSR800'</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                 var                                            description</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4     caco3_kg_sq_m                                   Total CaCO3 (kg/m^2)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8         cec_025cm                  CEC at pH 7 0-25cm depth (cmol[+]/kg)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9         cec_050cm                  CEC at pH 7 0-50cm depth (cmol[+]/kg)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7          cec_05cm                   CEC at pH 7 0-5cm depth (cmol[+]/kg)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18       clay_025cm                              clay percent 0-25cm depth</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17        clay_05cm                               clay percent 0-5cm depth</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19      clay_2550cm                             clay percent 25-50cm depth</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20      clay_3060cm                             clay percent 30-60cm depth</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 32   drainage_class                                    Soil Drainage Class</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6          ec_025cm                                 EC 0-25cm depth (dS/m)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5           ec_05cm                                  EC 0-5cm depth (dS/m)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 38       greatgroup                              Soil Taxonomy: Greatgroup</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 31           hydgrp                                  Hydrologic Soil Group</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 42    lcc_irrigated                       Land Capability Class, irrigated</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 43 lcc_nonirrigated                   Land Capability Class, non-irrigated</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3        om_kg_sq_m                     Total Soil Organic Matter (kg/m^2)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10             paws         total plant available water storage (cm water)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12       paws_025cm  plant available water storage 0-25cm depth (cm water)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11       paws_050cm  plant available water storage 0-50cm depth (cm water)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14         ph_025cm                                pH 1:1 H2O 0-25cm depth</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13          ph_05cm                                 pH 1:1 H2O 0-5cm depth</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15        ph_2550cm                               pH 1:1 H2O 25-50cm depth</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16        ph_3060cm                               pH 1:1 H2O 30-60cm depth</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 22       sand_025cm                              sand percent 0-25cm depth</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 21        sand_05cm                               sand percent 0-5cm depth</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 23      sand_2550cm                             sand percent 25-50cm depth</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 24      sand_3060cm                             sand percent 30-60cm depth</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 29              sar                                    SAR, entire profile</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 30      series_name                                       Soil Series Name</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 26       silt_025cm                              silt percent 0-25cm depth</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 25        silt_05cm                               silt percent 0-5cm depth</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 27      silt_2550cm                             silt percent 25-50cm depth</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 28      silt_3060cm                             silt percent 30-60cm depth</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 36        soilorder                              Soil Taxonomy: Soil Order</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2        ssurgo_pct  SSURGO data available, fraction of 800x800m grid cell</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1       statsgo_pct STATSGO data available, fraction of 800x800m grid cell</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 35              str                                Soil Temperature Regime</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 37         suborder                                Soil Taxonomy: Suborder</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 40    texture_025cm                             Soil Texture Class, 0-25cm</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 39     texture_05cm                              Soil Texture Class, 0-5cm</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 41   texture_2550cm                            Soil Texture Class, 25-50cm</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 33              weg                                 Wind Erodibility Group</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 34              wei                                 Wind Erodibility Index</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                 var       crs</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4     caco3_kg_sq_m EPSG:5070</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8         cec_025cm EPSG:5070</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9         cec_050cm EPSG:5070</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7          cec_05cm EPSG:5070</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18       clay_025cm EPSG:5070</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17        clay_05cm EPSG:5070</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19      clay_2550cm EPSG:5070</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20      clay_3060cm EPSG:5070</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 32   drainage_class EPSG:5070</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6          ec_025cm EPSG:5070</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5           ec_05cm EPSG:5070</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 38       greatgroup EPSG:5070</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 31           hydgrp EPSG:5070</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 42    lcc_irrigated EPSG:5070</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 43 lcc_nonirrigated EPSG:5070</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3        om_kg_sq_m EPSG:5070</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10             paws EPSG:5070</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12       paws_025cm EPSG:5070</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11       paws_050cm EPSG:5070</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14         ph_025cm EPSG:5070</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13          ph_05cm EPSG:5070</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15        ph_2550cm EPSG:5070</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16        ph_3060cm EPSG:5070</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22       sand_025cm EPSG:5070</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21        sand_05cm EPSG:5070</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23      sand_2550cm EPSG:5070</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24      sand_3060cm EPSG:5070</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 29              sar EPSG:5070</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 30      series_name EPSG:5070</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 26       silt_025cm EPSG:5070</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 25        silt_05cm EPSG:5070</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 27      silt_2550cm EPSG:5070</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28      silt_3060cm EPSG:5070</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 36        soilorder EPSG:5070</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2        ssurgo_pct EPSG:5070</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1       statsgo_pct EPSG:5070</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 35              str EPSG:5070</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 37         suborder EPSG:5070</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 40    texture_025cm EPSG:5070</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 39     texture_05cm EPSG:5070</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 41   texture_2550cm EPSG:5070</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 33              weg EPSG:5070</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 34              wei EPSG:5070</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                               description</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4                                    Total CaCO3 (kg/m^2)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8                   CEC at pH 7 0-25cm depth (cmol[+]/kg)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9                   CEC at pH 7 0-50cm depth (cmol[+]/kg)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7                    CEC at pH 7 0-5cm depth (cmol[+]/kg)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18                              clay percent 0-25cm depth</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17                               clay percent 0-5cm depth</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19                             clay percent 25-50cm depth</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20                             clay percent 30-60cm depth</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 32                                    Soil Drainage Class</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6                                  EC 0-25cm depth (dS/m)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5                                   EC 0-5cm depth (dS/m)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 38                              Soil Taxonomy: Greatgroup</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 31                                  Hydrologic Soil Group</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 42                       Land Capability Class, irrigated</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 43                   Land Capability Class, non-irrigated</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3                      Total Soil Organic Matter (kg/m^2)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10         total plant available water storage (cm water)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12  plant available water storage 0-25cm depth (cm water)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11  plant available water storage 0-50cm depth (cm water)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14                                pH 1:1 H2O 0-25cm depth</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13                                 pH 1:1 H2O 0-5cm depth</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15                               pH 1:1 H2O 25-50cm depth</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16                               pH 1:1 H2O 30-60cm depth</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22                              sand percent 0-25cm depth</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21                               sand percent 0-5cm depth</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23                             sand percent 25-50cm depth</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24                             sand percent 30-60cm depth</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 29                                    SAR, entire profile</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 30                                       Soil Series Name</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 26                              silt percent 0-25cm depth</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 25                               silt percent 0-5cm depth</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 27                             silt percent 25-50cm depth</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28                             silt percent 30-60cm depth</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 36                              Soil Taxonomy: Soil Order</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2   SSURGO data available, fraction of 800x800m grid cell</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  STATSGO data available, fraction of 800x800m grid cell</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 35                                Soil Temperature Regime</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 37                                Soil Taxonomy: Suborder</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 40                             Soil Texture Class, 0-25cm</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 39                              Soil Texture Class, 0-5cm</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 41                            Soil Texture Class, 25-50cm</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 33                                 Wind Erodibility Group</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 34                                 Wind Erodibility Index</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

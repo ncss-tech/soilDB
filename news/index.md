@@ -1,5 +1,13 @@
 # Changelog
 
+## soilDB 2.9.2 (development)
+
+### Improvements
+
+- [`soilColor.wcs()`](http://ncss-tech.github.io/soilDB/reference/soilColor.wcs.md)
+  updated with FY26 soil color maps, now including most OCONUS soil
+  surveys (AK, HI, PR, PW, GU, AS, MP)
+
 ## soilDB 2.9.1 (2026-04-01)
 
 CRAN release: 2026-04-03

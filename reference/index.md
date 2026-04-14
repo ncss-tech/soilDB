@@ -400,8 +400,8 @@
   : Simplify Coarse Fraction Data
 
 - [`soilColor.wcs()`](http://ncss-tech.github.io/soilDB/reference/soilColor.wcs.md)
-  : Get 30m or 270m gridded soil soil color data from SoilWeb Web
-  Coverage Service (WCS)
+  : Access gridded soil color data from the SoilWeb Web Coverage Service
+  (WCS)
 
 - [`soilDB-package`](http://ncss-tech.github.io/soilDB/reference/soilDB-package.md)
   [`soilDB`](http://ncss-tech.github.io/soilDB/reference/soilDB-package.md)
