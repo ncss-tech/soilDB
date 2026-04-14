@@ -39,6 +39,8 @@ WCS_details(wcs = 'ISSR800')
 #> 31           hydgrp EPSG:5070
 #> 42    lcc_irrigated EPSG:5070
 #> 43 lcc_nonirrigated EPSG:5070
+#> 46     n_components EPSG:5070
+#> 45       n_polygons EPSG:5070
 #> 3        om_kg_sq_m EPSG:5070
 #> 10             paws EPSG:5070
 #> 12       paws_025cm EPSG:5070
@@ -62,6 +64,7 @@ WCS_details(wcs = 'ISSR800')
 #> 1       statsgo_pct EPSG:5070
 #> 35              str EPSG:5070
 #> 37         suborder EPSG:5070
+#> 44      survey_type EPSG:5070
 #> 40    texture_025cm EPSG:5070
 #> 39     texture_05cm EPSG:5070
 #> 41   texture_2550cm EPSG:5070
@@ -83,6 +86,8 @@ WCS_details(wcs = 'ISSR800')
 #> 31                                  Hydrologic Soil Group
 #> 42                       Land Capability Class, irrigated
 #> 43                   Land Capability Class, non-irrigated
+#> 46                     Number of components per grid cell
+#> 45                       Number of polygons per grid cell
 #> 3                      Total Soil Organic Matter (kg/m^2)
 #> 10         total plant available water storage (cm water)
 #> 12  plant available water storage 0-25cm depth (cm water)
@@ -106,6 +111,7 @@ WCS_details(wcs = 'ISSR800')
 #> 1  STATSGO data available, fraction of 800x800m grid cell
 #> 35                                Soil Temperature Regime
 #> 37                                Soil Taxonomy: Suborder
+#> 44                                Soil survey data source
 #> 40                             Soil Texture Class, 0-25cm
 #> 39                              Soil Texture Class, 0-5cm
 #> 41                            Soil Texture Class, 25-50cm

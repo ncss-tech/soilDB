@@ -7,6 +7,8 @@
 - [`soilColor.wcs()`](http://ncss-tech.github.io/soilDB/reference/soilColor.wcs.md)
   updated with FY26 soil color maps, now including most OCONUS soil
   surveys (AK, HI, PR, PW, GU, AS, MP)
+- [`ISSR800.wcs()`](http://ncss-tech.github.io/soilDB/reference/ISSR800.wcs.md)
+  updated with FY26 data, bug fixes related to NA-handling by WCS
 
 ## soilDB 2.9.1 (2026-04-01)
 
@@ -21,8 +23,8 @@ CRAN release: 2026-04-03
   - $Ko$ and $L$ parameters now included in model output
 - [`fetchGDB()`](http://ncss-tech.github.io/soilDB/reference/fetchGDB.md)
   now supports passing path to SSURGO GeoPackage file via `dsn` argument
-- Breaking change: sample SoilProfileCollection datasets (`loafercreek`,
-  `gopheridge`, `mineralKing`) updated to 2.9.x
+- Breaking change: sample `SoilProfileCollection` datasets
+  (`loafercreek`, `gopheridge`, `mineralKing`) updated to 2.9.x
   [`fetchNASIS()`](http://ncss-tech.github.io/soilDB/reference/fetchNASIS.md)
   schema
   - Deprecated columns have been removed, following the corresponding

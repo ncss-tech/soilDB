@@ -3,7 +3,7 @@
 ## All functions
 
 - [`ISSR800.wcs()`](http://ncss-tech.github.io/soilDB/reference/ISSR800.wcs.md)
-  : Get 800m gridded soil properties from SoilWeb ISSR-800 Web Coverage
+  : Get 800m gridded soil properties from SoilWeb ISSR800 Web Coverage
   Service (WCS)
 
 - [`KSSL_VG_model()`](http://ncss-tech.github.io/soilDB/reference/KSSL_VG_model.md)
