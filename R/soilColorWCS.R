@@ -22,19 +22,7 @@
 #' 
 #' Variables available from this WCS can be queried using `WCS_details(wcs = 'soilColor')`. The full resolution version of the CONUS soil color grids use a `hr` suffix, e.g. 'sc025cm_hr'.
 #' 
-#' ## Map Unit Keys
-#' |db        |crs        |description                   |
-#' |:---------|:----------|:-----------------------------|
-#'   |fssurgo   |EPSG:5070  |SSURGO/STATSGO2 map unit keys |
-#'   |gnatsgo   |EPSG:5070  |gNATSGO map unit keys         |
-#'   |gssurgo   |EPSG:5070  |gSSURGO map unit keys         |
-#'   |hi_ssurgo |EPSG:6628  |HI map unit keys              |
-#'   |pr_ssurgo |EPSG:32161 |PR map unit keys              |
-#'   |rss       |EPSG:5070  |RSS map unit keys             |
-#'   |statsgo   |EPSG:5070  |STATSGO2 map unit keys        |
 #' 
-
-#' ## Soil Color
 #' |var        |crs        |description                                                                 |
 #' |:----------|:----------|:---------------------------------------------------------------------------|
 #'   |ak_sc005cm |EPSG:3338  |Alaska, moist soil colors, 5cm (90m resolution)                             |
@@ -109,54 +97,6 @@
 #'   |sc100cm_hr |EPSG:5070  |CONUS, moist soil color, 100cm (30m resolution)                             |
 #'   |sc125cm    |EPSG:5070  |CONUS, moist soil color, 125cm (270m resolution)                            |
 #'   |sc125cm_hr |EPSG:5070  |CONUS, moist soil color, 125cm (30m resolution)                             |
-#' 
-#' ## ISSR800
-#' 
-#' |var              |crs       |description                                            |
-#' |:----------------|:---------|:------------------------------------------------------|
-#'   |caco3_kg_sq_m    |EPSG:5070 |Total CaCO3 (kg/m^2)                                   |
-#'   |cec_025cm        |EPSG:5070 |CEC at pH 7 0-25cm depth (cmol[+]/kg)                  |
-#'   |cec_050cm        |EPSG:5070 |CEC at pH 7 0-50cm depth (cmol[+]/kg)                  |
-#'   |cec_05cm         |EPSG:5070 |CEC at pH 7 0-5cm depth (cmol[+]/kg)                   |
-#'   |clay_025cm       |EPSG:5070 |clay percent 0-25cm depth                              |
-#'   |clay_05cm        |EPSG:5070 |clay percent 0-5cm depth                               |
-#'   |clay_2550cm      |EPSG:5070 |clay percent 25-50cm depth                             |
-#'   |clay_3060cm      |EPSG:5070 |clay percent 30-60cm depth                             |
-#'   |drainage_class   |EPSG:5070 |Soil Drainage Class                                    |
-#'   |ec_025cm         |EPSG:5070 |EC 0-25cm depth (dS/m)                                 |
-#'   |ec_05cm          |EPSG:5070 |EC 0-5cm depth (dS/m)                                  |
-#'   |greatgroup       |EPSG:5070 |Soil Taxonomy: Greatgroup                              |
-#'   |hydgrp           |EPSG:5070 |Hydrologic Soil Group                                  |
-#'   |lcc_irrigated    |EPSG:5070 |Land Capability Class, irrigated                       |
-#'   |lcc_nonirrigated |EPSG:5070 |Land Capability Class, non-irrigated                   |
-#'   |om_kg_sq_m       |EPSG:5070 |Total Soil Organic Matter (kg/m^2)                     |
-#'   |paws             |EPSG:5070 |total plant available water storage (cm water)         |
-#'   |paws_025cm       |EPSG:5070 |plant available water storage 0-25cm depth (cm water)  |
-#'   |paws_050cm       |EPSG:5070 |plant available water storage 0-50cm depth (cm water)  |
-#'   |ph_025cm         |EPSG:5070 |pH 1:1 H2O 0-25cm depth                                |
-#'   |ph_05cm          |EPSG:5070 |pH 1:1 H2O 0-5cm depth                                 |
-#'   |ph_2550cm        |EPSG:5070 |pH 1:1 H2O 25-50cm depth                               |
-#'   |ph_3060cm        |EPSG:5070 |pH 1:1 H2O 30-60cm depth                               |
-#'   |sand_025cm       |EPSG:5070 |sand percent 0-25cm depth                              |
-#'   |sand_05cm        |EPSG:5070 |sand percent 0-5cm depth                               |
-#'   |sand_2550cm      |EPSG:5070 |sand percent 25-50cm depth                             |
-#'   |sand_3060cm      |EPSG:5070 |sand percent 30-60cm depth                             |
-#'   |sar              |EPSG:5070 |SAR, entire profile                                    |
-#'   |series_name      |EPSG:5070 |Soil Series Name                                       |
-#'   |silt_025cm       |EPSG:5070 |silt percent 0-25cm depth                              |
-#'   |silt_05cm        |EPSG:5070 |silt percent 0-5cm depth                               |
-#'   |silt_2550cm      |EPSG:5070 |silt percent 25-50cm depth                             |
-#'   |silt_3060cm      |EPSG:5070 |silt percent 30-60cm depth                             |
-#'   |soilorder        |EPSG:5070 |Soil Taxonomy: Soil Order                              |
-#'   |ssurgo_pct       |EPSG:5070 |SSURGO data available, fraction of 800x800m grid cell  |
-#'   |statsgo_pct      |EPSG:5070 |STATSGO data available, fraction of 800x800m grid cell |
-#'   |str              |EPSG:5070 |Soil Temperature Regime                                |
-#'   |suborder         |EPSG:5070 |Soil Taxonomy: Suborder                                |
-#'   |texture_025cm    |EPSG:5070 |Soil Texture Class, 0-25cm                             |
-#'   |texture_05cm     |EPSG:5070 |Soil Texture Class, 0-5cm                              |
-#'   |texture_2550cm   |EPSG:5070 |Soil Texture Class, 25-50cm                            |
-#'   |weg              |EPSG:5070 |Wind Erodibility Group                                 |
-#'   |wei              |EPSG:5070 |Wind Erodibility Index                                 |
 #' 
 #' 
 #' @return A `SpatRaster` (or `RasterLayer`) object containing indexed map unit keys and associated raster attribute table or a try-error if request fails. By default, spatial classes from the `terra` package are returned. If the input object class is from the `raster` or `sp` packages a `RasterLayer` is returned.
