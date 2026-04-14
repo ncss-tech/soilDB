@@ -10,7 +10,7 @@
    - New argument `est.type` for selecting ensemble summary method and resulting units of measure
    - $Ko$ and $L$ parameters now included in model output
  - `fetchGDB()` now supports passing path to SSURGO GeoPackage file via `dsn` argument
- - Breaking change: sample SoilProfileCollection datasets (`loafercreek`, `gopheridge`, `mineralKing`) updated to 2.9.x `fetchNASIS()` schema
+ - Breaking change: sample `SoilProfileCollection` datasets (`loafercreek`, `gopheridge`, `mineralKing`) updated to 2.9.x `fetchNASIS()` schema
    - Deprecated columns have been removed, following the corresponding changes in 2.9.0
    
 # soilDB 2.9.0 (2026-01-22)
