@@ -5,24 +5,22 @@
 #' 
 #' @description Moist soil colors, FY2026.
 #' 
-#' @param aoi area of interest (AOI) defined using a \code{Spatial*}, \code{RasterLayer}, \code{sf}, \code{sfc} or \code{bbox} object, OR a \code{list}, see details
+#' @param aoi area of interest (AOI) defined using a terra pakcage objects (`SpatRaster`, `SpatVector`, `ext`), sf objects (`sf`, `sfc`), raster package object (`RasterLayer`, `bbox`), sp package `Spatial*`, or a `list`, see details
 #' 
 #' @param var soil color grid name (case insensitive), see details
 #' 
-#' @param res grid resolution, units of meters, typically '270', or '30', depending on `var`. See details.
+#' @param res grid resolution, leave as NULL to use native grid resolution, see details
 #' 
-#' @param quiet logical, passed to \code{curl::curl_download} to enable / suppress URL and progress bar for download.
+#' @param quiet logical, passed to `curl::curl_download` to enable / suppress URL and progress bar for download.
 #'  
-#' @details \code{aoi} should be specified as a \code{SpatRaster}, \code{Spatial*}, \code{RasterLayer}, \code{SpatRaster}/\code{SpatVector}, \code{sf}, \code{sfc}, or \code{bbox} object or a \code{list} containing:
+#' @details When specified as a `list`, `aoi` should contain:
 #' 
-#' \describe{
-#'   \item{\code{aoi}}{bounding-box specified as (xmin, ymin, xmax, ymax) e.g. c(-114.16, 47.65, -114.08, 47.68)}
-#'   \item{\code{crs}}{coordinate reference system of BBOX, e.g. 'OGC:CRS84' (EPSG:4326, WGS84 Longitude/Latitude)}
-#' }
+#'   * `aoi`: bounding-box specified as (xmin, ymin, xmax, ymax) e.g. c(-114.16, 47.65, -114.08, 47.68)
+#'   * `crs`: coordinate reference system of BBOX, e.g. 'OGC:CRS84' (EPSG:4326, WGS84 Longitude/Latitude)
 #' 
-#' The WCS query is parameterized using a rectangular extent derived from the above AOI specification, after conversion to the native CRS (EPSG:5070) of the soil color grids.
+#' The WCS query is parameterized using a rectangular extent derived from the above AOI specification, after conversion to the native CRS of the soil color grids. 
 #' 
-#' Variables available from this WCS can be queried using \code{WCS_details(wcs = 'soilColor')}. The full resolution version of the soil color grids use a `hr` suffix, e.g. 'sc025cm_hr'.
+#' Variables available from this WCS can be queried using `WCS_details(wcs = 'soilColor')`. The full resolution version of the CONUS soil color grids use a `hr` suffix, e.g. 'sc025cm_hr'.
 #' 
 #' 
 #' @return A `SpatRaster` (or `RasterLayer`) object containing indexed map unit keys and associated raster attribute table or a try-error if request fails. By default, spatial classes from the `terra` package are returned. If the input object class is from the `raster` or `sp` packages a `RasterLayer` is returned.

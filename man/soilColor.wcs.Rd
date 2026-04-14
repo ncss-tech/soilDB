@@ -7,11 +7,11 @@
 soilColor.wcs(aoi, var, res = NULL, quiet = FALSE)
 }
 \arguments{
-\item{aoi}{area of interest (AOI) defined using a \code{Spatial*}, \code{RasterLayer}, \code{sf}, \code{sfc} or \code{bbox} object, OR a \code{list}, see details}
+\item{aoi}{area of interest (AOI) defined using a terra pakcage objects (\code{SpatRaster}, \code{SpatVector}, \code{ext}), sf objects (\code{sf}, \code{sfc}), raster package object (\code{RasterLayer}, \code{bbox}), sp package \verb{Spatial*}, or a \code{list}, see details}
 
 \item{var}{soil color grid name (case insensitive), see details}
 
-\item{res}{grid resolution, units of meters, typically '270', or '30', depending on \code{var}. See details.}
+\item{res}{grid resolution, leave as NULL to use native grid resolution, see details}
 
 \item{quiet}{logical, passed to \code{curl::curl_download} to enable / suppress URL and progress bar for download.}
 }
@@ -22,16 +22,15 @@ A \code{SpatRaster} (or \code{RasterLayer}) object containing indexed map unit k
 Moist soil colors, FY2026.
 }
 \details{
-\code{aoi} should be specified as a \code{SpatRaster}, \code{Spatial*}, \code{RasterLayer}, \code{SpatRaster}/\code{SpatVector}, \code{sf}, \code{sfc}, or \code{bbox} object or a \code{list} containing:
-
-\describe{
-\item{\code{aoi}}{bounding-box specified as (xmin, ymin, xmax, ymax) e.g. c(-114.16, 47.65, -114.08, 47.68)}
-\item{\code{crs}}{coordinate reference system of BBOX, e.g. 'OGC:CRS84' (EPSG:4326, WGS84 Longitude/Latitude)}
+When specified as a \code{list}, \code{aoi} should contain:
+\itemize{
+\item \code{aoi}: bounding-box specified as (xmin, ymin, xmax, ymax) e.g. c(-114.16, 47.65, -114.08, 47.68)
+\item \code{crs}: coordinate reference system of BBOX, e.g. 'OGC:CRS84' (EPSG:4326, WGS84 Longitude/Latitude)
 }
 
-The WCS query is parameterized using a rectangular extent derived from the above AOI specification, after conversion to the native CRS (EPSG:5070) of the soil color grids.
+The WCS query is parameterized using a rectangular extent derived from the above AOI specification, after conversion to the native CRS of the soil color grids.
 
-Variables available from this WCS can be queried using \code{WCS_details(wcs = 'soilColor')}. The full resolution version of the soil color grids use a \code{hr} suffix, e.g. 'sc025cm_hr'.
+Variables available from this WCS can be queried using \code{WCS_details(wcs = 'soilColor')}. The full resolution version of the CONUS soil color grids use a \code{hr} suffix, e.g. 'sc025cm_hr'.
 }
 \examples{
 \dontrun{

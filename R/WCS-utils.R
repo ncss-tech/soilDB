@@ -31,8 +31,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
   v <- lapply(spec, function(i) {
     data.frame(
       var = i[['dsn']],
-      description = i[['desc']],
-      stringsAsFactors = FALSE
+      crs = i[['crs']],
+      description = i[['desc']]
     )
   })
   
