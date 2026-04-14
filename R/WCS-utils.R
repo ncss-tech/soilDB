@@ -1360,11 +1360,11 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     desc = 'gNATSGO map unit keys',
     vintage = 'FY2024',
     grid = list(
-      crs = 'EPSG:5070',
       dim = c(nrows = 96754, ncols = 153999),
       ext = c(-2356155, 2263815, 270015, 3172635)
     ),
     na = 2147483647L,
+    crs = 'EPSG:5070',
     res = 30,
     rat = NULL
   ),
@@ -1375,11 +1375,11 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     desc = 'gSSURGO map unit keys',
     vintage = 'FY2026',
     grid = list(
-      crs = 'EPSG:5070',
       dim = c(nrows = 97053, ncols = 153996),
       ext = c(-2356125, 2263755, 260985, 3172575)
     ),
     na = 2147483647L,
+    crs = 'EPSG:5070',
     res = 30,
     rat = NULL
   ),
@@ -1390,11 +1390,11 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     desc = 'SSURGO/STATSGO2 map unit keys',
     vintage = 'FY2026',
     grid = list(
-      crs = 'EPSG:5070',
       dim = c(nrows = 96754, ncols = 153999),
       ext = c(-2356155, 2263815, 270015, 3172635)
     ),
     na = 2147483647L,
+    crs = 'EPSG:5070',
     res = 30,
     rat = NULL
   ),
@@ -1405,11 +1405,11 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     desc = 'HI map unit keys',
     vintage = 'FY2026',
     grid = list(
-      crs = 'EPSG:6628',
       dim = c(nrows = 12441, ncols = 17193),
       ext = c(56992, 572782, 8585, 381815)
     ),
     na = 4294967295,
+    crs = 'EPSG:6628',
     res = 30,
     rat = NULL
   ),
@@ -1420,11 +1420,11 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     desc = 'PR map unit keys',
     vintage = 'FY2026',
     grid = list(
-      crs = 'EPSG:32161',
       dim = c(nrows = 97053, ncols = 153996),
       ext = c(-2356125, 2263755, 260985, 3172575)
     ),
     na = 4294967295,
+    crs = 'EPSG:32161',
     res = 30,
     rat = NULL
   ),
@@ -1435,11 +1435,11 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     desc = 'STATSGO2 map unit keys',
     vintage = 'FY2026',
     grid = list(
-      crs = 'EPSG:5070',
       dim = c(nrows = 97053, ncols = 153996),
       ext = c(-2356125, 2263755, 260985, 3172575)
     ),
     na  = 32767L,
+    crs = 'EPSG:5070',
     res = 30,
     rat = NULL
   ),
@@ -1450,11 +1450,11 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     desc = 'RSS map unit keys',
     vintage = 'FY2023',
     grid = list(
-      crs = 'EPSG:5070',
       dim = c(nrows = 96754, ncols = 153999),
       ext = c(-2356155, 2263815, 270015, 3172635)
     ),
     na  = 32767L,
+    crs = 'EPSG:5070',
     res = 10,
     rat = NULL
   )

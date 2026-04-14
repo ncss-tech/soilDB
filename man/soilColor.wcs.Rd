@@ -31,6 +31,145 @@ When specified as a \code{list}, \code{aoi} should contain:
 The WCS query is parameterized using a rectangular extent derived from the above AOI specification, after conversion to the native CRS of the soil color grids.
 
 Variables available from this WCS can be queried using \code{WCS_details(wcs = 'soilColor')}. The full resolution version of the CONUS soil color grids use a \code{hr} suffix, e.g. 'sc025cm_hr'.
+\subsection{Map Unit Keys}{\tabular{lll}{
+   db \tab crs \tab description \cr
+   fssurgo \tab EPSG:5070 \tab SSURGO/STATSGO2 map unit keys \cr
+   gnatsgo \tab EPSG:5070 \tab gNATSGO map unit keys \cr
+   gssurgo \tab EPSG:5070 \tab gSSURGO map unit keys \cr
+   hi_ssurgo \tab EPSG:6628 \tab HI map unit keys \cr
+   pr_ssurgo \tab EPSG:32161 \tab PR map unit keys \cr
+   rss \tab EPSG:5070 \tab RSS map unit keys \cr
+   statsgo \tab EPSG:5070 \tab STATSGO2 map unit keys \cr
+}
+
+}
+
+\subsection{Soil Color}{\tabular{lll}{
+   var \tab crs \tab description \cr
+   ak_sc005cm \tab EPSG:3338 \tab Alaska, moist soil colors, 5cm (90m resolution) \cr
+   ak_sc010cm \tab EPSG:3338 \tab Alaska, moist soil colors, 10cm (90m resolution) \cr
+   ak_sc015cm \tab EPSG:3338 \tab Alaska, moist soil colors, 15cm (90m resolution) \cr
+   ak_sc025cm \tab EPSG:3338 \tab Alaska, moist soil colors, 25cm (90m resolution) \cr
+   ak_sc050cm \tab EPSG:3338 \tab Alaska, moist soil colors, 50cm (90m resolution) \cr
+   ak_sc075cm \tab EPSG:3338 \tab Alaska, moist soil colors, 75cm (90m resolution) \cr
+   ak_sc100cm \tab EPSG:3338 \tab Alaska, moist soil colors, 100cm (90m resolution) \cr
+   ak_sc125cm \tab EPSG:3338 \tab Alaska, moist soil colors, 125cm (90m resolution) \cr
+   as_sc005cm \tab EPSG:4326 \tab American Samoa, moist soil colors, 5cm (approx. 30m resolution) \cr
+   as_sc010cm \tab EPSG:4326 \tab American Samoa, moist soil colors, 10cm (approx. 30m resolution) \cr
+   as_sc015cm \tab EPSG:4326 \tab American Samoa, moist soil colors, 15cm (approx. 30m resolution) \cr
+   as_sc025cm \tab EPSG:4326 \tab American Samoa, moist soil colors, 25cm (approx. 30m resolution) \cr
+   as_sc050cm \tab EPSG:4326 \tab American Samoa, moist soil colors, 50cm (approx. 30m resolution) \cr
+   as_sc075cm \tab EPSG:4326 \tab American Samoa, moist soil colors, 75cm (approx. 30m resolution) \cr
+   as_sc100cm \tab EPSG:4326 \tab American Samoa, moist soil colors, 100cm (approx. 30m resolution) \cr
+   as_sc125cm \tab EPSG:4326 \tab American Samoa, moist soil colors, 125cm (approx. 30m resolution) \cr
+   gu_sc005cm \tab EPSG:4326 \tab Guam, moist soil colors, 5cm (approx. 30m resolution) \cr
+   gu_sc010cm \tab EPSG:4326 \tab Guam, moist soil colors, 10cm (approx. 30m resolution) \cr
+   gu_sc015cm \tab EPSG:4326 \tab Guam, moist soil colors, 15cm (approx. 30m resolution) \cr
+   gu_sc025cm \tab EPSG:4326 \tab Guam, moist soil colors, 25cm (approx. 30m resolution) \cr
+   gu_sc050cm \tab EPSG:4326 \tab Guam, moist soil colors, 50cm (approx. 30m resolution) \cr
+   gu_sc075cm \tab EPSG:4326 \tab Guam, moist soil colors, 75cm (approx. 30m resolution) \cr
+   gu_sc100cm \tab EPSG:4326 \tab Guam, moist soil colors, 100cm (approx. 30m resolution) \cr
+   gu_sc125cm \tab EPSG:4326 \tab Guam, moist soil colors, 125cm (approx. 30m resolution) \cr
+   hi_sc005cm \tab EPSG:6628 \tab Hawaii, moist soil colors, 5cm (30m resolution) \cr
+   hi_sc010cm \tab EPSG:6628 \tab Hawaii, moist soil colors, 10cm (30m resolution) \cr
+   hi_sc015cm \tab EPSG:6628 \tab Hawaii, moist soil colors, 15cm (30m resolution) \cr
+   hi_sc025cm \tab EPSG:6628 \tab Hawaii, moist soil colors, 25cm (30m resolution) \cr
+   hi_sc050cm \tab EPSG:6628 \tab Hawaii, moist soil colors, 50cm (30m resolution) \cr
+   hi_sc075cm \tab EPSG:6628 \tab Hawaii, moist soil colors, 75cm (30m resolution) \cr
+   hi_sc100cm \tab EPSG:6628 \tab Hawaii, moist soil colors, 100cm (30m resolution) \cr
+   hi_sc125cm \tab EPSG:6628 \tab Hawaii, moist soil colors, 125cm (30m resolution) \cr
+   mp_sc005cm \tab EPSG:4326 \tab Northern Mariana Islands, moist soil colors, 5cm (approx. 30m resolution) \cr
+   mp_sc010cm \tab EPSG:4326 \tab Northern Mariana Islands, moist soil colors, 10cm (approx. 30m resolution) \cr
+   mp_sc015cm \tab EPSG:4326 \tab Northern Mariana Islands, moist soil colors, 15cm (approx. 30m resolution) \cr
+   mp_sc025cm \tab EPSG:4326 \tab Northern Mariana Islands, moist soil colors, 25cm (approx. 30m resolution) \cr
+   mp_sc050cm \tab EPSG:4326 \tab Northern Mariana Islands, moist soil colors, 50cm (approx. 30m resolution) \cr
+   mp_sc075cm \tab EPSG:4326 \tab Northern Mariana Islands, moist soil colors, 75cm (approx. 30m resolution) \cr
+   mp_sc100cm \tab EPSG:4326 \tab Northern Mariana Islands, moist soil colors, 100cm (approx. 30m resolution) \cr
+   mp_sc125cm \tab EPSG:4326 \tab Northern Mariana Islands, moist soil colors, 125cm (approx. 30m resolution) \cr
+   pr_sc005cm \tab EPSG:32161 \tab Puerto Rico, moist soil colors, 5cm (30m resolution) \cr
+   pr_sc010cm \tab EPSG:32161 \tab Puerto Rico, moist soil colors, 10cm (30m resolution) \cr
+   pr_sc015cm \tab EPSG:32161 \tab Puerto Rico, moist soil colors, 15cm (30m resolution) \cr
+   pr_sc025cm \tab EPSG:32161 \tab Puerto Rico, moist soil colors, 25cm (30m resolution) \cr
+   pr_sc050cm \tab EPSG:32161 \tab Puerto Rico, moist soil colors, 50cm (30m resolution) \cr
+   pr_sc075cm \tab EPSG:32161 \tab Puerto Rico, moist soil colors, 75cm (30m resolution) \cr
+   pr_sc100cm \tab EPSG:32161 \tab Puerto Rico, moist soil colors, 100cm (30m resolution) \cr
+   pr_sc125cm \tab EPSG:32161 \tab Puerto Rico, moist soil colors, 125cm (30m resolution) \cr
+   pw_sc005cm \tab EPSG:4326 \tab Palau, moist soil colors, 5cm (approx. 30m resolution) \cr
+   pw_sc010cm \tab EPSG:4326 \tab Palau, moist soil colors, 10cm (approx. 30m resolution) \cr
+   pw_sc015cm \tab EPSG:4326 \tab Palau, moist soil colors, 15cm (approx. 30m resolution) \cr
+   pw_sc025cm \tab EPSG:4326 \tab Palau, moist soil colors, 25cm (approx. 30m resolution) \cr
+   pw_sc050cm \tab EPSG:4326 \tab Palau, moist soil colors, 50cm (approx. 30m resolution) \cr
+   pw_sc075cm \tab EPSG:4326 \tab Palau, moist soil colors, 75cm (approx. 30m resolution) \cr
+   pw_sc100cm \tab EPSG:4326 \tab Palau, moist soil colors, 100cm (approx. 30m resolution) \cr
+   pw_sc125cm \tab EPSG:4326 \tab Palau, moist soil colors, 125cm (approx. 30m resolution) \cr
+   sc005cm \tab EPSG:5070 \tab CONUS, moist soil color, 5cm (270m resolution) \cr
+   sc005cm_hr \tab EPSG:5070 \tab CONUS, moist soil color, 5cm (30m resolution) \cr
+   sc010cm \tab EPSG:5070 \tab CONUS, moist soil color, 10cm (270m resolution) \cr
+   sc010cm_hr \tab EPSG:5070 \tab CONUS, moist soil color, 10cm (30m resolution) \cr
+   sc015cm \tab EPSG:5070 \tab CONUS, moist soil color, 15cm (270m resolution) \cr
+   sc015cm_hr \tab EPSG:5070 \tab CONUS, moist soil color, 15cm (30m resolution) \cr
+   sc025cm \tab EPSG:5070 \tab CONUS, moist soil color, 25cm (270m resolution) \cr
+   sc025cm_hr \tab EPSG:5070 \tab CONUS, moist soil color, 25cm (30m resolution) \cr
+   sc050cm \tab EPSG:5070 \tab CONUS, moist soil color, 50cm (270m resolution) \cr
+   sc050cm_hr \tab EPSG:5070 \tab CONUS, moist soil color, 50cm (30m resolution) \cr
+   sc075cm \tab EPSG:5070 \tab CONUS, moist soil color, 75cm (270m resolution) \cr
+   sc075cm_hr \tab EPSG:5070 \tab CONUS, moist soil color, 75cm (30m resolution) \cr
+   sc100cm \tab EPSG:5070 \tab CONUS, moist soil color, 100cm (270m resolution) \cr
+   sc100cm_hr \tab EPSG:5070 \tab CONUS, moist soil color, 100cm (30m resolution) \cr
+   sc125cm \tab EPSG:5070 \tab CONUS, moist soil color, 125cm (270m resolution) \cr
+   sc125cm_hr \tab EPSG:5070 \tab CONUS, moist soil color, 125cm (30m resolution) \cr
+}
+
+}
+
+\subsection{ISSR800}{\tabular{lll}{
+   var \tab crs \tab description \cr
+   caco3_kg_sq_m \tab EPSG:5070 \tab Total CaCO3 (kg/m^2) \cr
+   cec_025cm \tab EPSG:5070 \tab CEC at pH 7 0-25cm depth (cmol\link{+}/kg) \cr
+   cec_050cm \tab EPSG:5070 \tab CEC at pH 7 0-50cm depth (cmol\link{+}/kg) \cr
+   cec_05cm \tab EPSG:5070 \tab CEC at pH 7 0-5cm depth (cmol\link{+}/kg) \cr
+   clay_025cm \tab EPSG:5070 \tab clay percent 0-25cm depth \cr
+   clay_05cm \tab EPSG:5070 \tab clay percent 0-5cm depth \cr
+   clay_2550cm \tab EPSG:5070 \tab clay percent 25-50cm depth \cr
+   clay_3060cm \tab EPSG:5070 \tab clay percent 30-60cm depth \cr
+   drainage_class \tab EPSG:5070 \tab Soil Drainage Class \cr
+   ec_025cm \tab EPSG:5070 \tab EC 0-25cm depth (dS/m) \cr
+   ec_05cm \tab EPSG:5070 \tab EC 0-5cm depth (dS/m) \cr
+   greatgroup \tab EPSG:5070 \tab Soil Taxonomy: Greatgroup \cr
+   hydgrp \tab EPSG:5070 \tab Hydrologic Soil Group \cr
+   lcc_irrigated \tab EPSG:5070 \tab Land Capability Class, irrigated \cr
+   lcc_nonirrigated \tab EPSG:5070 \tab Land Capability Class, non-irrigated \cr
+   om_kg_sq_m \tab EPSG:5070 \tab Total Soil Organic Matter (kg/m^2) \cr
+   paws \tab EPSG:5070 \tab total plant available water storage (cm water) \cr
+   paws_025cm \tab EPSG:5070 \tab plant available water storage 0-25cm depth (cm water) \cr
+   paws_050cm \tab EPSG:5070 \tab plant available water storage 0-50cm depth (cm water) \cr
+   ph_025cm \tab EPSG:5070 \tab pH 1:1 H2O 0-25cm depth \cr
+   ph_05cm \tab EPSG:5070 \tab pH 1:1 H2O 0-5cm depth \cr
+   ph_2550cm \tab EPSG:5070 \tab pH 1:1 H2O 25-50cm depth \cr
+   ph_3060cm \tab EPSG:5070 \tab pH 1:1 H2O 30-60cm depth \cr
+   sand_025cm \tab EPSG:5070 \tab sand percent 0-25cm depth \cr
+   sand_05cm \tab EPSG:5070 \tab sand percent 0-5cm depth \cr
+   sand_2550cm \tab EPSG:5070 \tab sand percent 25-50cm depth \cr
+   sand_3060cm \tab EPSG:5070 \tab sand percent 30-60cm depth \cr
+   sar \tab EPSG:5070 \tab SAR, entire profile \cr
+   series_name \tab EPSG:5070 \tab Soil Series Name \cr
+   silt_025cm \tab EPSG:5070 \tab silt percent 0-25cm depth \cr
+   silt_05cm \tab EPSG:5070 \tab silt percent 0-5cm depth \cr
+   silt_2550cm \tab EPSG:5070 \tab silt percent 25-50cm depth \cr
+   silt_3060cm \tab EPSG:5070 \tab silt percent 30-60cm depth \cr
+   soilorder \tab EPSG:5070 \tab Soil Taxonomy: Soil Order \cr
+   ssurgo_pct \tab EPSG:5070 \tab SSURGO data available, fraction of 800x800m grid cell \cr
+   statsgo_pct \tab EPSG:5070 \tab STATSGO data available, fraction of 800x800m grid cell \cr
+   str \tab EPSG:5070 \tab Soil Temperature Regime \cr
+   suborder \tab EPSG:5070 \tab Soil Taxonomy: Suborder \cr
+   texture_025cm \tab EPSG:5070 \tab Soil Texture Class, 0-25cm \cr
+   texture_05cm \tab EPSG:5070 \tab Soil Texture Class, 0-5cm \cr
+   texture_2550cm \tab EPSG:5070 \tab Soil Texture Class, 25-50cm \cr
+   weg \tab EPSG:5070 \tab Wind Erodibility Group \cr
+   wei \tab EPSG:5070 \tab Wind Erodibility Index \cr
+}
+
+}
 }
 \examples{
 \dontrun{

@@ -1,3 +1,8 @@
+# soilDB 2.9.2 (development)
+
+## Improvements
+ - `soilColor.wcs()` updated with FY26 soil color maps, now including most OCONUS soil surveys (AK, HI, PR, PW, GU, AS, MP)
+
 # soilDB 2.9.1 (2026-04-01)
  - `ROSETTA()` updates thanks to Todd Skaggs (USDA-ARS):
    - Now using version 2 of the ROSETTA API (<https://www.handbook60.org/rosetta>)
