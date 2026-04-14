@@ -189,15 +189,35 @@ SoilTaxonomyDendrogram(
 
 
 options(.aqp.plotSPC.args = NULL)
-options(.aqp.plotSPC.args = list(width = 0.35, scaling.factor = 0.013, max.depth = 150, cex.id = 0.7, cex.names = 0.85))
+options(.aqp.plotSPC.args = list(width = 0.35, scaling.factor = 0.015, max.depth = 150, cex.id = 0.7, cex.names = 0.85))
 
 par(mar = c(0.5, 0, 0, 2), bg = 'black', fg = 'white')
 plotGeomorphCrossSection(osd, type = 'line')
 plotGeomorphCrossSection(osd, type = 'bar')
 
+plotGeomorphCrossSection(osd, type = 'line', g = 'terrace')
+# plotGeomorphCrossSection(osd, type = 'line', g = 'flats')
+plotGeomorphCrossSection(osd, type = 'line', g = 'shape_across')
+plotGeomorphCrossSection(osd, type = 'line', g = 'shape_down')
+
+plotGeomorphCrossSection(osd, type = 'bar', g = 'geomorphons')
+
+
+
+
 options(.aqp.plotSPC.args = list(width = 0.35, max.depth = 150, cex.id = 0.7, cex.names = 0.8))
 plotGeomorphCrossSection(osd, type = 'line', clust = FALSE)
 plotGeomorphCrossSection(osd, type = 'bar', clust = FALSE)
+
+
+plotGeomorphCrossSection(osd, type = 'line', g = 'terrace', clust = FALSE)
+plotGeomorphCrossSection(osd, type = 'line', g = 'shape_across', clust = FALSE)
+plotGeomorphCrossSection(osd, type = 'line', g = 'shape_down', clust = FALSE)
+
+
+
+# hmm..
+plotGeomorphCrossSection(osd, type = 'bar', g = 'geomorphons', clust = FALSE)
 
 
 

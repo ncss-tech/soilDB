@@ -70,8 +70,8 @@ mukey.wcs <- function(aoi, db = c('gNATSGO', 'gSSURGO', 'RSS', 'STATSGO', 'PR_SS
   if (db %in% c('gnatsgo', 'gssurgo', 'rss', 'statsgo')) {
     # CONUS
     .crs <- 'EPSG:5070'
-    .grid <- terra::rast(nrows = 96754, ncols = 153999, crs = .crs, 
-                         extent = terra::ext(-2356155, 2263815, 270015, 3172635))
+    .grid <- terra::rast(nrows = 97053, ncols = 153996, crs = .crs, 
+                         extent = terra::ext(-2356125, 2263755, 260985, 3172575))
   } else if (db == 'pr_ssurgo') {
     # PR
     .crs <- 'EPSG:32161'
@@ -109,7 +109,7 @@ mukey.wcs <- function(aoi, db = c('gNATSGO', 'gSSURGO', 'RSS', 'STATSGO', 'PR_SS
   }
   
   # prepare AOI in native CRS
-  wcs.geom <- .prepare_AEA_AOI(obj = aoi, res = res, native_crs = .crs)
+  wcs.geom <- .prepare_AOI(obj = aoi, res = res, native_crs = .crs)
   
   ## TODO: investigate why
   # sanity check: a 1x1 pixel request to WCS results in a corrupt GeoTiff 
