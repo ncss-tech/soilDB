@@ -9,6 +9,8 @@ test_that("get_SDV_legend_elements works", {
   # simplify=TRUE, one where clause returning one legend
   res <- get_SDV_legend_elements("attributekey = 427")
   
+  skip_if(inherits(res, 'try-error'))
+  
   expect_true(inherits(res, 'data.frame'))
   
   # simplify=TRUE, two where clauses returning list of length 3 = 2 + 1 legends

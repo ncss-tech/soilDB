@@ -11,7 +11,7 @@ test_that("fetchSDA_spatial basic mupolygon functionality", {
   # expect 3, relatively non-extensive join delineations
   single.mukey <- fetchSDA_spatial(x = "2924882", by.col = 'mukey')
   
-  skip_if(inherits(single.mukey, 'try-error'))
+  skip_if(is.null(single.mukey) || inherits(single.mukey, 'try-error'))
   
   expect_equivalent(nrow(single.mukey), 3)
 
