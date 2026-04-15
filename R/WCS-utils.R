@@ -1474,6 +1474,20 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     rat = NULL
   ),
   
+  'ak_ssurgo' = list(
+    dsn = 'ak_ssurgo',
+    type = 'GEOTIFF_FLOAT',
+    desc = 'AK map unit keys',
+    vintage = 'FY2026',
+    grid = list(
+      dim = c(nrows = 21945, ncols = 40765),
+      ext = c(-2175732, 1493128, 408838, 2383910)
+    ),
+    na = 0,
+    crs = 'EPSG:3338',
+    res = 30,
+    rat = NULL
+  ),
   
   
   'rss' = list(
