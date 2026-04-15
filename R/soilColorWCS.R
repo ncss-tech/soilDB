@@ -230,6 +230,7 @@ soilColor.wcs <- function(aoi, var, res = NULL, quiet = FALSE) {
     stop('result is not a valid GeoTIFF', call. = FALSE)
   }
   
+  # TODO: is this different than set.values() ?
   # load all values into memory
   terra::values(r) <- terra::values(r)
   

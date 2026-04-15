@@ -1388,12 +1388,12 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     dsn = 'gnatsgo',
     type = 'GEOTIFF_FLOAT',
     desc = 'gNATSGO map unit keys',
-    vintage = 'FY2024',
+    vintage = 'FY2026',
     grid = list(
-      dim = c(nrows = 96754, ncols = 153999),
-      ext = c(-2356155, 2263815, 270015, 3172635)
+      dim = c(nrows = 97053, ncols = 153996),
+      ext = c(-2356125, 2263755, 260985, 3172575)
     ),
-    na = 2147483647L,
+    na = 0,
     crs = 'EPSG:5070',
     res = 30,
     rat = NULL
@@ -1408,7 +1408,7 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
       dim = c(nrows = 97053, ncols = 153996),
       ext = c(-2356125, 2263755, 260985, 3172575)
     ),
-    na = 2147483647L,
+    na = 0,
     crs = 'EPSG:5070',
     res = 30,
     rat = NULL
@@ -1420,10 +1420,25 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     desc = 'SSURGO/STATSGO2 map unit keys',
     vintage = 'FY2026',
     grid = list(
-      dim = c(nrows = 96754, ncols = 153999),
-      ext = c(-2356155, 2263815, 270015, 3172635)
+      dim = c(nrows = 97053, ncols = 153996),
+      ext = c(-2356125, 2263755, 260985, 3172575)
     ),
-    na = 2147483647L,
+    na = 4294967296,
+    crs = 'EPSG:5070',
+    res = 30,
+    rat = NULL
+  ),
+  
+  'statsgo' = list(
+    dsn = 'statsgo',
+    type = 'GEOTIFF_FLOAT',
+    desc = 'STATSGO2 map unit keys',
+    vintage = 'FY2026',
+    grid = list(
+      dim = c(nrows = 97053, ncols = 153996),
+      ext = c(-2356125, 2263755, 260985, 3172575)
+    ),
+    na  = 0,
     crs = 'EPSG:5070',
     res = 30,
     rat = NULL
@@ -1459,20 +1474,7 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     rat = NULL
   ),
   
-  'statsgo' = list(
-    dsn = 'statsgo',
-    type = 'GEOTIFF_FLOAT',
-    desc = 'STATSGO2 map unit keys',
-    vintage = 'FY2026',
-    grid = list(
-      dim = c(nrows = 97053, ncols = 153996),
-      ext = c(-2356125, 2263755, 260985, 3172575)
-    ),
-    na  = 32767L,
-    crs = 'EPSG:5070',
-    res = 30,
-    rat = NULL
-  ),
+  
   
   'rss' = list(
     dsn = 'rss',
