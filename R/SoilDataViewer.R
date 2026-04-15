@@ -27,7 +27,6 @@ get_SDV_legend_elements <- function(WHERE,
                                    FROM sdvattribute WHERE ", ak))
     
     if (inherits(x, 'try-error')) {
-      message(x[1])
       return(invisible(x))
     }
     
@@ -42,6 +41,12 @@ get_SDV_legend_elements <- function(WHERE,
     })
   })
 
+  # check for try-error
+  err <- sapply(y, inherits, "try-error")
+  if (any(err)) {
+    return(y[[which(err)[1]]])
+  }
+  
   if ((length(y) == 1) && length(y[[1]]) == 1 && simplify) {
     return(y[[1]][[1]])
   } else if (simplify) return(do.call('c', y))
