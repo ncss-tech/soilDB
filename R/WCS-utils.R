@@ -1451,9 +1451,9 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     vintage = 'FY2026',
     grid = list(
       dim = c(nrows = 12441, ncols = 17193),
-      ext = c(56992, 572782, 8585, 381815)
+      ext = c(56992, 572768, 8585, 381800)
     ),
-    na = 4294967295,
+    na = 0,
     crs = 'EPSG:6628',
     res = 30,
     rat = NULL
@@ -1465,10 +1465,10 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     desc = 'PR map unit keys',
     vintage = 'FY2026',
     grid = list(
-      dim = c(nrows = 97053, ncols = 153996),
-      ext = c(-2356125, 2263755, 260985, 3172575)
+      dim = c(nrows = 3466, ncols = 12311),
+      ext = c(34344, 403687, 177453, 281438)
     ),
-    na = 4294967295,
+    na = 0,
     crs = 'EPSG:32161',
     res = 30,
     rat = NULL

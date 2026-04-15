@@ -6,8 +6,8 @@
 \usage{
 mukey.wcs(
   aoi,
-  db = c("gNATSGO", "gSSURGO", "RSS", "STATSGO", "PR_SSURGO", "HI_SSURGO"),
-  res = 30,
+  db = c("gNATSGO", "gSSURGO", "RSS", "STATSGO", "fSSURGO", "PR_SSURGO", "HI_SSURGO"),
+  res = NULL,
   quiet = FALSE
 )
 }
