@@ -207,22 +207,22 @@ mukey.wcs <- function(
   test_y <- round((ymax2 - ymin) / res) != nrow(r)
   test_x <- round((xmax2 - xmin) / res) != ncol(r)
   
-  # fix requested vs. received grid dimensions
-  if (test_x || test_y) {
-    if (test_x)
-      message("Request partially outside boundary of coverage source data: expected ", 
-              (xmax2 - xmin) / res, " columns, received ", ncol(r))
-    if (test_y)
-      message("Request partially outside boundary of coverage source data: expected ", 
-              (ymax2 - ymin) / res, " rows, received ", nrow(r))
-    
-    # fix extent of result due to rounding error/incomplete pixels at edges of map
-    rex <- terra::ext(r) 
-    terra::ext(r) <- terra::ext(c(rex[1], rex[1] + ncol(r) * res, rex[3], rex[3] + nrow(r) * res))
-    
-    # extend to input extent
-    r <- terra::extend(r, terra::ext(c(xmin, xmax2, ymin, ymax2)))
-  }
+  # # fix requested vs. received grid dimensions
+  # if (test_x || test_y) {
+  #   if (test_x)
+  #     message("Request partially outside boundary of coverage source data: expected ", 
+  #             (xmax2 - xmin) / res, " columns, received ", ncol(r))
+  #   if (test_y)
+  #     message("Request partially outside boundary of coverage source data: expected ", 
+  #             (ymax2 - ymin) / res, " rows, received ", nrow(r))
+  #   
+  #   # fix extent of result due to rounding error/incomplete pixels at edges of map
+  #   rex <- terra::ext(r) 
+  #   terra::ext(r) <- terra::ext(c(rex[1], rex[1] + ncol(r) * res, rex[3], rex[3] + nrow(r) * res))
+  #   
+  #   # extend to input extent
+  #   r <- terra::extend(r, terra::ext(c(xmin, xmax2, ymin, ymax2)))
+  # }
   
   # read into memory
   terra::values(r) <- terra::values(r)
