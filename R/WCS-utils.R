@@ -121,15 +121,6 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     }
   }
   
-  
-  # CONUS grids: ISSR800, gNATSGO, gSSURGO, STATSGO, RSS
-  # 
-  # NOTE: EPSG:6350 NAD83 (2011) v.s. EPSG:5070 NAD83
-  # we use EPSG:5070 (https://github.com/ncss-tech/soilDB/issues/205)
-  # NOTE: +init=EPSG:XXXX syntax is deprecated in GDAL. It might return a CRS with a non-EPSG compliant axis order.
-  
-  
-  
   # transform bounding polygon to WCS CRS
   # could be either, 
   # st_bbox is commonly converted to 'sfc'
@@ -150,7 +141,7 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     # AOI and image calculations in native CRS
     # create BBOX used for WMS
     # xmin, ymin, xmax, ymax
-    aoi.native <- e.native[c(1,3,2,4)]
+    aoi.native <- e.native[c(1, 3, 2, 4)]
   }
   
   # these are used for calculating xmax/ymax for WCS request
@@ -1558,7 +1549,7 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
       dim = c(nrows = 96754, ncols = 153999),
       ext = c(-2356155, 2263815, 270015, 3172635)
     ),
-    na  = 32767L,
+    na  = 0,
     crs = 'EPSG:5070',
     res = 10,
     rat = NULL

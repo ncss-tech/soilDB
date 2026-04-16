@@ -41,6 +41,8 @@
 #' 
 #' The `fSSURGO` database is an unofficial hybrid of gSSURGO, back-filled with STATSGO2 data where SSURGO data are missing (e.b. denied access, NOTCOM, large misc. areas other than water). 
 #' 
+#' The RSS mukey grid is 10m resolution. CONUS, AK, HI, and PR mukey grids are 30m resolution. AS, GU, MP, and PW use a geographic coordinate system with a grid size of approximately 30m.
+#' 
 #' 
 #' @return A `SpatRaster` (or `RasterLayer`) object containing indexed map unit keys and associated raster attribute table, or a `try-error` if the WCS request fails. Basic metadata are encoded into the resulting `SpatRaster`, accessible via `terra::metags()`.
 #'
@@ -49,8 +51,8 @@
 #' \dontrun{
 #' library(terra)
 #' 
-#' res <- mukey.wcs(list(aoi = c(-116.7400, 35.2904, -116.7072, 35.3026), crs = "EPSG:4326"),
-#'                  db = 'gNATSGO', res = 30) 
+#' aoi <- list(aoi = c(-116.7400, 35.2904, -116.7072, 35.3026), crs = "EPSG:4326")
+#' res <- mukey.wcs(aoi, db = 'gNATSGO') 
 #'   
 #' m <- unique(values(res))
 #' 
@@ -71,7 +73,7 @@
 #' res2 <- catalyze(res)
 #' res2
 #' 
-#' plot(res2[['pH1to1_0to25']])
+#' terra::plot(res2[['pH1to1_0to25']])
 #' }
 mukey.wcs <- function(
     aoi, 
@@ -129,12 +131,8 @@ mukey.wcs <- function(
     # check for reasonable resolutions
     
     # CONUS grids
-    if (db %in% .conusGrids && (res < 30 || res > 3000)) {
+    if (db %in% .conusGrids && (res < 10 || res > 3000)) {
       stop('`res` should be within 30 <= res <= 3000 meters')
-    }
-    
-    if (db == 'rss' && (res < 10 || res > 1000)) {
-      stop('`res` should be within 10 <= res <= 1000 meters')
     }
     
     # TODO: OCONUS grids use a mixture of projected and geographic CRS
@@ -224,26 +222,26 @@ mukey.wcs <- function(
   }
   
   ## 2026-04-15: is this neccessary?
-  #
-  # test_y <- round((ymax2 - ymin) / res) != nrow(r)
-  # test_x <- round((xmax2 - xmin) / res) != ncol(r)
-  # 
-  # # fix requested vs. received grid dimensions
-  # if (test_x || test_y) {
-  #   if (test_x)
-  #     message("Request partially outside boundary of coverage source data: expected ", 
-  #             (xmax2 - xmin) / res, " columns, received ", ncol(r))
-  #   if (test_y)
-  #     message("Request partially outside boundary of coverage source data: expected ", 
-  #             (ymax2 - ymin) / res, " rows, received ", nrow(r))
-  #   
-  #   # fix extent of result due to rounding error/incomplete pixels at edges of map
-  #   rex <- terra::ext(r) 
-  #   terra::ext(r) <- terra::ext(c(rex[1], rex[1] + ncol(r) * res, rex[3], rex[3] + nrow(r) * res))
-  #   
-  #   # extend to input extent
-  #   r <- terra::extend(r, terra::ext(c(xmin, xmax2, ymin, ymax2)))
-  # }
+
+  test_y <- round((ymax2 - ymin) / res) != nrow(r)
+  test_x <- round((xmax2 - xmin) / res) != ncol(r)
+
+  # fix requested vs. received grid dimensions
+  if (test_x || test_y) {
+    if (test_x)
+      message("Request partially outside boundary of coverage source data: expected ",
+              (xmax2 - xmin) / res, " columns, received ", ncol(r))
+    if (test_y)
+      message("Request partially outside boundary of coverage source data: expected ",
+              (ymax2 - ymin) / res, " rows, received ", nrow(r))
+
+    # fix extent of result due to rounding error/incomplete pixels at edges of map
+    rex <- terra::ext(r)
+    terra::ext(r) <- terra::ext(c(rex[1], rex[1] + ncol(r) * res, rex[3], rex[3] + nrow(r) * res))
+
+    # extend to input extent
+    r <- terra::extend(r, terra::ext(c(xmin, xmax2, ymin, ymax2)))
+  }
   
   # read into memory
   terra::values(r) <- terra::values(r)
