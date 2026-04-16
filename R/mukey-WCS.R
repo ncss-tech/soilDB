@@ -2,31 +2,47 @@
 
 #' @title Get Map Unit Key (`mukey`) grid from SoilWeb Web Coverage Service (WCS)
 #' 
-#' @description Download chunks of the gNATSGO, gSSURGO, RSS, and STATSGO2 map unit key grid via bounding-box from the SoilWeb WCS.
+#' @description Download chunks of the gNATSGO, gSSURGO, OCONUS SSURGO, STATSGO2, and RSS map unit key grid via bounding-box from the SoilWeb WCS.
 #' 
 #' @author D.E. Beaudette and A.G. Brown
 #'
-#' @param aoi area of interest (AOI) defined using either a \code{Spatial*}, \code{RasterLayer}, \code{sf}, \code{sfc} or \code{bbox} object, or a \code{list}, see details
+#' @param aoi area of interest (AOI) defined using a terra pakcage objects (`SpatRaster`, `SpatVector`, `ext`), sf objects (`sf`, `sfc`), raster package object (`RasterLayer`, `bbox`), sp package `Spatial*`, or a `list`, see details
 #' 
-#' @param db name of the gridded map unit key grid to access, should be either 'gNATSGO', 'gSSURGO', 'STATSGO', 'HI_SSURGO', or 'PR_SSURGO' (case insensitive)
+#' @param db character, mukey grid source, see details
 #' 
-#' @param res grid resolution, units of meters. The native resolution of gNATSGO and gSSURGO (this WCS) is 30m; STATSGO (this WCS) is 300m; and Raster Soil Surveys (RSS) are at 10m resolution. If `res` is not specified the native resolution of the source is used.
-#' @param quiet logical, passed to \code{curl::curl_download} to enable / suppress URL and progress bar for download.
-#'
-#' @note The gNATSGO grid includes raster soil survey map unit keys which are not in SDA.
-#'
-#' @details \code{aoi} should be specified as one of: \code{SpatRaster}, \code{Spatial*}, \code{RasterLayer}, \code{sf}, \code{sfc}, \code{bbox} object, OR a \code{list} containing:
-#'
-#' \describe{
-#'   \item{\code{aoi}}{bounding-box specified as (xmin, ymin, xmax, ymax) e.g. c(-114.16, 47.65, -114.08, 47.68)}
-#'   \item{\code{crs}}{coordinate reference system of BBOX, e.g. 'OGC:CRS84' (EPSG:4326, WGS84 Longitude/Latitude)}
-#' }
+#' @param res grid resolution, leave as NULL to use native grid resolution, see details
+#' 
+#' @param quiet logical, passed to `curl::curl_download()` to enable / suppress URL and progress bar for download.
+#'  
+#' @details When specified as a `list`, `aoi` should contain:
+#' 
+#'   * `aoi`: bounding-box specified as (xmin, ymin, xmax, ymax) e.g. c(-114.16, 47.65, -114.08, 47.68)
+#'   * `crs`: coordinate reference system of BBOX, e.g. 'OGC:CRS84' (EPSG:4326, WGS84 Longitude/Latitude)
 #'
 #' The WCS query is parameterized using a rectangular extent derived from the above AOI specification, after conversion to the native CRS (EPSG:5070) of the WCS grids.
 #' 
-#' Databases available from this WCS can be queried using \code{WCS_details(wcs = 'mukey')}.
+#' Databases available from this WCS can be queried using `WCS_details(wcs = 'mukey')`.
 #' 
-#' @return A SpatRaster (or RasterLayer) object containing indexed map unit keys and associated raster attribute table or a try-error if request fails. By default, spatial classes from the `terra` package are returned. If the input object class is from the `raster` or `sp` packages a RasterLayer is returned. 
+#' |db        |crs        |description                   |
+#' |:---------|:----------|:-----------------------------|
+#'   |ak_ssurgo |EPSG:3338  |AK map unit keys              |
+#'   |as_ssurgo |EPSG:4326  |AS map unit keys              |
+#'   |fssurgo   |EPSG:5070  |SSURGO/STATSGO2 map unit keys |
+#'   |gnatsgo   |EPSG:5070  |gNATSGO map unit keys         |
+#'   |gssurgo   |EPSG:5070  |gSSURGO map unit keys         |
+#'   |gu_ssurgo |EPSG:4326  |GU map unit keys              |
+#'   |hi_ssurgo |EPSG:6628  |HI map unit keys              |
+#'   |mp_ssurgo |EPSG:4326  |MP map unit keys              |
+#'   |pr_ssurgo |EPSG:32161 |PR map unit keys              |
+#'   |pw_ssurgo |EPSG:4326  |PW map unit keys              |
+#'   |rss       |EPSG:5070  |RSS map unit keys             |
+#'   |statsgo   |EPSG:5070  |STATSGO2 map unit keys        |
+#'   
+#' 
+#' The `fSSURGO` database is an unofficial hybrid of gSSURGO, back-filled with STATSGO2 data where SSURGO data are missing (e.b. denied access, NOTCOM, large misc. areas other than water). 
+#' 
+#' 
+#' @return A `SpatRaster` (or `RasterLayer`) object containing indexed map unit keys and associated raster attribute table, or a `try-error` if the WCS request fails. Basic metadata are encoded into the resulting `SpatRaster`, accessible via `terra::metags()`.
 #'
 #' @export
 #' @examples 
@@ -164,6 +180,9 @@ mukey.wcs <- function(
   xmax2 <- xmin + res * wcs.geom$width[[1]]
   ymax2 <- ymin + res * wcs.geom$height[[1]]
   
+  # WCS notes:
+  # https://github.com/geographika/wcs-test
+  
   # compile WCS 2.0 style URL
   u <- paste0(
     base.url,
@@ -204,9 +223,11 @@ mukey.wcs <- function(
     stop('result is not a valid GeoTIFF', call. = FALSE)
   }
   
-  test_y <- round((ymax2 - ymin) / res) != nrow(r)
-  test_x <- round((xmax2 - xmin) / res) != ncol(r)
-  
+  ## 2026-04-15: is this neccessary?
+  #
+  # test_y <- round((ymax2 - ymin) / res) != nrow(r)
+  # test_x <- round((xmax2 - xmin) / res) != ncol(r)
+  # 
   # # fix requested vs. received grid dimensions
   # if (test_x || test_y) {
   #   if (test_x)

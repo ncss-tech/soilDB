@@ -99,7 +99,7 @@
 #'   |sc125cm_hr |EPSG:5070  |CONUS, moist soil color, 125cm (30m resolution)                             |
 #' 
 #' 
-#' @return A `SpatRaster` (or `RasterLayer`) object containing indexed map unit keys and associated raster attribute table or a try-error if request fails. By default, spatial classes from the `terra` package are returned. If the input object class is from the `raster` or `sp` packages a `RasterLayer` is returned.
+#' @return A `SpatRaster` (or `RasterLayer`) object containing indexed soil color IDs, associated raster attribute table, and color table. A `try-error` is returned if the WCS request fails.
 #' 
 #' @examples 
 #' \dontrun{
@@ -180,10 +180,6 @@ soilColor.wcs <- function(aoi, var, res = NULL, quiet = FALSE) {
   # unpack BBOX for WCS 2.0
   xmin <- wcs.geom$bbox[1]
   ymin <- wcs.geom$bbox[2]
-  
-  # xmax and ymax are now calculated from AOI dimensions and resolution
-  # xmax <- wcs.geom$bbox[3]
-  # ymax <- wcs.geom$bbox[4]
   
   # recalculate x/ymax based on xmin + resolution multiplied by AOI dims
   xmax2 <- xmin + res * wcs.geom$width
