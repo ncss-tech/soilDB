@@ -121,15 +121,6 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     }
   }
   
-  
-  # CONUS grids: ISSR800, gNATSGO, gSSURGO, STATSGO, RSS
-  # 
-  # NOTE: EPSG:6350 NAD83 (2011) v.s. EPSG:5070 NAD83
-  # we use EPSG:5070 (https://github.com/ncss-tech/soilDB/issues/205)
-  # NOTE: +init=EPSG:XXXX syntax is deprecated in GDAL. It might return a CRS with a non-EPSG compliant axis order.
-  
-  
-  
   # transform bounding polygon to WCS CRS
   # could be either, 
   # st_bbox is commonly converted to 'sfc'
@@ -150,7 +141,7 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     # AOI and image calculations in native CRS
     # create BBOX used for WMS
     # xmin, ymin, xmax, ymax
-    aoi.native <- e.native[c(1,3,2,4)]
+    aoi.native <- e.native[c(1, 3, 2, 4)]
   }
   
   # these are used for calculating xmax/ymax for WCS request
@@ -1388,12 +1379,12 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     dsn = 'gnatsgo',
     type = 'GEOTIFF_FLOAT',
     desc = 'gNATSGO map unit keys',
-    vintage = 'FY2024',
+    vintage = 'FY2026',
     grid = list(
-      dim = c(nrows = 96754, ncols = 153999),
-      ext = c(-2356155, 2263815, 270015, 3172635)
+      dim = c(nrows = 97053, ncols = 153996),
+      ext = c(-2356125, 2263755, 260985, 3172575)
     ),
-    na = 2147483647L,
+    na = 0,
     crs = 'EPSG:5070',
     res = 30,
     rat = NULL
@@ -1408,7 +1399,7 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
       dim = c(nrows = 97053, ncols = 153996),
       ext = c(-2356125, 2263755, 260985, 3172575)
     ),
-    na = 2147483647L,
+    na = 0,
     crs = 'EPSG:5070',
     res = 30,
     rat = NULL
@@ -1420,41 +1411,11 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     desc = 'SSURGO/STATSGO2 map unit keys',
     vintage = 'FY2026',
     grid = list(
-      dim = c(nrows = 96754, ncols = 153999),
-      ext = c(-2356155, 2263815, 270015, 3172635)
-    ),
-    na = 2147483647L,
-    crs = 'EPSG:5070',
-    res = 30,
-    rat = NULL
-  ),
-  
-  'hi_ssurgo' = list(
-    dsn = 'hi_ssurgo',
-    type = 'GEOTIFF_FLOAT',
-    desc = 'HI map unit keys',
-    vintage = 'FY2026',
-    grid = list(
-      dim = c(nrows = 12441, ncols = 17193),
-      ext = c(56992, 572782, 8585, 381815)
-    ),
-    na = 4294967295,
-    crs = 'EPSG:6628',
-    res = 30,
-    rat = NULL
-  ),
-  
-  'pr_ssurgo' = list(
-    dsn = 'pr_ssurgo',
-    type = 'GEOTIFF_FLOAT',
-    desc = 'PR map unit keys',
-    vintage = 'FY2026',
-    grid = list(
       dim = c(nrows = 97053, ncols = 153996),
       ext = c(-2356125, 2263755, 260985, 3172575)
     ),
-    na = 4294967295,
-    crs = 'EPSG:32161',
+    na = 4294967296,
+    crs = 'EPSG:5070',
     res = 30,
     rat = NULL
   ),
@@ -1468,9 +1429,114 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
       dim = c(nrows = 97053, ncols = 153996),
       ext = c(-2356125, 2263755, 260985, 3172575)
     ),
-    na  = 32767L,
+    na  = 0,
     crs = 'EPSG:5070',
     res = 30,
+    rat = NULL
+  ),
+  
+  'hi_ssurgo' = list(
+    dsn = 'hi_ssurgo',
+    type = 'GEOTIFF_FLOAT',
+    desc = 'HI map unit keys',
+    vintage = 'FY2026',
+    grid = list(
+      dim = c(nrows = 12441, ncols = 17193),
+      ext = c(56992, 572768, 8585, 381800)
+    ),
+    na = 0,
+    crs = 'EPSG:6628',
+    res = 30,
+    rat = NULL
+  ),
+  
+  'pr_ssurgo' = list(
+    dsn = 'pr_ssurgo',
+    type = 'GEOTIFF_FLOAT',
+    desc = 'PR map unit keys',
+    vintage = 'FY2026',
+    grid = list(
+      dim = c(nrows = 3466, ncols = 12311),
+      ext = c(34344, 403687, 177453, 281438)
+    ),
+    na = 0,
+    crs = 'EPSG:32161',
+    res = 30,
+    rat = NULL
+  ),
+  
+  'ak_ssurgo' = list(
+    dsn = 'ak_ssurgo',
+    type = 'GEOTIFF_FLOAT',
+    desc = 'AK map unit keys',
+    vintage = 'FY2026',
+    grid = list(
+      dim = c(nrows = 21945, ncols = 40765),
+      ext = c(-2175732, 1493128, 408838, 2383910)
+    ),
+    na = 0,
+    crs = 'EPSG:3338',
+    res = 30,
+    rat = NULL
+  ),
+  
+  'pw_ssurgo' = list(
+    dsn = 'pw_ssurgo',
+    type = 'GEOTIFF_FLOAT',
+    desc = 'PW map unit keys',
+    vintage = 'FY2026',
+    grid = list(
+      dim = c(nrows = 18440, ncols = 12963),
+      ext = c(131.120121813039, 134.721062737144, 2.97196562862596, 8.09408586748881)
+    ),
+    na = 0,
+    crs = 'EPSG:4326',
+    res = 0.0002777861,
+    rat = NULL
+  ),
+  
+  'gu_ssurgo' = list(
+    dsn = 'gu_ssurgo',
+    type = 'GEOTIFF_FLOAT',
+    desc = 'GU map unit keys',
+    vintage = 'FY2026',
+    grid = list(
+      dim = c(nrows = 1513, ncols = 1220),
+      ext = c(144.618068517806, 144.956955421916, 13.2340187307932, 13.6544204140536)
+    ),
+    na = 0,
+    crs = 'EPSG:4326',
+    res = 0.0002777762,
+    rat = NULL
+  ),
+  
+  'as_ssurgo' = list(
+    dsn = 'as_ssurgo',
+    type = 'GEOTIFF_FLOAT',
+    desc = 'AS map unit keys',
+    vintage = 'FY2026',
+    grid = list(
+      dim = c(nrows = 787, ncols = 5142),
+      ext = c(-170.846799186076, -169.418575873062, -14.3738552052458, -14.1553617420328)
+    ),
+    na = 0,
+    crs = 'EPSG:4326',
+    res = 0.0002777564,
+    rat = NULL
+  ),
+  
+  'mp_ssurgo' = list(
+    dsn = 'mp_ssurgo',
+    type = 'GEOTIFF_FLOAT',
+    desc = 'MP map unit keys',
+    vintage = 'FY2026',
+    grid = list(
+      dim = c(nrows = 16930, ncols = 2632),
+      ext = c(145.121303441146, 145.852451735958, 14.1104128808407, 18.8132500297094)
+    ),
+    na = 0,
+    crs = 'EPSG:4326',
+    res = 0.0002777919,
     rat = NULL
   ),
   
@@ -1483,7 +1549,7 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
       dim = c(nrows = 96754, ncols = 153999),
       ext = c(-2356155, 2263815, 270015, 3172635)
     ),
-    na  = 32767L,
+    na  = 0,
     crs = 'EPSG:5070',
     res = 10,
     rat = NULL

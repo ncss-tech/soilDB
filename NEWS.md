@@ -3,6 +3,7 @@
 ## Improvements
  - `soilColor.wcs()` updated with FY26 soil color maps, now including most OCONUS soil surveys (AK, HI, PR, PW, GU, AS, MP)
  - `ISSR800.wcs()` updated with FY26 data, bug fixes related to NA-handling by WCS
+ - `mukey.wcs()` updated with FY26 data, bug fixes related to NA-handling, now including most OCONUS soil surveys (AK, HI, PR, PW, GU, AS, MP)
 
 # soilDB 2.9.1 (2026-04-01)
  - `ROSETTA()` updates thanks to Todd Skaggs (USDA-ARS):

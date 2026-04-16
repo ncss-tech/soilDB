@@ -16,7 +16,7 @@ soilColor.wcs(aoi, var, res = NULL, quiet = FALSE)
 \item{quiet}{logical, passed to \code{curl::curl_download} to enable / suppress URL and progress bar for download.}
 }
 \value{
-A \code{SpatRaster} (or \code{RasterLayer}) object containing indexed map unit keys and associated raster attribute table or a try-error if request fails. By default, spatial classes from the \code{terra} package are returned. If the input object class is from the \code{raster} or \code{sp} packages a \code{RasterLayer} is returned.
+A \code{SpatRaster} (or \code{RasterLayer}) object containing indexed soil color IDs, associated raster attribute table, and color table. A \code{try-error} is returned if the WCS request fails.
 }
 \description{
 Moist soil colors, FY2026.

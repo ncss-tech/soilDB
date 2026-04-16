@@ -6,47 +6,62 @@
 \usage{
 mukey.wcs(
   aoi,
-  db = c("gNATSGO", "gSSURGO", "RSS", "STATSGO", "PR_SSURGO", "HI_SSURGO"),
-  res = 30,
+  db = c("gNATSGO", "gSSURGO", "RSS", "STATSGO", "fSSURGO", "PR_SSURGO", "HI_SSURGO"),
+  res = NULL,
   quiet = FALSE
 )
 }
 \arguments{
-\item{aoi}{area of interest (AOI) defined using either a \code{Spatial*}, \code{RasterLayer}, \code{sf}, \code{sfc} or \code{bbox} object, or a \code{list}, see details}
+\item{aoi}{area of interest (AOI) defined using a terra pakcage objects (\code{SpatRaster}, \code{SpatVector}, \code{ext}), sf objects (\code{sf}, \code{sfc}), raster package object (\code{RasterLayer}, \code{bbox}), sp package \verb{Spatial*}, or a \code{list}, see details}
 
-\item{db}{name of the gridded map unit key grid to access, should be either 'gNATSGO', 'gSSURGO', 'STATSGO', 'HI_SSURGO', or 'PR_SSURGO' (case insensitive)}
+\item{db}{character, mukey grid source, see details}
 
-\item{res}{grid resolution, units of meters. The native resolution of gNATSGO and gSSURGO (this WCS) is 30m; STATSGO (this WCS) is 300m; and Raster Soil Surveys (RSS) are at 10m resolution. If \code{res} is not specified the native resolution of the source is used.}
+\item{res}{grid resolution, leave as NULL to use native grid resolution, see details}
 
-\item{quiet}{logical, passed to \code{curl::curl_download} to enable / suppress URL and progress bar for download.}
+\item{quiet}{logical, passed to \code{curl::curl_download()} to enable / suppress URL and progress bar for download.}
 }
 \value{
-A SpatRaster (or RasterLayer) object containing indexed map unit keys and associated raster attribute table or a try-error if request fails. By default, spatial classes from the \code{terra} package are returned. If the input object class is from the \code{raster} or \code{sp} packages a RasterLayer is returned.
+A \code{SpatRaster} (or \code{RasterLayer}) object containing indexed map unit keys and associated raster attribute table, or a \code{try-error} if the WCS request fails. Basic metadata are encoded into the resulting \code{SpatRaster}, accessible via \code{terra::metags()}.
 }
 \description{
-Download chunks of the gNATSGO, gSSURGO, RSS, and STATSGO2 map unit key grid via bounding-box from the SoilWeb WCS.
+Download chunks of the gNATSGO, gSSURGO, OCONUS SSURGO, STATSGO2, and RSS map unit key grid via bounding-box from the SoilWeb WCS.
 }
 \details{
-\code{aoi} should be specified as one of: \code{SpatRaster}, \code{Spatial*}, \code{RasterLayer}, \code{sf}, \code{sfc}, \code{bbox} object, OR a \code{list} containing:
-
-\describe{
-\item{\code{aoi}}{bounding-box specified as (xmin, ymin, xmax, ymax) e.g. c(-114.16, 47.65, -114.08, 47.68)}
-\item{\code{crs}}{coordinate reference system of BBOX, e.g. 'OGC:CRS84' (EPSG:4326, WGS84 Longitude/Latitude)}
+When specified as a \code{list}, \code{aoi} should contain:
+\itemize{
+\item \code{aoi}: bounding-box specified as (xmin, ymin, xmax, ymax) e.g. c(-114.16, 47.65, -114.08, 47.68)
+\item \code{crs}: coordinate reference system of BBOX, e.g. 'OGC:CRS84' (EPSG:4326, WGS84 Longitude/Latitude)
 }
 
 The WCS query is parameterized using a rectangular extent derived from the above AOI specification, after conversion to the native CRS (EPSG:5070) of the WCS grids.
 
-Databases available from this WCS can be queried using \code{WCS_details(wcs = 'mukey')}.
+Databases available from this WCS can be queried using \code{WCS_details(wcs = 'mukey')}.\tabular{lll}{
+   db \tab crs \tab description \cr
+   ak_ssurgo \tab EPSG:3338 \tab AK map unit keys \cr
+   as_ssurgo \tab EPSG:4326 \tab AS map unit keys \cr
+   fssurgo \tab EPSG:5070 \tab SSURGO/STATSGO2 map unit keys \cr
+   gnatsgo \tab EPSG:5070 \tab gNATSGO map unit keys \cr
+   gssurgo \tab EPSG:5070 \tab gSSURGO map unit keys \cr
+   gu_ssurgo \tab EPSG:4326 \tab GU map unit keys \cr
+   hi_ssurgo \tab EPSG:6628 \tab HI map unit keys \cr
+   mp_ssurgo \tab EPSG:4326 \tab MP map unit keys \cr
+   pr_ssurgo \tab EPSG:32161 \tab PR map unit keys \cr
+   pw_ssurgo \tab EPSG:4326 \tab PW map unit keys \cr
+   rss \tab EPSG:5070 \tab RSS map unit keys \cr
+   statsgo \tab EPSG:5070 \tab STATSGO2 map unit keys \cr
 }
-\note{
-The gNATSGO grid includes raster soil survey map unit keys which are not in SDA.
+
+
+The \code{fSSURGO} database is an unofficial hybrid of gSSURGO, back-filled with STATSGO2 data where SSURGO data are missing (e.b. denied access, NOTCOM, large misc. areas other than water).
+
+The RSS mukey grid is 10m resolution. CONUS, AK, HI, and PR mukey grids are 30m resolution. AS, GU, MP, and PW use a geographic coordinate system with a grid size of approximately 30m.
 }
 \examples{
 \dontrun{
 library(terra)
 
-res <- mukey.wcs(list(aoi = c(-116.7400, 35.2904, -116.7072, 35.3026), crs = "EPSG:4326"),
-                 db = 'gNATSGO', res = 30) 
+aoi <- list(aoi = c(-116.7400, 35.2904, -116.7072, 35.3026), crs = "EPSG:4326")
+res <- mukey.wcs(aoi, db = 'gNATSGO') 
   
 m <- unique(values(res))
 
@@ -67,7 +82,7 @@ levels(res) <- prp
 res2 <- catalyze(res)
 res2
 
-plot(res2[['pH1to1_0to25']])
+terra::plot(res2[['pH1to1_0to25']])
 }
 }
 \author{

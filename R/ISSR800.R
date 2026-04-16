@@ -74,7 +74,7 @@
 #' 
 #' @note There are still some issues to be resolved related to the encoding of NA Variables with a natural zero (e.g. SAR) have 0 set to NA.
 #' 
-#' @return `SpatRaster` (or `RasterLayer`) object
+#' @return `SpatRaster` (or `RasterLayer`) object, or `try-error` if the WCS request fails.
 #' 
 #' @examples 
 #' 
