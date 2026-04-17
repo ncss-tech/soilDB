@@ -34,11 +34,9 @@ soilColor.wcs(aoi, var, res = NULL, quiet = FALSE)
 
 ## Value
 
-A `SpatRaster` (or `RasterLayer`) object containing indexed map unit
-keys and associated raster attribute table or a try-error if request
-fails. By default, spatial classes from the `terra` package are
-returned. If the input object class is from the `raster` or `sp`
-packages a `RasterLayer` is returned.
+A `SpatRaster` (or `RasterLayer`) object containing indexed soil color
+IDs, associated raster attribute table, and color table. A `try-error`
+is returned if the WCS request fails.
 
 ## Details
 

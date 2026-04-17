@@ -41,7 +41,8 @@ ISSR800.wcs(aoi, var, res = 800, quiet = FALSE)
 
 ## Value
 
-`SpatRaster` (or `RasterLayer`) object
+`SpatRaster` (or `RasterLayer`) object, or `try-error` if the WCS
+request fails.
 
 ## Details
 

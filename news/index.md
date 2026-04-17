@@ -9,6 +9,9 @@
   surveys (AK, HI, PR, PW, GU, AS, MP)
 - [`ISSR800.wcs()`](http://ncss-tech.github.io/soilDB/reference/ISSR800.wcs.md)
   updated with FY26 data, bug fixes related to NA-handling by WCS
+- [`mukey.wcs()`](http://ncss-tech.github.io/soilDB/reference/mukey.wcs.md)
+  updated with FY26 data, bug fixes related to NA-handling, now
+  including most OCONUS soil surveys (AK, HI, PR, PW, GU, AS, MP)
 
 ## soilDB 2.9.1 (2026-04-01)
 
