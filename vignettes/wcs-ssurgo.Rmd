@@ -37,7 +37,7 @@ The files backing each WCS are re-created annually after the SSURGO annual refre
 
 In addition to the standard CONUS gSSURGO and gNATSGO grids, these web coverage services are also provided:
 
- - Raster Soil Survey (RSS) products at 10m resolution (EPSG:5070).
+ - Raster Soil Survey (RSS) products at 30m resolution (EPSG:5070).
 
  - STATSGO2 (2016) at 30m resolution (EPSG:5070).
 
@@ -85,7 +85,7 @@ x <- mukey.wcs(aoi = aoi, db = 'gnatsgo', ...)
 # select STATSGO2 grid, 30m resolution
 x <- mukey.wcs(aoi = aoi, db = 'statsgo', ...)
 
-# select RSS grid, 10m resolution
+# select RSS grid, 30m resolution
 x <- mukey.wcs(aoi = aoi, db = 'RSS', ...)
 
 # select fSSURGO grid, 30m resolution
@@ -349,7 +349,7 @@ a <- vect(a, crs = 'epsg:5070')
 # gNATSGO grid: 30m resolution
 (y <- mukey.wcs(a, db = 'gNATSGO'))
 
-# RSS grid: 10m resolution
+# RSS grid: 30m resolution
 (z <- mukey.wcs(a, db = 'RSS'))
 
 # graphical comparison

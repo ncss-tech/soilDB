@@ -1544,14 +1544,14 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     dsn = 'rss',
     type = 'GEOTIFF_FLOAT',
     desc = 'RSS map unit keys',
-    vintage = 'FY2023',
+    vintage = 'FY26',
     grid = list(
-      dim = c(nrows = 96754, ncols = 153999),
-      ext = c(-2356155, 2263815, 270015, 3172635)
+      dim = c(nrows = 97053, ncols = 153996),
+      ext = c(-2356125, 2263755, 260985, 3172575)
     ),
     na  = 0,
     crs = 'EPSG:5070',
-    res = 10,
+    res = 30,
     rat = NULL
   )
 )
