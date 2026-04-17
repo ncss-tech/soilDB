@@ -130,8 +130,8 @@ mukey.wcs <- function(
   } else {
     # check for reasonable resolutions
     
-    # CONUS grids
-    if (db %in% .conusGrids && (res < 10 || res > 3000)) {
+    # all CONUS grids are 30m resolution
+    if (db %in% .conusGrids && (res < 30 || res > 3000)) {
       stop('`res` should be within 30 <= res <= 3000 meters')
     }
     
