@@ -1,7 +1,7 @@
 # Get Ecological Dynamics Information Tool (EDIT) ecological sites by catalog (ESD/ESG) and MLRA
 
 Data are accessed via Ecological Dynamics Interpretive Tool (EDIT) web
-services: https://edit.jornada.nmsu.edu/resources/esd. `geoUnit` refers
+services: https://edit.sc.egov.usda.gov/resources/esd. `geoUnit` refers
 to MLRA codes, possibly with a leading zero and trailing "X" for two
 digit MLRA symbols.
 

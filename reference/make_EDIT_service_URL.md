@@ -1,7 +1,7 @@
 # Make Ecological Dynamics Interpretive Tool (EDIT) web services URL
 
 Construct a URL for Ecological Dynamics Interpretive Tool (EDIT) web
-services (`https://edit.jornada.nmsu.edu/services/...`) to return PDF,
+services (`https://edit.sc.egov.usda.gov/services/...`) to return PDF,
 TXT or JSON results.
 
 ## Usage
@@ -88,14 +88,14 @@ get_EDIT_ecoclass_by_geoUnit
 make_EDIT_service_URL(src = "descriptions",
                       catalog = "esd",
                       geoUnit = "039X")
-#> [1] "https://edit.jornada.nmsu.edu/services/descriptions/esd/039X.pdf"
+#> [1] "https://edit.sc.egov.usda.gov/services/descriptions/esd/039X.pdf"
 
 # url for a single key within geoUnit as PDF
 make_EDIT_service_URL(src = "descriptions",
                       catalog = "esd",
                       geoUnit = "039X",
                       key = "1")
-#> [1] "https://edit.jornada.nmsu.edu/services/descriptions/esd/039X/1.pdf"
+#> [1] "https://edit.sc.egov.usda.gov/services/descriptions/esd/039X/1.pdf"
 
 # query for "full" description in JSON
 desc <-  make_EDIT_service_URL(src = "descriptions",

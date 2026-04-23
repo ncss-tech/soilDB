@@ -2,16 +2,17 @@
 
 ## soilDB 2.9.2 (development)
 
-### Improvements
-
-- [`soilColor.wcs()`](http://ncss-tech.github.io/soilDB/reference/soilColor.wcs.md)
-  updated with FY26 soil color maps, now including most OCONUS soil
+- EDIT base URL (for
+  [`get_EDIT_ecoclass_by_geoUnit()`](http://ncss-tech.github.io/soilDB/reference/get_EDIT_ecoclass_by_geoUnit.md)
+  and
+  [`make_EDIT_service_URL()`](http://ncss-tech.github.io/soilDB/reference/make_EDIT_service_URL.md))
+  updated to new USDA-managed server: <https://edit.sc.egov.usda.gov/>
+- SoilWeb-based Web Coverage Services
+  ([`soilColor.wcs()`](http://ncss-tech.github.io/soilDB/reference/soilColor.wcs.md),
+  [`ISSR800.wcs()`](http://ncss-tech.github.io/soilDB/reference/ISSR800.wcs.md),
+  [`mukey.wcs()`](http://ncss-tech.github.io/soilDB/reference/mukey.wcs.md))
+  have been updated with FY26 maps, now including most OCONUS soil
   surveys (AK, HI, PR, PW, GU, AS, MP)
-- [`ISSR800.wcs()`](http://ncss-tech.github.io/soilDB/reference/ISSR800.wcs.md)
-  updated with FY26 data, bug fixes related to NA-handling by WCS
-- [`mukey.wcs()`](http://ncss-tech.github.io/soilDB/reference/mukey.wcs.md)
-  updated with FY26 data, bug fixes related to NA-handling, now
-  including most OCONUS soil surveys (AK, HI, PR, PW, GU, AS, MP)
 
 ## soilDB 2.9.1 (2026-04-01)
 
