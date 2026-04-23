@@ -15,7 +15,7 @@ get_EDIT_ecoclass_by_geoUnit(geoUnit, catalog = c("esd", "esg"))
 A \code{data.frame} containing: \code{geoUnit}, \code{id}, \code{legacyId}, \code{name}. \code{NULL} if no result.
 }
 \description{
-Data are accessed via Ecological Dynamics Interpretive Tool (EDIT) web services: https://edit.jornada.nmsu.edu/resources/esd. \code{geoUnit} refers to MLRA codes, possibly with a leading zero and trailing "X" for two digit MLRA symbols.
+Data are accessed via Ecological Dynamics Interpretive Tool (EDIT) web services: https://edit.sc.egov.usda.gov/resources/esd. \code{geoUnit} refers to MLRA codes, possibly with a leading zero and trailing "X" for two digit MLRA symbols.
 }
 \examples{
 \dontshow{if (curl::has_internet() && requireNamespace("httr", quietly = TRUE)) withAutoprint(\{ # examplesIf}

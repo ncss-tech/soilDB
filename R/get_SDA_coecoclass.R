@@ -291,7 +291,7 @@ get_SDA_coecoclass <- function(method = "None",
             isTRUE(x$ecoclassid[i] == not_rated_value | is.na(x$ecoclassid[i])),
             NA_character_,
             paste0(
-              "https://edit.jornada.nmsu.edu/catalogs/esd/",
+              "https://edit.sc.egov.usda.gov/catalogs/esd/",
               substr(x$ecoclassid[i], 2, 5),
               "/",
               x$ecoclassid[i]
@@ -300,7 +300,7 @@ get_SDA_coecoclass <- function(method = "None",
         )
         # sitenpdf = ifelse(isTRUE(x$ecoclassid[i] == "Not assigned"), NA_character_,
         #                   paste0(
-        #                     "https://edit.jornada.nmsu.edu/services/descriptions/esd/",
+        #                     "https://edit.sc.egov.usda.gov/services/descriptions/esd/",
         #                     substr(x$ecoclassid[i], 2, 5), "/", x$ecoclassid[i], ".pdf"
         #                   )))
       }
