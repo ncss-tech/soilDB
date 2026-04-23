@@ -1,9 +1,6 @@
 # soilDB 2.9.2 (development)
-
-## Improvements
- - `soilColor.wcs()` updated with FY26 soil color maps, now including most OCONUS soil surveys (AK, HI, PR, PW, GU, AS, MP)
- - `ISSR800.wcs()` updated with FY26 data, bug fixes related to NA-handling by WCS
- - `mukey.wcs()` updated with FY26 data, bug fixes related to NA-handling, now including most OCONUS soil surveys (AK, HI, PR, PW, GU, AS, MP)
+ - EDIT base URL (for `get_EDIT_ecoclass_by_geoUnit()` and `make_EDIT_service_URL()`) updated to new USDA-managed server: <https://edit.sc.egov.usda.gov/>
+ - SoilWeb-based Web Coverage Services (`soilColor.wcs()`, `ISSR800.wcs()`, `mukey.wcs()`) have been updated with FY26 maps, now including most OCONUS soil surveys (AK, HI, PR, PW, GU, AS, MP)
 
 # soilDB 2.9.1 (2026-04-01)
  - `ROSETTA()` updates thanks to Todd Skaggs (USDA-ARS):
