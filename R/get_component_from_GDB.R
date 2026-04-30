@@ -324,7 +324,7 @@ get_mapunit_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb",
       paste0("AND cokey IN ", soilDB::format_SQL_in_statement(co$cokey))
     }
   )
-  pmg <- sf::read_sf(dsn = dsn, query = qry, as_tibble = FALSE, fid_column_name = "copmgrpkey")
+  pmg <- sf::read_sf(dsn = dsn, query = qry, as_tibble = FALSE)
   
   
   # remove duplicate rvindicators
