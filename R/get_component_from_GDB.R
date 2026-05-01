@@ -325,7 +325,7 @@ get_mapunit_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb",
     }
   )
   pmg <- sf::read_sf(dsn = dsn, query = qry, as_tibble = FALSE, fid_column_name = "copmgrpkey")
-  
+  pmg$copmgrpkey.1 <- NULL
   
   # remove duplicate rvindicators
   dat <- as.data.frame.matrix(table(pmg$cokey, pmg$rvindicator))
