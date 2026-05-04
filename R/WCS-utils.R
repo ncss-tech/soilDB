@@ -1,3 +1,72 @@
+
+###
+
+# https://github.com/ncss-tech/soilDB/issues/450
+
+# trying to do more with WCS metadata,
+# still very limited
+# # ISSR800 getCapabilities still doesn't work, why?
+# https://casoilresource.lawr.ucdavis.edu/cgi-bin/mapserv?map=/data1/website/wcs/issr800.map&SERVICE=WCS&VERSION=2.0.1&REQUEST=GetCapabilities
+
+# stay in holding pattern until resolved
+
+# WCS_capabilities <- function(wcs = c('mukey', 'issr800', 'soilcolor')) {
+#   
+#   if (!requireNamespace('xml2')) {
+#     stop('please install the package: xml2', call. = FALSE)
+#   }
+#   
+#   wcs <- match.arg(wcs)
+#   
+#   .mapfile <- switch(
+#     wcs,
+#     mukey = 'mukey-grids.map',
+#     issr800 = 'issr800.map',
+#     soilcolor = 'soilcolor.map'
+#   )
+#   
+#   .u <- sprintf('https://casoilresource.lawr.ucdavis.edu/cgi-bin/mapserv?map=/data1/website/wcs/%s&SERVICE=WCS&VERSION=2.0.1&REQUEST=GetCapabilities', .mapfile)
+#   
+#   .xml <- xml2::read_xml(.u)
+#   
+#   .layers <- xml2::xml_find_all(.xml, xpath = '//wcs:CoverageId')
+#   
+#   .res <- xml2::xml_text(xml2::xml_contents(.layers))
+#   
+#   return(.res)
+# }
+# 
+# 
+# WCS_describeCoverage <- function(wcs, layer) {
+#   
+#   if (!requireNamespace('xml2')) {
+#     stop('please install the package: xml2', call. = FALSE)
+#   }
+#   
+#   wcs <- match.arg(wcs)
+#   
+#   .mapfile <- switch(
+#     wcs,
+#     mukey = 'mukey-grids.map',
+#     issr800 = 'issr800.map',
+#     soilcolor = 'soilcolor.map'
+#   )
+#   
+#   u <- sprintf(
+#     'https://casoilresource.lawr.ucdavis.edu/cgi-bin/mapserv?map=/data1/website/wcs/%s&SERVICE=WCS&VERSION=2.0.1&REQUEST=DescribeCoverage&COVERAGEID=%s',
+#     .mapfile, layer
+#   )
+#   
+#   # ...
+# }
+# 
+
+###
+
+
+
+
+
 #' @title Web Coverage Services Details
 #' 
 #' @description List variables or databases provided by soilDB web coverage service (WCS) abstraction. These lists will be expanded in future versions.
@@ -161,7 +230,7 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
 ## moist soil colors
 # these are 16bit (unsigned) integers
 # these maps all share the same RAT
-.soilColorRAT <- 'http://soilmap4-1.lawr.ucdavis.edu/wcs-files/soilcolor/current/unique-moist-color-LUT.csv'
+.soilColorRAT <- 'http://casoilresource.lawr.ucdavis.edu/wcs-files/soilcolor/current/unique-moist-color-LUT.csv'
 .soilColor.spec <- list(
   
   'pr_sc005cm' = list(

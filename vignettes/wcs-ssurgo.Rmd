@@ -47,6 +47,8 @@ In addition to the standard CONUS gSSURGO and gNATSGO grids, these web coverage 
  
  - SSURGO in PW, GU, AS, MP (EPSG:4326) at approximately 30m resolution.
  
+ - SSURGO back-filled with STATSGO2 within map units named "NOTCOM" and "ANS", at 30m resolution (EPSG:5070).
+ 
  - [ISSR-800 soil property grids](https://casoilresource.lawr.ucdavis.edu/soil-properties/).
 
 
@@ -88,7 +90,7 @@ x <- mukey.wcs(aoi = aoi, db = 'statsgo', ...)
 # select RSS grid, 30m resolution
 x <- mukey.wcs(aoi = aoi, db = 'RSS', ...)
 
-# select fSSURGO grid, 30m resolution
+# select SSURGO/STATSGO2 hybrid, 30m resolution
 x <- mukey.wcs(aoi = aoi, db = 'fSSURGO', ...)
 ```
 
