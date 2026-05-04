@@ -52,6 +52,7 @@ S.M. Roecker
 ## Examples
 
 ``` r
+
 # \donttest{
 if(local_NASIS_defined()) {
  # load cosoilmoist (e.g. water table data)

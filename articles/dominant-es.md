@@ -30,6 +30,7 @@ by `soilDB` for processing SSURGO data. The `terra` package can be used
 with only minor changes in syntax.
 
 ``` r
+
 library(soilDB)
 library(sf)
 ```
@@ -50,6 +51,7 @@ the need for local files.
 Define Area of Interest (AOI) as a bounding box `sf` POLYGON.
 
 ``` r
+
 aoi <- sf::st_as_sfc(sf::st_bbox(c(
   xmin = -120.85,
   xmax = -120.775,
@@ -72,21 +74,22 @@ plot(
 ![](dominant-es_files/figure-html/SDA-spatialQuery-1.png)
 
 ``` r
+
 head(soil_polygons)
 ```
 
     ## Simple feature collection with 6 features and 2 fields
     ## Geometry type: POLYGON
     ## Dimension:     XY
-    ## Bounding box:  xmin: -120.8344 ymin: 37.97854 xmax: -120.7725 ymax: 38.01469
+    ## Bounding box:  xmin: -120.8235 ymin: 37.98283 xmax: -120.7807 ymax: 38.01469
     ## Geodetic CRS:  WGS 84
-    ##     mukey   area_ac                           geom
-    ## 1 2441798 187.86338 POLYGON ((-120.7961 38.0051...
-    ## 2 2766838 268.59311 POLYGON ((-120.8299 37.9959...
-    ## 3 2924752  25.08626 POLYGON ((-120.8076 38.0025...
-    ## 4 2766836  51.72639 POLYGON ((-120.8265 38.0057...
-    ## 5 2450844  37.79529 POLYGON ((-120.7763 37.9786...
-    ## 6 2766836  59.91714 POLYGON ((-120.7884 37.9883...
+    ##     mukey    area_ac                           geom
+    ## 1 2441798 187.863380 POLYGON ((-120.7961 38.0051...
+    ## 2 2924886   6.788244 POLYGON ((-120.8201 37.9839...
+    ## 3 2450844  30.732837 POLYGON ((-120.7897 37.9864...
+    ## 4 2924752  11.813110 POLYGON ((-120.7836 37.9887...
+    ## 5 2441798  32.166563 POLYGON ((-120.7884 37.9883...
+    ## 6 2450844  48.484422 POLYGON ((-120.7985 37.9945...
 
 You can also set `geomIntersection = TRUE` so that intersecting
 geometries are cropped to the AOI. This is convenient if you have a very
@@ -94,6 +97,7 @@ specific AOI in mind or would like to reduce the amount of data you are
 going to download.
 
 ``` r
+
 # Query SDA for map unit polygons cropped to the AOI
 soil_polygons <- SDA_spatialQuery(
   aoi, 
@@ -110,6 +114,7 @@ plot(
 ![](dominant-es_files/figure-html/SDA-spatialQuery-geomIntersect-1.png)
 
 ``` r
+
 head(soil_polygons)
 ```
 
@@ -141,6 +146,7 @@ the full extent of map unit concepts, as opposed to more site-specific
 analyses.
 
 ``` r
+
 mu_ssurgo <- fetchSDA_spatial(
   unique(soil_polygons$mukey), 
   by.col = "mukey",
@@ -155,6 +161,7 @@ plot(mu_ssurgo["mukey"], main = "SSURGO Map Units from fetchSDA_spatial")
 ![](dominant-es_files/figure-html/fetch-SDA-spatial-1.png)
 
 ``` r
+
 head(mu_ssurgo)
 ```
 
@@ -209,6 +216,7 @@ to fetch the data for our AOI, then
 to get the full extent of those map unit concepts.
 
 ``` r
+
 statsgo_polygons <- SDA_spatialQuery(
   aoi, 
   what = "mupolygon",
@@ -222,6 +230,7 @@ plot(statsgo_polygons["mukey"], main = "STATSGO Map Units from SDA_spatialQuery"
 ![](dominant-es_files/figure-html/fetch-SDA-spatial-statsgo-1.png)
 
 ``` r
+
 head(statsgo_polygons)
 ```
 
@@ -232,10 +241,11 @@ head(statsgo_polygons)
     ## Geodetic CRS:  WGS 84
     ##    mukey   area_ac                           geom
     ## 1 660921 1668.6742 POLYGON ((-120.7998 37.975,...
-    ## 2 660939 2596.0225 POLYGON ((-120.8427 37.975,...
-    ## 3 660960  253.0798 POLYGON ((-120.85 37.975, -...
+    ## 2 660960  253.0798 POLYGON ((-120.85 37.975, -...
+    ## 3 660939 2596.0225 POLYGON ((-120.8427 37.975,...
 
 ``` r
+
 mu_statsgo <- fetchSDA_spatial(
   unique(statsgo_polygons$mukey), 
   by.col = "mukey",
@@ -249,30 +259,32 @@ plot(mu_statsgo["mukey"], main = "STATSGO Map Units from fetchSDA_spatial")
 ![](dominant-es_files/figure-html/fetch-SDA-spatial-statsgo-2.png)
 
 ``` r
+
 head(mu_statsgo)
 ```
 
     ## Simple feature collection with 6 features and 6 fields
     ## Geometry type: POLYGON
     ## Dimension:     XY
-    ## Bounding box:  xmin: -121.0731 ymin: 37.07511 xmax: -119.9157 ymax: 38.18986
+    ## Bounding box:  xmin: -121.2368 ymin: 37.07511 xmax: -119.9157 ymax: 38.18986
     ## Geodetic CRS:  WGS 84
     ##    mukey areasymbol nationalmusym      areaname
     ## 1 660921         US          q5r1 United States
     ## 2 660939         US          q5rm United States
     ## 3 660960         US          q5s9 United States
     ## 4 660960         US          q5s9 United States
-    ## 5 660939         US          q5rm United States
+    ## 5 660960         US          q5s9 United States
     ## 6 660939         US          q5rm United States
     ##                                 muname farmlndcl                           geom
     ## 1 Whiterock-Rock outcrop-Auburn (s818)      <NA> POLYGON ((-120.794 38.18986...
     ## 2                  Peters-Pentz (s836)      <NA> POLYGON ((-120.9141 38.0735...
     ## 3       Finrod-Cogna-Archerdale (s857)      <NA> POLYGON ((-120.9711 37.9490...
     ## 4       Finrod-Cogna-Archerdale (s857)      <NA> POLYGON ((-120.7151 37.7056...
-    ## 5                  Peters-Pentz (s836)      <NA> POLYGON ((-120.8224 37.7205...
-    ## 6                  Peters-Pentz (s836)      <NA> POLYGON ((-120.5867 37.7205...
+    ## 5       Finrod-Cogna-Archerdale (s857)      <NA> POLYGON ((-121.1592 38.0989...
+    ## 6                  Peters-Pentz (s836)      <NA> POLYGON ((-120.8224 37.7205...
 
 ``` r
+
 ssas <- SDA_spatialQuery(aoi, what = "areasymbol")
 ssas
 ```
@@ -282,6 +294,7 @@ ssas
     ## 2      CA632
 
 ``` r
+
 ssa <- fetchSDA_spatial(
   ssas$areasymbol, 
   by.col = "areasymbol",
@@ -295,6 +308,7 @@ plot(ssa["areasymbol"], main = "SSURGO Soil Survey Area from SDA")
 ![](dominant-es_files/figure-html/fetch-SDA-spatial-ssa-1.png)
 
 ``` r
+
 head(ssa)
 ```
 
@@ -346,6 +360,7 @@ or
 [`terra::vect()`](https://rspatial.github.io/terra/reference/vect.html)
 
 ``` r
+
 ssurgo_path <- "data/soilmu_a.gpkg"  # Replace with your actual path
 soil_polygons <- sf::st_read(ssurgo_path)
 head(soil_polygons)
@@ -364,12 +379,14 @@ As we did above for
 we are going to get the unique set of map units in our AOI.
 
 ``` r
+
 mukeys <- unique(soil_polygons$mukey)
 ```
 
 ### Use `get_SDA_coecoclass()`
 
 ``` r
+
 eco_data <- get_SDA_coecoclass(mukeys = mukeys)
 head(eco_data)
 ```
@@ -417,6 +434,7 @@ distinct components within map unit concepts. The most common method to
 select one component per map unit is `"dominant component"`
 
 ``` r
+
 eco_data_domcond <- get_SDA_coecoclass(
   mukeys = mukeys,
   method = "dominant component"
@@ -475,6 +493,7 @@ condition makes up a higher percentage of the area of the map unit than
 the dominant component alone.
 
 ``` r
+
 eco_data_domcond <- get_SDA_coecoclass(
   mukeys = mukeys,
   method = "dominant condition"
@@ -532,6 +551,7 @@ thematic variable we are mapping, so we will use the map unit dominant
 condition ecological sites (`eco_data_domcond`).
 
 ``` r
+
 soil_polygons <- merge(
   soil_polygons, 
   eco_data_domcond, 
@@ -542,6 +562,7 @@ soil_polygons <- merge(
 ## Visualize the Result
 
 ``` r
+
 plot(
   soil_polygons["ecoclassid"],
   main = "Dominant Ecological Site by Map Unit"
@@ -561,6 +582,7 @@ Finally, we can write our result out to a spatial file, such as a
 GeoPackage, using `sf` or `terra`.
 
 ``` r
+
 sf::st_write(
   soil_polygons, 
   "ecosite_dominant.gpkg", 

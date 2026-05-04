@@ -40,6 +40,9 @@ coverage services are also provided:
 
 - SSURGO in PW, GU, AS, MP (EPSG:4326) at approximately 30m resolution.
 
+- SSURGO back-filled with STATSGO2 within map units named “NOTCOM” and
+  “ANS”, at 30m resolution (EPSG:5070).
+
 - [ISSR-800 soil property
   grids](https://casoilresource.lawr.ucdavis.edu/soil-properties/).
 
@@ -54,6 +57,7 @@ spatial inputs, if `terra` objects are used as input, `terra` objects
 are returned.
 
 ``` r
+
 install.packages(c('soilDB', 'terra', 'sf'))
 ```
 
@@ -61,6 +65,7 @@ Consider also installing the latest development versions from GitHub or
 [r-universe](https://r-universe.dev/):
 
 ``` r
+
 install.packages(c('soilDB', 'terra', 'sf'),
   repos = c('https://ncss-tech.r-universe.dev',
             'https://rspatial.r-universe.dev',
@@ -79,6 +84,7 @@ See the
 manual pages for details.
 
 ``` r
+
 # select gSSURGO grid, 30m resolution
 x <- mukey.wcs(aoi = aoi, db = 'gssurgo', ...)
 
@@ -91,7 +97,7 @@ x <- mukey.wcs(aoi = aoi, db = 'statsgo', ...)
 # select RSS grid, 30m resolution
 x <- mukey.wcs(aoi = aoi, db = 'RSS', ...)
 
-# select fSSURGO grid, 30m resolution
+# select SSURGO/STATSGO2 hybrid, 30m resolution
 x <- mukey.wcs(aoi = aoi, db = 'fSSURGO', ...)
 ```
 
@@ -100,6 +106,7 @@ is a similar function that makes available a variety of pre-aggregated
 800m resolution properties derived from gNATSGO.
 
 ``` r
+
 # select various ISSR-800 grids, details below
 x <- ISSR800.wcs(aoi = aoi, var = 'paws')
 ```
@@ -212,6 +219,7 @@ create a 1000m radius circular polygon around the point with
 [`buffer()`](https://rspatial.github.io/terra/reference/buffer.html):
 
 ``` r
+
 library(terra)
 library(soilDB)
 
@@ -270,6 +278,7 @@ Right-clicking anywhere in the map interface will also generate a link
 to those coordinates and zoom level.
 
 ``` r
+
 library(sf)
 library(soilDB)
 library(terra)
@@ -322,6 +331,7 @@ unit can be aggregated so the aggregate values are 1:1 with `mukey`,
 then the resulting values can be used to symbolize the map.
 
 ``` r
+
 # make a bounding box and assign a CRS (4326: GCS, WGS84)
 a <- st_bbox(
   c(xmin = -114.16, xmax = -114.08, ymin = 47.65, ymax = 47.68), 
@@ -339,7 +349,7 @@ print(mu)
 #> extent      : -1365495, -1358925, 2869245, 2873655  (xmin, xmax, ymin, ymax)
 #> coord. ref. : NAD83 / Conus Albers (EPSG:5070) 
 #> source(s)   : memory
-#> varname     : file24d9614789a4 
+#> varname     : file24c9783043b2 
 #> categories  : mukey 
 #> name        :   mukey 
 #> min value   :  144983 
@@ -373,6 +383,7 @@ First get intersecting SSURGO polygons from SDA with
 [`SDA_spatialQuery()`](http://ncss-tech.github.io/soilDB/reference/SDA_spatialQuery.md)
 
 ``` r
+
 # because mu is a SpatRaster, result is a SpatVector object (GCS WGS84)
 p <- SDA_spatialQuery(mu, what = 'mupolygon', geomIntersection = TRUE)
 ```
@@ -381,6 +392,7 @@ Then transform to AEA coordinate reference system used by CONUS gSSURGO
 / gNATSGO (`"EPSG:5070"`).
 
 ``` r
+
 p <- project(p, crs(mu))
 ```
 
@@ -388,6 +400,7 @@ Inspect the result by overlaying SSURGO polygons on the 30m map unit key
 grid.
 
 ``` r
+
 terra::plot(mu,
      main = 'gSSURGO Grid (WCS)\nSSURGO Polygons (SDA)',
      axes = FALSE,
@@ -414,6 +427,7 @@ Detailed analysis should be based on derived property data sets
 aggregated up from 30m results.
 
 ``` r
+
 # make a bounding box (in California) and assign a CRS (GCS WGS84 / EPSG:4326)
 a.CA <- st_bbox(c(
   xmin = -121,
@@ -450,6 +464,7 @@ note that tabular data for Raster Soil Surveys are not yet available via
 Soil Data Access.
 
 ``` r
+
 # Coweeta Hydrologic Laboratory extent; specified in EPSG:5070
 a <- ext(c(xmin = 1129000, xmax = 1135000, ymin = 1403000, ymax = 1411000))
 a <- vect(a, crs = 'epsg:5070')
@@ -462,7 +477,7 @@ a <- vect(a, crs = 'epsg:5070')
 #> extent      : 1129005, 1135005, 1402995, 1411005  (xmin, xmax, ymin, ymax)
 #> coord. ref. : NAD83 / Conus Albers (EPSG:5070) 
 #> source(s)   : memory
-#> varname     : file24d92360f6f4 
+#> varname     : file24c99c990d1 
 #> categories  : mukey 
 #> name        :  mukey 
 #> min value   : 545800 
@@ -476,7 +491,7 @@ a <- vect(a, crs = 'epsg:5070')
 #> extent      : 1129005, 1135005, 1402995, 1411005  (xmin, xmax, ymin, ymax)
 #> coord. ref. : NAD83 / Conus Albers (EPSG:5070) 
 #> source(s)   : memory
-#> varname     : file24d91bf964d9 
+#> varname     : file24c9521a987c 
 #> categories  : mukey 
 #> name        :   mukey 
 #> min value   :  545800 
@@ -490,7 +505,7 @@ a <- vect(a, crs = 'epsg:5070')
 #> extent      : 1129005, 1135005, 1402995, 1411005  (xmin, xmax, ymin, ymax)
 #> coord. ref. : NAD83 / Conus Albers (EPSG:5070) 
 #> source(s)   : memory
-#> varname     : file24d977645c73 
+#> varname     : file24c91a4c2a5f 
 #> categories  : mukey 
 #> name        :   mukey 
 #> min value   : 3244721 
@@ -538,6 +553,7 @@ gSSURGO product with the Digital General Soil Map of the United States
 and resolution) as SSURGO products.
 
 ``` r
+
 (statsgo <- mukey.wcs(a, db = 'statsgo'))
 #> class       : SpatRaster 
 #> size        : 267, 200, 1  (nrow, ncol, nlyr)
@@ -545,7 +561,7 @@ and resolution) as SSURGO products.
 #> extent      : 1129005, 1135005, 1402995, 1411005  (xmin, xmax, ymin, ymax)
 #> coord. ref. : NAD83 / Conus Albers (EPSG:5070) 
 #> source(s)   : memory
-#> varname     : file24d93e9ca9b9 
+#> varname     : file24c9251c9348 
 #> categories  : mukey 
 #> name        :  mukey 
 #> min value   : 659074 
@@ -582,6 +598,7 @@ The example bounding box is centered on the [southern coast of
 Kauai](https://casoilresource.lawr.ucdavis.edu/gmap/?loc=21.97839,-159.61727,z13).
 
 ``` r
+
 # paste your BBOX text here
 bb <- '-159.7426 21.9059,-159.7426 22.0457,-159.4913 22.0457,-159.4913 21.9059,-159.7426 21.9059'
 
@@ -613,6 +630,7 @@ The example bounding box is centered on the [eastern coast of Puerto
 Rico](https://casoilresource.lawr.ucdavis.edu/gmap/?loc=18.24843,-65.67369,z13).
 
 ``` r
+
 # paste your BBOX text here
 bb <- '-65.7741 18.1711,-65.7741 18.3143,-65.5228 18.3143,-65.5228 18.1711,-65.7741 18.1711'
 
@@ -640,6 +658,7 @@ The following example BBOX + resulting gSSURGO map unit key grid will be
 used for thematic mapping examples:
 
 ``` r
+
 # make a bounding box and assign a CRS (4326: GCS, WGS84)
 a <- st_bbox(
   c(xmin = -114.16, xmax = -114.08, ymin = 47.65, ymax = 47.68), 
@@ -667,6 +686,7 @@ function, or write a query in SQL and submit via
 [`SDA_query()`](http://ncss-tech.github.io/soilDB/reference/SDA_query.md).
 
 ``` r
+
 # copy example grid
 mu2 <- mu
 
@@ -768,6 +788,7 @@ interpretation rules: `'ENG - Construction Materials; Roadfill'`, and
 `'AWM - Irrigation Disposal of Wastewater'`.
 
 ``` r
+
 # copy example grid
 mu2 <- mu
 
@@ -856,6 +877,7 @@ range of fuzzy values (`rating_ENGConstructionMaterialsRoadfill`).
 Next, we can view the ratings as a thematic map:
 
 ``` r
+
 vars <- c(
   'rating_ENGConstructionMaterialsRoadfill',
   'rating_AWMIrrigationDisposalofWastewater'
@@ -893,6 +915,7 @@ to get the standard Soil Data Viewer colors for the selected
 property/interpretation.
 
 ``` r
+
 # copy example grid
 mu2 <- mu
 
@@ -927,6 +950,7 @@ Another example is thematic mapping of the “simplified component parent
 material group”. First, set up a new AOI for the following examples:
 
 ``` r
+
 # https://casoilresource.lawr.ucdavis.edu/gmap/?loc=36.57666,-96.70175,z14
 # make a bounding box and assign a CRS (4326: GCS, WGS84)
 a <- st_bbox(
@@ -955,6 +979,7 @@ to obtain the tabular parent material information to relate to map unit
 keys:
 
 ``` r
+
 # copy example grid
 mu2 <- mu
 
@@ -981,6 +1006,7 @@ default aggregation method in
 [`get_SDA_hydric()`](http://ncss-tech.github.io/soilDB/reference/get_SDA_hydric.md).
 
 ``` r
+
 # copy example grid
 mu2 <- mu
 
@@ -1013,6 +1039,7 @@ Derive aggregate soil properties, merge with raster attribute table
 (RAT).
 
 ``` r
+
 # extract RAT for thematic mapping
 rat <- cats(mu)[[1]]
 
@@ -1062,6 +1089,7 @@ mu2 <- catalyze(mu)
 Inspect just the plant available water 0-25cm.
 
 ``` r
+
 terra::plot(mu2$awc_r, axes = FALSE)
 ```
 
@@ -1070,6 +1098,7 @@ terra::plot(mu2$awc_r, axes = FALSE)
 Plot aggregate soil properties.
 
 ``` r
+
 terra::plot(mu2[['dbthirdbar_r']], cex.main = 0.7,
      main = '1/3 Bar Bulk Density (g/cm^3)\nDominant Component\n0-25cm')
 ```
@@ -1078,6 +1107,7 @@ terra::plot(mu2[['dbthirdbar_r']], cex.main = 0.7,
 
 ``` r
 
+
 terra::plot(mu2[['awc_r']], cex.main = 0.7,
      main = 'AWC (cm/cm)\nDominant Component\n0-25cm')
 ```
@@ -1085,6 +1115,7 @@ terra::plot(mu2[['awc_r']], cex.main = 0.7,
 ![](wcs-ssurgo_files/figure-html/unnamed-chunk-27-2.png)
 
 ``` r
+
 
 terra::plot(mu2[['ph1to1h2o_r']], cex.main = 0.7,
      main = 'pH 1:1 H2O\nDominant Component\n0-25cm')
@@ -1101,6 +1132,7 @@ In this case the one soil survey was published in 1979 and the other in
 First, we setup BBOX and query map unit key WCS.
 
 ``` r
+
 # extract a BBOX like this from SoilWeb by pressing "b"
 bb <- '-91.6853 36.4617,-91.6853 36.5281,-91.5475 36.5281,-91.5475 36.4617,-91.6853 36.4617'
 wkt <- sprintf('POLYGON((%s))', bb)
@@ -1123,6 +1155,7 @@ will take the sand and clay values to calculate the surface texture
 class for comparison.
 
 ``` r
+
 # extract RAT for thematic mapping
 rat <- cats(mu)[[1]]
 

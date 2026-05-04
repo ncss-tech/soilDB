@@ -35,6 +35,7 @@ will download the official SSURGO data from Web Soil Survey for the
 specified `areasymbol` and return the path to the ZIP archives.
 
 ``` r
+
 library(soilDB)
 
 gpkg_dir <- tempdir()
@@ -81,6 +82,7 @@ SQLite database. A suggested SQLite-based format to use is
 open format with a well-defined standard.
 
 ``` r
+
 # Create a local GeoPackage from the downloaded ZIP
 gpkg_path <- file.path(gpkg_dir, "ssurgo.gpkg")
 
@@ -110,6 +112,7 @@ includes tables like `mapunit`, `component`, `chorizon`, and spatial
 layers such as the spatial map unit polygon layer, `mupolygon`.
 
 ``` r
+
 library(DBI)
 library(RSQLite)
 
@@ -177,6 +180,7 @@ You can inspect the structure of a specific table, such as `mapunit`,
 which contains general information about each map unit.
 
 ``` r
+
 dbListFields(con, "mapunit")
 ```
 
@@ -196,6 +200,7 @@ For example, a query to look at the first `5` rows of the `mapunit`
 table:
 
 ``` r
+
 dbGetQuery(con, "SELECT * FROM mapunit LIMIT 5")
 ```
 
@@ -236,6 +241,7 @@ You can join tables to explore relationships between map units and their
 components:
 
 ``` r
+
 query <- "
 SELECT mu.musym, mu.muname, c.compname, c.comppct_r
 FROM mapunit mu
@@ -266,13 +272,14 @@ Here we demonstrate how to read the `mupolygon` layer, which contains
 the polygon geometries of delineations of specific map unit concepts:
 
 ``` r
+
 library(sf)
 
 # Read spatial map units
 spatial_mu <- st_read(gpkg_path, layer = "mupolygon")
 ```
 
-    ## Reading layer `mupolygon' from data source `/tmp/Rtmp5HTn2M/ssurgo.gpkg' using driver `GPKG'
+    ## Reading layer `mupolygon' from data source `/tmp/RtmppaaLbx/ssurgo.gpkg' using driver `GPKG'
     ## Simple feature collection with 3333 features and 4 fields
     ## Geometry type: POLYGON
     ## Dimension:     XY
@@ -280,6 +287,7 @@ spatial_mu <- st_read(gpkg_path, layer = "mupolygon")
     ## Geodetic CRS:  WGS 84
 
 ``` r
+
 spatial_mu
 ```
 
@@ -302,6 +310,7 @@ spatial_mu
     ## 10      KS129          6  1511 1382582 POLYGON ((-101.9917 37.1193...
 
 ``` r
+
 # Plot the map units
 plot(st_geometry(spatial_mu))
 ```
@@ -324,6 +333,7 @@ Here we look at the first few rows of `mapunit` and `component`, two
 critical tables in the SSURGO schema.
 
 ``` r
+
 # Read tabular data
 mapunit <- dbReadTable(con, "mapunit")
 head(mapunit)
@@ -366,6 +376,7 @@ head(mapunit)
     ## 6            NA         NA 10591 1382585
 
 ``` r
+
 component <- dbReadTable(con, "component")
 head(component)
 ```
@@ -505,6 +516,7 @@ head(component)
     ## 6              NA           NA          NA 1382582 26370017
 
 ``` r
+
 # Disconnect when done
 dbDisconnect(con)
 ```
@@ -517,6 +529,7 @@ base R
 [`aggregate()`](https://rspatial.github.io/terra/reference/aggregate.html).
 
 ``` r
+
 # Calculate dominant component per map unit
 dominant_comp <- aggregate(
   comppct_r ~ mukey,
@@ -535,6 +548,7 @@ head(dominant_comp)
     ## 6 1382552        90
 
 ``` r
+
 # Match dominant component value for each mukey with mukey of spatial data
 spatial_mu$domcomppct_r <- dominant_comp$comppct_r[match(spatial_mu$mukey, dominant_comp$mukey)]
 ```
@@ -543,6 +557,7 @@ Here we see map units symbolized by the dominant component percentage.
 Numbers closer to 100% are more “pure” concepts.
 
 ``` r
+
 # Visualize 
 plot(
   spatial_mu["domcomppct_r"], 
@@ -582,6 +597,7 @@ the `WHERE` clause `"1=1"` which is true for all map units in the
 database.
 
 ``` r
+
 component_properties <- c("hydgrp", "drainagecl")
 
 # Get most common hydgrp and drainagecl per mukey
@@ -623,6 +639,7 @@ order, and other metadata.
 We extract from, and replace into, our `hyd_tab` data.frame using `[`:
 
 ``` r
+
 # Convert to factor
 hyd_tab[component_properties] <- NASISChoiceList(hyd_tab[component_properties])
 
@@ -654,6 +671,7 @@ work on all columns that match exactly. If they differ or you only want
 to join on one specific column you specify `by`. `by.x`, or `by.y`.
 
 ``` r
+
 # Join with spatial data
 spatial_mu <- merge(spatial_mu, hyd_tab)
 
@@ -690,6 +708,7 @@ First, we plot map unit dominant condition [Hydrologic
 Group](https://directives.nrcs.usda.gov/sites/default/files2/1712930597/11905.pdf).
 
 ``` r
+
 plot(
   spatial_mu["hydgrp"],
   main = "Hydrologic Group (hydgrp)", 
@@ -704,6 +723,7 @@ plot(
 Next, we see map unit dominant condition Drainage Class.
 
 ``` r
+
 plot(
   spatial_mu["drainagecl"],
   main = "Drainage Class (drainagecl)", 

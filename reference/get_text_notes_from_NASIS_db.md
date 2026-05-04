@@ -44,6 +44,7 @@ Dylan E. Beaudette and Jay M. Skovlin
 ## Examples
 
 ``` r
+
 # \donttest{
 if(local_NASIS_defined()) {
  # query text note data

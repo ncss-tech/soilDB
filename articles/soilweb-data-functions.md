@@ -94,6 +94,7 @@ function, when specified with the `extended = TRUE` argument, will
 include the last updated date for curated sources.
 
 ``` r
+
 # typical invocation
 library(soilDB)
 library(aqp)
@@ -216,6 +217,7 @@ soils are derived from the OSD records. These data are available via
 Competing soil series.
 
 ``` r
+
 # series names listed in "competing" have the family classification as "series"
 head(x$competing)
 ```
@@ -234,6 +236,7 @@ several geographically associated series in common, and can be modeled
 using [directed graphs](https://en.wikipedia.org/wiki/Directed_graph).
 
 ``` r
+
 # series names listed in "gas" are geographically associated with "series"
 head(x$geog_assoc_soils)
 ```
@@ -277,6 +280,7 @@ MLRA “membership” for the
 soil series.
 
 ``` r
+
 .mlra <- x$mlra[x$mlra$series == 'LUCY', ]
 .mlra[order(.mlra$membership, decreasing = TRUE), ]
 ```
@@ -326,6 +330,7 @@ geomorphic data records associated with each soil series. It is possible
 for a single component to have multiple geomorphic positions defined.
 
 ``` r
+
 # hillslope position
 head(x$hillpos)
 # geomorphic component: hills
@@ -350,24 +355,24 @@ head(x$shape_down)
 | PIERRE  |     0.00 |      0.14 |      0.73 |     0.01 |   0.12 |  432 |            1.16 |
 | TRISTAN |     0.00 |      0.00 |      1.00 |     0.00 |   0.00 |   14 |            0.00 |
 
-hillslope position
+hillslope position {.table}
 
-| series  | Interfluve | Crest | Head Slope | Nose Slope | Side Slope | Base Slope |    n | shannon_entropy |
-|:--------|-----------:|------:|-----------:|-----------:|-----------:|-----------:|-----:|----------------:|
-| LUCY    |       0.68 |  0.04 |       0.00 |       0.00 |       0.27 |       0.00 |  427 |            1.13 |
-| MIAMI   |       0.06 |  0.12 |       0.12 |       0.14 |       0.51 |       0.05 | 1419 |            2.08 |
-| MUSICK  |       0.11 |  0.00 |       0.00 |       0.00 |       0.89 |       0.00 |   19 |            0.49 |
-| PIERRE  |       0.05 |  0.00 |       0.03 |       0.08 |       0.84 |       0.00 |  114 |            0.86 |
-| TRISTAN |       0.00 |  0.00 |       0.17 |       0.00 |       0.83 |       0.00 |   12 |            0.65 |
+| series | Interfluve | Crest | Head Slope | Nose Slope | Side Slope | Base Slope | n | shannon_entropy |
+|:---|---:|---:|---:|---:|---:|---:|---:|---:|
+| LUCY | 0.68 | 0.04 | 0.00 | 0.00 | 0.27 | 0.00 | 427 | 1.13 |
+| MIAMI | 0.06 | 0.12 | 0.12 | 0.14 | 0.51 | 0.05 | 1419 | 2.08 |
+| MUSICK | 0.11 | 0.00 | 0.00 | 0.00 | 0.89 | 0.00 | 19 | 0.49 |
+| PIERRE | 0.05 | 0.00 | 0.03 | 0.08 | 0.84 | 0.00 | 114 | 0.86 |
+| TRISTAN | 0.00 | 0.00 | 0.17 | 0.00 | 0.83 | 0.00 | 12 | 0.65 |
 
-geomorphic component: hills
+geomorphic component: hills {.table}
 
-| series  | Mountaintop | Mountainflank | Upper third of mountainflank | Center third of mountainflank | Lower third of mountainflank | Mountainbase |   n | shannon_entropy |
-|:--------|------------:|--------------:|-----------------------------:|------------------------------:|-----------------------------:|-------------:|----:|----------------:|
-| MUSICK  |        0.26 |          0.72 |                         0.02 |                             0 |                            0 |            0 |  57 |            0.95 |
-| TRISTAN |        0.00 |          1.00 |                         0.00 |                             0 |                            0 |            0 |   8 |            0.00 |
+| series | Mountaintop | Mountainflank | Upper third of mountainflank | Center third of mountainflank | Lower third of mountainflank | Mountainbase | n | shannon_entropy |
+|:---|---:|---:|---:|---:|---:|---:|---:|---:|
+| MUSICK | 0.26 | 0.72 | 0.02 | 0 | 0 | 0 | 57 | 0.95 |
+| TRISTAN | 0.00 | 1.00 | 0.00 | 0 | 0 | 0 | 8 | 0.00 |
 
-geomorphic component: mountains
+geomorphic component: mountains {.table}
 
 | series | Tread | Riser |   n | shannon_entropy |
 |:-------|------:|------:|----:|----------------:|
@@ -375,14 +380,14 @@ geomorphic component: mountains
 | MIAMI  |   1.0 |   0.0 |   2 |            0.00 |
 | PIERRE |   0.5 |   0.5 |   4 |            1.00 |
 
-geomorphic component: terraces
+geomorphic component: terraces {.table}
 
 | series | Dip | Talf | Flat | Rise |   n | shannon_entropy |
 |:-------|----:|-----:|-----:|-----:|----:|----------------:|
 | LUCY   |   0 | 0.00 |    0 | 1.00 | 111 |            0.00 |
 | MIAMI  |   0 | 0.02 |    0 | 0.98 | 126 |            0.16 |
 
-geomorphic component: flats
+geomorphic component: flats {.table}
 
 | series  | Concave | Linear | Convex | Complex | Undulating |   n | shannon_entropy |
 |:--------|--------:|-------:|-------:|--------:|-----------:|----:|----------------:|
@@ -392,7 +397,7 @@ geomorphic component: flats
 | PIERRE  |    0.00 |   0.95 |   0.05 |       0 |          0 | 457 |            0.31 |
 | TRISTAN |    0.44 |   0.31 |   0.25 |       0 |          0 |  32 |            1.55 |
 
-surface curvature across-slope
+surface curvature across-slope {.table}
 
 | series  | Concave | Linear | Convex | Complex | Undulating |   n | shannon_entropy |
 |:--------|--------:|-------:|-------:|--------:|-----------:|----:|----------------:|
@@ -402,7 +407,7 @@ surface curvature across-slope
 | PIERRE  |    0.00 |   0.70 |   0.29 |       0 |          0 | 457 |            0.91 |
 | TRISTAN |    0.34 |   0.62 |   0.03 |       0 |          0 |  32 |            1.11 |
 
-surface curvature down-slope
+surface curvature down-slope {.table}
 
 #### Siblings
 
@@ -417,6 +422,7 @@ The `n` column describes how many map units are shared between a sibling
 and the PIERRE series.
 
 ``` r
+
 sib <- siblings('PIERRE', only.major = TRUE)
 head(sib$sib)
 ```
@@ -444,32 +450,34 @@ are computed from SSURGO component records, by soil series name. These
 include both irrigated and non-irrigated versions of the NCCPI.
 
 ``` r
+
 head(x$NCCPI)
 ```
 
-| series  |   n | nccpi_irrigated_q01 | nccpi_irrigated_q05 | nccpi_irrigated_q25 | nccpi_irrigated_q50 | nccpi_irrigated_q75 | nccpi_irrigated_q95 | nccpi_irrigated_q99 | nccpi_q01 | nccpi_q05 | nccpi_q25 | nccpi_q50 | nccpi_q75 | nccpi_q95 | nccpi_q99 |
-|:--------|----:|--------------------:|--------------------:|--------------------:|--------------------:|--------------------:|--------------------:|--------------------:|----------:|----------:|----------:|----------:|----------:|----------:|----------:|
-| LUCY    | 341 |                0.43 |                0.58 |                0.73 |                0.80 |                0.82 |                0.84 |                0.86 |      0.09 |      0.31 |      0.41 |      0.50 |      0.54 |      0.58 |      0.61 |
-| MIAMI   | 731 |                  NA |                  NA |                  NA |                  NA |                  NA |                  NA |                  NA |      0.15 |      0.35 |      0.55 |      0.62 |      0.67 |      0.79 |      0.83 |
-| MUSICK  | 103 |                0.29 |                0.37 |                0.77 |                0.82 |                0.90 |                0.99 |                0.99 |      0.11 |      0.14 |      0.43 |      0.64 |      0.75 |      0.84 |      0.84 |
-| PIERRE  | 295 |                0.29 |                0.31 |                0.41 |                0.43 |                0.51 |                0.52 |                0.58 |      0.06 |      0.09 |      0.19 |      0.26 |      0.29 |      0.33 |      0.35 |
-| TRISTAN |  32 |                0.32 |                0.32 |                0.32 |                0.32 |                0.32 |                0.32 |                0.32 |      0.00 |      0.00 |      0.02 |      0.02 |      0.02 |      0.08 |      0.09 |
+| series | n | nccpi_irrigated_q01 | nccpi_irrigated_q05 | nccpi_irrigated_q25 | nccpi_irrigated_q50 | nccpi_irrigated_q75 | nccpi_irrigated_q95 | nccpi_irrigated_q99 | nccpi_q01 | nccpi_q05 | nccpi_q25 | nccpi_q50 | nccpi_q75 | nccpi_q95 | nccpi_q99 |
+|:---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| LUCY | 341 | 0.43 | 0.58 | 0.73 | 0.80 | 0.82 | 0.84 | 0.86 | 0.09 | 0.31 | 0.41 | 0.50 | 0.54 | 0.58 | 0.61 |
+| MIAMI | 731 | NA | NA | NA | NA | NA | NA | NA | 0.15 | 0.35 | 0.55 | 0.62 | 0.67 | 0.79 | 0.83 |
+| MUSICK | 103 | 0.29 | 0.37 | 0.77 | 0.82 | 0.90 | 0.99 | 0.99 | 0.11 | 0.14 | 0.43 | 0.64 | 0.75 | 0.84 | 0.84 |
+| PIERRE | 295 | 0.29 | 0.31 | 0.41 | 0.43 | 0.51 | 0.52 | 0.58 | 0.06 | 0.09 | 0.19 | 0.26 | 0.29 | 0.33 | 0.35 |
+| TRISTAN | 32 | 0.32 | 0.32 | 0.32 | 0.32 | 0.32 | 0.32 | 0.32 | 0.00 | 0.00 | 0.02 | 0.02 | 0.02 | 0.08 | 0.09 |
 
 Ecological classification membership are computed from map unit polygon
 area and component percentages.
 
 ``` r
+
 head(x$ecoclassid)
 ```
 
 | series | ecoclassid  | n_components | area_ac | proportion |
 |:-------|:------------|-------------:|--------:|-----------:|
-| LUCY   | F133AY610NC |            2 |    2325 |       0.00 |
-| LUCY   | F137XY040SC |            1 |    2279 |       0.00 |
-| LUCY   | F138XY200AL |            6 |    2072 |       0.00 |
-| LUCY   | F137XY050GA |            2 |    1587 |       0.00 |
-| LUCY   | F133AY430NC |          141 |  438630 |       0.63 |
-| LUCY   | F133AY530NC |          108 |  195781 |       0.28 |
+| LUCY   | F153AY030NC |           15 |   25899 |       0.51 |
+| LUCY   | F133BY006TX |           11 |   20631 |       0.41 |
+| LUCY   | F137XY040SC |            1 |    2279 |       0.05 |
+| LUCY   | F137XY050GA |            2 |    1587 |       0.03 |
+| MIAMI  | F098XA015MI |           82 |   41416 |       0.04 |
+| MIAMI  | F098XA022MI |           59 |   33897 |       0.03 |
 
 #### Parent Material Summaries
 
@@ -480,6 +488,7 @@ the total number of component parent material records by soil series.
 The final column, `P`, is the associated proportion.
 
 ``` r
+
 head(x$pmkind)
 head(x$pmorigin)
 ```
@@ -539,28 +548,29 @@ sampling of one point per SSURGO map unit polygon.
 An example of annual and monthly climate percentiles.
 
 ``` r
+
 head(x$climate.annual)
 
 head(x$climate.monthly)
 ```
 
-|     | series | climate_var                             | minimum |  q01 |  q05 |  q25 |  q50 |  q75 |  q95 |  q99 | maximum |     n |
-|:----|:-------|:----------------------------------------|--------:|-----:|-----:|-----:|-----:|-----:|-----:|-----:|--------:|------:|
-| 2   | LUCY   | Effective Precipitation (mm)            |     148 |  198 |  212 |  238 |  320 |  421 |  597 |  687 |     754 | 32459 |
-| 3   | LUCY   | Frost-Free Days                         |     197 |  219 |  233 |  239 |  245 |  256 |  273 |  283 |     299 | 32459 |
-| 4   | LUCY   | Mean Annual Air Temperature (degrees C) |      14 |   16 |   17 |   18 |   18 |   19 |   20 |   20 |      20 | 32459 |
-| 5   | LUCY   | Mean Annual Precipitation (mm)          |    1071 | 1113 | 1124 | 1160 | 1268 | 1380 | 1577 | 1723 |    1786 | 32459 |
-| 6   | LUCY   | Growing Degree Days (degrees C)         |    2465 | 2930 | 3135 | 3258 | 3351 | 3535 | 3710 | 3760 |    3923 | 32459 |
-| 7   | LUCY   | Fraction of Annual PPT as Rain          |      96 |   98 |   99 |   99 |  100 |  100 |  100 |  100 |     100 | 32459 |
+|  | series | climate_var | minimum | q01 | q05 | q25 | q50 | q75 | q95 | q99 | maximum | n |
+|:---|:---|:---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| 2 | LUCY | Effective Precipitation (mm) | 148 | 198 | 212 | 238 | 320 | 421 | 597 | 687 | 754 | 32459 |
+| 3 | LUCY | Frost-Free Days | 197 | 219 | 233 | 239 | 245 | 256 | 273 | 283 | 299 | 32459 |
+| 4 | LUCY | Mean Annual Air Temperature (degrees C) | 14 | 16 | 17 | 18 | 18 | 19 | 20 | 20 | 20 | 32459 |
+| 5 | LUCY | Mean Annual Precipitation (mm) | 1071 | 1113 | 1124 | 1160 | 1268 | 1380 | 1577 | 1723 | 1786 | 32459 |
+| 6 | LUCY | Growing Degree Days (degrees C) | 2465 | 2930 | 3135 | 3258 | 3351 | 3535 | 3710 | 3760 | 3923 | 32459 |
+| 7 | LUCY | Fraction of Annual PPT as Rain | 96 | 98 | 99 | 99 | 100 | 100 | 100 | 100 | 100 | 32459 |
 
-|     | series | climate_var | minimum | q01 | q05 | q25 | q50 | q75 | q95 | q99 | maximum |     n | month | variable           |
-|:----|:-------|:------------|--------:|----:|----:|----:|----:|----:|----:|----:|--------:|------:|:------|:-------------------|
-| 1   | LUCY   | ppt1        |      85 |  92 |  98 | 109 | 119 | 128 | 142 | 152 |     160 | 32459 | 1     | Precipitation (mm) |
-| 10  | LUCY   | ppt2        |      72 |  82 |  88 | 102 | 113 | 123 | 134 | 143 |     156 | 32459 | 2     | Precipitation (mm) |
-| 11  | LUCY   | ppt3        |      88 |  96 |  99 | 117 | 133 | 145 | 156 | 162 |     170 | 32459 | 3     | Precipitation (mm) |
-| 12  | LUCY   | ppt4        |      63 |  69 |  72 |  78 |  87 |  99 | 117 | 124 |     134 | 32459 | 4     | Precipitation (mm) |
-| 13  | LUCY   | ppt5        |      56 |  61 |  65 |  72 |  79 |  92 | 115 | 132 |     143 | 32459 | 5     | Precipitation (mm) |
-| 14  | LUCY   | ppt6        |      82 |  92 |  99 | 109 | 122 | 135 | 162 | 179 |     197 | 32459 | 6     | Precipitation (mm) |
+|  | series | climate_var | minimum | q01 | q05 | q25 | q50 | q75 | q95 | q99 | maximum | n | month | variable |
+|:---|:---|:---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|:---|:---|
+| 1 | LUCY | ppt1 | 85 | 92 | 98 | 109 | 119 | 128 | 142 | 152 | 160 | 32459 | 1 | Precipitation (mm) |
+| 10 | LUCY | ppt2 | 72 | 82 | 88 | 102 | 113 | 123 | 134 | 143 | 156 | 32459 | 2 | Precipitation (mm) |
+| 11 | LUCY | ppt3 | 88 | 96 | 99 | 117 | 133 | 145 | 156 | 162 | 170 | 32459 | 3 | Precipitation (mm) |
+| 12 | LUCY | ppt4 | 63 | 69 | 72 | 78 | 87 | 99 | 117 | 124 | 134 | 32459 | 4 | Precipitation (mm) |
+| 13 | LUCY | ppt5 | 56 | 61 | 65 | 72 | 79 | 92 | 115 | 132 | 143 | 32459 | 5 | Precipitation (mm) |
+| 14 | LUCY | ppt6 | 82 | 92 | 99 | 109 | 122 | 135 | 162 | 179 | 197 | 32459 | 6 | Precipitation (mm) |
 
 #### Frost-Free Period
 
@@ -577,12 +587,14 @@ Values have been cross-checked with 300+ weather stations in CA.
 
 **Linear Regression Model**
 
+
      ols(formula = ffd.50 ~ prism_ffd, data = z)
      
 
 [TABLE]
 
 Residuals
+
 
           Min       1Q   Median       3Q      Max 
      -278.344  -16.875    2.436   14.323  274.604 
@@ -613,10 +625,10 @@ From *NSSH Part 618.33 Frost Action, Potential*:
 Methods:
 
 - using units of degrees Celsius, and daily average air temperature
-  ($Tavg$)
+  ($`Tavg`$)
 - freezing degree days for a single year:
-  $FI = sum\left( abs\left( min(0,Tavg) \right) \right)$
-- design freezing index, over 30 year record: $DFI = Q90(FI)$ where
+  $`FI = sum( abs( min(0, Tavg) ) )`$
+- design freezing index, over 30 year record: $`DFI = Q90( FI )`$ where
   **FI** is the stack of annual FI
 
 Notes:
@@ -639,9 +651,13 @@ minimum/maximum temperature data over the interval of 1981–2010.
 Calculation reference:
 [http://agron-www.agron.iastate.edu/courses/Agron541/classes/541/lesson02b/2b.1.1.html](https://web.archive.org/web/20211018034119/http://agron-www.agron.iastate.edu/courses/Agron541/classes/541/lesson02b/2b.1.1.html)
 
-$$GDD_{i} = \left\lbrack min\left( T_{max},upper_{threshold} \right) + max\left( Tmin,lower_{threshold} \right)/2 \right\rbrack - T_{base}$$
+``` math
+GDD_i = [ min(T_{max}, upper_{threshold}) + max(Tmin, lower_{threshold}) / 2 ] - T_{base}
+```
 
-$$GDD_{i} = max\left( GDD_{i},0 \right)$$
+``` math
+GDD_i = max(GDD_i, 0)
+```
 
 #### Effective Precipitation
 
@@ -666,29 +682,43 @@ from Rajagopal and Harpold (2016).
 
 Partition PPT into snow/rain:
 
-$$rain = PPT - snow$$
+``` math
+rain = PPT - snow
+```
 
-$$snow = PPT*Pr(snow)$$
+``` math
+snow = PPT * Pr(snow)
+```
 
-compute $Pr(snow)$ as a function of $Tmax$ using [exponential identity
-for hyperbolic tangent
+compute $`Pr(snow)`$ as a function of $`Tmax`$ using [exponential
+identity for hyperbolic tangent
 function](https://en.wikipedia.org/wiki/Hyperbolic_function#Standard_analytic_expressions):
 
 Evaluate conditional probability (fraction) of snow on a daily basis:
 
-$$Pr(snow) = a*\left( tanh\left( b*(Tmax - c) \right) - d \right)$$
+``` math
+Pr(snow) = a * ( tanh(b * (Tmax - c) ) - d )
+```
 
 a:-0.5, b:0.21, c:0.5, d:1
 
-$$tanh(x) = \left( 1 - exp( - 2*x) \right)/\left( 1 + exp( - 2*x) \right)$$
+``` math
+tanh(x) = (1 - exp(-2*x)) / (1 + exp(-2*x))
+```
 
-$$Pr(snow) = - 0.5*\left( \left( 1 - exp\left( - 2*\left( 0.21*(Tmax - 0.5) \right) \right) \right)/\left( 1 + exp\left( - 2*\left( 0.21*(Tmax - 0.5) \right) \right) \right) - 1 \right)$$
+``` math
+Pr(snow) = -0.5 * ( (1 - exp(-2 * (0.21 * (Tmax - 0.5) ))) / (1 + exp(-2 * (0.21 * (Tmax - 0.5) ))) - 1 )
+```
 
-$$rain = PPT - \left( PPT*Pr(snow) \right)$$
+``` math
+rain = PPT - (PPT * Pr(snow))
+```
 
-For each year($i$):
+For each year($`i`$):
 
-$$rainfraction_{i} = sum\left( rain_{i} \right)/sum\left( PPT_{i} \right)$$
+``` math
+rain fraction_i = sum(rain_i) / sum(PPT_i)
+```
 
 Percentages have been converted to integers ranging from 0 to 100.
 
@@ -722,15 +752,16 @@ Proportions are weighted by total soil series area (within CONUS) as
 informed by the component name and associated component percentage.
 
 ``` r
+
 head(x$geomorphons)
 ```
 
-| series  | flat | summit | ridge | shoulder | spur | slope | hollow | footslope | valley | depression | shannon_entropy |
-|:--------|-----:|-------:|------:|---------:|-----:|------:|-------:|----------:|-------:|-----------:|----------------:|
-| LUCY    | 0.39 |   0.01 |  0.14 |     0.15 | 0.04 |  0.09 |   0.02 |      0.09 |   0.07 |       0.00 |            2.61 |
-| MIAMI   | 0.74 |   0.00 |  0.05 |     0.11 | 0.01 |  0.04 |   0.01 |      0.04 |   0.01 |       0.00 |            1.46 |
-| MUSICK  | 0.00 |   0.03 |  0.17 |     0.00 | 0.21 |  0.24 |   0.16 |      0.00 |   0.16 |       0.02 |            2.55 |
-| PIERRE  | 0.24 |   0.01 |  0.12 |     0.14 | 0.05 |  0.16 |   0.04 |      0.14 |   0.10 |       0.00 |            2.90 |
-| TRISTAN | 0.00 |   0.03 |  0.16 |     0.00 | 0.23 |  0.25 |   0.16 |      0.00 |   0.15 |       0.01 |            2.48 |
+| series | flat | summit | ridge | shoulder | spur | slope | hollow | footslope | valley | depression | shannon_entropy |
+|:---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| LUCY | 0.39 | 0.01 | 0.14 | 0.15 | 0.04 | 0.09 | 0.02 | 0.09 | 0.07 | 0.00 | 2.61 |
+| MIAMI | 0.74 | 0.00 | 0.05 | 0.11 | 0.01 | 0.04 | 0.01 | 0.04 | 0.01 | 0.00 | 1.46 |
+| MUSICK | 0.00 | 0.03 | 0.17 | 0.00 | 0.21 | 0.24 | 0.16 | 0.00 | 0.16 | 0.02 | 2.55 |
+| PIERRE | 0.24 | 0.01 | 0.12 | 0.14 | 0.05 | 0.16 | 0.04 | 0.14 | 0.10 | 0.00 | 2.90 |
+| TRISTAN | 0.00 | 0.03 | 0.16 | 0.00 | 0.23 | 0.25 | 0.16 | 0.00 | 0.15 | 0.01 | 2.48 |
 
-geomorphon summary
+geomorphon summary {.table style="width:100%;"}

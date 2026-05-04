@@ -22,6 +22,7 @@ a `data.frame`
 ## Examples
 
 ``` r
+
 WCS_details(wcs = 'ISSR800')
 #>                 var       crs
 #> 4     caco3_kg_sq_m EPSG:5070

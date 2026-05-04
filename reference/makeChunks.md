@@ -25,6 +25,7 @@ A numeric vector
 ## Examples
 
 ``` r
+
 # split the lowercase alphabet into 2 chunks
 
 aggregate(letters,

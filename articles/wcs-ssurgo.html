@@ -105,6 +105,8 @@ resolution.</p></li>
 <li><p>SSURGO in AK (EPSG:3338) at 30m resolution.</p></li>
 <li><p>SSURGO in PW, GU, AS, MP (EPSG:4326) at approximately 30m
 resolution.</p></li>
+<li><p>SSURGO back-filled with STATSGO2 within map units named “NOTCOM”
+and “ANS”, at 30m resolution (EPSG:5070).</p></li>
 <li><p><a href="https://casoilresource.lawr.ucdavis.edu/soil-properties/" class="external-link">ISSR-800
 soil property grids</a>.</p></li>
 </ul>
@@ -151,7 +153,7 @@ manual pages for details.</p>
 <span><span class="co"># select RSS grid, 30m resolution</span></span>
 <span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mukey.wcs.html">mukey.wcs</a></span><span class="op">(</span>aoi <span class="op">=</span> <span class="va">aoi</span>, db <span class="op">=</span> <span class="st">'RSS'</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># select fSSURGO grid, 30m resolution</span></span>
+<span><span class="co"># select SSURGO/STATSGO2 hybrid, 30m resolution</span></span>
 <span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mukey.wcs.html">mukey.wcs</a></span><span class="op">(</span>aoi <span class="op">=</span> <span class="va">aoi</span>, db <span class="op">=</span> <span class="st">'fSSURGO'</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
 <p><a href="http://ncss-tech.github.io/soilDB/reference/ISSR800.wcs.html"><code>ISSR800.wcs</code></a>
 is a similar function that makes available a variety of pre-aggregated
@@ -400,7 +402,7 @@ the map.</p>
 <span><span class="co">#&gt; extent      : -1365495, -1358925, 2869245, 2873655  (xmin, xmax, ymin, ymax)</span></span>
 <span><span class="co">#&gt; coord. ref. : NAD83 / Conus Albers (EPSG:5070) </span></span>
 <span><span class="co">#&gt; source(s)   : memory</span></span>
-<span><span class="co">#&gt; varname     : file24d9614789a4 </span></span>
+<span><span class="co">#&gt; varname     : file24c9783043b2 </span></span>
 <span><span class="co">#&gt; categories  : mukey </span></span>
 <span><span class="co">#&gt; name        :   mukey </span></span>
 <span><span class="co">#&gt; min value   :  144983 </span></span>
@@ -507,7 +509,7 @@ Access.</p>
 <span><span class="co">#&gt; extent      : 1129005, 1135005, 1402995, 1411005  (xmin, xmax, ymin, ymax)</span></span>
 <span><span class="co">#&gt; coord. ref. : NAD83 / Conus Albers (EPSG:5070) </span></span>
 <span><span class="co">#&gt; source(s)   : memory</span></span>
-<span><span class="co">#&gt; varname     : file24d92360f6f4 </span></span>
+<span><span class="co">#&gt; varname     : file24c99c990d1 </span></span>
 <span><span class="co">#&gt; categories  : mukey </span></span>
 <span><span class="co">#&gt; name        :  mukey </span></span>
 <span><span class="co">#&gt; min value   : 545800 </span></span>
@@ -521,7 +523,7 @@ Access.</p>
 <span><span class="co">#&gt; extent      : 1129005, 1135005, 1402995, 1411005  (xmin, xmax, ymin, ymax)</span></span>
 <span><span class="co">#&gt; coord. ref. : NAD83 / Conus Albers (EPSG:5070) </span></span>
 <span><span class="co">#&gt; source(s)   : memory</span></span>
-<span><span class="co">#&gt; varname     : file24d91bf964d9 </span></span>
+<span><span class="co">#&gt; varname     : file24c9521a987c </span></span>
 <span><span class="co">#&gt; categories  : mukey </span></span>
 <span><span class="co">#&gt; name        :   mukey </span></span>
 <span><span class="co">#&gt; min value   :  545800 </span></span>
@@ -535,7 +537,7 @@ Access.</p>
 <span><span class="co">#&gt; extent      : 1129005, 1135005, 1402995, 1411005  (xmin, xmax, ymin, ymax)</span></span>
 <span><span class="co">#&gt; coord. ref. : NAD83 / Conus Albers (EPSG:5070) </span></span>
 <span><span class="co">#&gt; source(s)   : memory</span></span>
-<span><span class="co">#&gt; varname     : file24d977645c73 </span></span>
+<span><span class="co">#&gt; varname     : file24c91a4c2a5f </span></span>
 <span><span class="co">#&gt; categories  : mukey </span></span>
 <span><span class="co">#&gt; name        :   mukey </span></span>
 <span><span class="co">#&gt; min value   : 3244721 </span></span>
@@ -589,7 +591,7 @@ products.</p>
 <span><span class="co">#&gt; extent      : 1129005, 1135005, 1402995, 1411005  (xmin, xmax, ymin, ymax)</span></span>
 <span><span class="co">#&gt; coord. ref. : NAD83 / Conus Albers (EPSG:5070) </span></span>
 <span><span class="co">#&gt; source(s)   : memory</span></span>
-<span><span class="co">#&gt; varname     : file24d93e9ca9b9 </span></span>
+<span><span class="co">#&gt; varname     : file24c9251c9348 </span></span>
 <span><span class="co">#&gt; categories  : mukey </span></span>
 <span><span class="co">#&gt; name        :  mukey </span></span>
 <span><span class="co">#&gt; min value   : 659074 </span></span>

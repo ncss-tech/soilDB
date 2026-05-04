@@ -113,23 +113,23 @@ parsing will be echoed when `verbose=TRUE`.
 
 ### Properties
 
-|          |                                                                                        |                         |                   |                     |
-|----------|----------------------------------------------------------------------------------------|-------------------------|-------------------|---------------------|
-| Name     | Description                                                                            | Mapped units            | Conversion factor | Conventional units  |
-| bdod     | Bulk density of the fine earth fraction                                                | cg/cm^3                 | 100               | kg/dm^3             |
-| cec      | Cation Exchange Capacity of the soil                                                   | mmol(c)/kg              | 10                | cmol(c)/kg          |
-| cfvo     | Volumetric fraction of coarse fragments (\> 2 mm)                                      | cm^3/dm^3 (vol per mil) | 10                | cm^3/100cm^3 (vol%) |
-| clay     | Proportion of clay particles (\< 0.002 mm) in the fine earth fraction                  | g/kg                    | 10                | g/100g (%)          |
-| nitrogen | Total nitrogen (N)                                                                     | cg/kg                   | 100               | g/kg                |
-| phh2o    | Soil pH                                                                                | pH\*10                  | 10                | pH                  |
-| sand     | Proportion of sand particles (\> 0.05 mm) in the fine earth fraction                   | g/kg                    | 10                | g/100g (%)          |
-| silt     | Proportion of silt particles (\>= 0.002 mm and \<= 0.05 mm) in the fine earth fraction | g/kg                    | 10                | g/100g (%)          |
-| soc      | Soil organic carbon content in the fine earth fraction                                 | dg/kg                   | 10                | g/kg                |
-| ocd      | Organic carbon density                                                                 | hg/m^3                  | 10                | kg/m^3              |
-| ocs      | Organic carbon stocks (0-30cm depth interval only)                                     | t/ha                    | 10                | kg/m^2              |
-| wv0010   | Volumetric Water Content at 10kPa                                                      | 0.1 v% or 1 mm/m        | 10                | volume (%)          |
-| wv0033   | Volumetric Water Content at 33kPa                                                      | 0.1 v% or 1 mm/m        | 10                | volume (%)          |
-| wv1500   | Volumetric Water Content at 1500kPa                                                    | 0.1 v% or 1 mm/m        | 10                | volume (%)          |
+|  |  |  |  |  |
+|----|----|----|----|----|
+| Name | Description | Mapped units | Conversion factor | Conventional units |
+| bdod | Bulk density of the fine earth fraction | cg/cm^3 | 100 | kg/dm^3 |
+| cec | Cation Exchange Capacity of the soil | mmol(c)/kg | 10 | cmol(c)/kg |
+| cfvo | Volumetric fraction of coarse fragments (\> 2 mm) | cm^3/dm^3 (vol per mil) | 10 | cm^3/100cm^3 (vol%) |
+| clay | Proportion of clay particles (\< 0.002 mm) in the fine earth fraction | g/kg | 10 | g/100g (%) |
+| nitrogen | Total nitrogen (N) | cg/kg | 100 | g/kg |
+| phh2o | Soil pH | pH\*10 | 10 | pH |
+| sand | Proportion of sand particles (\> 0.05 mm) in the fine earth fraction | g/kg | 10 | g/100g (%) |
+| silt | Proportion of silt particles (\>= 0.002 mm and \<= 0.05 mm) in the fine earth fraction | g/kg | 10 | g/100g (%) |
+| soc | Soil organic carbon content in the fine earth fraction | dg/kg | 10 | g/kg |
+| ocd | Organic carbon density | hg/m^3 | 10 | kg/m^3 |
+| ocs | Organic carbon stocks (0-30cm depth interval only) | t/ha | 10 | kg/m^2 |
+| wv0010 | Volumetric Water Content at 10kPa | 0.1 v% or 1 mm/m | 10 | volume (%) |
+| wv0033 | Volumetric Water Content at 33kPa | 0.1 v% or 1 mm/m | 10 | volume (%) |
+| wv1500 | Volumetric Water Content at 1500kPa | 0.1 v% or 1 mm/m | 10 | volume (%) |
 
 SoilGrids predictions are made for the six standard depth intervals
 specified in the GlobalSoilMap IUSS working group and its

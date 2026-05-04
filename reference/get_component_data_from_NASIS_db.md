@@ -90,6 +90,7 @@ Dylan E. Beaudette, Stephen Roecker, and Jay M. Skovlin
 ## Examples
 
 ``` r
+
 # \donttest{
 if(local_NASIS_defined()) {
  fc <- try(get_component_data_from_NASIS_db())

@@ -89,7 +89,49 @@ D.E. Beaudette
     # basic usage
     x <- siblings('zook')
     x$sib
-#> NULL
+#>    series      sibling majcompflag  n
+#> 1    zook       Olmitz        TRUE 17
+#> 2    zook        Vigar        TRUE 12
+#> 3    zook       Vesser        TRUE 10
+#> 4    zook          Ely        TRUE 10
+#> 5    zook      Excello        TRUE  9
+#> 6    zook         Colo        TRUE  8
+#> 7    zook      Nodaway        TRUE  5
+#> 8    zook          Zoe        TRUE  3
+#> 9    zook Mt. Sterling        TRUE  3
+#> 10   zook        Kezan        TRUE  2
+#> 11   zook        Clamo        TRUE  2
+#> 12   zook     Humeston        TRUE  1
+#> 13   zook         Klum        TRUE  1
+#> 14   zook       Quiver        TRUE  1
+#> 15   zook         Colo       FALSE 73
+#> 16   zook       Wabash       FALSE 59
+#> 17   zook     Chequest       FALSE 45
+#> 18   zook      Nodaway       FALSE 45
+#> 19   zook     Humeston       FALSE 27
+#> 20   zook       Arbela       FALSE 23
+#> 21   zook      Ackmore       FALSE 18
+#> 22   zook      Dockery       FALSE 16
+#> 23   zook       Bremer       FALSE 16
+#> 24   zook         Lamo       FALSE 15
+#> 25   zook       Landes       FALSE 14
+#> 26   zook     Kennebec       FALSE 13
+#> 27   zook        Shell       FALSE 12
+#> 28   zook         Napa       FALSE 12
+#> 29   zook       Olmitz       FALSE  9
+#> 30   zook       Coland       FALSE  9
+#> 31   zook      Sawmill       FALSE  9
+#> 32   zook       Vesser       FALSE  9
+#> 33   zook     Blackoar       FALSE  5
+#> 34   zook       Nishna       FALSE  5
+#> 35   zook       Eudora       FALSE  3
+#> 36   zook        Chase       FALSE  3
+#> 37   zook      Reading       FALSE  3
+#> 38   zook       Judson       FALSE  2
+#> 39   zook        Calco       FALSE  2
+#> 40   zook       Quiver       FALSE  2
+#> 41   zook     Clarinda       FALSE  1
+#> 42   zook          Ely       FALSE  1
     
     # restrict to siblings that are major components
     # e.g. the most likely siblings

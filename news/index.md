@@ -24,7 +24,7 @@ CRAN release: 2026-04-03
     (<https://www.handbook60.org/rosetta>)
   - New argument `est.type` for selecting ensemble summary method and
     resulting units of measure
-  - $Ko$ and $L$ parameters now included in model output
+  - $`Ko`$ and $`L`$ parameters now included in model output
 - [`fetchGDB()`](http://ncss-tech.github.io/soilDB/reference/fetchGDB.md)
   now supports passing path to SSURGO GeoPackage file via `dsn` argument
 - Breaking change: sample `SoilProfileCollection` datasets
@@ -1761,8 +1761,8 @@ CRAN release: 2016-04-29
 - two new functions for simplifying NASIS color and fragment data:
   - simplifyFragmentData()
   - simplifyColorData()
-- ^^^ these new functions are now used by fetchNASIS() to summarize
-  color and fragment data (vs. SQL)
+- ^ these new functions are now used by fetchNASIS() to summarize color
+  and fragment data (vs. SQL)
 - NOTE: soilDB now uses reshape2::dcast() instead of reshape::cast()
 
 ## soilDB 1.7 (2016-04-18)

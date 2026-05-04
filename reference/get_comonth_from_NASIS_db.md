@@ -42,6 +42,7 @@ Stephen Roecker
 ## Examples
 
 ``` r
+
 # \donttest{
 if(local_NASIS_defined()) {
   # query text note data

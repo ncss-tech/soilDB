@@ -56,6 +56,7 @@ D.E. Beaudette
 ## Examples
 
 ``` r
+
 par(mar=c(4,1,0,1))
 STRplot(mast = 0:25, msst = 10, mwst = 1)
 ```

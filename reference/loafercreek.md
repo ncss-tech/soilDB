@@ -6,6 +6,7 @@ Several examples of soil profile collections returned by
 ## Examples
 
 ``` r
+
 # \donttest{
   library(aqp)
   

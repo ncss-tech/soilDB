@@ -92,6 +92,7 @@ D.E. Beaudette
 ## Examples
 
 ``` r
+
 # basic example
 d <- data.frame(
   theta_r = 0.0337216, 

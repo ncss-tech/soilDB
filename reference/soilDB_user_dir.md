@@ -79,6 +79,7 @@ Andrew Gene Brown
 ## Examples
 
 ``` r
+
 soilDB_user_dir("data", c("dataset1", "dataset2"), "source", create = FALSE)
 #> Warning: path[1]="/home/runner/.local/share/R/soilDB/dataset1/source": No such file or directory
 #> Warning: path[2]="/home/runner/.local/share/R/soilDB/dataset2/source": No such file or directory

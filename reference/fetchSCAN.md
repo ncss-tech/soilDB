@@ -85,37 +85,37 @@ offsets due to daylight savings time.
 All Soil Climate Analysis Network (SCAN) sensor measurements are
 reported hourly.
 
-|                          |                                                                                                            |                                                |
-|--------------------------|------------------------------------------------------------------------------------------------------------|------------------------------------------------|
-| Element Measured         | Sensor Type                                                                                                | Precision                                      |
-| Air Temperature          | Shielded thermistor                                                                                        | 0.1 degrees C                                  |
-| Barometric Pressure      | Silicon capacitive pressure sensor                                                                         | 1%                                             |
-| Precipitation            | Storage-type gage or tipping bucket                                                                        | Storage: 0.1 inches;                           |
-| Relative Humidity        | Thin film capacitance-type sensor                                                                          | 1%                                             |
-| Snow Depth               | Sonic sensor (not on all stations)                                                                         | 0.5 inches                                     |
-| Snow Water Content       | Snow pillow device and a pressure transducer (not on all stations)                                         | 0.1 inches                                     |
-| Soil Moisture            | Dielectric constant measuring device. Typical measurements are at 2", 4", 8", 20", and 40" where possible. | 0.50%                                          |
-| Soil Temperature         | Encapsulated thermistor. Typical measurements are at 2", 4", 8", 20", and 40" where possible.              | 0.1 degrees C                                  |
-| Solar Radiation          | Pyranometer                                                                                                | 0.01 watts per meter                           |
-| Wind Speed and Direction | Propellor-type anemometer                                                                                  | Speed: 0.1 miles per hour; Direction: 1 degree |
+|  |  |  |
+|----|----|----|
+| Element Measured | Sensor Type | Precision |
+| Air Temperature | Shielded thermistor | 0.1 degrees C |
+| Barometric Pressure | Silicon capacitive pressure sensor | 1% |
+| Precipitation | Storage-type gage or tipping bucket | Storage: 0.1 inches; |
+| Relative Humidity | Thin film capacitance-type sensor | 1% |
+| Snow Depth | Sonic sensor (not on all stations) | 0.5 inches |
+| Snow Water Content | Snow pillow device and a pressure transducer (not on all stations) | 0.1 inches |
+| Soil Moisture | Dielectric constant measuring device. Typical measurements are at 2", 4", 8", 20", and 40" where possible. | 0.50% |
+| Soil Temperature | Encapsulated thermistor. Typical measurements are at 2", 4", 8", 20", and 40" where possible. | 0.1 degrees C |
+| Solar Radiation | Pyranometer | 0.01 watts per meter |
+| Wind Speed and Direction | Propellor-type anemometer | Speed: 0.1 miles per hour; Direction: 1 degree |
 
 ### SNOTEL Sensors
 
 All Snow Telemetry (SNOTEL) sensor measurements are reported daily.
 
-|                          |                                                                                                            |                                                  |
-|--------------------------|------------------------------------------------------------------------------------------------------------|--------------------------------------------------|
-| Element Measured         | Sensor Type                                                                                                | Precision                                        |
-| Air Temperature          | Shielded thermistor                                                                                        | 0.1 degrees C                                    |
-| Barometric Pressure      | Silicon capacitive pressure sensor                                                                         | 1%                                               |
-| Precipitation            | Storage-type gage or tipping bucket                                                                        | Storage: 0.1 inches; Tipping bucket: 0.01 inches |
-| Relative Humidity        | Thin film capacitance-type sensor                                                                          | 1%                                               |
-| Snow Depth               | Sonic sensor                                                                                               | 0.5 inches                                       |
-| Snow Water Content       | Snow pillow device and a pressure transducer                                                               | 0.1 inches                                       |
-| Soil Moisture            | Dielectric constant measuring device. Typical measurements are at 2", 4", 8", 20", and 40" where possible. | 0.50%                                            |
-| Soil Temperature         | Encapsulated thermistor. Typical measurements are at 2", 4", 8", 20", and 40" where possible.              | 0.1 degrees C                                    |
-| Solar Radiation          | Pyranometer                                                                                                | 0.01 watts per meter                             |
-| Wind Speed and Direction | Propellor-type anemometer                                                                                  | Speed: 0.1 miles per hour; Direction: 1 degree   |
+|  |  |  |
+|----|----|----|
+| Element Measured | Sensor Type | Precision |
+| Air Temperature | Shielded thermistor | 0.1 degrees C |
+| Barometric Pressure | Silicon capacitive pressure sensor | 1% |
+| Precipitation | Storage-type gage or tipping bucket | Storage: 0.1 inches; Tipping bucket: 0.01 inches |
+| Relative Humidity | Thin film capacitance-type sensor | 1% |
+| Snow Depth | Sonic sensor | 0.5 inches |
+| Snow Water Content | Snow pillow device and a pressure transducer | 0.1 inches |
+| Soil Moisture | Dielectric constant measuring device. Typical measurements are at 2", 4", 8", 20", and 40" where possible. | 0.50% |
+| Soil Temperature | Encapsulated thermistor. Typical measurements are at 2", 4", 8", 20", and 40" where possible. | 0.1 degrees C |
+| Solar Radiation | Pyranometer | 0.01 watts per meter |
+| Wind Speed and Direction | Propellor-type anemometer | Speed: 0.1 miles per hour; Direction: 1 degree |
 
 See the [fetchSCAN
 tutorial](http://ncss-tech.github.io/AQP/soilDB/fetchSCAN-demo.md) for

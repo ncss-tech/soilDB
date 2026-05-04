@@ -41,6 +41,7 @@ Jay M. Skovlin and Dylan E. Beaudette
 ## Examples
 
 ``` r
+
 # \donttest{
 
 if(local_NASIS_defined()) {

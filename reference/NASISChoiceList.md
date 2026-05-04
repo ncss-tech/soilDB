@@ -92,6 +92,7 @@ vectors are always returned when `choice` is `"ChoiceValue"`.
 ## Examples
 
 ``` r
+
 NASISChoiceList(1:3, "texcl")
 #> [1] cos s   fs 
 #> 21 Levels: c cl cos cosl fs fsl l lcos lfs ls lvfs s sc scl si sic sicl ... vfsl

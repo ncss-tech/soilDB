@@ -86,6 +86,7 @@ Stephen Roecker
 ## Examples
 
 ``` r
+
 # \donttest{
 
 ## replace `dsn` with path to your own geodatabase (SSURGO OR gNATSGO)

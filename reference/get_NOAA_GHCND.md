@@ -43,6 +43,7 @@ A data.frame containing the GHCND data requested (limit 1000 records)
 ## Examples
 
 ``` r
+
 #' ## in order to use this function, you must obtain an API token from this website:
 ##  https://www.ncdc.noaa.gov/cdo-web/token
 

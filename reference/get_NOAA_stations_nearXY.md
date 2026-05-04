@@ -43,6 +43,7 @@ bounding box around `lat`, `lng`.
 ## Examples
 
 ``` r
+
 ## in order to use this function, you must obtain an API token from this website:
 ##  https://www.ncdc.noaa.gov/cdo-web/token
 

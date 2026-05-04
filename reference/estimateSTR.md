@@ -71,6 +71,7 @@ D.E. Beaudette
 ## Examples
 
 ``` r
+
 # simple example
 estimateSTR(mast=17, mean.summer = 22, mean.winter = 12)
 #> [1] thermic

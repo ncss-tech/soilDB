@@ -180,6 +180,7 @@ D.E. Beaudette
 ## Examples
 
 ``` r
+
 # \donttest{
   # find all series that list Pardee as a geographically associated soil.
   s <- OSDquery(geog_assoc_soils = 'pardee')

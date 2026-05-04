@@ -47,6 +47,7 @@ D.E. Beaudette
 ## Examples
 
 ``` r
+
 # try it
 waterDayYear('2019-01-01')
 #>     wy wd

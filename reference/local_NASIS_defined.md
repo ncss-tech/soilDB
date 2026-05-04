@@ -34,6 +34,7 @@ value of `DBI::dbExistsTable("MetadataDomainMaster")`
 
 ``` r
 
+
 if(local_NASIS_defined()) {
   # use fetchNASIS or some other lower-level fetch function
 } else {
