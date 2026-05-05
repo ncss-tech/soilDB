@@ -406,7 +406,38 @@ createSSURGO <- function(filename = NULL,
     if (length(msidxdn) >= 1) {
       msidxdet <- read.delim(msidxdn[1], sep = "|", stringsAsFactors = FALSE, header = header)
     }
-    
+
+    # build type mapping from SSURGO logicaldatatype metadata
+    # mstabcol columns: 1=tabphyname, 2=colsequence, 3=colphyname, 4=collogname,
+    #                   5=uomabbrev, 6=logicaldatatype, 7=notnull, 8=fieldsize
+    if (exists("mstabcol") && length(mstabcol) >= 6) {
+      .ssurgo_type_map <- c(
+        String = "character", Choice = "character", Vtext = "character", 
+        `Date/Time` = "character",
+        Integer = "integer", Float = "numeric", Boolean = "logical"
+      )
+    } else {
+      .ssurgo_type_map <- NULL
+    }
+
+    # helper: coerce columns to schema types from mstabcol metadata
+    .coerce_ssurgo_types <- function(y, tablename, mstabcol, type_map) {
+      if (is.null(type_map) || length(mstabcol) < 6) return(y)
+      col_meta <- mstabcol[mstabcol[[1]] == tablename, c(3L, 6L), drop = FALSE]
+      for (j in seq_len(nrow(col_meta))) {
+        col  <- col_meta[[1L]][j]
+        rtyp <- type_map[col_meta[[2L]][j]]
+        if (is.na(rtyp) || !col %in% names(y)) next
+        y[[col]] <- switch(rtyp,
+          character = as.character(y[[col]]),
+          integer   = suppressWarnings(as.integer(as.character(y[[col]]))),
+          numeric   = suppressWarnings(as.numeric(as.character(y[[col]]))),
+          logical   = as.logical(y[[col]])
+        )
+      }
+      y
+    }
+
     lapply(names(f.txt.grp), function(x) {
       
       if (!is.null(mstabcol)) {
@@ -420,7 +451,8 @@ createSSURGO <- function(filename = NULL,
       
       d <- try(lapply(seq_along(f.txt.grp[[x]]), function(i) {
           # message(f.txt.grp[[x]][i])
-          y <- try(read.delim(f.txt.grp[[x]][i], sep = "|", stringsAsFactors = FALSE, header = header), silent = TRUE)
+          y <- try(read.delim(f.txt.grp[[x]][i], sep = "|", stringsAsFactors = FALSE, header = header,
+                              na.strings = c("", "NA")), silent = TRUE)
           
           if (inherits(y, 'try-error')) {
             if (!quiet) {
@@ -437,11 +469,13 @@ createSSURGO <- function(filename = NULL,
               y <- data.frame(content = y)
             }
           } else {
-            if (!is.null(mstab) && !header) { # preserve headers if present 
+            if (!is.null(mstab) && !header) { # preserve headers if present
               colnames(y) <- newnames
             }
+            # enforce schema types from metadata
+            y <- .coerce_ssurgo_types(y, mstab_lut[x], mstabcol, .ssurgo_type_map)
           }
-          
+
           if (is.na(mstab_lut[x])) {
             # readme, version
             return(NULL)
