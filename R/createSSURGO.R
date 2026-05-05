@@ -25,9 +25,9 @@
 #' @param overwrite _logical_. Overwrite by re-extracting if directory already exists? Default:
 #'   `FALSE`
 #' @param quiet _logical_. Passed to `curl::curl_download()`.
-#' 
+#'
 #' @details When `db="STATSGO"` the `WHERE` argument is not supported. Allowed `areasymbols` include
-#' `"US"` and two-letter state codes e.g. `"WY"` for the Wyoming general soils map.
+#'   `"US"` and two-letter state codes e.g. `"WY"` for the Wyoming general soils map.
 #'
 #' @export
 #'
@@ -42,17 +42,17 @@
 #'   have prefix `soilmu_` (mapunit), `soilsa_` (survey area), `soilsf_` (special features). There
 #'   will also be a TXT file with prefix `soilsf_` describing any special features. Shapefile names
 #'   then have an `a_` (polygon), `l_` (line), `p_` (point) followed by the soil survey area symbol.
-#'
+#' 
 #' @return _character_. Paths to downloaded ZIP files (invisibly). May not exist if `remove_zip =
 #'   TRUE`.
 #' @seealso [createSSURGO()]
-downloadSSURGO <- function(WHERE = NULL, 
+downloadSSURGO <- function(WHERE = NULL,
                            areasymbols = NULL,
-                           destdir = tempdir(), 
-                           exdir = destdir, 
+                           destdir = tempdir(),
+                           exdir = destdir,
                            include_template = FALSE,
                            db = c('SSURGO', 'STATSGO'),
-                           extract = TRUE, 
+                           extract = TRUE,
                            remove_zip = FALSE,
                            overwrite = FALSE,
                            quiet = FALSE) {
@@ -117,13 +117,14 @@ downloadSSURGO <- function(WHERE = NULL,
       dir.create(exdir, recursive = TRUE)
     }
     
-    for (i in seq_along(paths2)) {
+    res <- lapply(seq_along(paths2), function(i) {
       ssa <- gsub(".*wss_SSA_(.*)_.*", "\\1", paths2[i])
-      if ((!dir.exists(file.path(exdir, ssa)) || overwrite) && 
-          length(utils::unzip(paths2[i], exdir = exdir)) == 0) {
+      lz <- utils::unzip(paths2[i], list = TRUE)
+      uz <- utils::unzip(paths2[i], exdir = exdir)
+      if ((!dir.exists(file.path(exdir, ssa)) || overwrite) && length(uz) == 0) {
         message(paste('Invalid zipfile:', paths2[i]))
       }
-    }
+    })
     
     if (remove_zip) {
       file.remove(paths2)
@@ -156,13 +157,13 @@ downloadSSURGO <- function(WHERE = NULL,
 #' @param include_spatial _logical_ or _character_. Include spatial data layers in database?
 #'   Default: `TRUE` inserts all spatial tables. If `include_spatial` is a _character_ vector
 #'   containing table names, only that set are written to file. e.g. `include_spatial=c("mupolygon",
-#'   "featpoint")` writes only the mapunit polygons and special feature points.
+#'   "featpoint")` writes only the mapunit polygons and special feature points. 
 #' @param include_tabular _logical_ or _character_. Include tabular data layers in database?
 #'   Default: `TRUE` inserts all tabular tables. If `include_tabular` is a _character_ vector
 #'   containing table names, only that set are written to file. e.g. `include_tabular=c("mapunit",
 #'   "muaggatt")` writes only the `mapunit` and `muaggatt` tables. Note that special feature
 #'   descriptions are stored in table `"featdesc"` and metadata for each soil survey area are stored
-#'   in `"soil_metadata"` tables.
+#'   in `"soil_metadata"` tables. 
 #' @param dissolve_field _character_. Dissolve geometries to create MULTIPOLYGON features? Column
 #'   name
 #'   specified is the grouping variable. Default: `NULL` does no aggregation, giving 1 `POLYGON`
@@ -187,7 +188,7 @@ downloadSSURGO <- function(WHERE = NULL,
 #' }
 createSSURGO <- function(filename = NULL,
                          exdir,
-                         conn = NULL, 
+                         conn = NULL,
                          pattern = NULL,
                          include_spatial = TRUE,
                          include_tabular = TRUE,
@@ -233,22 +234,28 @@ createSSURGO <- function(filename = NULL,
     stop("package `sf` is required to write spatial datasets to DBI data sources", call. = FALSE)
   } 
   
-  f <- list.files(exdir, recursive = TRUE, pattern = pattern, full.names = TRUE)
+  layer_names <- .get_spatial_layer_names()
   
-  # create and add combined vector datasets:
-  #   "soilmu_a", "soilmu_l", "soilmu_p", "soilsa_a", "soilsf_l", "soilsf_p" 
-  f.shp <- f[grepl(".*\\.shp$", f)]
-  shp.grp <- do.call('rbind', strsplit(gsub(".*soil([musfa]{2})_([apl])_([a-z]{2}\\d{3}|[a-z]{2})\\.shp", "\\1;\\2;\\3", f.shp), ";", fixed = TRUE))
+  f <- list.files(
+    exdir, 
+    recursive = TRUE, 
+    pattern = pattern, 
+    full.names = TRUE
+  )
   
-  layer_names <- c(`mu_a` = "mupolygon", `mu_l` = "muline",   `mu_p` = "mupoint", 
-                   `sa_a` = "sapolygon", `sf_l` = "featline", `sf_p` = "featpoint")
+  inv <- .inventory_ssurgo_files(
+    f,
+    exdir = NULL,
+    pattern = pattern,
+    layer_names = layer_names,
+    include_spatial = include_spatial,
+    include_tabular = include_tabular,
+    header = header
+  )
   
-  if (is.character(include_spatial)) {
-    idx <- paste0(shp.grp[, 1], "_", shp.grp[, 2]) %in% names(layer_names[layer_names %in% include_spatial])
-    shp.grp <- shp.grp[idx, ]
-    f.shp <- f.shp[idx]
-    include_spatial <- TRUE
-  }
+  # inventory method converts partial sets (character vectors) to logical for include_* args
+  include_spatial <- inv$include_spatial
+  include_tabular <- inv$include_tabular
   
   if ((missing(conn) || is.null(conn)) && !IS_GPKG) {
     
@@ -264,8 +271,8 @@ createSSURGO <- function(filename = NULL,
     on.exit(DBI::dbDisconnect(conn))
   } 
   
-  if (nrow(shp.grp) >= 1 && ncol(shp.grp) == 3 && include_spatial) {
-    f.shp.grp <- split(f.shp, list(feature = shp.grp[, 1], geom = shp.grp[, 2]), drop = TRUE)
+  if (nrow(inv$shp.grp) >= 1 && ncol(inv$shp.grp) == 3 && include_spatial) {
+    f.shp.grp <- split(inv$f.shp, list(feature = inv$shp.grp[, 1], geom = inv$shp.grp[, 2]), drop = TRUE)
     
     if (IS_DUCKDB) {
       DBI::dbExecute(conn, "INSTALL spatial; LOAD spatial;")
@@ -366,6 +373,179 @@ createSSURGO <- function(filename = NULL,
     on.exit(DBI::dbDisconnect(conn))
   } 
   
+  if (include_tabular) {
+
+    if (length(inv$mstabcn) >= 1) {
+      mstabcol <- read.delim(inv$mstabcn[1], sep = "|", stringsAsFactors = FALSE, header = header)
+    }
+    
+    if (length(inv$msidxdn) >= 1) {
+      msidxdet <- read.delim(inv$msidxdn[1], sep = "|", stringsAsFactors = FALSE, header = header)
+    }
+
+    # build type mapping from SSURGO logicaldatatype metadata
+    # mstabcol columns: 1=tabphyname, 2=colsequence, 3=colphyname, 4=collogname,
+    #                   5=uomabbrev, 6=logicaldatatype, 7=notnull, 8=fieldsize
+    if (exists("mstabcol") && length(mstabcol) >= 6) {
+      .ssurgo_type_map <- c(
+        String = "character", Choice = "character", Vtext = "character", 
+        `Date/Time` = "character",
+        Integer = "integer", Float = "numeric", Boolean = "logical"
+      )
+    } else {
+      .ssurgo_type_map <- NULL
+    }
+
+    lapply(names(inv$f.txt.grp), function(x) {
+      
+      if (!is.null(mstabcol)) {
+        newnames <- mstabcol[[3]][mstabcol[[1]] == inv$mstab_lut[x]]
+      }
+      
+      if (!is.null(msidxdet)) {
+        indexPK <- na.omit(msidxdet[[4]][msidxdet[[1]] == inv$mstab_lut[x] & grepl("PK_", msidxdet[[2]])])
+        indexDI <- na.omit(msidxdet[[4]][msidxdet[[1]] == inv$mstab_lut[x] & grepl("DI_", msidxdet[[2]])])
+      }
+      
+      d <- try(lapply(seq_along(inv$f.txt.grp[[x]]), function(i) {
+          # message(f.txt.grp[[x]][i])
+          y <- try(read.delim(inv$f.txt.grp[[x]][i], sep = "|", stringsAsFactors = FALSE, header = header,
+                              na.strings = c("", "NA")), silent = TRUE)
+          
+          if (inherits(y, 'try-error')) {
+            if (!quiet) {
+              message("File ", inv$f.txt.grp[[x]][i], " contains no data")
+            }
+            return(NULL)
+          } else if (length(y) == 1) {
+            if (grepl("soil_metadata", inv$f.txt.grp[[x]][i])) {
+              y <- data.frame(
+                areasymbol = toupper(gsub(".*soil_metadata_(.*)\\.txt", "\\1", inv$f.txt.grp[[x]][i])),
+                content = paste(y[[1]], collapse = "\n")
+              )
+            } else {
+              y <- data.frame(content = y)
+            }
+          } else {
+            if (!is.null(inv$mstab) && !header) { # preserve headers if present
+              colnames(y) <- newnames
+            }
+            # enforce schema types from metadata
+            y <- .coerce_ssurgo_types(y, inv$mstab_lut[x], mstabcol, .ssurgo_type_map)
+          }
+
+          if (is.na(inv$mstab_lut[x])) {
+            # readme, version
+            return(NULL)
+          }
+          
+          # remove deeper rules from cointerp for smaller DB size
+          # most people only use depth==0 (default)
+          if (inv$mstab_lut[x] == "cointerp" && !is.null(maxruledepth)) {
+            y <- y[y$ruledepth <= maxruledepth, ]
+          }
+          
+          if ("musym" %in% colnames(y)) {
+            y$musym <- as.character(y$musym)
+          }
+          
+          try({
+            if (i == 1 && isFALSE(append)) {
+              DBI::dbWriteTable(conn, inv$mstab_lut[x], y, overwrite = overwrite)
+            } else {
+              if (DBI::dbExistsTable(conn, inv$mstab_lut[x]) && x %in% txt.first) {
+                # skip writing sdv/mds* metadata tables to avoid uniqueness issues 
+                return(FALSE)
+              }
+              DBI::dbWriteTable(conn, inv$mstab_lut[x], y, append = TRUE)
+            }
+          }, silent = quiet)
+      }), silent = quiet)
+      
+      if (length(inv$mstab_lut[x]) && is.na(inv$mstab_lut[x])) {
+        inv$mstab_lut[x] <- x
+      }
+      
+      if (length(inv$mstab_lut[x]) && !is.na(inv$mstab_lut[x])) {
+        
+        # create pkey indices
+        if (!is.null(indexPK) && length(indexPK) > 0) {
+          try({
+            q <- sprintf("CREATE UNIQUE INDEX IF NOT EXISTS %s ON %s (%s)", 
+                         paste0('PK_', inv$mstab_lut[x]), inv$mstab_lut[x], 
+                         paste(indexPK, collapse = ","))
+            if (DBI::dbExistsTable(conn, inv$mstab_lut[x]))
+              DBI::dbExecute(conn, q)
+          }, silent = quiet)
+        }
+        
+        # create key indices
+        if (!is.null(indexDI) && length(indexDI) > 0) {
+          for (i in seq_along(indexDI)) {
+            try({
+              q <- sprintf("CREATE INDEX IF NOT EXISTS %s ON %s (%s)", 
+                           paste0('DI_', inv$mstab_lut[x]), inv$mstab_lut[x], indexDI[i])
+              if (DBI::dbExistsTable(conn, inv$mstab_lut[x]))
+                DBI::dbExecute(conn, q)
+            }, silent = quiet)
+          }
+        }
+        
+        # for GPKG output, add gpkg_contents (metadata for features and attributes)
+        if (IS_GPKG) {
+          if (!.gpkg_has_contents(conn)) {
+            # if no spatial data inserted, there will be no gpkg_contents table initally
+            try(.gpkg_create_contents(conn))
+          }
+          # update gpkg_contents table entry
+          if (DBI::dbExistsTable(conn, inv$mstab_lut[x])) {
+            try(.gpkg_delete_contents(conn, inv$mstab_lut[x]))
+            try(.gpkg_add_contents(conn, inv$mstab_lut[x]))
+          }
+        }
+        
+        # TODO: other foreign keys/relationships? ALTER TABLE/ADD CONSTRAINT not available in SQLite
+        #  the only way to add a foreign key is via CREATE TABLE which means refactoring above two
+        #  steps into a single SQL statement (create table with primary and foreign keys)
+      }
+    })
+  }
+  
+  res <- DBI::dbListTables(conn)
+  invisible(res)
+}
+
+.inventory_ssurgo_files <- function(files = list.files(exdir,
+                                                       recursive = TRUE,
+                                                       pattern = pattern,
+                                                       full.names = TRUE),
+                                    exdir = NULL,
+                                    pattern = NULL,
+                                    layer_names = .get_spatial_layer_names(),
+                                    include_spatial = TRUE,
+                                    include_tabular = TRUE,
+                                    header = FALSE) {
+  
+  # create and add combined vector datasets:
+  #   "soilmu_a", "soilmu_l", "soilmu_p", "soilsa_a", "soilsf_l", "soilsf_p" 
+  f.shp <- f[grepl(".*\\.shp$", f)]
+  shp.grp <- do.call('rbind', strsplit(
+    gsub(
+      ".*soil([musfa]{2})_([apl])_([a-z]{2}\\d{3}|[a-z]{2})\\.shp",
+      "\\1;\\2;\\3",
+      f.shp
+    ),
+    ";",
+    fixed = TRUE
+  ))
+  
+  if (is.character(include_spatial)) {
+    idx <- paste0(shp.grp[, 1], "_", shp.grp[, 2]) %in% names(layer_names[layer_names %in% include_spatial])
+    shp.grp <- shp.grp[idx, ]
+    f.shp <- f.shp[idx]
+    include_spatial <- TRUE
+  }
+  
   # create and add combined tabular datasets
   f.txt <- f[grepl(".*\\.txt$", f)]
   txt.grp <- gsub("\\.txt", "", basename(f.txt))
@@ -397,166 +577,53 @@ createSSURGO <- function(filename = NULL,
     include_tabular <- TRUE
   }
   
-  if (include_tabular) {
-
-    if (length(mstabcn) >= 1) {
-      mstabcol <- read.delim(mstabcn[1], sep = "|", stringsAsFactors = FALSE, header = header)
-    }
-    
-    if (length(msidxdn) >= 1) {
-      msidxdet <- read.delim(msidxdn[1], sep = "|", stringsAsFactors = FALSE, header = header)
-    }
-
-    # build type mapping from SSURGO logicaldatatype metadata
-    # mstabcol columns: 1=tabphyname, 2=colsequence, 3=colphyname, 4=collogname,
-    #                   5=uomabbrev, 6=logicaldatatype, 7=notnull, 8=fieldsize
-    if (exists("mstabcol") && length(mstabcol) >= 6) {
-      .ssurgo_type_map <- c(
-        String = "character", Choice = "character", Vtext = "character", 
-        `Date/Time` = "character",
-        Integer = "integer", Float = "numeric", Boolean = "logical"
-      )
-    } else {
-      .ssurgo_type_map <- NULL
-    }
-
-    # helper: coerce columns to schema types from mstabcol metadata
-    .coerce_ssurgo_types <- function(y, tablename, mstabcol, type_map) {
-      if (is.null(type_map) || length(mstabcol) < 6) return(y)
-      col_meta <- mstabcol[mstabcol[[1]] == tablename, c(3L, 6L), drop = FALSE]
-      for (j in seq_len(nrow(col_meta))) {
-        col  <- col_meta[[1L]][j]
-        rtyp <- type_map[col_meta[[2L]][j]]
-        if (is.na(rtyp) || !col %in% names(y)) next
-        y[[col]] <- switch(rtyp,
-          character = as.character(y[[col]]),
-          integer   = suppressWarnings(as.integer(as.character(y[[col]]))),
-          numeric   = suppressWarnings(as.numeric(as.character(y[[col]]))),
-          logical   = as.logical(y[[col]])
-        )
-      }
-      y
-    }
-
-    lapply(names(f.txt.grp), function(x) {
-      
-      if (!is.null(mstabcol)) {
-        newnames <- mstabcol[[3]][mstabcol[[1]] == mstab_lut[x]]
-      }
-      
-      if (!is.null(msidxdet)) {
-        indexPK <- na.omit(msidxdet[[4]][msidxdet[[1]] == mstab_lut[x] & grepl("PK_", msidxdet[[2]])])
-        indexDI <- na.omit(msidxdet[[4]][msidxdet[[1]] == mstab_lut[x] & grepl("DI_", msidxdet[[2]])])
-      }
-      
-      d <- try(lapply(seq_along(f.txt.grp[[x]]), function(i) {
-          # message(f.txt.grp[[x]][i])
-          y <- try(read.delim(f.txt.grp[[x]][i], sep = "|", stringsAsFactors = FALSE, header = header,
-                              na.strings = c("", "NA")), silent = TRUE)
-          
-          if (inherits(y, 'try-error')) {
-            if (!quiet) {
-              message("File ", f.txt.grp[[x]][i], " contains no data")
-            }
-            return(NULL)
-          } else if (length(y) == 1) {
-            if (grepl("soil_metadata", f.txt.grp[[x]][i])) {
-              y <- data.frame(
-                areasymbol = toupper(gsub(".*soil_metadata_(.*)\\.txt", "\\1", f.txt.grp[[x]][i])),
-                content = paste(y[[1]], collapse = "\n")
-              )
-            } else {
-              y <- data.frame(content = y)
-            }
-          } else {
-            if (!is.null(mstab) && !header) { # preserve headers if present
-              colnames(y) <- newnames
-            }
-            # enforce schema types from metadata
-            y <- .coerce_ssurgo_types(y, mstab_lut[x], mstabcol, .ssurgo_type_map)
-          }
-
-          if (is.na(mstab_lut[x])) {
-            # readme, version
-            return(NULL)
-          }
-          
-          # remove deeper rules from cointerp for smaller DB size
-          # most people only use depth==0 (default)
-          if (mstab_lut[x] == "cointerp" && !is.null(maxruledepth)) {
-            y <- y[y$ruledepth <= maxruledepth, ]
-          }
-          
-          if ("musym" %in% colnames(y)) {
-            y$musym <- as.character(y$musym)
-          }
-          
-          try({
-            if (i == 1 && isFALSE(append)) {
-              DBI::dbWriteTable(conn, mstab_lut[x], y, overwrite = overwrite)
-            } else {
-              if (DBI::dbExistsTable(conn, mstab_lut[x]) && x %in% txt.first) {
-                # skip writing sdv/mds* metadata tables to avoid uniqueness issues 
-                return(FALSE)
-              }
-              DBI::dbWriteTable(conn, mstab_lut[x], y, append = TRUE)
-            }
-          }, silent = quiet)
-      }), silent = quiet)
-      
-      if (length(mstab_lut[x]) && is.na(mstab_lut[x])) {
-        mstab_lut[x] <- x
-      }
-      
-      if (length(mstab_lut[x]) && !is.na(mstab_lut[x])) {
-        
-        # create pkey indices
-        if (!is.null(indexPK) && length(indexPK) > 0) {
-          try({
-            q <- sprintf("CREATE UNIQUE INDEX IF NOT EXISTS %s ON %s (%s)", 
-                         paste0('PK_', mstab_lut[x]), mstab_lut[x], 
-                         paste(indexPK, collapse = ","))
-            if (DBI::dbExistsTable(conn, mstab_lut[x]))
-              DBI::dbExecute(conn, q)
-          }, silent = quiet)
-        }
-        
-        # create key indices
-        if (!is.null(indexDI) && length(indexDI) > 0) {
-          for (i in seq_along(indexDI)) {
-            try({
-              q <- sprintf("CREATE INDEX IF NOT EXISTS %s ON %s (%s)", 
-                           paste0('DI_', mstab_lut[x]), mstab_lut[x], indexDI[i])
-              if (DBI::dbExistsTable(conn, mstab_lut[x]))
-                DBI::dbExecute(conn, q)
-            }, silent = quiet)
-          }
-        }
-        
-        # for GPKG output, add gpkg_contents (metadata for features and attributes)
-        if (IS_GPKG) {
-          if (!.gpkg_has_contents(conn)) {
-            # if no spatial data inserted, there will be no gpkg_contents table initally
-            try(.gpkg_create_contents(conn))
-          }
-          # update gpkg_contents table entry
-          if (DBI::dbExistsTable(conn, mstab_lut[x])) {
-            try(.gpkg_delete_contents(conn, mstab_lut[x]))
-            try(.gpkg_add_contents(conn, mstab_lut[x]))
-          }
-        }
-        
-        # TODO: other foreign keys/relationships? ALTER TABLE/ADD CONSTRAINT not available in SQLite
-        #  the only way to add a foreign key is via CREATE TABLE which means refactoring above two
-        #  steps into a single SQL statement (create table with primary and foreign keys)
-      }
-    })
-  }
-  
-  res <- DBI::dbListTables(conn)
-  invisible(res)
+  list(
+    f.shp = f.shp,
+    shp.grp = shp.grp,
+    include_spatial = include_spatial,
+    f.txt.grp = f.txt.grp,
+    txt.first = txt.first,
+    include_tabular = include_tabular,
+    mstabn = mstabn,
+    mstabcn = mstabcn,
+    msidxdn = msidxdn,
+    mstab = mstab,
+    mstab_lut = mstab_lut
+  )
 }
 
+.get_spatial_layer_names <- function() {
+  c(
+    `mu_a` = "mupolygon",
+    `mu_l` = "muline",
+    `mu_p` = "mupoint",
+    `sa_a` = "sapolygon",
+    `sf_l` = "featline",
+    `sf_p` = "featpoint"
+  )
+}
+  
+# helper: coerce columns to schema types from mstabcol metadata
+.coerce_ssurgo_types <- function(y, tablename, mstabcol, type_map) {
+  if (is.null(type_map) || length(mstabcol) < 6)
+    return(y)
+  col_meta <- mstabcol[mstabcol[[1]] == tablename, c(3L, 6L), drop = FALSE]
+  for (j in seq_len(nrow(col_meta))) {
+    col  <- col_meta[[1L]][j]
+    rtyp <- type_map[col_meta[[2L]][j]]
+    if (is.na(rtyp) || !col %in% names(y))
+      next
+    y[[col]] <- switch(
+      rtyp,
+      character = as.character(y[[col]]),
+      integer   = suppressWarnings(as.integer(as.character(y[[col]]))),
+      numeric   = suppressWarnings(as.numeric(as.character(y[[col]]))),
+      logical   = as.logical(y[[col]])
+    )
+  }
+  y
+}
+  
 ## From https://github.com/brownag/gpkg -----
 
 #' Add, Remove, Update and Create `gpkg_contents` table and records
