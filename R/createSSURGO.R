@@ -8,18 +8,30 @@
 #' of `sacatalog` table such as `areasymbol = 'CA067'`, `"areasymbol IN ('CA628', 'CA067')"` or
 #' `areasymbol LIKE 'CT%'`.
 #'
-#' @param WHERE _character_. A SQL `WHERE` clause expression used to filter records in `sacatalog` table.
-#'   Alternately `WHERE` can be any spatial object supported by `SDA_spatialQuery()` for defining
-#'   the target extent.
-#' @param areasymbols _character_. Character vector of soil survey area symbols e.g. `c("CA067", "CA077")`. Used
-#'   in lieu of `WHERE` argument.
+#' @param WHERE _character_. A SQL `WHERE` clause expression used to filter records in `sacatalog`
+#'   table. Alternately `WHERE` can be any spatial object supported by `SDA_spatialQuery()` for
+#'   defining the target extent.
+#' @param areasymbols _character_. Character vector of soil survey area symbols e.g. `c("CA067",
+#'   "CA077")`. Used in lieu of `WHERE` argument.
 #' @param destdir _character_. Directory to download ZIP files into. Default `tempdir()`.
-#' @param exdir _character_. Directory to extract ZIP archives into. May be a directory that does not yet exist.
-#'   Each ZIP file will extract to a folder labeled with `areasymbol` in this directory. Default:
-#'   `destdir`
-#' @param include_template _logical_. Include the (possibly state-specific) MS Access template database?
-#'   Default: `FALSE`
-#' @param db _character_. Either `"SSURGO"` (default; detailed soil map) or `"STATSGO"` (general soil map).
+#' @param exdir _character_. Directory to extract ZIP archives into. May be a directory that does
+#'   not yet exist. Each ZIP file will extract to a folder labeled with `areasymbol` in this
+#'   directory. Default: `destdir`
+#' @param include_template _logical_. Include the (possibly state-specific) MS Access template
+#' database? Default: `FALSE`
+#' @param include_spatial _logical_ or _character_. Extract spatial data layers from ZIP file?
+#'   Default: `TRUE` inserts all spatial tables. If `include_spatial` is a _character_ vector
+#'   containing table names, only that set is extracted from the downloaded ZIP files. e.g.
+#'   `include_spatial=c("mupolygon", "featpoint")` extracts only the shapefiles (with side car
+#'   files) for mapunit polygons and special feature points.
+#' @param include_tabular _logical_ or _character_. Include tabular data layers in database?
+#'   Default: `TRUE` inserts all tabular tables. If `include_tabular` is a _character_ vector
+#'   containing table names, only that set is extracted from the downloaded ZIP files. e.g.
+#'   `include_tabular=c("mapunit", "muaggatt")` writes only the `mapunit` and `muaggatt` tables.
+#'   Note that special feature descriptions are stored in table `"featdesc"` and metadata for each
+#'   soil survey area are stored in `"soil_metadata"` tables.
+#' @param db _character_. Either `"SSURGO"` (default; detailed soil map) or `"STATSGO"` (general
+#'   soil map).
 #' @param extract _logical_. Extract ZIP files to `exdir`? Default: `TRUE`
 #' @param remove_zip _logical_. Remove ZIP files after extracting? Default: `FALSE`
 #' @param overwrite _logical_. Overwrite by re-extracting if directory already exists? Default:
@@ -28,12 +40,21 @@
 #'
 #' @details When `db="STATSGO"` the `WHERE` argument is not supported. Allowed `areasymbols` include
 #'   `"US"` and two-letter state codes e.g. `"WY"` for the Wyoming general soils map.
-#'
+#'  
+#' As in `createSSURGO()`, the `include_spatial` and `include_tabular` arguments either take a
+#' logical value (default `TRUE`) or a character vector of the specific table names to include. Note
+#' that when used in `downloadSSURGO()` the required metadata files are _always_ extracted to
+#' facilitate mapping to user-facing table names. These arguments allow for customizing the files
+#' that get extracted from ZIP files, not just filtering on file names (as is implemented with
+#' pre-existing `pattern` argument). This can dramatically improve efficiency of extraction and the
+#' overall size of the data in `exdir`. These arguments can be used in conjunction with the
+#' `pattern` argument to fine-tune the files included in the generated snapshot database.
+#' 
 #' @export
 #'
 #' @details Pipe-delimited TXT files are found in _/tabular/_ folder extracted from a SSURGO ZIP.
-#'   The files are named for tables in the SSURGO schema. There is no header / the files do not have
-#'   column names. See the _Soil Data Access Tables and Columns Report_:
+#'   The files are named for tables in the SSURGO schema. There is no header and the files do not
+#'   have column names. See the _Soil Data Access Tables and Columns Report_:
 #'   \url{https://sdmdataaccess.nrcs.usda.gov/documents/TablesAndColumnsReport.pdf} for details on
 #'   tables, column names and metadata including the default sequence of columns used in TXT files.
 #'   The function returns a `try-error` if the `WHERE`/`areasymbols` arguments result in
@@ -51,6 +72,8 @@ downloadSSURGO <- function(WHERE = NULL,
                            destdir = tempdir(),
                            exdir = destdir,
                            include_template = FALSE,
+                           include_spatial = TRUE,
+                           include_tabular = TRUE,
                            db = c('SSURGO', 'STATSGO'),
                            extract = TRUE,
                            remove_zip = FALSE,
@@ -119,10 +142,25 @@ downloadSSURGO <- function(WHERE = NULL,
     
     res <- lapply(seq_along(paths2), function(i) {
       ssa <- gsub(".*wss_SSA_(.*)_.*", "\\1", paths2[i])
-      lz <- utils::unzip(paths2[i], list = TRUE)
-      uz <- utils::unzip(paths2[i], exdir = exdir)
+      if (isTRUE(include_spatial) && isTRUE(include_tabular)) {
+        lz <- NULL
+      } else {
+        lz <- utils::unzip(paths2[i], list = TRUE)$Name
+        # need to pre-extract mstab data to map to real column names
+        utils::unzip(paths2[i], files = lz[grepl(
+          "^(mstab|mdstattabs|MetadataTable|mstabcol|mdstattabcol|MetadataColumnLookup|msidxdet|mdstatidxdet|MetadataIndexDetail)$",
+          tools::file_path_sans_ext(basename(lz))
+        )], exdir = exdir)
+        inv <- .inventory_ssurgo_files(lz, include_spatial = include_spatial, include_tabular = include_tabular)
+        lz <- unlist(c(inv$f.shp.sc, inv$f.txt.grp))
+      }
+      uz <- utils::unzip(paths2[i], files = lz, exdir = exdir)
       if ((!dir.exists(file.path(exdir, ssa)) || overwrite) && length(uz) == 0) {
         message(paste('Invalid zipfile:', paths2[i]))
+      } else {
+        if (!quiet) {
+          message("Extracted: ", paths2[i])
+        }
       }
     })
     
@@ -235,18 +273,10 @@ createSSURGO <- function(filename = NULL,
   } 
   
   layer_names <- .get_spatial_layer_names()
-  
-  f <- list.files(
-    exdir, 
-    recursive = TRUE, 
-    pattern = pattern, 
-    full.names = TRUE
-  )
+  f <- list.files(exdir, recursive = TRUE, full.names = TRUE)
   
   inv <- .inventory_ssurgo_files(
-    f,
-    exdir = NULL,
-    pattern = pattern,
+    files = f[grepl(pattern, f)],
     layer_names = layer_names,
     include_spatial = include_spatial,
     include_tabular = include_tabular,
@@ -453,7 +483,7 @@ createSSURGO <- function(filename = NULL,
             if (i == 1 && isFALSE(append)) {
               DBI::dbWriteTable(conn, inv$mstab_lut[x], y, overwrite = overwrite)
             } else {
-              if (DBI::dbExistsTable(conn, inv$mstab_lut[x]) && x %in% txt.first) {
+              if (DBI::dbExistsTable(conn, inv$mstab_lut[x]) && x %in% inv$txt.first) {
                 # skip writing sdv/mds* metadata tables to avoid uniqueness issues 
                 return(FALSE)
               }
@@ -515,11 +545,7 @@ createSSURGO <- function(filename = NULL,
   invisible(res)
 }
 
-.inventory_ssurgo_files <- function(files = list.files(exdir,
-                                                       recursive = TRUE,
-                                                       pattern = pattern,
-                                                       full.names = TRUE),
-                                    exdir = NULL,
+.inventory_ssurgo_files <- function(files,
                                     pattern = NULL,
                                     layer_names = .get_spatial_layer_names(),
                                     include_spatial = TRUE,
@@ -528,7 +554,7 @@ createSSURGO <- function(filename = NULL,
   
   # create and add combined vector datasets:
   #   "soilmu_a", "soilmu_l", "soilmu_p", "soilsa_a", "soilsf_l", "soilsf_p" 
-  f.shp <- f[grepl(".*\\.shp$", f)]
+  f.shp <- files[grepl(".*\\.shp$", files)]
   shp.grp <- do.call('rbind', strsplit(
     gsub(
       ".*soil([musfa]{2})_([apl])_([a-z]{2}\\d{3}|[a-z]{2})\\.shp",
@@ -539,15 +565,17 @@ createSSURGO <- function(filename = NULL,
     fixed = TRUE
   ))
   
+  f.shp.sc <- character(0)
   if (is.character(include_spatial)) {
     idx <- paste0(shp.grp[, 1], "_", shp.grp[, 2]) %in% names(layer_names[layer_names %in% include_spatial])
     shp.grp <- shp.grp[idx, ]
     f.shp <- f.shp[idx]
+    f.shp.sc <- files[grepl(paste0("soil", shp.grp[1], "_", shp.grp[2], "_", shp.grp[3]), files)]
     include_spatial <- TRUE
   }
   
   # create and add combined tabular datasets
-  f.txt <- f[grepl(".*\\.txt$", f)]
+  f.txt <- files[grepl(".*\\.txt$", files)]
   txt.grp <- gsub("\\.txt", "", basename(f.txt))
   
   # explicit handling special feature descriptions -> "featdesc" table
@@ -580,6 +608,7 @@ createSSURGO <- function(filename = NULL,
   list(
     f.shp = f.shp,
     shp.grp = shp.grp,
+    f.shp.sc = f.shp.sc,
     include_spatial = include_spatial,
     f.txt.grp = f.txt.grp,
     txt.first = txt.first,

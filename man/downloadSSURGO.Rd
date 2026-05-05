@@ -10,6 +10,8 @@ downloadSSURGO(
   destdir = tempdir(),
   exdir = destdir,
   include_template = FALSE,
+  include_spatial = TRUE,
+  include_tabular = TRUE,
   db = c("SSURGO", "STATSGO"),
   extract = TRUE,
   remove_zip = FALSE,
@@ -18,23 +20,36 @@ downloadSSURGO(
 )
 }
 \arguments{
-\item{WHERE}{\emph{character}. A SQL \code{WHERE} clause expression used to filter records in \code{sacatalog} table.
-Alternately \code{WHERE} can be any spatial object supported by \code{SDA_spatialQuery()} for defining
-the target extent.}
+\item{WHERE}{\emph{character}. A SQL \code{WHERE} clause expression used to filter records in \code{sacatalog}
+table. Alternately \code{WHERE} can be any spatial object supported by \code{SDA_spatialQuery()} for
+defining the target extent.}
 
-\item{areasymbols}{\emph{character}. Character vector of soil survey area symbols e.g. \code{c("CA067", "CA077")}. Used
-in lieu of \code{WHERE} argument.}
+\item{areasymbols}{\emph{character}. Character vector of soil survey area symbols e.g. \code{c("CA067", "CA077")}. Used in lieu of \code{WHERE} argument.}
 
 \item{destdir}{\emph{character}. Directory to download ZIP files into. Default \code{tempdir()}.}
 
-\item{exdir}{\emph{character}. Directory to extract ZIP archives into. May be a directory that does not yet exist.
-Each ZIP file will extract to a folder labeled with \code{areasymbol} in this directory. Default:
-\code{destdir}}
+\item{exdir}{\emph{character}. Directory to extract ZIP archives into. May be a directory that does
+not yet exist. Each ZIP file will extract to a folder labeled with \code{areasymbol} in this
+directory. Default: \code{destdir}}
 
-\item{include_template}{\emph{logical}. Include the (possibly state-specific) MS Access template database?
-Default: \code{FALSE}}
+\item{include_template}{\emph{logical}. Include the (possibly state-specific) MS Access template
+database? Default: \code{FALSE}}
 
-\item{db}{\emph{character}. Either \code{"SSURGO"} (default; detailed soil map) or \code{"STATSGO"} (general soil map).}
+\item{include_spatial}{\emph{logical} or \emph{character}. Extract spatial data layers from ZIP file?
+Default: \code{TRUE} inserts all spatial tables. If \code{include_spatial} is a \emph{character} vector
+containing table names, only that set is extracted from the downloaded ZIP files. e.g.
+\code{include_spatial=c("mupolygon", "featpoint")} extracts only the shapefiles (with side car
+files) for mapunit polygons and special feature points.}
+
+\item{include_tabular}{\emph{logical} or \emph{character}. Include tabular data layers in database?
+Default: \code{TRUE} inserts all tabular tables. If \code{include_tabular} is a \emph{character} vector
+containing table names, only that set is extracted from the downloaded ZIP files. e.g.
+\code{include_tabular=c("mapunit", "muaggatt")} writes only the \code{mapunit} and \code{muaggatt} tables.
+Note that special feature descriptions are stored in table \code{"featdesc"} and metadata for each
+soil survey area are stored in \code{"soil_metadata"} tables.}
+
+\item{db}{\emph{character}. Either \code{"SSURGO"} (default; detailed soil map) or \code{"STATSGO"} (general
+soil map).}
 
 \item{extract}{\emph{logical}. Extract ZIP files to \code{exdir}? Default: \code{TRUE}}
 
@@ -61,9 +76,18 @@ of \code{sacatalog} table such as \code{areasymbol = 'CA067'}, \code{"areasymbol
 When \code{db="STATSGO"} the \code{WHERE} argument is not supported. Allowed \code{areasymbols} include
 \code{"US"} and two-letter state codes e.g. \code{"WY"} for the Wyoming general soils map.
 
+As in \code{createSSURGO()}, the \code{include_spatial} and \code{include_tabular} arguments either take a
+logical value (default \code{TRUE}) or a character vector of the specific table names to include. Note
+that when used in \code{downloadSSURGO()} the required metadata files are \emph{always} extracted to
+facilitate mapping to user-facing table names. These arguments allow for customizing the files
+that get extracted from ZIP files, not just filtering on file names (as is implemented with
+pre-existing \code{pattern} argument). This can dramatically improve efficiency of extraction and the
+overall size of the data in \code{exdir}. These arguments can be used in conjunction with the
+\code{pattern} argument to fine-tune the files included in the generated snapshot database.
+
 Pipe-delimited TXT files are found in \emph{/tabular/} folder extracted from a SSURGO ZIP.
-The files are named for tables in the SSURGO schema. There is no header / the files do not have
-column names. See the \emph{Soil Data Access Tables and Columns Report}:
+The files are named for tables in the SSURGO schema. There is no header and the files do not
+have column names. See the \emph{Soil Data Access Tables and Columns Report}:
 \url{https://sdmdataaccess.nrcs.usda.gov/documents/TablesAndColumnsReport.pdf} for details on
 tables, column names and metadata including the default sequence of columns used in TXT files.
 The function returns a \code{try-error} if the \code{WHERE}/\code{areasymbols} arguments result in
