@@ -150,7 +150,7 @@ downloadSSURGO <- function(WHERE = NULL,
           "^(mstab|mdstattabs|MetadataTable|mstabcol|mdstattabcol|MetadataColumnLookup|msidxdet|mdstatidxdet|MetadataIndexDetail)$",
           tools::file_path_sans_ext(basename(lz))
         )], exdir = exdir)
-        inv <- .inventory_ssurgo_files(lz, include_spatial = include_spatial, include_tabular = include_tabular)
+        inv <- .inventory_ssurgo_files(lz, exdir = exdir, include_spatial = include_spatial, include_tabular = include_tabular)
         lz <- unlist(c(inv$f.shp.sc, inv$f.txt.grp))
       }
       uz <- utils::unzip(paths2[i], files = lz, exdir = exdir)
@@ -281,6 +281,7 @@ createSSURGO <- function(filename = NULL,
   
   inv <- .inventory_ssurgo_files(
     files = f[fdx],
+    exdir = exdir,
     layer_names = layer_names,
     include_spatial = include_spatial,
     include_tabular = include_tabular,
@@ -420,7 +421,7 @@ createSSURGO <- function(filename = NULL,
     # build type mapping from SSURGO logicaldatatype metadata
     # mstabcol columns: 1=tabphyname, 2=colsequence, 3=colphyname, 4=collogname,
     #                   5=uomabbrev, 6=logicaldatatype, 7=notnull, 8=fieldsize
-    if (exists("mstabcol") && length(mstabcol) >= 6) {
+    if (length(mstabcol) >= 6) {
       .ssurgo_type_map <- c(
         String = "character", Choice = "character", Vtext = "character", 
         `Date/Time` = "character",
@@ -550,6 +551,7 @@ createSSURGO <- function(filename = NULL,
 }
 
 .inventory_ssurgo_files <- function(files,
+                                    exdir, 
                                     pattern = NULL,
                                     layer_names = .get_spatial_layer_names(),
                                     include_spatial = TRUE,
@@ -596,7 +598,12 @@ createSSURGO <- function(filename = NULL,
   msidxdn <- f.txt.grp[[which(names(f.txt.grp) %in% c("msidxdet", "mdstatidxdet", "MetadataIndexDetail"))[1]]][[1]]
   
   if (length(mstabn) >= 1) {
-    mstab <- read.delim(mstabn[1], sep = "|", stringsAsFactors = FALSE, header = header)
+    mstab <- read.delim(
+      file.path(exdir, mstabn[1]),
+      sep = "|",
+      stringsAsFactors = FALSE,
+      header = header
+    )
     mstab_lut <- c(mstab[[1]], "soil_metadata")
     names(mstab_lut) <- c(mstab[[5]], "soil_metadata")
   } else {
