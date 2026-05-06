@@ -14,6 +14,7 @@ downloadSSURGO(
   include_tabular = TRUE,
   db = c("SSURGO", "STATSGO"),
   extract = TRUE,
+  LAPPLY.FUN = lapply,
   remove_zip = FALSE,
   overwrite = FALSE,
   quiet = FALSE
@@ -52,6 +53,10 @@ soil survey area are stored in \code{"soil_metadata"} tables.}
 soil map).}
 
 \item{extract}{\emph{logical}. Extract ZIP files to \code{exdir}? Default: \code{TRUE}}
+
+\item{LAPPLY.FUN}{\emph{function}. \code{lapply()}-like function to use for iteration during \code{extract}
+phase. Only used if \code{extract=TRUE}. This allows for the \code{utils::unzip()} operations to be run
+in parallel instead of sequential, custom progress reporting, or similar.}
 
 \item{remove_zip}{\emph{logical}. Remove ZIP files after extracting? Default: \code{FALSE}}
 

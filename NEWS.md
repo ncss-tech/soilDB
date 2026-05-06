@@ -1,7 +1,7 @@
 # soilDB 2.9.2 (development)
  - EDIT base URL (for `get_EDIT_ecoclass_by_geoUnit()` and `make_EDIT_service_URL()`) updated to new USDA-managed server: <https://edit.sc.egov.usda.gov/>
  - SoilWeb-based Web Coverage Services (`soilColor.wcs()`, `ISSR800.wcs()`, `mukey.wcs()`) have been updated with FY26 maps, now including most OCONUS soil surveys (AK, HI, PR, PW, GU, AS, MP)
- - `downloadSSURGO()` gains arguments `include_spatial` and `include_tabular` that are analogous to arguments of the same name from `createSSURGO()`. Thanks to feature request from @dylanbeaudette (#470).
+ - `downloadSSURGO()` gains arguments `include_spatial` and `include_tabular` that are analogous to arguments of the same name from `createSSURGO()`. Also, added `LAPPLY.FUN` to support arbitrary parallel or progress reporting backends. Thanks to feature request from @dylanbeaudette (#470).
 
 # soilDB 2.9.1 (2026-04-01)
  - `ROSETTA()` updates thanks to Todd Skaggs (USDA-ARS):

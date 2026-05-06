@@ -33,6 +33,9 @@
 #' @param db _character_. Either `"SSURGO"` (default; detailed soil map) or `"STATSGO"` (general
 #'   soil map).
 #' @param extract _logical_. Extract ZIP files to `exdir`? Default: `TRUE`
+#' @param LAPPLY.FUN _function_. `lapply()`-like function to use for iteration during `extract`
+#'   phase. Only used if `extract=TRUE`. This allows for the `utils::unzip()` operations to be run
+#'   in parallel instead of sequential, custom progress reporting, or similar.
 #' @param remove_zip _logical_. Remove ZIP files after extracting? Default: `FALSE`
 #' @param overwrite _logical_. Overwrite by re-extracting if directory already exists? Default:
 #'   `FALSE`
@@ -75,6 +78,7 @@ downloadSSURGO <- function(WHERE = NULL,
                            include_tabular = TRUE,
                            db = c('SSURGO', 'STATSGO'),
                            extract = TRUE,
+                           LAPPLY.FUN = lapply,
                            remove_zip = FALSE,
                            overwrite = FALSE,
                            quiet = FALSE) {
@@ -138,8 +142,7 @@ downloadSSURGO <- function(WHERE = NULL,
     if (!dir.exists(exdir)) {
       dir.create(exdir, recursive = TRUE)
     }
-
-    res <- lapply(seq_along(paths2), function(i) {
+    res <- LAPPLY.FUN(seq_along(paths2), function(i) {
       ssa <- gsub(".*wss_SSA_(.*)_.*", "\\1", paths2[i])
       if (isTRUE(include_spatial) && isTRUE(include_tabular)) {
         lz <- NULL
