@@ -190,15 +190,15 @@ downloadSSURGO <- function(WHERE = NULL,
 #' you encounter issues using specific DBI connection types, please report in the soilDB issue
 #' tracker.
 #'
-#' @param filename _character_. Output file name (e.g. `'db.sqlite'` or `'db.gpkg'`). Only used when `con` is not
-#'   specified by the user.
-#' @param exdir  _character_. Path containing containing input SSURGO spatial (.shp) and tabular (.txt) files,
-#'   downloaded and extracted by `downloadSSURGO()` or similar.
+#' @param filename _character_. Output file name (e.g. `'db.sqlite'` or `'db.gpkg'`). Only used when
+#'   `con` is not specified by the user.
+#' @param exdir  _character_. Path containing containing input SSURGO spatial (.shp) and tabular
+#'   (.txt) files, downloaded and extracted by `downloadSSURGO()` or similar.
 #' @param conn A _DBIConnection_ object. Default is a `SQLiteConnection` used for writing .sqlite or
 #'   .gpkg files. Alternate options are any DBI connection types. When `include_spatial=TRUE`, the
 #'   sf package is used to write spatial data to the database.
-#' @param pattern  _character_. Optional regular expression to use to filter subdirectories of `exdir`.
-#'   Default: `NULL` will search all subdirectories for SSURGO export files.
+#' @param pattern  _character_. Optional regular expression to use to filter subdirectories of
+#'   `exdir`. Default: `NULL` will search all subdirectories for SSURGO export files.
 #' @param include_spatial _logical_ or _character_. Include spatial data layers in database?
 #'   Default: `TRUE` inserts all spatial tables. If `include_spatial` is a _character_ vector
 #'   containing table names, only that set are written to file. e.g. `include_spatial=c("mupolygon",
@@ -210,12 +210,11 @@ downloadSSURGO <- function(WHERE = NULL,
 #'   descriptions are stored in table `"featdesc"` and metadata for each soil survey area are stored
 #'   in `"soil_metadata"` tables.
 #' @param dissolve_field _character_. Dissolve geometries to create MULTIPOLYGON features? Column
-#'   name
-#'   specified is the grouping variable. Default: `NULL` does no aggregation, giving 1 `POLYGON`
-#'   feature per delineation. `"mukey"` aggregates all related delineations within a soil survey
-#'   area.
-#' @param maxruledepth _integer_. Maximum rule depth for `"cointerp"` table. Default `0` includes only
-#'   shallowest ratings for smaller database size.
+#'   name specified is the grouping variable. Default: `NULL` does no aggregation, giving 1
+#'   `POLYGON` feature per delineation. `"mukey"` aggregates all related delineations within a soil
+#'   survey area.
+#' @param maxruledepth _integer_. Maximum rule depth for `"cointerp"` table. Default `0` includes
+#'   only shallowest ratings for smaller database size.
 #' @param overwrite _logical_. Overwrite existing layers? Default: `FALSE`
 #' @param append _logical_. Append to existing layers? Default: `FALSE`
 #' @param header _logical_. Passed to `read.delim()` for reading pipe-delimited (`|`) text files
@@ -223,7 +222,7 @@ downloadSSURGO <- function(WHERE = NULL,
 #' @param quiet _logical_. Suppress messages and other output from database read/write operations?
 #' @param ... Additional arguments passed to `write_sf()` for writing spatial layers.
 #'
-#' @return Character. Vector of layer/table names in `filename`.
+#' @return _character_. Vector of layer/table names in `filename`.
 #' @seealso [downloadSSURGO()]
 #' @export
 #' @examples
