@@ -211,29 +211,29 @@ dbGetQuery(con, "SELECT * FROM mapunit LIMIT 5")
     ## 4  1512                  Atchison loam, 6 to 9 percent slopes Consociation
     ## 5  1515 Atchison-Rock outcrop complex, 6 to 20 percent slopes      Complex
     ##   mustatus muacres mapunitlfw_l mapunitlfw_r mapunitlfw_h mapunitpfa_l
-    ## 1       NA   15733           NA           NA           NA           NA
-    ## 2       NA      62           NA           NA           NA           NA
-    ## 3       NA   36516           NA           NA           NA           NA
-    ## 4       NA    4666           NA           NA           NA           NA
-    ## 5       NA    3488           NA           NA           NA           NA
+    ## 1     <NA>   15733           NA           NA           NA           NA
+    ## 2     <NA>      62           NA           NA           NA           NA
+    ## 3     <NA>   36516           NA           NA           NA           NA
+    ## 4     <NA>    4666           NA           NA           NA           NA
+    ## 5     <NA>    3488           NA           NA           NA           NA
     ##   mapunitpfa_r mapunitpfa_h                        farmlndcl muhelcl muwathelcl
-    ## 1           NA           NA Farmland of statewide importance      NA         NA
-    ## 2           NA           NA      Prime farmland if irrigated      NA         NA
-    ## 3           NA           NA      Prime farmland if irrigated      NA         NA
-    ## 4           NA           NA Farmland of statewide importance      NA         NA
-    ## 5           NA           NA Farmland of statewide importance      NA         NA
+    ## 1           NA           NA Farmland of statewide importance    <NA>       <NA>
+    ## 2           NA           NA      Prime farmland if irrigated    <NA>       <NA>
+    ## 3           NA           NA      Prime farmland if irrigated    <NA>       <NA>
+    ## 4           NA           NA Farmland of statewide importance    <NA>       <NA>
+    ## 5           NA           NA Farmland of statewide importance    <NA>       <NA>
     ##   muwndhelcl interpfocus invesintens iacornsr nhiforsoigrp nhspiagr
-    ## 1         NA                 Order 2       NA           NA       NA
-    ## 2         NA                 Order 2       NA           NA       NA
-    ## 3         NA                 Order 2       NA           NA       NA
-    ## 4         NA                 Order 2       NA           NA       NA
-    ## 5         NA                 Order 2       NA           NA       NA
+    ## 1       <NA>        <NA>     Order 2       NA         <NA>       NA
+    ## 2       <NA>        <NA>     Order 2       NA         <NA>       NA
+    ## 3       <NA>        <NA>     Order 2       NA         <NA>       NA
+    ## 4       <NA>        <NA>     Order 2       NA         <NA>       NA
+    ## 5       <NA>        <NA>     Order 2       NA         <NA>       NA
     ##   vtsepticsyscl mucertstat  lkey   mukey
-    ## 1            NA         NA 10591 1382580
-    ## 2            NA         NA 10591 1382581
-    ## 3            NA         NA 10591 1382582
-    ## 4            NA         NA 10591 1382583
-    ## 5            NA         NA 10591 1382584
+    ## 1          <NA>       <NA> 10591 1382580
+    ## 2          <NA>       <NA> 10591 1382581
+    ## 3          <NA>       <NA> 10591 1382582
+    ## 4          <NA>       <NA> 10591 1382583
+    ## 5          <NA>       <NA> 10591 1382584
 
 ### Join Tables
 
@@ -279,7 +279,7 @@ library(sf)
 spatial_mu <- st_read(gpkg_path, layer = "mupolygon")
 ```
 
-    ## Reading layer `mupolygon' from data source `/tmp/RtmppaaLbx/ssurgo.gpkg' using driver `GPKG'
+    ## Reading layer `mupolygon' from data source `/tmp/RtmpPOasIb/ssurgo.gpkg' using driver `GPKG'
     ## Simple feature collection with 3333 features and 4 fields
     ## Geometry type: POLYGON
     ## Dimension:     XY
@@ -347,33 +347,33 @@ head(mapunit)
     ## 5  1515 Atchison-Rock outcrop complex, 6 to 20 percent slopes      Complex
     ## 6  1550         Belfon clay loam, cool, 0 to 1 percent slopes Consociation
     ##   mustatus muacres mapunitlfw_l mapunitlfw_r mapunitlfw_h mapunitpfa_l
-    ## 1       NA   15733           NA           NA           NA           NA
-    ## 2       NA      62           NA           NA           NA           NA
-    ## 3       NA   36516           NA           NA           NA           NA
-    ## 4       NA    4666           NA           NA           NA           NA
-    ## 5       NA    3488           NA           NA           NA           NA
-    ## 6       NA    5811           NA           NA           NA           NA
+    ## 1     <NA>   15733           NA           NA           NA           NA
+    ## 2     <NA>      62           NA           NA           NA           NA
+    ## 3     <NA>   36516           NA           NA           NA           NA
+    ## 4     <NA>    4666           NA           NA           NA           NA
+    ## 5     <NA>    3488           NA           NA           NA           NA
+    ## 6     <NA>    5811           NA           NA           NA           NA
     ##   mapunitpfa_r mapunitpfa_h                        farmlndcl muhelcl muwathelcl
-    ## 1           NA           NA Farmland of statewide importance      NA         NA
-    ## 2           NA           NA      Prime farmland if irrigated      NA         NA
-    ## 3           NA           NA      Prime farmland if irrigated      NA         NA
-    ## 4           NA           NA Farmland of statewide importance      NA         NA
-    ## 5           NA           NA Farmland of statewide importance      NA         NA
-    ## 6           NA           NA      Prime farmland if irrigated      NA         NA
+    ## 1           NA           NA Farmland of statewide importance    <NA>       <NA>
+    ## 2           NA           NA      Prime farmland if irrigated    <NA>       <NA>
+    ## 3           NA           NA      Prime farmland if irrigated    <NA>       <NA>
+    ## 4           NA           NA Farmland of statewide importance    <NA>       <NA>
+    ## 5           NA           NA Farmland of statewide importance    <NA>       <NA>
+    ## 6           NA           NA      Prime farmland if irrigated    <NA>       <NA>
     ##   muwndhelcl interpfocus invesintens iacornsr nhiforsoigrp nhspiagr
-    ## 1         NA                 Order 2       NA           NA       NA
-    ## 2         NA                 Order 2       NA           NA       NA
-    ## 3         NA                 Order 2       NA           NA       NA
-    ## 4         NA                 Order 2       NA           NA       NA
-    ## 5         NA                 Order 2       NA           NA       NA
-    ## 6         NA    cropland     Order 2       NA           NA       NA
+    ## 1       <NA>        <NA>     Order 2       NA         <NA>       NA
+    ## 2       <NA>        <NA>     Order 2       NA         <NA>       NA
+    ## 3       <NA>        <NA>     Order 2       NA         <NA>       NA
+    ## 4       <NA>        <NA>     Order 2       NA         <NA>       NA
+    ## 5       <NA>        <NA>     Order 2       NA         <NA>       NA
+    ## 6       <NA>    cropland     Order 2       NA         <NA>       NA
     ##   vtsepticsyscl mucertstat  lkey   mukey
-    ## 1            NA         NA 10591 1382580
-    ## 2            NA         NA 10591 1382581
-    ## 3            NA         NA 10591 1382582
-    ## 4            NA         NA 10591 1382583
-    ## 5            NA         NA 10591 1382584
-    ## 6            NA         NA 10591 1382585
+    ## 1          <NA>       <NA> 10591 1382580
+    ## 2          <NA>       <NA> 10591 1382581
+    ## 3          <NA>       <NA> 10591 1382582
+    ## 4          <NA>       <NA> 10591 1382583
+    ## 5          <NA>       <NA> 10591 1382584
+    ## 6          <NA>       <NA> 10591 1382585
 
 ``` r
 
@@ -382,33 +382,33 @@ head(component)
 ```
 
     ##   comppct_l comppct_r comppct_h compname compkind majcompflag        otherph
-    ## 1        NA        90        NA Atchison   Series         Yes               
-    ## 2        NA        10        NA    Otero   Series         No  HIGH PPT, NIRR
-    ## 3        NA         5        NA   Bigbow   Series         No                
-    ## 4        NA        70        NA Atchison   Series         Yes               
-    ## 5        NA        25        NA    Otero   Series         No  HIGH PPT, NIRR
-    ## 6        NA         5        NA  Satanta   Series         No  PE<31, MAAT>45
+    ## 1        NA        90        NA Atchison   Series          NA           <NA>
+    ## 2        NA        10        NA    Otero   Series          NA HIGH PPT, NIRR
+    ## 3        NA         5        NA   Bigbow   Series          NA           <NA>
+    ## 4        NA        70        NA Atchison   Series          NA           <NA>
+    ## 5        NA        25        NA    Otero   Series          NA HIGH PPT, NIRR
+    ## 6        NA         5        NA  Satanta   Series          NA PE<31, MAAT>45
     ##   localphase slope_l slope_r slope_h slopelenusle_l slopelenusle_r
-    ## 1                  3       5       6             NA             61
-    ## 2                  4      10      15             NA             23
-    ## 3                  0       1       1             NA            107
-    ## 4                  1       2       3             NA             76
-    ## 5                  2       3       4             NA             61
-    ## 6                  0       1       1             NA            107
+    ## 1       <NA>       3       5       6             NA             61
+    ## 2       <NA>       4      10      15             NA             23
+    ## 3       <NA>       0       1       1             NA            107
+    ## 4       <NA>       1       2       3             NA             76
+    ## 5       <NA>       2       3       4             NA             61
+    ## 6       <NA>       0       1       1             NA            107
     ##   slopelenusle_h runoff tfact wei weg erocl earthcovkind1 earthcovkind2
-    ## 1             NA Medium     5  86  4L                                  
-    ## 2             NA Medium     5  86   3                                  
-    ## 3             NA    Low     5  86   3                                  
-    ## 4             NA    Low     5  86   3                                  
-    ## 5             NA    Low     5  86   3                                  
-    ## 6             NA    Low     5  56   5                                  
+    ## 1             NA Medium     5  86  4L  <NA>          <NA>          <NA>
+    ## 2             NA Medium     5  86   3  <NA>          <NA>          <NA>
+    ## 3             NA    Low     5  86   3  <NA>          <NA>          <NA>
+    ## 4             NA    Low     5  86   3  <NA>          <NA>          <NA>
+    ## 5             NA    Low     5  86   3  <NA>          <NA>          <NA>
+    ## 6             NA    Low     5  56   5  <NA>          <NA>          <NA>
     ##   hydricon hydricrating                   drainagecl elev_l elev_r elev_h
-    ## 1                    No                 Well drained    732    915   1097
-    ## 2                    No Somewhat excessively drained    732    915   1097
-    ## 3                    No                 Well drained    732    915   1097
-    ## 4                    No                 Well drained    732    915   1097
-    ## 5                    No Somewhat excessively drained   1372   1524   1676
-    ## 6                    No                 Well drained    610    915   1219
+    ## 1     <NA>           No                 Well drained    732    915   1097
+    ## 2     <NA>           No Somewhat excessively drained    732    915   1097
+    ## 3     <NA>           No                 Well drained    732    915   1097
+    ## 4     <NA>           No                 Well drained    732    915   1097
+    ## 5     <NA>           No Somewhat excessively drained   1372   1524   1676
+    ## 6     <NA>           No                 Well drained    610    915   1219
     ##   aspectccwise aspectrep aspectcwise                                   geomdesc
     ## 1            0       180         359                     fan remnants on breaks
     ## 2            0       180         359                     fan remnants on breaks
@@ -431,40 +431,40 @@ head(component)
     ## 5   450   500               NA               NA               NA   185   200
     ## 6   450   500               NA               NA               NA   195   215
     ##   ffd_h nirrcapcl nirrcapscl nirrcapunit irrcapcl irrcapscl irrcapunit
-    ## 1   235         3          e          NA       NA                   NA
+    ## 1   235         3          e          NA     <NA>      <NA>         NA
     ## 2   235         6          e          NA        6         e         NA
     ## 3   215         3          e          NA        2         e         NA
-    ## 4   215         3          e          NA       NA                   NA
+    ## 4   215         3          e          NA     <NA>      <NA>         NA
     ## 5   215         6          e          NA        6         e         NA
-    ## 6   235         3          c          NA        1                   NA
+    ## 6   235         3          c          NA        1      <NA>         NA
     ##   cropprodindex constreeshrubgrp wndbrksuitgrp rsprod_l rsprod_r rsprod_h
-    ## 1            NA                8            NA      800     1650     2400
-    ## 2            NA                             NA     1000     2000     3000
-    ## 3            NA                             NA     1250     2000     3000
-    ## 4            NA                8            NA      800     1650     2400
-    ## 5            NA                             NA      900     1800     2500
-    ## 6            NA                             NA      900     1700     2200
+    ## 1            NA                8          <NA>      800     1650     2400
+    ## 2            NA             <NA>          <NA>     1000     2000     3000
+    ## 3            NA             <NA>          <NA>     1250     2000     3000
+    ## 4            NA                8          <NA>      800     1650     2400
+    ## 5            NA             <NA>          <NA>      900     1800     2500
+    ## 6            NA             <NA>          <NA>      900     1700     2200
     ##   foragesuitgrpid wlgrain wlgrass wlherbaceous wlshrub wlconiferous wlhardwood
-    ## 1              NA      NA      NA           NA      NA           NA         NA
-    ## 2              NA      NA      NA           NA      NA           NA         NA
-    ## 3              NA      NA      NA           NA      NA           NA         NA
-    ## 4              NA      NA      NA           NA      NA           NA         NA
-    ## 5              NA      NA      NA           NA      NA           NA         NA
-    ## 6              NA      NA      NA           NA      NA           NA         NA
+    ## 1            <NA>    <NA>    <NA>         <NA>    <NA>         <NA>       <NA>
+    ## 2            <NA>    <NA>    <NA>         <NA>    <NA>         <NA>       <NA>
+    ## 3            <NA>    <NA>    <NA>         <NA>    <NA>         <NA>       <NA>
+    ## 4            <NA>    <NA>    <NA>         <NA>    <NA>         <NA>       <NA>
+    ## 5            <NA>    <NA>    <NA>         <NA>    <NA>         <NA>       <NA>
+    ## 6            <NA>    <NA>    <NA>         <NA>    <NA>         <NA>       <NA>
     ##   wlwetplant wlshallowwat wlrangeland wlopenland wlwoodland wlwetland
-    ## 1         NA           NA          NA         NA         NA        NA
-    ## 2         NA           NA          NA         NA         NA        NA
-    ## 3         NA           NA          NA         NA         NA        NA
-    ## 4         NA           NA          NA         NA         NA        NA
-    ## 5         NA           NA          NA         NA         NA        NA
-    ## 6         NA           NA          NA         NA         NA        NA
+    ## 1       <NA>         <NA>        <NA>       <NA>       <NA>      <NA>
+    ## 2       <NA>         <NA>        <NA>       <NA>       <NA>      <NA>
+    ## 3       <NA>         <NA>        <NA>       <NA>       <NA>      <NA>
+    ## 4       <NA>         <NA>        <NA>       <NA>       <NA>      <NA>
+    ## 5       <NA>         <NA>        <NA>       <NA>       <NA>      <NA>
+    ## 6       <NA>         <NA>        <NA>       <NA>       <NA>      <NA>
     ##   soilslippot frostact initsub_l initsub_r initsub_h totalsub_l totalsub_r
-    ## 1             Moderate         0         0         0         NA         NA
-    ## 2             Moderate         0         0         0         NA         NA
-    ## 3             Moderate         0         0         0         NA         NA
-    ## 4             Moderate         0         0         0         NA         NA
-    ## 5             Moderate         0         0         0         NA         NA
-    ## 6             Moderate         0         0         0         NA         NA
+    ## 1        <NA> Moderate         0         0         0         NA         NA
+    ## 2        <NA> Moderate         0         0         0         NA         NA
+    ## 3        <NA> Moderate         0         0         0         NA         NA
+    ## 4        <NA> Moderate         0         0         0         NA         NA
+    ## 5        <NA> Moderate         0         0         0         NA         NA
+    ## 6        <NA> Moderate         0         0         0         NA         NA
     ##   totalsub_h hydgrp   corcon corsteel
     ## 1         NA      B Moderate Moderate
     ## 2         NA      A Moderate Moderate
@@ -487,33 +487,33 @@ head(component)
     ## 5    Entisols    Orthents Ustorthents Aridic Ustorthents coarse-loamy
     ## 6   Mollisols     Ustolls Argiustolls Aridic Argiustolls   fine-loamy
     ##   taxpartsizemod  taxceactcl taxreaction taxtempcl     taxmoistscl
-    ## 1                superactive    not used     mesic Aridic (torric)
-    ## 2                superactive  calcareous     mesic                
-    ## 3                superactive    not used     mesic                
-    ## 4                superactive    not used     mesic Aridic (torric)
-    ## 5                superactive  calcareous     mesic                
-    ## 6                superactive    not used     mesic                
+    ## 1           <NA> superactive    not used     mesic Aridic (torric)
+    ## 2           <NA> superactive  calcareous     mesic            <NA>
+    ## 3           <NA> superactive    not used     mesic            <NA>
+    ## 4           <NA> superactive    not used     mesic Aridic (torric)
+    ## 5           <NA> superactive  calcareous     mesic            <NA>
+    ## 6           <NA> superactive    not used     mesic            <NA>
     ##   taxtempregime soiltaxedition castorieindex flecolcomnum flhe flphe
-    ## 1         mesic  ninth edition            NA           NA   NA    NA
-    ## 2         mesic  ninth edition            NA           NA   NA    NA
-    ## 3         mesic                           NA           NA   NA    NA
-    ## 4         mesic  ninth edition            NA           NA   NA    NA
-    ## 5         mesic                           NA           NA   NA    NA
-    ## 6         mesic                           NA           NA   NA    NA
+    ## 1         mesic  ninth edition            NA         <NA> <NA>  <NA>
+    ## 2         mesic  ninth edition            NA         <NA> <NA>  <NA>
+    ## 3         mesic           <NA>            NA         <NA> <NA>  <NA>
+    ## 4         mesic  ninth edition            NA         <NA> <NA>  <NA>
+    ## 5         mesic           <NA>            NA         <NA> <NA>  <NA>
+    ## 6         mesic           <NA>            NA         <NA> <NA>  <NA>
     ##   flsoilleachpot flsoirunoffpot fltemik2use fltriumph2use indraingrp
-    ## 1             NA             NA         N/A           N/A         NA
-    ## 2             NA             NA         N/A           N/A         NA
-    ## 3             NA             NA         N/A           N/A         NA
-    ## 4             NA             NA         N/A           N/A         NA
-    ## 5             NA             NA         N/A           N/A         NA
-    ## 6             NA             NA         N/A           N/A         NA
+    ## 1           <NA>           <NA>         N/A           N/A       <NA>
+    ## 2           <NA>           <NA>         N/A           N/A       <NA>
+    ## 3           <NA>           <NA>         N/A           N/A       <NA>
+    ## 4           <NA>           <NA>         N/A           N/A       <NA>
+    ## 5           <NA>           <NA>         N/A           N/A       <NA>
+    ## 6           <NA>           <NA>         N/A           N/A       <NA>
     ##   innitrateleachi misoimgmtgrp vasoimgtgrp   mukey    cokey
-    ## 1              NA           NA          NA 1382580 26369989
-    ## 2              NA           NA          NA 1382580 26369990
-    ## 3              NA           NA          NA 1382581 26369991
-    ## 4              NA           NA          NA 1382581 26369992
-    ## 5              NA           NA          NA 1382581 26369993
-    ## 6              NA           NA          NA 1382582 26370017
+    ## 1              NA         <NA>        <NA> 1382580 26369989
+    ## 2              NA         <NA>        <NA> 1382580 26369990
+    ## 3              NA         <NA>        <NA> 1382581 26369991
+    ## 4              NA         <NA>        <NA> 1382581 26369992
+    ## 5              NA         <NA>        <NA> 1382581 26369993
+    ## 6              NA         <NA>        <NA> 1382582 26370017
 
 ``` r
 
@@ -648,7 +648,7 @@ str(hyd_tab)
 ```
 
     ## 'data.frame':    75 obs. of  6 variables:
-    ##  $ mukey     : int  1382547 1382548 1382549 1382550 1382551 1382552 1382553 1382554 1382555 1382556 ...
+    ##  $ mukey     : chr  "1382547" "1382548" "1382549" "1382550" ...
     ##  $ areasymbol: chr  "KS187" "KS187" "KS187" "KS187" ...
     ##  $ musym     : chr  "1510" "1511" "1550" "1342" ...
     ##  $ muname    : chr  "Atchison clay loam, 3 to 6 percent slopes" "Atchison loam, 1 to 3 percent slopes" "Belfon clay loam, cool, 0 to 1 percent slopes" "Bridgeport clay loam, rarely flooded" ...

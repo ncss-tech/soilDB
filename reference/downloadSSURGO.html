@@ -60,6 +60,8 @@ SSURGO format; optionally including the corresponding SSURGO Template Database w
 <span>  destdir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  exdir <span class="op">=</span> <span class="va">destdir</span>,</span>
 <span>  include_template <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  include_spatial <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  include_tabular <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  db <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SSURGO"</span>, <span class="st">"STATSGO"</span><span class="op">)</span>,</span>
 <span>  extract <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  remove_zip <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -73,14 +75,13 @@ SSURGO format; optionally including the corresponding SSURGO Template Database w
 
 
 <dl><dt id="arg-where">WHERE<a class="anchor" aria-label="anchor" href="#arg-where"></a></dt>
-<dd><p><em>character</em>. A SQL <code>WHERE</code> clause expression used to filter records in <code>sacatalog</code> table.
-Alternately <code>WHERE</code> can be any spatial object supported by <code><a href="SDA_spatialQuery.html">SDA_spatialQuery()</a></code> for defining
-the target extent.</p></dd>
+<dd><p><em>character</em>. A SQL <code>WHERE</code> clause expression used to filter records in <code>sacatalog</code>
+table. Alternately <code>WHERE</code> can be any spatial object supported by <code><a href="SDA_spatialQuery.html">SDA_spatialQuery()</a></code> for
+defining the target extent.</p></dd>
 
 
 <dt id="arg-areasymbols">areasymbols<a class="anchor" aria-label="anchor" href="#arg-areasymbols"></a></dt>
-<dd><p><em>character</em>. Character vector of soil survey area symbols e.g. <code>c("CA067", "CA077")</code>. Used
-in lieu of <code>WHERE</code> argument.</p></dd>
+<dd><p><em>character</em>. Character vector of soil survey area symbols e.g. <code>c("CA067", "CA077")</code>. Used in lieu of <code>WHERE</code> argument.</p></dd>
 
 
 <dt id="arg-destdir">destdir<a class="anchor" aria-label="anchor" href="#arg-destdir"></a></dt>
@@ -88,18 +89,36 @@ in lieu of <code>WHERE</code> argument.</p></dd>
 
 
 <dt id="arg-exdir">exdir<a class="anchor" aria-label="anchor" href="#arg-exdir"></a></dt>
-<dd><p><em>character</em>. Directory to extract ZIP archives into. May be a directory that does not yet exist.
-Each ZIP file will extract to a folder labeled with <code>areasymbol</code> in this directory. Default:
-<code>destdir</code></p></dd>
+<dd><p><em>character</em>. Directory to extract ZIP archives into. May be a directory that does
+not yet exist. Each ZIP file will extract to a folder labeled with <code>areasymbol</code> in this
+directory. Default: <code>destdir</code></p></dd>
 
 
 <dt id="arg-include-template">include_template<a class="anchor" aria-label="anchor" href="#arg-include-template"></a></dt>
-<dd><p><em>logical</em>. Include the (possibly state-specific) MS Access template database?
-Default: <code>FALSE</code></p></dd>
+<dd><p><em>logical</em>. Include the (possibly state-specific) MS Access template
+database? Default: <code>FALSE</code></p></dd>
+
+
+<dt id="arg-include-spatial">include_spatial<a class="anchor" aria-label="anchor" href="#arg-include-spatial"></a></dt>
+<dd><p><em>logical</em> or <em>character</em>. Extract spatial data layers from ZIP file?
+Default: <code>TRUE</code> inserts all spatial tables. If <code>include_spatial</code> is a <em>character</em> vector
+containing table names, only that set is extracted from the downloaded ZIP files. e.g.
+<code>include_spatial=c("mupolygon", "featpoint")</code> extracts only the shapefiles (with side car
+files) for mapunit polygons and special feature points.</p></dd>
+
+
+<dt id="arg-include-tabular">include_tabular<a class="anchor" aria-label="anchor" href="#arg-include-tabular"></a></dt>
+<dd><p><em>logical</em> or <em>character</em>. Include tabular data layers in database?
+Default: <code>TRUE</code> inserts all tabular tables. If <code>include_tabular</code> is a <em>character</em> vector
+containing table names, only that set is extracted from the downloaded ZIP files. e.g.
+<code>include_tabular=c("mapunit", "muaggatt")</code> writes only the <code>mapunit</code> and <code>muaggatt</code> tables.
+Note that special feature descriptions are stored in table <code>"featdesc"</code> and metadata for each
+soil survey area are stored in <code>"soil_metadata"</code> tables.</p></dd>
 
 
 <dt id="arg-db">db<a class="anchor" aria-label="anchor" href="#arg-db"></a></dt>
-<dd><p><em>character</em>. Either <code>"SSURGO"</code> (default; detailed soil map) or <code>"STATSGO"</code> (general soil map).</p></dd>
+<dd><p><em>character</em>. Either <code>"SSURGO"</code> (default; detailed soil map) or <code>"STATSGO"</code> (general
+soil map).</p></dd>
 
 
 <dt id="arg-extract">extract<a class="anchor" aria-label="anchor" href="#arg-extract"></a></dt>
@@ -128,18 +147,26 @@ Default: <code>FALSE</code></p></dd>
     <p>To specify the Soil Survey Areas you would like to obtain data you use a <code>WHERE</code> clause for query
 of <code>sacatalog</code> table such as <code>areasymbol = 'CA067'</code>, <code>"areasymbol IN ('CA628', 'CA067')"</code> or
 <code>areasymbol LIKE 'CT%'</code>.</p>
-<p>When <code>db="STATSGO"</code> the <code>WHERE</code> argument is not supported. Allowed <code>areasymbols</code> include
-<code>"US"</code> and two-letter state codes e.g. <code>"WY"</code> for the Wyoming general soils map.</p>
 <p>Pipe-delimited TXT files are found in <em>/tabular/</em> folder extracted from a SSURGO ZIP.
-The files are named for tables in the SSURGO schema. There is no header / the files do not have
-column names. See the <em>Soil Data Access Tables and Columns Report</em>:
+The files are named for tables in the SSURGO schema. There is no header and the files do not
+have column names. See the <em>Soil Data Access Tables and Columns Report</em>:
 <a href="https://sdmdataaccess.nrcs.usda.gov/documents/TablesAndColumnsReport.pdf" class="external-link">https://sdmdataaccess.nrcs.usda.gov/documents/TablesAndColumnsReport.pdf</a> for details on
 tables, column names and metadata including the default sequence of columns used in TXT files.
 The function returns a <code>try-error</code> if the <code>WHERE</code>/<code>areasymbols</code> arguments result in</p>
 <p>Several ESRI shapefiles are found in the <em>/spatial/</em> folder extracted from a SSURGO ZIP. These
 have prefix <code>soilmu_</code> (mapunit), <code>soilsa_</code> (survey area), <code>soilsf_</code> (special features). There
 will also be a TXT file with prefix <code>soilsf_</code> describing any special features. Shapefile names
-then have an <code>a_</code> (polygon), <code>l_</code> (line), <code>p_</code> (point) followed by the soil survey area symbol.</p>
+then have an <code>a_</code> (polygon), <code>l_</code> (line), <code>p_</code> (point) followed by the soil survey area symbol.
+When <code>db="STATSGO"</code> the <code>WHERE</code> argument is not supported. Allowed <code>areasymbols</code> include
+<code>"US"</code> and two-letter state codes e.g. <code>"WY"</code> for the Wyoming general soils map.</p>
+<p>As in <code><a href="createSSURGO.html">createSSURGO()</a></code>, the <code>include_spatial</code> and <code>include_tabular</code> arguments either take a
+logical value (default <code>TRUE</code>) or a character vector of the specific table names to include. Note
+that when used in <code>downloadSSURGO()</code> the required metadata files are <em>always</em> extracted to
+facilitate mapping to user-facing table names. These arguments allow for customizing the files
+that get extracted from ZIP files, not just filtering on file names (as is implemented with
+pre-existing <code>pattern</code> argument). This can dramatically improve efficiency of extraction and the
+overall size of the data in <code>exdir</code>. These arguments can be used in conjunction with the
+<code>pattern</code> argument to fine-tune the files included in the generated snapshot database.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>

@@ -13,6 +13,13 @@
   [`mukey.wcs()`](http://ncss-tech.github.io/soilDB/reference/mukey.wcs.md))
   have been updated with FY26 maps, now including most OCONUS soil
   surveys (AK, HI, PR, PW, GU, AS, MP)
+- [`downloadSSURGO()`](http://ncss-tech.github.io/soilDB/reference/downloadSSURGO.md)
+  gains arguments `include_spatial` and `include_tabular` that are
+  analogous to arguments of the same name from
+  [`createSSURGO()`](http://ncss-tech.github.io/soilDB/reference/createSSURGO.md).
+  Thanks to feature request from
+  [@dylanbeaudette](https://github.com/dylanbeaudette)
+  ([\#470](https://github.com/ncss-tech/soilDB/issues/470)).
 
 ## soilDB 2.9.1 (2026-04-01)
 

@@ -152,13 +152,13 @@ Andrew G. Brown, Dylan E. Beaudette
     single.mukey <- try(fetchSDA_spatial(x = "2924882"))
 #> Using 1 chunks...
 #> Chunk #1 completed (n = 1; 0.1 secs)
-#> Done in 0.1 secs; mean/chunk: 0.1 secs; mean/symbol: 0.07 secs.
+#> Done in 0.1 secs; mean/chunk: 0.1 secs; mean/symbol: 0.12 secs.
 
     # demonstrate fetching full extent (multi-mukey) of national musym
     full.extent.nmusym <- try(fetchSDA_spatial(x = "2x8l5", by = "nmusym"))
 #> Using 1 chunks...
-#> Chunk #1 completed (n = 3; 0.1 secs)
-#> Done in 0.2 secs; mean/chunk: 0.1 secs; mean/symbol: 0.07 secs.
+#> Chunk #1 completed (n = 3; 0.2 secs)
+#> Done in 0.4 secs; mean/chunk: 0.2 secs; mean/symbol: 0.12 secs.
 
     # compare extent of nmusym to single mukey within it
     if (!inherits(single.mukey, 'try-error') && 
@@ -178,7 +178,7 @@ Andrew G. Brown, Dylan E. Beaudette
     head(try(fetchSDA_spatial(x = "2x8l5", by="nmusym", add.fields="muname")))
 #> Using 1 chunks...
 #> Chunk #1 completed (n = 3; 0.1 secs)
-#> Done in 0.2 secs; mean/chunk: 0.1 secs; mean/symbol: 0.08 secs.
+#> Done in 0.3 secs; mean/chunk: 0.1 secs; mean/symbol: 0.08 secs.
 #> Simple feature collection with 6 features and 4 fields
 #> Geometry type: POLYGON
 #> Dimension:     XY
