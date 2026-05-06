@@ -153,7 +153,11 @@ downloadSSURGO <- function(WHERE = NULL,
           "^(mstab|mdstattabs|MetadataTable|mstabcol|mdstattabcol|MetadataColumnLookup|msidxdet|mdstatidxdet|MetadataIndexDetail)$",
           tools::file_path_sans_ext(basename(lz))
         )], exdir = exdir)
-        inv <- .inventory_ssurgo_files(lz, exdir = exdir, include_spatial = include_spatial, include_tabular = include_tabular)
+        
+        # explicitly fetch internal function our namespace to support parallel workers
+        INV.FUN <- get(".inventory_ssurgo_files", envir = asNamespace("soilDB"))
+        inv <- INV.FUN(lz, include_spatial = include_spatial, include_tabular = include_tabular)
+        
         lz <- unlist(c(inv$f.shp.sc, inv$f.txt.grp))
       }
       uz <- utils::unzip(paths2[i], files = lz, exdir = exdir)
