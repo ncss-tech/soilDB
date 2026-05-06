@@ -1,12 +1,9 @@
 #' Get SSURGO ZIP files from Web Soil Survey 'Download Soils Data'
 #'
-#' Download ZIP files containing spatial (ESRI shapefile) and tabular (TXT) files with standard
-#' SSURGO format; optionally including the corresponding SSURGO Template Database with
-#' `include_template=TRUE`.
-#'
-#' To specify the Soil Survey Areas you would like to obtain data you use a `WHERE` clause for query
-#' of `sacatalog` table such as `areasymbol = 'CA067'`, `"areasymbol IN ('CA628', 'CA067')"` or
-#' `areasymbol LIKE 'CT%'`.
+#' Download ZIP files containing spatial (ESRI shapefile) and tabular (TXT) files in standard SSURGO
+#' format. To specify the Soil Survey Areas you would like to download, use a `WHERE` clause for
+#' query of `sacatalog` table, for example: `areasymbol = 'CA067'`, `"areasymbol IN ('CA628',
+#' 'CA067')"`, or `areasymbol LIKE 'CT%'`.
 #'
 #' @param WHERE _character_. A SQL `WHERE` clause expression used to filter records in `sacatalog`
 #'   table. Alternately `WHERE` can be any spatial object supported by `SDA_spatialQuery()` for
@@ -18,15 +15,15 @@
 #'   not yet exist. Each ZIP file will extract to a folder labeled with `areasymbol` in this
 #'   directory. Default: `destdir`
 #' @param include_template _logical_. Include the (possibly state-specific) MS Access template
-#' database? Default: `FALSE`
+#'   database? Default: `FALSE`
 #' @param include_spatial _logical_ or _character_. Extract spatial data layers from ZIP file?
 #'   Default: `TRUE` inserts all spatial tables. If `include_spatial` is a _character_ vector
 #'   containing table names, only that set is extracted from the downloaded ZIP files. e.g.
 #'   `include_spatial=c("mupolygon", "featpoint")` extracts only the shapefiles (with side car
 #'   files) for mapunit polygons and special feature points.
-#' @param include_tabular _logical_ or _character_. Include tabular data layers in database?
-#'   Default: `TRUE` inserts all tabular tables. If `include_tabular` is a _character_ vector
-#'   containing table names, only that set is extracted from the downloaded ZIP files. e.g.
+#' @param include_tabular _logical_ or _character_. Extract tabular data from ZIP file? Default:
+#'   `TRUE` inserts all tabular tables. If `include_tabular` is a _character_ vector containing
+#'   table names, only that set is extracted from the downloaded ZIP files. e.g.
 #'   `include_tabular=c("mapunit", "muaggatt")` writes only the `mapunit` and `muaggatt` tables.
 #'   Note that special feature descriptions are stored in table `"featdesc"` and metadata for each
 #'   soil survey area are stored in `"soil_metadata"` tables.
@@ -36,6 +33,7 @@
 #' @param LAPPLY.FUN _function_. `lapply()`-like function to use for iteration during `extract`
 #'   phase. Only used if `extract=TRUE`. This allows for the `utils::unzip()` operations to be run
 #'   in parallel instead of sequential, custom progress reporting, or similar.
+#' @param LAPPLY.FUN.ARGS _list_. Optional list of additional arguments to pass to `LAPPLY.FUN`.
 #' @param remove_zip _logical_. Remove ZIP files after extracting? Default: `FALSE`
 #' @param overwrite _logical_. Overwrite by re-extracting if directory already exists? Default:
 #'   `FALSE`
@@ -54,17 +52,17 @@
 #'   have prefix `soilmu_` (mapunit), `soilsa_` (survey area), `soilsf_` (special features). There
 #'   will also be a TXT file with prefix `soilsf_` describing any special features. Shapefile names
 #'   then have an `a_` (polygon), `l_` (line), `p_` (point) followed by the soil survey area symbol.
-#'  When `db="STATSGO"` the `WHERE` argument is not supported. Allowed `areasymbols` include
-#'   `"US"` and two-letter state codes e.g. `"WY"` for the Wyoming general soils map.
+#'   When `db="STATSGO"` the `WHERE` argument is not supported. Allowed `areasymbols` include `"US"`
+#'   and two-letter state codes e.g. `"WY"` for the Wyoming general soils map.
 #'
-#' As in `createSSURGO()`, the `include_spatial` and `include_tabular` arguments either take a
-#' logical value (default `TRUE`) or a character vector of the specific table names to include. Note
-#' that when used in `downloadSSURGO()` the required metadata files are _always_ extracted to
-#' facilitate mapping to user-facing table names. These arguments allow for customizing the files
-#' that get extracted from ZIP files, not just filtering on file names (as is implemented with
-#' pre-existing `pattern` argument). This can dramatically improve efficiency of extraction and the
-#' overall size of the data in `exdir`. These arguments can be used in conjunction with the
-#' `pattern` argument to fine-tune the files included in the generated snapshot database.
+#'   As in `createSSURGO()`, the `include_spatial` and `include_tabular` arguments either take a
+#'   logical value (default `TRUE`) or a character vector of the specific table names to include.
+#'   Note that when used in `downloadSSURGO()` the required metadata files are _always_ extracted to
+#'   facilitate mapping to user-facing table names. These arguments allow for customizing the files
+#'   that get extracted from ZIP files, not just filtering on file names (as is implemented with
+#'   pre-existing `pattern` argument). This can dramatically improve efficiency of extraction and
+#'   the overall size of the data in `exdir`. These arguments can be used in conjunction with the
+#'   `pattern` argument to fine-tune the files included in the generated snapshot database.
 #'
 #' @return _character_. Paths to downloaded ZIP files (invisibly). May not exist if `remove_zip =
 #'   TRUE`.
@@ -79,6 +77,7 @@ downloadSSURGO <- function(WHERE = NULL,
                            db = c('SSURGO', 'STATSGO'),
                            extract = TRUE,
                            LAPPLY.FUN = lapply,
+                           LAPPLY.FUN.ARGS = NULL,
                            remove_zip = FALSE,
                            overwrite = FALSE,
                            quiet = FALSE) {
@@ -142,8 +141,8 @@ downloadSSURGO <- function(WHERE = NULL,
     if (!dir.exists(exdir)) {
       dir.create(exdir, recursive = TRUE)
     }
-    res <- LAPPLY.FUN(seq_along(paths2), function(i) {
-      ssa <- gsub(".*wss_SSA_(.*)_.*", "\\1", paths2[i])
+
+    UNZIP.FUN <- function(i) {
       if (isTRUE(include_spatial) && isTRUE(include_tabular)) {
         lz <- NULL
       } else {
@@ -153,11 +152,11 @@ downloadSSURGO <- function(WHERE = NULL,
           "^(mstab|mdstattabs|MetadataTable|mstabcol|mdstattabcol|MetadataColumnLookup|msidxdet|mdstatidxdet|MetadataIndexDetail)$",
           tools::file_path_sans_ext(basename(lz))
         )], exdir = exdir)
-        
+
         # explicitly fetch internal function our namespace to support parallel workers
         INV.FUN <- get(".inventory_ssurgo_files", envir = asNamespace("soilDB"))
         inv <- INV.FUN(lz, include_spatial = include_spatial, include_tabular = include_tabular)
-        
+
         lz <- unlist(c(inv$f.shp.sc, inv$f.txt.grp))
       }
       uz <- utils::unzip(paths2[i], files = lz, exdir = exdir)
@@ -168,7 +167,9 @@ downloadSSURGO <- function(WHERE = NULL,
           message("Extracted: ", paths2[i])
         }
       }
-    })
+    }
+
+    res <- do.call(LAPPLY.FUN, c(list(seq_along(paths2), UNZIP.FUN), LAPPLY.FUN.ARGS))
 
     if (remove_zip) {
       file.remove(paths2)
@@ -301,7 +302,8 @@ createSSURGO <- function(filename = NULL,
   if ((missing(conn) || is.null(conn)) && !IS_GPKG) {
 
     if (!requireNamespace("RSQLite")) {
-      stop("package 'RSQLite' is required (when `conn` is not specified)", call. = FALSE)
+      stop("package 'RSQLite' is required (when `conn` is not specified)",
+           call. = FALSE)
     }
 
     conn <- DBI::dbConnect(DBI::dbDriver("SQLite"),
@@ -313,7 +315,11 @@ createSSURGO <- function(filename = NULL,
   }
 
   if (nrow(inv$shp.grp) >= 1 && ncol(inv$shp.grp) == 3 && include_spatial) {
-    f.shp.grp <- split(inv$f.shp, list(feature = inv$shp.grp[, 1], geom = inv$shp.grp[, 2]), drop = TRUE)
+
+    f.shp.grp <- split(inv$f.shp,
+                       list(feature = inv$shp.grp[, 1],
+                            geom = inv$shp.grp[, 2]),
+                       drop = TRUE)
 
     if (IS_DUCKDB) {
       DBI::dbExecute(conn, "INSTALL spatial; LOAD spatial;")
