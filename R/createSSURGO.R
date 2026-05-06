@@ -273,9 +273,14 @@ createSSURGO <- function(filename = NULL,
   
   layer_names <- .get_spatial_layer_names()
   f <- list.files(exdir, recursive = TRUE, full.names = TRUE)
+  fdx <- rep(TRUE, length(f))
+  
+  if (!is.null(pattern)) {
+    fdx <- grepl(pattern, f)
+  }
   
   inv <- .inventory_ssurgo_files(
-    files = f[grepl(pattern, f)],
+    files = f[fdx],
     layer_names = layer_names,
     include_spatial = include_spatial,
     include_tabular = include_tabular,
