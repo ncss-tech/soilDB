@@ -573,7 +573,7 @@ createSSURGO <- function(filename = NULL,
   f.shp.sc <- character(0)
   if (is.character(include_spatial)) {
     idx <- paste0(shp.grp[, 1], "_", shp.grp[, 2]) %in% names(layer_names[layer_names %in% include_spatial])
-    shp.grp <- shp.grp[idx, ]
+    shp.grp <- shp.grp[idx, , drop = FALSE]
     f.shp <- f.shp[idx]
     f.shp.sc <- files[grepl(paste0(
     	paste0("soil", shp.grp[, 1], "_", shp.grp[, 2], "_", shp.grp[, 3]),
