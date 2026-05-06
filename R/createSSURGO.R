@@ -155,12 +155,12 @@ downloadSSURGO <- function(WHERE = NULL,
 
         # explicitly fetch internal function our namespace to support parallel workers
         INV.FUN <- get(".inventory_ssurgo_files", envir = asNamespace("soilDB"))
-        inv <- INV.FUN(lz, include_spatial = include_spatial, include_tabular = include_tabular)
+        inv <- INV.FUN(lz, exdir = exdir, include_spatial = include_spatial, include_tabular = include_tabular)
 
         lz <- unlist(c(inv$f.shp.sc, inv$f.txt.grp))
       }
       uz <- utils::unzip(paths2[i], files = lz, exdir = exdir)
-      if ((!dir.exists(file.path(exdir, ssa)) || overwrite) && length(uz) == 0) {
+      if (length(uz) == 0) {
         message(paste('Invalid zipfile:', paths2[i]))
       } else {
         if (!quiet) {
