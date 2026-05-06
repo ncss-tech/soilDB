@@ -281,7 +281,6 @@ createSSURGO <- function(filename = NULL,
   
   inv <- .inventory_ssurgo_files(
     files = f[fdx],
-    exdir = exdir,
     layer_names = layer_names,
     include_spatial = include_spatial,
     include_tabular = include_tabular,
