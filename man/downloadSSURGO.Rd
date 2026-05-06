@@ -73,18 +73,6 @@ To specify the Soil Survey Areas you would like to obtain data you use a \code{W
 of \code{sacatalog} table such as \code{areasymbol = 'CA067'}, \code{"areasymbol IN ('CA628', 'CA067')"} or
 \verb{areasymbol LIKE 'CT\%'}.
 
-When \code{db="STATSGO"} the \code{WHERE} argument is not supported. Allowed \code{areasymbols} include
-\code{"US"} and two-letter state codes e.g. \code{"WY"} for the Wyoming general soils map.
-
-As in \code{createSSURGO()}, the \code{include_spatial} and \code{include_tabular} arguments either take a
-logical value (default \code{TRUE}) or a character vector of the specific table names to include. Note
-that when used in \code{downloadSSURGO()} the required metadata files are \emph{always} extracted to
-facilitate mapping to user-facing table names. These arguments allow for customizing the files
-that get extracted from ZIP files, not just filtering on file names (as is implemented with
-pre-existing \code{pattern} argument). This can dramatically improve efficiency of extraction and the
-overall size of the data in \code{exdir}. These arguments can be used in conjunction with the
-\code{pattern} argument to fine-tune the files included in the generated snapshot database.
-
 Pipe-delimited TXT files are found in \emph{/tabular/} folder extracted from a SSURGO ZIP.
 The files are named for tables in the SSURGO schema. There is no header and the files do not
 have column names. See the \emph{Soil Data Access Tables and Columns Report}:
@@ -96,6 +84,17 @@ Several ESRI shapefiles are found in the \emph{/spatial/} folder extracted from 
 have prefix \code{soilmu_} (mapunit), \code{soilsa_} (survey area), \code{soilsf_} (special features). There
 will also be a TXT file with prefix \code{soilsf_} describing any special features. Shapefile names
 then have an \code{a_} (polygon), \code{l_} (line), \code{p_} (point) followed by the soil survey area symbol.
+When \code{db="STATSGO"} the \code{WHERE} argument is not supported. Allowed \code{areasymbols} include
+\code{"US"} and two-letter state codes e.g. \code{"WY"} for the Wyoming general soils map.
+
+As in \code{createSSURGO()}, the \code{include_spatial} and \code{include_tabular} arguments either take a
+logical value (default \code{TRUE}) or a character vector of the specific table names to include. Note
+that when used in \code{downloadSSURGO()} the required metadata files are \emph{always} extracted to
+facilitate mapping to user-facing table names. These arguments allow for customizing the files
+that get extracted from ZIP files, not just filtering on file names (as is implemented with
+pre-existing \code{pattern} argument). This can dramatically improve efficiency of extraction and the
+overall size of the data in \code{exdir}. These arguments can be used in conjunction with the
+\code{pattern} argument to fine-tune the files included in the generated snapshot database.
 }
 \seealso{
 \code{\link[=createSSURGO]{createSSURGO()}}

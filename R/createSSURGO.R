@@ -38,18 +38,6 @@
 #'   `FALSE`
 #' @param quiet _logical_. Passed to `curl::curl_download()`.
 #'
-#' @details When `db="STATSGO"` the `WHERE` argument is not supported. Allowed `areasymbols` include
-#'   `"US"` and two-letter state codes e.g. `"WY"` for the Wyoming general soils map.
-#'  
-#' As in `createSSURGO()`, the `include_spatial` and `include_tabular` arguments either take a
-#' logical value (default `TRUE`) or a character vector of the specific table names to include. Note
-#' that when used in `downloadSSURGO()` the required metadata files are _always_ extracted to
-#' facilitate mapping to user-facing table names. These arguments allow for customizing the files
-#' that get extracted from ZIP files, not just filtering on file names (as is implemented with
-#' pre-existing `pattern` argument). This can dramatically improve efficiency of extraction and the
-#' overall size of the data in `exdir`. These arguments can be used in conjunction with the
-#' `pattern` argument to fine-tune the files included in the generated snapshot database.
-#' 
 #' @export
 #'
 #' @details Pipe-delimited TXT files are found in _/tabular/_ folder extracted from a SSURGO ZIP.
@@ -63,6 +51,17 @@
 #'   have prefix `soilmu_` (mapunit), `soilsa_` (survey area), `soilsf_` (special features). There
 #'   will also be a TXT file with prefix `soilsf_` describing any special features. Shapefile names
 #'   then have an `a_` (polygon), `l_` (line), `p_` (point) followed by the soil survey area symbol.
+#'  When `db="STATSGO"` the `WHERE` argument is not supported. Allowed `areasymbols` include
+#'   `"US"` and two-letter state codes e.g. `"WY"` for the Wyoming general soils map.
+#'  
+#' As in `createSSURGO()`, the `include_spatial` and `include_tabular` arguments either take a
+#' logical value (default `TRUE`) or a character vector of the specific table names to include. Note
+#' that when used in `downloadSSURGO()` the required metadata files are _always_ extracted to
+#' facilitate mapping to user-facing table names. These arguments allow for customizing the files
+#' that get extracted from ZIP files, not just filtering on file names (as is implemented with
+#' pre-existing `pattern` argument). This can dramatically improve efficiency of extraction and the
+#' overall size of the data in `exdir`. These arguments can be used in conjunction with the
+#' `pattern` argument to fine-tune the files included in the generated snapshot database.
 #' 
 #' @return _character_. Paths to downloaded ZIP files (invisibly). May not exist if `remove_zip =
 #'   TRUE`.
