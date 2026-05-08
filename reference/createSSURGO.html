@@ -82,13 +82,13 @@ Postgres or PostGIS
 
 
 <dl><dt id="arg-filename">filename<a class="anchor" aria-label="anchor" href="#arg-filename"></a></dt>
-<dd><p><em>character</em>. Output file name (e.g. <code>'db.sqlite'</code> or <code>'db.gpkg'</code>). Only used when <code>con</code> is not
-specified by the user.</p></dd>
+<dd><p><em>character</em>. Output file name (e.g. <code>'db.sqlite'</code> or <code>'db.gpkg'</code>). Only used when
+<code>con</code> is not specified by the user.</p></dd>
 
 
 <dt id="arg-exdir">exdir<a class="anchor" aria-label="anchor" href="#arg-exdir"></a></dt>
-<dd><p><em>character</em>. Path containing containing input SSURGO spatial (.shp) and tabular (.txt) files,
-downloaded and extracted by <code><a href="downloadSSURGO.html">downloadSSURGO()</a></code> or similar.</p></dd>
+<dd><p><em>character</em>. Path containing containing input SSURGO spatial (.shp) and tabular
+(.txt) files, downloaded and extracted by <code><a href="downloadSSURGO.html">downloadSSURGO()</a></code> or similar.</p></dd>
 
 
 <dt id="arg-conn">conn<a class="anchor" aria-label="anchor" href="#arg-conn"></a></dt>
@@ -98,8 +98,8 @@ sf package is used to write spatial data to the database.</p></dd>
 
 
 <dt id="arg-pattern">pattern<a class="anchor" aria-label="anchor" href="#arg-pattern"></a></dt>
-<dd><p><em>character</em>. Optional regular expression to use to filter subdirectories of <code>exdir</code>.
-Default: <code>NULL</code> will search all subdirectories for SSURGO export files.</p></dd>
+<dd><p><em>character</em>. Optional regular expression to use to filter subdirectories of
+<code>exdir</code>. Default: <code>NULL</code> will search all subdirectories for SSURGO export files.</p></dd>
 
 
 <dt id="arg-include-spatial">include_spatial<a class="anchor" aria-label="anchor" href="#arg-include-spatial"></a></dt>
@@ -118,15 +118,14 @@ in <code>"soil_metadata"</code> tables.</p></dd>
 
 <dt id="arg-dissolve-field">dissolve_field<a class="anchor" aria-label="anchor" href="#arg-dissolve-field"></a></dt>
 <dd><p><em>character</em>. Dissolve geometries to create MULTIPOLYGON features? Column
-name
-specified is the grouping variable. Default: <code>NULL</code> does no aggregation, giving 1 <code>POLYGON</code>
-feature per delineation. <code>"mukey"</code> aggregates all related delineations within a soil survey
-area.</p></dd>
+name specified is the grouping variable. Default: <code>NULL</code> does no aggregation, giving 1
+<code>POLYGON</code> feature per delineation. <code>"mukey"</code> aggregates all related delineations within a soil
+survey area.</p></dd>
 
 
 <dt id="arg-maxruledepth">maxruledepth<a class="anchor" aria-label="anchor" href="#arg-maxruledepth"></a></dt>
-<dd><p><em>integer</em>. Maximum rule depth for <code>"cointerp"</code> table. Default <code>0</code> includes only
-shallowest ratings for smaller database size.</p></dd>
+<dd><p><em>integer</em>. Maximum rule depth for <code>"cointerp"</code> table. Default <code>0</code> includes
+only shallowest ratings for smaller database size.</p></dd>
 
 
 <dt id="arg-overwrite">overwrite<a class="anchor" aria-label="anchor" href="#arg-overwrite"></a></dt>
@@ -152,7 +151,7 @@ containing tabular data.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>Character. Vector of layer/table names in <code>filename</code>.</p>
+    <p><em>character</em>. Vector of layer/table names in <code>filename</code>.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>

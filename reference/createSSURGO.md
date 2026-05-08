@@ -112,7 +112,7 @@ createSSURGO(
 
 ## Value
 
-Character. Vector of layer/table names in `filename`.
+*character*. Vector of layer/table names in `filename`.
 
 ## Details
 

@@ -1,8 +1,10 @@
 # Get SSURGO ZIP files from Web Soil Survey 'Download Soils Data'
 
 Download ZIP files containing spatial (ESRI shapefile) and tabular (TXT)
-files with standard SSURGO format; optionally including the
-corresponding SSURGO Template Database with `include_template=TRUE`.
+files in standard SSURGO format. To specify the Soil Survey Areas you
+would like to download, use a `WHERE` clause for query of `sacatalog`
+table, for example: `areasymbol = 'CA067'`,
+`"areasymbol IN ('CA628', 'CA067')"`, or `areasymbol LIKE 'CT%'`.
 
 ## Usage
 
@@ -17,6 +19,8 @@ downloadSSURGO(
   include_tabular = TRUE,
   db = c("SSURGO", "STATSGO"),
   extract = TRUE,
+  LAPPLY.FUN = lapply,
+  LAPPLY.FUN.ARGS = NULL,
   remove_zip = FALSE,
   overwrite = FALSE,
   quiet = FALSE
@@ -66,8 +70,8 @@ downloadSSURGO(
 
 - include_tabular:
 
-  *logical* or *character*. Include tabular data layers in database?
-  Default: `TRUE` inserts all tabular tables. If `include_tabular` is a
+  *logical* or *character*. Extract tabular data from ZIP file? Default:
+  `TRUE` inserts all tabular tables. If `include_tabular` is a
   *character* vector containing table names, only that set is extracted
   from the downloaded ZIP files. e.g.
   `include_tabular=c("mapunit", "muaggatt")` writes only the `mapunit`
@@ -83,6 +87,19 @@ downloadSSURGO(
 - extract:
 
   *logical*. Extract ZIP files to `exdir`? Default: `TRUE`
+
+- LAPPLY.FUN:
+
+  *function*. [`lapply()`](https://rdrr.io/r/base/lapply.html)-like
+  function to use for iteration during `extract` phase. Only used if
+  `extract=TRUE`. This allows for the
+  [`utils::unzip()`](https://rdrr.io/r/utils/unzip.html) operations to
+  be run in parallel instead of sequential, custom progress reporting,
+  or similar.
+
+- LAPPLY.FUN.ARGS:
+
+  *list*. Optional list of additional arguments to pass to `LAPPLY.FUN`.
 
 - remove_zip:
 
@@ -104,11 +121,6 @@ downloadSSURGO(
 `remove_zip = TRUE`.
 
 ## Details
-
-To specify the Soil Survey Areas you would like to obtain data you use a
-`WHERE` clause for query of `sacatalog` table such as
-`areasymbol = 'CA067'`, `"areasymbol IN ('CA628', 'CA067')"` or
-`areasymbol LIKE 'CT%'`.
 
 Pipe-delimited TXT files are found in */tabular/* folder extracted from
 a SSURGO ZIP. The files are named for tables in the SSURGO schema. There

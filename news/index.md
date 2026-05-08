@@ -17,7 +17,8 @@
   gains arguments `include_spatial` and `include_tabular` that are
   analogous to arguments of the same name from
   [`createSSURGO()`](http://ncss-tech.github.io/soilDB/reference/createSSURGO.md).
-  Thanks to feature request from
+  Also, added `LAPPLY.FUN` to support arbitrary parallel or progress
+  reporting backends. Thanks to feature request from
   [@dylanbeaudette](https://github.com/dylanbeaudette)
   ([\#470](https://github.com/ncss-tech/soilDB/issues/470)).
 
