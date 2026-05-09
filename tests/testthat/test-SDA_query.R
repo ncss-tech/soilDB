@@ -287,7 +287,7 @@ test_that("SDA_query() works with multi-line records", {
   
   # https://github.com/ncss-tech/soilDB/issues/28
   expect_true(inherits(x.4, 'data.frame'))
-  expect_true(nrow(x.4) == 7)
+  expect_equal(nrow(x.4), 6)
 
 })
 

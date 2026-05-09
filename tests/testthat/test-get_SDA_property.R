@@ -192,7 +192,9 @@ test_that("SDA properties (weighted average) works", {
                             mukeys = 545857)
   skip_if(inherits(agg, 'try-error'))
   skip_if(inherits(noagg, 'try-error'))
-
+  
+  skip_if_not_installed("aqp")
+  
   aqp::depths(noagg) <- cokey ~ hzdept_r + hzdepb_r
   aqp::site(noagg) <- ~ comppct_r
 
