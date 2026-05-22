@@ -162,8 +162,9 @@ names(x)[which(nm == 'longitude')] <- 'Longitude'
 # 
 
 
-## make permanent
-write.csv(x, "data-raw/scan-snotel-current/station-metadata.csv", row.names = FALSE)
-
 SCAN_SNOTEL_metadata <- x
-usethis::use_data(SCAN_SNOTEL_metadata, compress = "xz")
+usethis::use_data(SCAN_SNOTEL_metadata, compress = "xz", overwrite = TRUE)
+
+## make permanent (sans associatedHucs list column)
+x$associatedHucs <- NULL
+write.csv(x, "data-raw/scan-snotel-current/station-metadata.csv", row.names = FALSE)
