@@ -16,6 +16,9 @@ createSSURGO(
   overwrite = FALSE,
   append = FALSE,
   header = FALSE,
+  sep = "|",
+  na.string = c("", "NA"),
+  quote = "",
   quiet = TRUE,
   ...
 )
@@ -56,12 +59,17 @@ only shallowest ratings for smaller database size.}
 
 \item{append}{\emph{logical}. Append to existing layers? Default: \code{FALSE}}
 
-\item{header}{\emph{logical}. Passed to \code{read.delim()} for reading pipe-delimited (\code{|}) text files
-containing tabular data.}
+\item{header}{\emph{logical}. Passed to \code{data.table::fread()} for reading delimited tabular text files. Default: \code{FALSE}}
+
+\item{sep}{\emph{character}. Passed to \code{data.table::fread()}. Default: \code{"|"}}
+
+\item{na.string}{\emph{character}. Passed to \code{data.table::fread()}. Default: \code{c("", "NA")}}
+
+\item{quote}{\emph{character}. Passed to \code{data.table::fread()}. Default: \code{""}}
 
 \item{quiet}{\emph{logical}. Suppress messages and other output from database read/write operations?}
 
-\item{...}{Additional arguments passed to \code{write_sf()} for writing spatial layers.}
+\item{...}{Additional arguments passed to \code{sf::write_sf()} for writing spatial layers.}
 }
 \value{
 \emph{character}. Vector of layer/table names in \code{filename}.
