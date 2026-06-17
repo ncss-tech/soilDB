@@ -1,13 +1,7 @@
 
 #' Get component tables from NASIS Web Reports
 #'
-#' @aliases fetchNASISWebReport get_project_from_NASISWebReport
-#' get_progress_from_NASISWebReport get_project_correlation_from_NASISWebReport
-#' get_legend_from_NASISWebReport get_mapunit_from_NASISWebReport
-#' get_projectmapunit_from_NASISWebReport
-#' get_projectmapunit2_from_NASISWebReport get_component_from_NASISWebReport
-#' get_chorizon_from_NASISWebReport get_cosoilmoist_from_NASISWebReport
-#' get_sitesoilmoist_from_NASISWebReport get_lmuaoverlap_from_NASISWebReport
+#' @aliases fetchNASISWebReport get_project_from_NASISWebReport get_progress_from_NASISWebReport get_project_correlation_from_NASISWebReport get_legend_from_NASISWebReport get_mapunit_from_NASISWebReport get_projectmapunit_from_NASISWebReport get_projectmapunit2_from_NASISWebReport get_component_from_NASISWebReport get_chorizon_from_NASISWebReport get_cosoilmoist_from_NASISWebReport get_sitesoilmoist_from_NASISWebReport get_lmuaoverlap_from_NASISWebReport
 #'
 #' @param projectname text string vector of project names to be inserted into a
 #' SQL WHERE clause (default: `NA`)
