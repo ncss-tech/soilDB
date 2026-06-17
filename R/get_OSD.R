@@ -13,7 +13,6 @@
 #' @export
 #' @aliases get_OSD_JSON
 #' @examplesIf curl::has_internet() && requireNamespace("httr", quietly = TRUE) && requireNamespace("jsonlite", quietly = TRUE)
-#' @examples
 #' \donttest{
 #'   series <- c("Musick", "Hector", "Chewacla")
 #'   get_OSD(series)

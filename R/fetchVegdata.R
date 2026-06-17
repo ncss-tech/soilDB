@@ -19,11 +19,7 @@
 #'   "vegtransplantsum", 'vegsiteindexsum', "vegsiteindexdet", "vegbasalarea",
 #'   and "vegplottext" tables
 #'
-#' @aliases get_vegplot_from_NASIS_db get_vegplot_location_from_NASIS_db
-#'   get_vegplot_species_from_NASIS_db get_vegplot_textnote_from_NASIS_db
-#'   get_vegplot_transect_from_NASIS_db get_vegplot_transpecies_from_NASIS_db
-#'   get_vegplot_tree_si_details_from_NASIS_db
-#'   get_vegplot_tree_si_summary_from_NASIS_db get_vegplot_trhi_from_NASIS_db
+#' @aliases get_vegplot_from_NASIS_db get_vegplot_location_from_NASIS_db get_vegplot_species_from_NASIS_db get_vegplot_textnote_from_NASIS_db get_vegplot_transect_from_NASIS_db get_vegplot_transpecies_from_NASIS_db get_vegplot_tree_si_details_from_NASIS_db get_vegplot_tree_si_summary_from_NASIS_db get_vegplot_trhi_from_NASIS_db
 #' @export
 fetchVegdata <- function(SS = TRUE,
                          include_pedon = TRUE,

@@ -28,7 +28,6 @@ This function downloads a generalized representations of a soil series extent fr
 }
 \examples{
 \dontshow{if (curl::has_internet() && requireNamespace("httr", quietly = TRUE) && requireNamespace("terra") && packageVersion("terra") >= '1.8.93' && terra::proj_ok() && requireNamespace("sf")) withAutoprint(\{ # examplesIf}
-\dontshow{\}) # examplesIf}
 \dontrun{
   
   # specify a soil series name
@@ -56,6 +55,7 @@ This function downloads a generalized representations of a soil series extent fr
     plot(x, add = TRUE)
   }
 }
+\dontshow{\}) # examplesIf}
 }
 \references{
 \url{https://casoilresource.lawr.ucdavis.edu/see/}

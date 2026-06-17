@@ -39,9 +39,9 @@ The default \code{base_url} for \code{result="json"} is to JSON files stored in 
 }
 \examples{
 \dontshow{if (curl::has_internet() && requireNamespace("httr", quietly = TRUE) && requireNamespace("jsonlite", quietly = TRUE)) withAutoprint(\{ # examplesIf}
-\dontshow{\}) # examplesIf}
 \donttest{
   series <- c("Musick", "Hector", "Chewacla")
   get_OSD(series)
 }
+\dontshow{\}) # examplesIf}
 }

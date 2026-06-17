@@ -33,8 +33,7 @@
 #'   erroneously marked as errors due to the way in which they are stored in
 #'   NASIS as two overlapping horizon records.
 
-#' @aliases fetchNASIS get_phorizon_from_NASIS_db get_phfmp_from_NASIS_db
-#'   get_concentrations_from_NASIS_db
+#' @aliases fetchNASIS get_phorizon_from_NASIS_db get_phfmp_from_NASIS_db get_concentrations_from_NASIS_db
 #'
 #' @param from Determines what objects should fetched? Default: `'pedons'`.
 #'   Alternately, `'components'`, or `'pedon_report'`.

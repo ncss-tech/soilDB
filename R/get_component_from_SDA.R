@@ -914,9 +914,7 @@ get_chorizon_from_SDA <- function(WHERE = NULL, duplicates = FALSE,
 #' 
 #' Additional examples can be found in the [Soil Data Access (SDA) Tutorial](http://ncss-tech.github.io/AQP/soilDB/SDA-tutorial.html)
 #' 
-#' @aliases fetchSDA get_legend_from_SDA get_lmuaoverlap_from_SDA
-#' get_mapunit_from_SDA get_component_from_SDA get_chorizon_from_SDA
-#' get_cosoilmoist_from_SDA get_cointerp_from_SDA
+#' @aliases fetchSDA get_legend_from_SDA get_lmuaoverlap_from_SDA get_mapunit_from_SDA get_component_from_SDA get_chorizon_from_SDA get_cosoilmoist_from_SDA get_cointerp_from_SDA
 #' @param WHERE text string formatted as an SQL WHERE clause (default: FALSE)
 #' @param duplicates logical; if TRUE a record is returned for each unique
 #' mukey (may be many per nationalmusym)

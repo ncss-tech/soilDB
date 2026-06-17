@@ -603,8 +603,8 @@ get_mapunit_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb",
 #' specified (except for fetchGDB() which currently can only target one table 
 #' (e.g. legend, mapunit or component) at a time with the WHERE clause).
 #' 
-#' @aliases fetchGDB get_legend_from_GDB get_mapunit_from_GDB
-#' get_component_from_GDB
+#' @aliases fetchGDB get_legend_from_GDB get_mapunit_from_GDB get_component_from_GDB
+#' 
 #' @param dsn data source name (interpretation varies by driver - for some
 #' drivers, dsn is a file name, but may also be a folder, or contain the name
 #' and access credentials of a database); in case of GeoJSON, dsn may be the
