@@ -219,13 +219,15 @@ downloadSSURGO <- function(WHERE = NULL,
 #' @param append _logical_. Append to existing layers? Default: `FALSE`
 #' @param header _logical_. Passed to `data.table::fread()` for reading delimited tabular text files. Default: `FALSE`
 #' @param sep _character_. Passed to `data.table::fread()`. Default: `"|"`
-#' @param na.string _character_. Passed to `data.table::fread()`. Default: `c("", "NA")`
+#' @param na.strings _character_. Passed to `data.table::fread()`. Default: `c("", "NA")`
 #' @param quote _character_. Passed to `data.table::fread()`. Default: `""`
 #' @param quiet _logical_. Suppress messages and other output from database read/write operations?
 #' @param ... Additional arguments passed to `sf::write_sf()` for writing spatial layers.
 #'
 #' @return _character_. Vector of layer/table names in `filename`.
 #' @seealso [downloadSSURGO()]
+#' @importFrom stats sd
+#' @importFrom utils flush.console head
 #' @export
 #' @examples
 #' \dontrun{
@@ -1026,6 +1028,7 @@ createSSURGO <- function(filename = NULL,
 
 # print summary of write timings collected during run
 .ssurgo_print_write_summary <- function(res_obj = NULL, top_n = 30) {
+  .N <- NULL; elapsed <- NULL; total_elapsed <- NULL
   if (!is.null(res_obj) &&
       !is.null(attr(res_obj, 'write_timings'))) {
     df <- attr(res_obj, 'write_timings')
@@ -1038,7 +1041,7 @@ createSSURGO <- function(filename = NULL,
   df$elapsed <- as.numeric(df$elapsed)
 
   dt <- data.table::as.data.table(df)
-  agg_dt <- dt[, .(
+  agg_dt <- dt[, list(
     n = .N,
     total_elapsed = sum(elapsed),
     mean = mean(elapsed),

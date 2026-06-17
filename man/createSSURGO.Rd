@@ -17,7 +17,7 @@ createSSURGO(
   append = FALSE,
   header = FALSE,
   sep = "|",
-  na.string = c("", "NA"),
+  na.strings = c("", "NA"),
   quote = "",
   quiet = TRUE,
   ...
@@ -63,7 +63,7 @@ only shallowest ratings for smaller database size.}
 
 \item{sep}{\emph{character}. Passed to \code{data.table::fread()}. Default: \code{"|"}}
 
-\item{na.string}{\emph{character}. Passed to \code{data.table::fread()}. Default: \code{c("", "NA")}}
+\item{na.strings}{\emph{character}. Passed to \code{data.table::fread()}. Default: \code{c("", "NA")}}
 
 \item{quote}{\emph{character}. Passed to \code{data.table::fread()}. Default: \code{""}}
 
