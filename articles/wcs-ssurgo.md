@@ -349,7 +349,7 @@ print(mu)
 #> extent      : -1365495, -1358925, 2869245, 2873655  (xmin, xmax, ymin, ymax)
 #> coord. ref. : NAD83 / Conus Albers (EPSG:5070)
 #> source(s)   : memory
-#> varname     : file24d07a295dbb
+#> varname     : file24cf32d8e7bc
 #> categories  : mukey
 #> name        :   mukey
 #> min value   :  144983
@@ -477,7 +477,7 @@ a <- vect(a, crs = 'epsg:5070')
 #> extent      : 1129005, 1135005, 1402995, 1411005  (xmin, xmax, ymin, ymax)
 #> coord. ref. : NAD83 / Conus Albers (EPSG:5070)
 #> source(s)   : memory
-#> varname     : file24d0767218e4
+#> varname     : file24cf5c7f7aea
 #> categories  : mukey
 #> name        :  mukey
 #> min value   : 545800
@@ -491,7 +491,7 @@ a <- vect(a, crs = 'epsg:5070')
 #> extent      : 1129005, 1135005, 1402995, 1411005  (xmin, xmax, ymin, ymax)
 #> coord. ref. : NAD83 / Conus Albers (EPSG:5070)
 #> source(s)   : memory
-#> varname     : file24d065a5ae6c
+#> varname     : file24cfc78659b
 #> categories  : mukey
 #> name        :   mukey
 #> min value   :  545800
@@ -505,7 +505,7 @@ a <- vect(a, crs = 'epsg:5070')
 #> extent      : 1129005, 1135005, 1402995, 1411005  (xmin, xmax, ymin, ymax)
 #> coord. ref. : NAD83 / Conus Albers (EPSG:5070)
 #> source(s)   : memory
-#> varname     : file24d02ebb2c65
+#> varname     : file24cf4db8732d
 #> categories  : mukey
 #> name        :   mukey
 #> min value   : 3244721
@@ -561,7 +561,7 @@ and resolution) as SSURGO products.
 #> extent      : 1129005, 1135005, 1402995, 1411005  (xmin, xmax, ymin, ymax)
 #> coord. ref. : NAD83 / Conus Albers (EPSG:5070)
 #> source(s)   : memory
-#> varname     : file24d02609fffd
+#> varname     : file24cf103253f5
 #> categories  : mukey
 #> name        :  mukey
 #> min value   : 659074
@@ -806,41 +806,41 @@ tab <- get_SDA_interpretation(
 
 # check
 head(tab)
-#>   areasymbol musym                                                               muname  mukey
-#> 1      MT629   101                      McCollum fine sandy loam, 0 to 2 percent slopes 144983
-#> 2      MT629   102                      McCollum fine sandy loam, 2 to 4 percent slopes 144984
-#> 3      MT629   103                      McCollum fine sandy loam, 4 to 8 percent slopes 144985
-#> 4      MT629   104 McCollum fine sandy loam, gravelly substratum, 0 to 2 percent slopes 144986
-#> 5      MT629   120                         Niarada gravelly loam, 0 to 4 percent slopes 145005
-#> 6      MT629   123                 Niarada gravelly loam, cool, 15 to 30 percent slopes 145009
+#>   areasymbol musym                                               muname  mukey
+#> 1      MT629   102      McCollum fine sandy loam, 2 to 4 percent slopes 144984
+#> 2      MT629   103      McCollum fine sandy loam, 4 to 8 percent slopes 144985
+#> 3      MT629   120         Niarada gravelly loam, 0 to 4 percent slopes 145005
+#> 4      MT629   123 Niarada gravelly loam, cool, 15 to 30 percent slopes 145009
+#> 5      MT629   124 Niarada gravelly loam, cool, 30 to 60 percent slopes 145010
+#> 6      MT629   125         Niarada-Kerl complex, 8 to 15 percent slopes 145011
 #>   rating_ENGConstructionMaterialsRoadfill rating_AWMIrrigationDisposalofWastewater
-#> 1                                    1.00                                     0.00
-#> 2                                    0.98                                     0.05
-#> 3                                    0.98                                     0.68
-#> 4                                    1.00                                     0.15
-#> 5                                    0.98                                     0.19
-#> 6                                    0.12                                     1.00
+#> 1                                    0.98                                     0.05
+#> 2                                    0.98                                     0.68
+#> 3                                    0.98                                     0.19
+#> 4                                    0.12                                     1.00
+#> 5                                    0.03                                     1.00
+#> 6                                    0.88                                     0.96
 #>   class_ENGConstructionMaterialsRoadfill class_AWMIrrigationDisposalofWastewater
-#> 1                            Well suited                             Not limited
-#> 2                 Moderately well suited                        Slightly limited
-#> 3                 Moderately well suited                      Moderately limited
-#> 4                            Well suited                        Slightly limited
-#> 5                 Moderately well suited                        Slightly limited
-#> 6                          Poorly suited                            Very limited
+#> 1                 Moderately well suited                        Slightly limited
+#> 2                 Moderately well suited                      Moderately limited
+#> 3                 Moderately well suited                        Slightly limited
+#> 4                          Poorly suited                            Very limited
+#> 5                          Poorly suited                            Very limited
+#> 6                 Moderately well suited                      Moderately limited
 #>                                                                                                                                                                               reason_ENGConstructionMaterialsRoadfill
-#> 1                                                                                                                                                                                                                <NA>
+#> 1                                                                                                                                                                                 Low strength (0.778); Dusty (0.785)
 #> 2                                                                                                                                                                                 Low strength (0.778); Dusty (0.785)
-#> 3                                                                                                                                                                                 Low strength (0.778); Dusty (0.785)
-#> 4                                                                                                                                                                                                                <NA>
-#> 5                                                                                                                                                                         Dusty (0.981); Dusty (0.902); Dusty (0.981)
-#> 6 Slope (0.08); Dusty (0.981); Depth to bedrock (0); Slope (0); Not rated; Slope (); Not rated; Fragments 75 to 250mm (); Not rated; Fragments > 250m (); Not rated (); Low strength (0); Slope (0.08); Dusty (0.975)
+#> 3                                                                                                                                                                         Dusty (0.981); Dusty (0.902); Dusty (0.981)
+#> 4 Slope (0.08); Dusty (0.981); Depth to bedrock (0); Slope (0); Not rated; Slope (); Not rated; Fragments 75 to 250mm (); Not rated; Fragments > 250m (); Not rated (); Low strength (0); Slope (0.08); Dusty (0.975)
+#> 5       Slope (0); Dusty (0.993); Depth to bedrock (0); Slope (0); Not rated; Slope (); Not rated; Fragments 75 to 250mm (); Not rated; Fragments > 250m (); Not rated (); Low strength (0); Slope (0); Dusty (0.975)
+#> 6                                                                                                       Dusty (0.981); Low strength (0); Dusty (0.783); Low strength (0); Dusty (0.785); Dusty (0.981); Dusty (0.902)
 #>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           reason_AWMIrrigationDisposalofWastewater
-#> 1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             <NA>
-#> 2                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 Filtering capacity (1); Too steep for surface application (0.08)
-#> 3                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               Too steep for surface application (0.68); Too steep for surface application (0.68)
-#> 4                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 Filtering capacity (1); Filtering capacity (1); Droughty (0.918)
-#> 5                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   Large stones on the surface (0.141); Droughty (0.117); Filtering capacity (1); Droughty (0.918); Slow water movement (0.372); Droughty (0.133)
-#> 6 Too steep for surface application (1); Too steep for sprinkler application (1); Large stones on the surface (0.141); Droughty (0.117); Too steep for sprinkler application (1); Depth to bedrock (1); Large stones on the surface (0.684); Droughty (1); Too steep for surface application (1); Filtering capacity (1); Too steep for surface application (1); Droughty (0.918); Too steep for sprinkler application (0.395); Not rated; Ksat (); Not rated; Ksat (); Not rated; Fragments 75 to 250mm (); Not rated; pH (); Not rated; AWC (); Too steep for surface application (1); Too steep for sprinkler application (1); Droughty (0.061)
+#> 1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 Filtering capacity (1); Too steep for surface application (0.08)
+#> 2                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               Too steep for surface application (0.68); Too steep for surface application (0.68)
+#> 3                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   Large stones on the surface (0.141); Droughty (0.117); Filtering capacity (1); Droughty (0.918); Slow water movement (0.372); Droughty (0.133)
+#> 4 Too steep for surface application (1); Too steep for sprinkler application (1); Large stones on the surface (0.141); Droughty (0.117); Too steep for sprinkler application (1); Depth to bedrock (1); Large stones on the surface (0.684); Droughty (1); Too steep for surface application (1); Filtering capacity (1); Too steep for surface application (1); Droughty (0.918); Too steep for sprinkler application (0.395); Not rated; Ksat (); Not rated; Ksat (); Not rated; Fragments 75 to 250mm (); Not rated; pH (); Not rated; AWC (); Too steep for surface application (1); Too steep for sprinkler application (1); Droughty (0.061)
+#> 5                                                                                Too steep for surface application (1); Too steep for sprinkler application (1); Too steep for surface application (1); Too steep for sprinkler application (0.395); Droughty (0.072); Droughty (1); Too steep for surface application (1); Too steep for sprinkler application (1); Depth to bedrock (1); Large stones on the surface (0.684); Not rated; Ksat (); Not rated; Ksat (); Not rated; Fragments 75 to 250mm (); Not rated; pH (); Not rated; AWC (); Too steep for surface application (1); Too steep for sprinkler application (1); Droughty (0.061)
+#> 6                                                                                                                                                                                      Too steep for surface application (1); Too steep for sprinkler application (0.778); Large stones on the surface (0.141); Droughty (0.117); Sodium content (1); Too steep for surface application (0.68); Slow water movement (0.372); Too steep for surface application (1); Too steep for sprinkler application (0.778); Droughty (0.133); Too steep for sprinkler application (0.778); Slow water movement (0.372); Too steep for surface application (1)
 
 # set ordered factor levels (for nice label/legend order)
 tab$class_ENGConstructionMaterialsRoadfill <- factor(

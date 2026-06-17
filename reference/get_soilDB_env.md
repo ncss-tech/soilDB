@@ -13,10 +13,6 @@ soilDB.env
 get_soilDB_env()
 ```
 
-## Format
-
-An object of class `environment` of length 0.
-
 ## Value
 
 a `environment` object
@@ -25,5 +21,5 @@ a `environment` object
 
 ``` r
 get_soilDB_env()
-#> <environment: 0x5616ae8e0320>
+#> <environment: 0x55d0332e0e48>
 ```
