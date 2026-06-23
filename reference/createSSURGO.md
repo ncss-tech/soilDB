@@ -23,6 +23,9 @@ createSSURGO(
   overwrite = FALSE,
   append = FALSE,
   header = FALSE,
+  sep = "|",
+  na.strings = c("", "NA"),
+  quote = "",
   quiet = TRUE,
   ...
 )
@@ -96,8 +99,26 @@ createSSURGO(
 - header:
 
   *logical*. Passed to
-  [`read.delim()`](https://rdrr.io/r/utils/read.table.html) for reading
-  pipe-delimited (`|`) text files containing tabular data.
+  [`data.table::fread()`](https://rdrr.io/pkg/data.table/man/fread.html)
+  for reading delimited tabular text files. Default: `FALSE`
+
+- sep:
+
+  *character*. Passed to
+  [`data.table::fread()`](https://rdrr.io/pkg/data.table/man/fread.html).
+  Default: `"|"`
+
+- na.strings:
+
+  *character*. Passed to
+  [`data.table::fread()`](https://rdrr.io/pkg/data.table/man/fread.html).
+  Default: `c("", "NA")`
+
+- quote:
+
+  *character*. Passed to
+  [`data.table::fread()`](https://rdrr.io/pkg/data.table/man/fread.html).
+  Default: `""`
 
 - quiet:
 
@@ -107,7 +128,7 @@ createSSURGO(
 - ...:
 
   Additional arguments passed to
-  [`write_sf()`](https://r-spatial.github.io/sf/reference/st_write.html)
+  [`sf::write_sf()`](https://r-spatial.github.io/sf/reference/st_write.html)
   for writing spatial layers.
 
 ## Value

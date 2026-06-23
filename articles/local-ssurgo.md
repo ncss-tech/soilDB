@@ -279,7 +279,7 @@ library(sf)
 spatial_mu <- st_read(gpkg_path, layer = "mupolygon")
 ```
 
-    ## Reading layer `mupolygon' from data source `/tmp/RtmplCDWYc/ssurgo.gpkg' using driver `GPKG'
+    ## Reading layer `mupolygon' from data source `/tmp/RtmpNcVskn/ssurgo.gpkg' using driver `GPKG'
     ## Simple feature collection with 3333 features and 4 fields
     ## Geometry type: POLYGON
     ## Dimension:     XY
@@ -540,12 +540,12 @@ head(dominant_comp)
 ```
 
     ##     mukey comppct_r
-    ## 1 1382547        90
-    ## 2 1382548        85
-    ## 3 1382549        90
-    ## 4 1382550        96
-    ## 5 1382551        95
-    ## 6 1382552        90
+    ## 1 1382580        90
+    ## 2 1382581        70
+    ## 3 1382582        85
+    ## 4 1382583        80
+    ## 5 1382584        90
+    ## 6 1382585        90
 
 ``` r
 
@@ -610,20 +610,20 @@ hyd_tab <- get_SDA_property(
 head(hyd_tab)
 ```
 
-    ##     mukey areasymbol musym                                        muname hydgrp
-    ## 1 1382547      KS187  1510     Atchison clay loam, 3 to 6 percent slopes      B
-    ## 2 1382548      KS187  1511          Atchison loam, 1 to 3 percent slopes      B
-    ## 3 1382549      KS187  1550 Belfon clay loam, cool, 0 to 1 percent slopes      B
-    ## 4 1382550      KS187  1342          Bridgeport clay loam, rarely flooded      B
-    ## 5 1382551      KS187  1349    Bridgeport silty clay loam, rarely flooded      B
-    ## 6 1382552      KS187  2554       Campus clay loam, 0 to 3 percent slopes      C
-    ##     drainagecl
-    ## 1 Well drained
-    ## 2 Well drained
-    ## 3 Well drained
-    ## 4 Well drained
-    ## 5 Well drained
-    ## 6 Well drained
+    ##     mukey areasymbol musym
+    ## 1 1382580      KS129  1510
+    ## 2 1382581      KS129  5110
+    ## 3 1382582      KS129  1511
+    ## 4 1382583      KS129  1512
+    ## 5 1382584      KS129  1515
+    ## 6 1382585      KS129  1550
+    ##                                                  muname hydgrp   drainagecl
+    ## 1             Atchison clay loam, 3 to 6 percent slopes      B Well drained
+    ## 2       Atchison fine sandy loam, 1 to 3 percent slopes      B Well drained
+    ## 3                  Atchison loam, 1 to 3 percent slopes      B Well drained
+    ## 4                  Atchison loam, 6 to 9 percent slopes      B Well drained
+    ## 5 Atchison-Rock outcrop complex, 6 to 20 percent slopes      B Well drained
+    ## 6         Belfon clay loam, cool, 0 to 1 percent slopes      B Well drained
 
 `soilDB` also includes a function,
 [`NASISChoiceList()`](http://ncss-tech.github.io/soilDB/reference/NASISChoiceList.md),
@@ -647,12 +647,12 @@ hyd_tab[component_properties] <- NASISChoiceList(hyd_tab[component_properties])
 str(hyd_tab)
 ```
 
-    ## 'data.frame':    75 obs. of  6 variables:
-    ##  $ mukey     : chr  "1382547" "1382548" "1382549" "1382550" ...
-    ##  $ areasymbol: chr  "KS187" "KS187" "KS187" "KS187" ...
-    ##  $ musym     : chr  "1510" "1511" "1550" "1342" ...
-    ##  $ muname    : chr  "Atchison clay loam, 3 to 6 percent slopes" "Atchison loam, 1 to 3 percent slopes" "Belfon clay loam, cool, 0 to 1 percent slopes" "Bridgeport clay loam, rarely flooded" ...
-    ##  $ hydgrp    : Factor w/ 7 levels "a","b","c","d",..: 2 2 2 2 2 3 3 2 2 2 ...
+    ## 'data.frame':    39 obs. of  6 variables:
+    ##  $ mukey     : chr  "1382580" "1382581" "1382582" "1382583" ...
+    ##  $ areasymbol: chr  "KS129" "KS129" "KS129" "KS129" ...
+    ##  $ musym     : chr  "1510" "5110" "1511" "1512" ...
+    ##  $ muname    : chr  "Atchison clay loam, 3 to 6 percent slopes" "Atchison fine sandy loam, 1 to 3 percent slopes" "Atchison loam, 1 to 3 percent slopes" "Atchison loam, 6 to 9 percent slopes" ...
+    ##  $ hydgrp    : Factor w/ 7 levels "a","b","c","d",..: 2 2 2 2 2 2 2 2 2 2 ...
     ##  $ drainagecl: Ord.factor w/ 8 levels "excessively"<..: 3 3 3 3 3 3 3 3 3 3 ...
 
 Above we see that `hydgrp` and `drainagecl` are now factors and drainage
@@ -679,7 +679,7 @@ spatial_mu <- merge(spatial_mu, hyd_tab)
 str(spatial_mu)
 ```
 
-    ## Classes 'sf' and 'data.frame':   3333 obs. of  9 variables:
+    ## Classes 'sf' and 'data.frame':   1378 obs. of  9 variables:
     ##  $ areasymbol  : chr  "KS129" "KS129" "KS129" "KS129" ...
     ##  $ musym       : chr  "1158" "1158" "1158" "1158" ...
     ##  $ mukey       : chr  "1382599" "1382599" "1382599" "1382599" ...
@@ -688,7 +688,7 @@ str(spatial_mu)
     ##  $ muname      : chr  "Glenberg fine sandy loam, occasionally flooded" "Glenberg fine sandy loam, occasionally flooded" "Glenberg fine sandy loam, occasionally flooded" "Glenberg fine sandy loam, occasionally flooded" ...
     ##  $ hydgrp      : Factor w/ 7 levels "a","b","c","d",..: 1 1 1 1 1 1 1 1 1 1 ...
     ##  $ drainagecl  : Ord.factor w/ 8 levels "excessively"<..: 3 3 3 3 3 3 3 3 3 3 ...
-    ##  $ geom        :sfc_POLYGON of length 3333; first list element: List of 1
+    ##  $ geom        :sfc_POLYGON of length 1378; first list element: List of 1
     ##   ..$ : num [1:619, 1:2] -102 -102 -102 -102 -102 ...
     ##   ..- attr(*, "class")= chr [1:3] "XY" "POLYGON" "sfg"
     ##  - attr(*, "sf_column")= chr "geom"

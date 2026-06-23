@@ -72,6 +72,9 @@ Postgres or PostGIS
 <span>  overwrite <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  append <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  header <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  sep <span class="op">=</span> <span class="st">"|"</span>,</span>
+<span>  na.strings <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">""</span>, <span class="st">"NA"</span><span class="op">)</span>,</span>
+<span>  quote <span class="op">=</span> <span class="st">""</span>,</span>
 <span>  quiet <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -137,8 +140,19 @@ only shallowest ratings for smaller database size.</p></dd>
 
 
 <dt id="arg-header">header<a class="anchor" aria-label="anchor" href="#arg-header"></a></dt>
-<dd><p><em>logical</em>. Passed to <code><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.delim()</a></code> for reading pipe-delimited (<code>|</code>) text files
-containing tabular data.</p></dd>
+<dd><p><em>logical</em>. Passed to <code><a href="https://rdrr.io/pkg/data.table/man/fread.html" class="external-link">data.table::fread()</a></code> for reading delimited tabular text files. Default: <code>FALSE</code></p></dd>
+
+
+<dt id="arg-sep">sep<a class="anchor" aria-label="anchor" href="#arg-sep"></a></dt>
+<dd><p><em>character</em>. Passed to <code><a href="https://rdrr.io/pkg/data.table/man/fread.html" class="external-link">data.table::fread()</a></code>. Default: <code>"|"</code></p></dd>
+
+
+<dt id="arg-na-strings">na.strings<a class="anchor" aria-label="anchor" href="#arg-na-strings"></a></dt>
+<dd><p><em>character</em>. Passed to <code><a href="https://rdrr.io/pkg/data.table/man/fread.html" class="external-link">data.table::fread()</a></code>. Default: <code>c("", "NA")</code></p></dd>
+
+
+<dt id="arg-quote">quote<a class="anchor" aria-label="anchor" href="#arg-quote"></a></dt>
+<dd><p><em>character</em>. Passed to <code><a href="https://rdrr.io/pkg/data.table/man/fread.html" class="external-link">data.table::fread()</a></code>. Default: <code>""</code></p></dd>
 
 
 <dt id="arg-quiet">quiet<a class="anchor" aria-label="anchor" href="#arg-quiet"></a></dt>
@@ -146,7 +160,7 @@ containing tabular data.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
-<dd><p>Additional arguments passed to <code><a href="https://r-spatial.github.io/sf/reference/st_write.html" class="external-link">write_sf()</a></code> for writing spatial layers.</p></dd>
+<dd><p>Additional arguments passed to <code><a href="https://r-spatial.github.io/sf/reference/st_write.html" class="external-link">sf::write_sf()</a></code> for writing spatial layers.</p></dd>
 
 </dl></div>
     <div class="section level2">

@@ -349,7 +349,7 @@ print(mu)
 #> extent      : -1365495, -1358925, 2869245, 2873655  (xmin, xmax, ymin, ymax)
 #> coord. ref. : NAD83 / Conus Albers (EPSG:5070)
 #> source(s)   : memory
-#> varname     : file24cf32d8e7bc
+#> varname     : file25135827791c
 #> categories  : mukey
 #> name        :   mukey
 #> min value   :  144983
@@ -477,7 +477,7 @@ a <- vect(a, crs = 'epsg:5070')
 #> extent      : 1129005, 1135005, 1402995, 1411005  (xmin, xmax, ymin, ymax)
 #> coord. ref. : NAD83 / Conus Albers (EPSG:5070)
 #> source(s)   : memory
-#> varname     : file24cf5c7f7aea
+#> varname     : file25131761d52b
 #> categories  : mukey
 #> name        :  mukey
 #> min value   : 545800
@@ -491,7 +491,7 @@ a <- vect(a, crs = 'epsg:5070')
 #> extent      : 1129005, 1135005, 1402995, 1411005  (xmin, xmax, ymin, ymax)
 #> coord. ref. : NAD83 / Conus Albers (EPSG:5070)
 #> source(s)   : memory
-#> varname     : file24cfc78659b
+#> varname     : file2513747d3f38
 #> categories  : mukey
 #> name        :   mukey
 #> min value   :  545800
@@ -505,7 +505,7 @@ a <- vect(a, crs = 'epsg:5070')
 #> extent      : 1129005, 1135005, 1402995, 1411005  (xmin, xmax, ymin, ymax)
 #> coord. ref. : NAD83 / Conus Albers (EPSG:5070)
 #> source(s)   : memory
-#> varname     : file24cf4db8732d
+#> varname     : file25135c6e69a9
 #> categories  : mukey
 #> name        :   mukey
 #> min value   : 3244721
@@ -561,7 +561,7 @@ and resolution) as SSURGO products.
 #> extent      : 1129005, 1135005, 1402995, 1411005  (xmin, xmax, ymin, ymax)
 #> coord. ref. : NAD83 / Conus Albers (EPSG:5070)
 #> source(s)   : memory
-#> varname     : file24cf103253f5
+#> varname     : file251368133976
 #> categories  : mukey
 #> name        :  mukey
 #> min value   : 659074
