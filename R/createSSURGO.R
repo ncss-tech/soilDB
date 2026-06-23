@@ -217,13 +217,17 @@ downloadSSURGO <- function(WHERE = NULL,
 #'   only shallowest ratings for smaller database size.
 #' @param overwrite _logical_. Overwrite existing layers? Default: `FALSE`
 #' @param append _logical_. Append to existing layers? Default: `FALSE`
-#' @param header _logical_. Passed to `read.delim()` for reading pipe-delimited (`|`) text files
-#'   containing tabular data.
+#' @param header _logical_. Passed to `data.table::fread()` for reading delimited tabular text files. Default: `FALSE`
+#' @param sep _character_. Passed to `data.table::fread()`. Default: `"|"`
+#' @param na.strings _character_. Passed to `data.table::fread()`. Default: `c("", "NA")`
+#' @param quote _character_. Passed to `data.table::fread()`. Default: `""`
 #' @param quiet _logical_. Suppress messages and other output from database read/write operations?
-#' @param ... Additional arguments passed to `write_sf()` for writing spatial layers.
+#' @param ... Additional arguments passed to `sf::write_sf()` for writing spatial layers.
 #'
 #' @return _character_. Vector of layer/table names in `filename`.
 #' @seealso [downloadSSURGO()]
+#' @importFrom stats sd
+#' @importFrom utils flush.console head
 #' @export
 #' @examples
 #' \dontrun{
@@ -241,13 +245,24 @@ createSSURGO <- function(filename = NULL,
                          overwrite = FALSE,
                          append = FALSE,
                          header = FALSE,
+                         sep = "|",
+                         na.strings = c("", "NA"),
+                         quote = "",
                          quiet = TRUE,
                          ...) {
 
   if ((missing(filename) || length(filename) == 0) && missing(conn)) {
     stop("`filename` should be a path to a .gpkg or .sqlite file to create or append to, or a DBIConnection should be provided via `conn`.")
   }
-
+  
+  if (!dir.exists(exdir) ||
+      length(list.dirs(exdir)) == 0 || 
+      length(list.files(exdir, recursive = TRUE)) == 0) {
+    stop(sprintf("SSURGO extraction directory (%s) appears to be empty, check that the path is correct.\n\nIf you want to download new data, run `downloadSSURGO(destdir=%s, ...)` first.",
+                 exdir, shQuote(exdir)),
+         call. = FALSE)
+  }
+  
   if (missing(conn) || is.null(conn)) {
     # delete existing file if overwrite=TRUE; does _not_ apply to DBIConnection
     if (file.exists(filename)) {
@@ -285,19 +300,39 @@ createSSURGO <- function(filename = NULL,
   if (!is.null(pattern)) {
     fdx <- grepl(pattern, f)
   }
-
+  
+  
+  if (!quiet) {
+    message("Creating SSURGO database from ", exdir, " using pattern ", 
+             ifelse(is.null(pattern), "*", pattern), "...")
+  
+    message(
+      "  Output:  ", ifelse(is.null(conn), filename, conn@dbname), "\n",
+      "  Spatial: ", paste0(include_spatial, collapse = ", "), "\n",
+      "  Tabular: ", paste0(include_tabular, collapse = ", ")
+    )
+  }
+  
+  # initialize timing records for this run (collected locally and attached to result)
+  write_timings <- list()
+  zero_time <- Sys.time()
+  
   inv <- .inventory_ssurgo_files(
     files = f[fdx],
     layer_names = layer_names,
     include_spatial = include_spatial,
     include_tabular = include_tabular,
+    sep = sep,
+    quote = quote,
+    na.strings = na.strings,
     header = header
   )
 
   # inventory method converts partial sets (character vectors) to logical for include_* args
   include_spatial <- inv$include_spatial
   include_tabular <- inv$include_tabular
-
+  
+  
   if ((missing(conn) || is.null(conn)) && !IS_GPKG) {
 
     if (!requireNamespace("RSQLite")) {
@@ -344,23 +379,28 @@ createSSURGO <- function(filename = NULL,
           sf::st_geometry(shp) <- "geometry"
 
           .st_write_sf_conn <-  function(x, dsn, layer, j, overwrite) {
+            # attempt to capture source file path for SSA extraction (f.shp.grp is in outer scope)
+            src_file <- tryCatch(f.shp.grp[[i]][j], error = function(e) NULL)
             if ((i == 1 && j == 1) && isFALSE(append)) {
-              sf::write_sf(
-                x,
-                dsn = dsn,
-                layer = layer,
-                delete_layer = IS_GPKG || overwrite,
-                ...
-              )
+              rec <- .write_sf_with_log(x = x,
+                                 dsn = dsn,
+                                 layer = layer,
+                                 delete_layer = IS_GPKG || overwrite,
+                                 append = FALSE,
+                                 file = src_file,
+                                 quiet = quiet,
+                                 ...)
             } else {
-              sf::write_sf(
-                x,
-                dsn = dsn,
-                layer = layer,
-                append = TRUE,
-                ...
-              )
+              rec <- .write_sf_with_log(x = x,
+                                 dsn = dsn,
+                                 layer = layer,
+                                 delete_layer = FALSE,
+                                 append = TRUE,
+                                 file = src_file,
+                                 quiet = quiet,
+                                 ...)
             }
+            invisible(rec)
           }
 
           # dissolve on dissolve_field
@@ -395,15 +435,18 @@ createSSURGO <- function(filename = NULL,
           if (IS_GPKG && missing(conn)) {
             # writing to SQLiteConnection fails to create proper gpkg_contents entries
             # so use the path for GPKG only
-            .st_write_sf_conn(shp, filename, lnm, j, overwrite)
+            rec <- .st_write_sf_conn(shp, filename, lnm, j, overwrite)
           } else {
-            .st_write_sf_conn(shp, conn, lnm, j, overwrite)
+            rec <- .st_write_sf_conn(shp, conn, lnm, j, overwrite)
           }
-        }
-        NULL
-      }
-    }
-  }
+          
+          if (!is.null(rec)) {
+            write_timings[[length(write_timings) + 1L]] <- rec
+          }
+        } 
+      } 
+    } 
+  } 
 
   if (IS_GPKG) {
 
@@ -441,6 +484,19 @@ createSSURGO <- function(filename = NULL,
     } else {
       .ssurgo_type_map <- NULL
     }
+    
+    # environment variable (batching is helpful, but larger batch sizes not inherently faster)
+    batch_env <- Sys.getenv("R_SOILDB_SSURGO_TABLE_WRITE_BATCH_SIZE", unset = "25")
+    if (nzchar(batch_env)) {
+      batch_size <- suppressWarnings(as.integer(batch_env))
+    }
+    
+    if (is.na(batch_size) || batch_size <= 0L) {
+      warning(
+        "Invalid R_SOILDB_SSURGO_TABLE_WRITE_BATCH_SIZE='", batch_env, "', using no batching"
+      )
+      batch_size <- 1L
+    }
 
     lapply(names(inv$f.txt.grp), function(x) {
 
@@ -453,60 +509,83 @@ createSSURGO <- function(filename = NULL,
         indexDI <- na.omit(msidxdet[[4]][msidxdet[[1]] == inv$mstab_lut[x] & grepl("DI_", msidxdet[[2]])])
       }
 
-      d <- try(lapply(seq_along(inv$f.txt.grp[[x]]), function(i) {
-          # message(f.txt.grp[[x]][i])
-          y <- try(read.delim(inv$f.txt.grp[[x]][i], sep = "|", stringsAsFactors = FALSE, header = header,
-                              na.strings = c("", "NA")), silent = TRUE)
+      # process files in transaction batches
+      files <- inv$f.txt.grp[[x]]
+      files_n <- length(files)
+      
+      if (files_n > 0) {
+        
+        batch_n <- as.integer(batch_size)
+        
+        for (start_idx in seq(1, files_n, by = batch_n)) {
+          
+          end_idx <- min(start_idx + batch_n - 1L, files_n)
+          
+          tryCatch({
+            DBI::dbBegin(conn)
+            for (i in seq(start_idx, end_idx)) {
+              y <- try({
+                .read_delim_tabular(
+                  files[i],
+                  header = header,
+                  newnames = newnames,
+                  tablename = inv$mstab_lut[x],
+                  mstabcol = mstabcol,
+                  type_map = .ssurgo_type_map,
+                  maxruledepth = maxruledepth,
+                  sep = sep,
+                  na.strings = na.strings,
+                  quote = quote,
+                  quiet = quiet
+                )
+              }, silent = quiet)
 
-          if (inherits(y, 'try-error')) {
-            if (!quiet) {
-              message("File ", inv$f.txt.grp[[x]][i], " contains no data")
-            }
-            return(NULL)
-          } else if (length(y) == 1) {
-            if (grepl("soil_metadata", inv$f.txt.grp[[x]][i])) {
-              y <- data.frame(
-                areasymbol = toupper(gsub(".*soil_metadata_(.*)\\.txt", "\\1", inv$f.txt.grp[[x]][i])),
-                content = paste(y[[1]], collapse = "\n")
-              )
-            } else {
-              y <- data.frame(content = y)
-            }
-          } else {
-            if (!is.null(inv$mstab) && !header) { # preserve headers if present
-              colnames(y) <- newnames
-            }
-            # enforce schema types from metadata
-            y <- .coerce_ssurgo_types(y, inv$mstab_lut[x], mstabcol, .ssurgo_type_map)
-          }
-
-          if (is.na(inv$mstab_lut[x])) {
-            # readme, version
-            return(NULL)
-          }
-
-          # remove deeper rules from cointerp for smaller DB size
-          # most people only use depth==0 (default)
-          if (inv$mstab_lut[x] == "cointerp" && !is.null(maxruledepth)) {
-            y <- y[y$ruledepth <= maxruledepth, ]
-          }
-
-          if ("musym" %in% colnames(y)) {
-            y$musym <- as.character(y$musym)
-          }
-
-          try({
-            if (i == 1 && isFALSE(append)) {
-              DBI::dbWriteTable(conn, inv$mstab_lut[x], y, overwrite = overwrite)
-            } else {
-              if (DBI::dbExistsTable(conn, inv$mstab_lut[x]) && x %in% inv$txt.first) {
-                # skip writing sdv/mds* metadata tables to avoid uniqueness issues
-                return(FALSE)
+              if (inherits(y, 'try-error') || is.null(y)) {
+                if (!quiet) message("File ", files[i], " contains no data or failed to read")
+                next
               }
-              DBI::dbWriteTable(conn, inv$mstab_lut[x], y, append = TRUE)
+
+              if (is.na(inv$mstab_lut[x])) next
+
+              try({
+                table_name <- inv$mstab_lut[x]
+                table_exists <- DBI::dbExistsTable(conn, table_name)
+                append_arg <- FALSE
+                overwrite_arg <- overwrite
+
+                if (!table_exists) {
+                  append_arg <- FALSE
+                  overwrite_arg <- FALSE
+                } else if (isTRUE(append)) {
+                  append_arg <- TRUE
+                  overwrite_arg <- FALSE
+                } else {
+                  append_arg <- FALSE
+                  overwrite_arg <- overwrite
+                }
+
+                rec <- .write_table_with_log(
+                  conn = conn,
+                  name = table_name,
+                  value = y,
+                  overwrite = overwrite_arg,
+                  append = append_arg,
+                  file = files[i],
+                  quiet = quiet
+                )
+
+                if (!is.null(rec)) {
+                  write_timings[[length(write_timings) + 1L]] <- rec
+                }
+              }, silent = quiet)
             }
-          }, silent = quiet)
-      }), silent = quiet)
+            DBI::dbCommit(conn)
+          }, error = function(e) {
+            try(DBI::dbRollback(conn), silent = TRUE)
+            stop(e)
+          })
+        }
+      }
 
       if (length(inv$mstab_lut[x]) && is.na(inv$mstab_lut[x])) {
         inv$mstab_lut[x] <- x
@@ -556,8 +635,26 @@ createSSURGO <- function(filename = NULL,
       }
     })
   }
-
+  complete_time <- Sys.time()
+  
+  if (!quiet) {
+    message("Database creation complete in ", format(signif(difftime(complete_time, zero_time, units = "auto"), 3)), ".")
+  }
   res <- DBI::dbListTables(conn)
+
+  # attach write timing summary as attribute for programmatic access
+  if (length(write_timings) > 0) {
+    timings_df <- do.call(rbind, lapply(write_timings, function(r)
+      data.frame(
+        table = r$table,
+        ssa = r$ssa,
+        rows = r$rows,
+        elapsed = r$elapsed,
+        stringsAsFactors = FALSE
+      )))
+    attr(res, 'write_timings') <- timings_df
+  }
+
   invisible(res)
 }
 
@@ -567,6 +664,9 @@ createSSURGO <- function(filename = NULL,
                                     layer_names = .get_spatial_layer_names(),
                                     include_spatial = TRUE,
                                     include_tabular = TRUE,
+                                    sep = "|",
+                                    quote = "",
+                                    na.strings = c("", "NA"),
                                     header = FALSE) {
 
   # create and add combined vector datasets:
@@ -625,6 +725,7 @@ createSSURGO <- function(filename = NULL,
     mstab_lut <- c(mstab[[1]], "soil_metadata")
     names(mstab_lut) <- c(mstab[[5]], "soil_metadata")
   } else {
+    mstab <- NULL
     mstab_lut <- names(f.txt.grp)
     names(mstab_lut) <- names(f.txt.grp)
   }
@@ -680,6 +781,278 @@ createSSURGO <- function(filename = NULL,
     )
   }
   y
+}
+
+# helper: fast delimited text reader
+.read_delim_tabular <- function(file,
+                                header,
+                                newnames,
+                                tablename,
+                                mstabcol,
+                                type_map,
+                                maxruledepth,
+                                sep = "|",
+                                na.strings = c("", "NA"),
+                                quote = "",
+                                quiet) {
+  dt <- suppressWarnings(data.table::fread(
+    file,
+    sep = sep,
+    header = header,
+    na.strings = na.strings,
+    showProgress = FALSE,
+    data.table = FALSE
+  ))
+  
+  if (length(dt) == 1) {
+    if (grepl("soil_metadata", file)) {
+      y <- data.frame(
+        areasymbol = toupper(gsub(
+          ".*soil_metadata_(.*)\\.txt", "\\1", file
+        )),
+        content = paste(dt[[1]], collapse = "\n"),
+        stringsAsFactors = FALSE
+      )
+      return(y)
+    } else {
+      y <- data.frame(content = dt, stringsAsFactors = FALSE)
+      return(y)
+    }
+  }
+  
+  y <- dt
+  if (!is.null(mstabcol) && !header && !is.null(newnames) && length(y) > 0) {
+    colnames(y) <- newnames
+  }
+  if (length(y) == 0) {
+    return(try(stop("failed to read"), silent = TRUE))
+  }
+  y <- .coerce_ssurgo_types(y, tablename, mstabcol, type_map)
+  
+  # cointerp is generally large; filter early by ruledepth by defaykt
+  if (!is.null(maxruledepth) &&
+      tablename == "cointerp" &&
+      "ruledepth" %in% colnames(y)) {
+    y <- y[y$ruledepth <= maxruledepth, , drop = FALSE]
+  }
+  
+  if ("musym" %in% colnames(y)) {
+    y$musym <- as.character(y$musym)
+  }
+  
+  y
+}
+
+.write_table_with_log <- function(conn,
+                                 name,
+                                 value,
+                                 overwrite = FALSE,
+                                 append = FALSE,
+                                 file = NULL,
+                                 quiet = TRUE) {
+  
+ # attempt to extract SSA identifier from file path if present
+ ssa <- NA_character_
+ if (!is.null(file) && nzchar(file)) {
+   try(silent = TRUE, {
+     ssa <- toupper(basename(.deep_dirname(file, ifelse(grepl("soil_metadata", file), 1, 2))))
+   })
+ }
+
+ start_time <- Sys.time()
+
+ # environment variable (at this scale chunk size mostly negligible)
+ chunk_size <- as.integer(Sys.getenv("R_SOILDB_SSURGO_ROW_CHUNK_SIZE", "100000"))
+ 
+ if (is.na(chunk_size) || chunk_size <= 0L) {
+   warning(
+     "Invalid R_SOILDB_SSURGO_ROW_CHUNK_SIZE='", chunk_size, "', using 100,000 row batches"
+   )
+   chunk_size <- 100000L
+ }
+
+ res <- tryCatch({
+   rows_written <- NA_integer_
+   if (isTRUE(append) && is.data.frame(value)) {
+     n <- nrow(value)
+
+     if (n == 0) {
+       rows_written <- 0L
+     } else {
+       if (n <= chunk_size) {
+         DBI::dbAppendTable(conn, name, value)
+       } else {
+         starts <- seq(1, n, by = chunk_size)
+         for (s in starts) {
+           e <- min(s + chunk_size - 1L, n)
+           DBI::dbAppendTable(conn, name, value[s:e, , drop = FALSE])
+         }
+       }
+       rows_written <- n
+     }
+   } else {
+     # not an append or not a data.frame: write in one shot
+     DBI::dbWriteTable(conn, name, value, overwrite = overwrite)
+     rows_written <- ifelse(is.data.frame(value), nrow(value), NA_integer_)
+   }
+
+   end_time <- Sys.time()
+   elapsed <- as.numeric(difftime(end_time, start_time, units = "secs"))
+
+   if (!quiet) {
+     message(
+       sprintf(
+         "[%s] WRITE table=%s ssa=%s rows=%s elapsed=%.3f",
+         .format_iso8601(end_time),
+         as.character(name),
+         ifelse(is.na(ssa) || length(ssa) == 0, "NA", ssa),
+         ifelse(is.numeric(rows_written), rows_written, NA_integer_),
+         elapsed
+       )
+     )
+   }
+   
+   flush.console()
+
+   record <- list(
+     table = as.character(name),
+     ssa = ifelse(is.na(ssa) || length(ssa) == 0, NA_character_, as.character(ssa)),
+     rows = ifelse(is.numeric(rows_written), as.integer(rows_written), NA_integer_),
+     elapsed = elapsed
+   )
+
+   invisible(record)
+ }, error = function(e) {
+   end_time <- Sys.time()
+   elapsed <- as.numeric(difftime(end_time, start_time, units = "secs"))
+   if (!quiet) {
+     message(
+       sprintf(
+         "[%s] ERROR write table=%s ssa=%s elapsed=%.3f error=%s",
+         .format_iso8601(end_time),
+         as.character(name),
+         ifelse(is.na(ssa) || length(ssa) == 0, "NA", ssa),
+         elapsed,
+         conditionMessage(e)
+       )
+     )
+   }   
+   flush.console()
+   stop(e)
+ })
+ 
+ res
+}
+
+
+.write_sf_with_log <- function(x,
+                               dsn,
+                               layer,
+                               delete_layer = FALSE,
+                               append = FALSE,
+                               file = NULL,
+                               quiet = TRUE,
+                               ...) {
+  ssa <- NA_character_
+  if (!is.null(file) && nzchar(file)) {
+    try(silent = TRUE, {
+      ssa <- toupper(basename(.deep_dirname(file, 2)))
+    })
+  }
+
+  start_time <- Sys.time()
+
+  res <- tryCatch({
+    # delegate to sf::write_sf with the same args used currently
+    if (!isTRUE(append)) {
+      sf::write_sf(x,
+                   dsn = dsn,
+                   layer = layer,
+                   delete_layer = delete_layer,
+                   ...)
+    } else {
+      sf::write_sf(x,
+                   dsn = dsn,
+                   layer = layer,
+                   append = TRUE,
+                   ...)
+    }
+    end_time <- Sys.time()
+    elapsed <- as.numeric(difftime(end_time, start_time, units = "secs"))
+    features <- ifelse(inherits(x, 'data.frame'), nrow(x), NA_integer_)
+
+    # compact single-line log
+    if (!quiet) {
+      message(
+        sprintf(
+          "[%s] WRITE sf=%s ssa=%s features=%s elapsed=%.3f",
+          .format_iso8601(end_time),
+          as.character(layer),
+          ifelse(is.na(ssa) || length(ssa) == 0, "NA", ssa),
+          ifelse(is.numeric(features), features, NA_integer_),
+          elapsed
+        )
+      )
+    }
+    flush.console()
+
+    record <- list(
+      table = as.character(layer),
+      ssa = ifelse(is.na(ssa) || length(ssa) == 0, NA_character_, as.character(ssa)),
+      rows = ifelse(is.numeric(features), as.integer(features), NA_integer_),
+      elapsed = elapsed
+    )
+    invisible(record)
+  }, error = function(e) {
+    end_time <- Sys.time()
+    elapsed <- as.numeric(difftime(end_time, start_time, units = "secs"))
+    if (!quiet) {
+      message(
+        sprintf(
+          "[%s] ERROR write sf=%s ssa=%s elapsed=%.3f error=%s",
+          .format_iso8601(end_time),
+          as.character(layer),
+          ifelse(is.na(ssa) || length(ssa) == 0, "NA", ssa),
+          elapsed,
+          conditionMessage(e)
+        )
+      )
+    }
+    flush.console()
+    stop(e)
+  })
+
+  res
+}
+
+
+# print summary of write timings collected during run
+.ssurgo_print_write_summary <- function(res_obj = NULL, top_n = 30) {
+  .N <- NULL; elapsed <- NULL; total_elapsed <- NULL
+  if (!is.null(res_obj) &&
+      !is.null(attr(res_obj, 'write_timings'))) {
+    df <- attr(res_obj, 'write_timings')
+  } else {
+    message(
+      'No write timings recorded.'
+    )
+    return(invisible(NULL))
+  }
+  df$elapsed <- as.numeric(df$elapsed)
+
+  dt <- data.table::as.data.table(df)
+  agg_dt <- dt[, list(
+    n = .N,
+    total_elapsed = sum(elapsed),
+    mean = mean(elapsed),
+    sd = if (.N > 1) sd(elapsed) else as.numeric(NA),
+    min = min(elapsed),
+    max = max(elapsed)
+  ), by = table]
+
+  data.table::setorder(agg_dt, -total_elapsed)
+  print(head(agg_dt, top_n))
+  invisible(as.data.frame(agg_dt))
 }
 
 ## From https://github.com/brownag/gpkg -----

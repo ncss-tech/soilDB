@@ -2,6 +2,19 @@
 ## misc functions used by soilDB
 ##
 
+## format a timestamp using ISO8601
+# x: object to pass to `format()`
+.format_iso8601 <- function(x) {
+  format(x, "%Y-%m-%dT%H:%M:%OS3Z")
+}
+
+## get the nth parent directory name from a path
+# x: character path
+# n: number of parent folders
+.deep_dirname <- function(x, n) {
+  Reduce(function(init, f) dirname(init), seq_len(n), init = x)
+}
+
 ## simplfied base R implementation of glue::glue()
 # x: character vector with simple braced expressions to replace (NOT evaluate)
 # env: environment where expression values are defined (default: `parent.frame()`)

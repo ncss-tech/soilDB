@@ -156,7 +156,16 @@
     for (tt in tables) {
       res <- dbGetQuery(con, paste("SELECT * FROM", tt))
       res <- FUN(res)
-      RSQLite::dbWriteTable(con, tt, res, overwrite = TRUE)
+      
+      .write_table_with_log(
+        conn = con,
+        name = tt,
+        value = res,
+        overwrite = TRUE,
+        append = FALSE,
+        file = NULL,
+        quiet = FALSE
+      )
       message(tt)
     }
   }
@@ -352,7 +361,17 @@
   tables <- DBI::dbListTables(channel)
   res <- lapply(tables, function(x) {
     y <- try(DBI::dbReadTable(channel, x), silent = quiet)
-    if (!inherits(y, 'try-error')) DBI::dbWriteTable(channel_out, x, y)
+    if (!inherits(y, 'try-error')) {
+      .write_table_with_log(
+        conn = channel_out,
+        name = x,
+        value = y,
+        overwrite = TRUE,
+        append = FALSE,
+        file = NULL,
+        quiet = quiet
+      )
+    }
   })
   DBI::dbDisconnect(channel)
   DBI::dbDisconnect(channel_out)
