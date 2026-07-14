@@ -42,12 +42,14 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="2.9.2" id="soildb-292-development">soilDB 2.9.2 (development)<a class="anchor" aria-label="anchor" href="#soildb-292-development"></a></h2>
+<h2 class="pkg-version" data-toc-text="2.9.2" id="soildb-292-2026-07-10">soilDB 2.9.2 (2026-07-10)<a class="anchor" aria-label="anchor" href="#soildb-292-2026-07-10"></a></h2><p class="text-muted">CRAN release: 2026-07-11</p>
 <ul><li>EDIT base URL (for <code><a href="../reference/get_EDIT_ecoclass_by_geoUnit.html">get_EDIT_ecoclass_by_geoUnit()</a></code> and <code><a href="../reference/make_EDIT_service_URL.html">make_EDIT_service_URL()</a></code>) updated to new USDA-managed server: <a href="https://edit.sc.egov.usda.gov/" class="external-link uri">https://edit.sc.egov.usda.gov/</a>
 </li>
 <li>SoilWeb-based Web Coverage Services (<code><a href="../reference/soilColor.wcs.html">soilColor.wcs()</a></code>, <code><a href="../reference/ISSR800.wcs.html">ISSR800.wcs()</a></code>, <code><a href="../reference/mukey.wcs.html">mukey.wcs()</a></code>) have been updated with FY26 maps, now including most OCONUS soil surveys (AK, HI, PR, PW, GU, AS, MP)</li>
 <li>
 <code><a href="../reference/downloadSSURGO.html">downloadSSURGO()</a></code> gains arguments <code>include_spatial</code> and <code>include_tabular</code> that are analogous to arguments of the same name from <code><a href="../reference/createSSURGO.html">createSSURGO()</a></code>. Also, added <code>LAPPLY.FUN</code> to support arbitrary parallel or progress reporting backends. Thanks to feature request from <a href="https://github.com/dylanbeaudette" class="external-link">@dylanbeaudette</a> (<a href="https://github.com/ncss-tech/soilDB/issues/470" class="external-link">#470</a>).</li>
+<li>
+<code><a href="../reference/createSSURGO.html">createSSURGO()</a></code> improved performance of reading and writing of tabular data and type conversion</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="2.9.1" id="soildb-291-2026-04-01">soilDB 2.9.1 (2026-04-01)<a class="anchor" aria-label="anchor" href="#soildb-291-2026-04-01"></a></h2><p class="text-muted">CRAN release: 2026-04-03</p>
@@ -1350,7 +1352,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer></div>

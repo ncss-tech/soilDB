@@ -124,8 +124,7 @@
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>You can download SQLite or GeoPackage snapshots here: <a href="https://ncsslabdatamart.sc.egov.usda.gov/database_download.aspx" class="external-link">https://ncsslabdatamart.sc.egov.usda.gov/database_download.aspx</a>. Specify the <code>dsn</code> argument to use a local copy of the lab data rather than Soil Data Access web service.</p>
-<p>Lab Data Mart model diagram: <a href="https://jneme910.github.io/Lab_Data_Mart_Documentation/Documents/SDA_KSSL_Data_model.html" class="external-link">https://jneme910.github.io/Lab_Data_Mart_Documentation/Documents/SDA_KSSL_Data_model.html</a>
-If the <code>chunk.size</code> parameter is set too large and the Soil Data Access request fails, the algorithm will re-try the query with a smaller (halved) <code>chunk.size</code> argument. This will be attempted up to 3 times before returning <code>NULL</code></p>
+<p>If the <code>chunk.size</code> parameter is set too large and the Soil Data Access request fails, the algorithm will re-try the query with a smaller (halved) <code>chunk.size</code> argument. This will be attempted up to 3 times before returning <code>NULL</code></p>
 <p>The default behavior joins the <code>lab_area</code> tables only for the "Soil Survey Area" related records. You can specify alternative area records for use in <code>x</code>, <code>what</code> or <code>WHERE</code> arguments by setting <code>area_type</code> to a different value.</p>
 <p>When requesting data from <code>"lab_major_and_trace_elements_and_oxides"</code>, <code>"lab_mineralogy_glass_count"</code>, or <code>"lab_xray_and_thermal"</code> multiple preparation codes (<code>prep_code</code>) or size fractions (<code>analyzed_size_frac</code>) are possible. The default behavior of <code>fetchLDM()</code> is to attempt to return a topologically valid (minimal overlaps) <em>SoilProfileCollection</em>. This is achieved by setting <code>prep_code="S"</code> ("sieved") and <code>analyzed_size_frac="&lt;2 mm"</code>. You may specify alternate or additional preparation codes or fractions as needed, but note that this may cause "duplication" of some layers where measurements were made with different preparation or on fractionated samples</p>
     </div>
@@ -164,7 +163,7 @@ If the <code>chunk.size</code> parameter is set too large and the Soil Data Acce
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer></div>

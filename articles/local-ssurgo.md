@@ -279,7 +279,7 @@ library(sf)
 spatial_mu <- st_read(gpkg_path, layer = "mupolygon")
 ```
 
-    ## Reading layer `mupolygon' from data source `/tmp/RtmpNcVskn/ssurgo.gpkg' using driver `GPKG'
+    ## Reading layer `mupolygon' from data source `/tmp/Rtmp9AxTKm/ssurgo.gpkg' using driver `GPKG'
     ## Simple feature collection with 3333 features and 4 fields
     ## Geometry type: POLYGON
     ## Dimension:     XY

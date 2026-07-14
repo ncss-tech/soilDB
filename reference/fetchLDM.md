@@ -114,8 +114,6 @@ You can download SQLite or GeoPackage snapshots here:
 Specify the `dsn` argument to use a local copy of the lab data rather
 than Soil Data Access web service.
 
-Lab Data Mart model diagram:
-<https://jneme910.github.io/Lab_Data_Mart_Documentation/Documents/SDA_KSSL_Data_model.html>
 If the `chunk.size` parameter is set too large and the Soil Data Access
 request fails, the algorithm will re-try the query with a smaller
 (halved) `chunk.size` argument. This will be attempted up to 3 times

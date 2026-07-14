@@ -1,6 +1,8 @@
 # Changelog
 
-## soilDB 2.9.2 (development)
+## soilDB 2.9.2 (2026-07-10)
+
+CRAN release: 2026-07-11
 
 - EDIT base URL (for
   [`get_EDIT_ecoclass_by_geoUnit()`](http://ncss-tech.github.io/soilDB/reference/get_EDIT_ecoclass_by_geoUnit.md)
@@ -21,6 +23,9 @@
   reporting backends. Thanks to feature request from
   [@dylanbeaudette](https://github.com/dylanbeaudette)
   ([\#470](https://github.com/ncss-tech/soilDB/issues/470)).
+- [`createSSURGO()`](http://ncss-tech.github.io/soilDB/reference/createSSURGO.md)
+  improved performance of reading and writing of tabular data and type
+  conversion
 
 ## soilDB 2.9.1 (2026-04-01)
 

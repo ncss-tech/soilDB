@@ -1,5 +1,5 @@
 pandoc: 3.8.3
-pkgdown: 2.2.0
+pkgdown: 2.2.1
 pkgdown_sha: ~
 articles:
   dominant-es: dominant-es.html
@@ -8,7 +8,7 @@ articles:
   sda: sda.html
   soilweb-data-functions: soilweb-data-functions.html
   wcs-ssurgo: wcs-ssurgo.html
-last_built: 2026-06-23T22:38Z
+last_built: 2026-07-14T18:53Z
 urls:
   reference: http://ncss-tech.github.io/soilDB/reference
   article: http://ncss-tech.github.io/soilDB/articles
