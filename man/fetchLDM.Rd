@@ -54,7 +54,6 @@ This function provides access to the Kellogg Soil Survey Laboratory Data Mart vi
 \details{
 You can download SQLite or GeoPackage snapshots here: \url{https://ncsslabdatamart.sc.egov.usda.gov/database_download.aspx}. Specify the \code{dsn} argument to use a local copy of the lab data rather than Soil Data Access web service.
 
-Lab Data Mart model diagram: \url{https://jneme910.github.io/Lab_Data_Mart_Documentation/Documents/SDA_KSSL_Data_model.html}
 If the \code{chunk.size} parameter is set too large and the Soil Data Access request fails, the algorithm will re-try the query with a smaller (halved) \code{chunk.size} argument. This will be attempted up to 3 times before returning \code{NULL}
 
 The default behavior joins the \code{lab_area} tables only for the "Soil Survey Area" related records. You can specify alternative area records for use in \code{x}, \code{what} or \code{WHERE} arguments by setting \code{area_type} to a different value.
