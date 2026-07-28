@@ -7,8 +7,8 @@
 downloadSSURGO(
   WHERE = NULL,
   areasymbols = NULL,
-  destdir = tempdir(),
-  exdir = destdir,
+  destdir = NULL,
+  exdir = NULL,
   include_template = FALSE,
   include_spatial = TRUE,
   include_tabular = TRUE,
@@ -18,7 +18,8 @@ downloadSSURGO(
   LAPPLY.FUN.ARGS = NULL,
   remove_zip = FALSE,
   overwrite = FALSE,
-  quiet = FALSE
+  quiet = FALSE,
+  force = FALSE
 )
 }
 \arguments{
@@ -28,11 +29,12 @@ defining the target extent.}
 
 \item{areasymbols}{\emph{character}. Character vector of soil survey area symbols e.g. \code{c("CA067", "CA077")}. Used in lieu of \code{WHERE} argument.}
 
-\item{destdir}{\emph{character}. Directory to download ZIP files into. Default \code{tempdir()}.}
+\item{destdir}{\emph{character}. Directory to download ZIP files into. Default \code{NULL} uses the
+persistent soilDB Web Soil Survey cache.}
 
 \item{exdir}{\emph{character}. Directory to extract ZIP archives into. May be a directory that does
 not yet exist. Each ZIP file will extract to a folder labeled with \code{areasymbol} in this
-directory. Default: \code{destdir}}
+directory. Default: \code{destdir}, or the soilDB WSS cache root when \code{destdir} is \code{NULL}.}
 
 \item{include_template}{\emph{logical}. Include the (possibly state-specific) MS Access template
 database? Default: \code{FALSE}}
@@ -67,6 +69,9 @@ in parallel instead of sequential, custom progress reporting, or similar.}
 \code{FALSE}}
 
 \item{quiet}{\emph{logical}. Passed to \code{curl::curl_download()}.}
+
+\item{force}{\emph{logical}. Force re-download of ZIP files even when a cached copy exists. Default:
+\code{FALSE}}
 }
 \value{
 \emph{character}. Paths to downloaded ZIP files (invisibly). May not exist if \code{remove_zip = TRUE}.
@@ -99,7 +104,12 @@ that get extracted from ZIP files, not just filtering on file names (as is imple
 pre-existing \code{pattern} argument). This can dramatically improve efficiency of extraction and
 the overall size of the data in \code{exdir}. These arguments can be used in conjunction with the
 \code{pattern} argument to fine-tune the files included in the generated snapshot database.
+
+When \code{destdir} is omitted, ZIP files are stored in the persistent soilDB Web Soil Survey cache.
+Cache paths are organized by fiscal year, and the cache policy also distinguishes template and
+non-template archives when choosing the ZIP to reuse. Use \code{list_WSS_cache()} or \code{clear_WSS_cache()} to inspect or
+clean the cache.
 }
 \seealso{
-\code{\link[=createSSURGO]{createSSURGO()}}
+\code{\link[=createSSURGO]{createSSURGO()}}, \code{\link[=list_WSS_cache]{list_WSS_cache()}}, \code{\link[=clear_WSS_cache]{clear_WSS_cache()}}
 }

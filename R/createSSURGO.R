@@ -10,10 +10,11 @@
 #'   defining the target extent.
 #' @param areasymbols _character_. Character vector of soil survey area symbols e.g. `c("CA067",
 #'   "CA077")`. Used in lieu of `WHERE` argument.
-#' @param destdir _character_. Directory to download ZIP files into. Default `tempdir()`.
+#' @param destdir _character_. Directory to download ZIP files into. Default `NULL` uses the
+#'   persistent soilDB Web Soil Survey cache.
 #' @param exdir _character_. Directory to extract ZIP archives into. May be a directory that does
 #'   not yet exist. Each ZIP file will extract to a folder labeled with `areasymbol` in this
-#'   directory. Default: `destdir`
+#'   directory. Default: `destdir`, or the soilDB WSS cache root when `destdir` is `NULL`.
 #' @param include_template _logical_. Include the (possibly state-specific) MS Access template
 #'   database? Default: `FALSE`
 #' @param include_spatial _logical_ or _character_. Extract spatial data layers from ZIP file?
@@ -38,6 +39,8 @@
 #' @param overwrite _logical_. Overwrite by re-extracting if directory already exists? Default:
 #'   `FALSE`
 #' @param quiet _logical_. Passed to `curl::curl_download()`.
+#' @param force _logical_. Force re-download of ZIP files even when a cached copy exists. Default:
+#'   `FALSE`
 #'
 #' @export
 #'
@@ -64,13 +67,18 @@
 #'   the overall size of the data in `exdir`. These arguments can be used in conjunction with the
 #'   `pattern` argument to fine-tune the files included in the generated snapshot database.
 #'
+#'   When `destdir` is omitted, ZIP files are stored in the persistent soilDB Web Soil Survey cache.
+#'   Cache paths are organized by fiscal year, and the cache policy also distinguishes template and
+#'   non-template archives when choosing the ZIP to reuse. Use `list_WSS_cache()` or `clear_WSS_cache()` to inspect or
+#'   clean the cache.
+#'
 #' @return _character_. Paths to downloaded ZIP files (invisibly). May not exist if `remove_zip =
 #'   TRUE`.
-#' @seealso [createSSURGO()]
+#' @seealso [createSSURGO()], [list_WSS_cache()], [clear_WSS_cache()]
 downloadSSURGO <- function(WHERE = NULL,
                            areasymbols = NULL,
-                           destdir = tempdir(),
-                           exdir = destdir,
+                           destdir = NULL,
+                           exdir = NULL,
                            include_template = FALSE,
                            include_spatial = TRUE,
                            include_tabular = TRUE,
@@ -80,7 +88,8 @@ downloadSSURGO <- function(WHERE = NULL,
                            LAPPLY.FUN.ARGS = NULL,
                            remove_zip = FALSE,
                            overwrite = FALSE,
-                           quiet = FALSE) {
+                           quiet = FALSE,
+                           force = FALSE) {
 
   db <- match.arg(toupper(db), c('SSURGO', 'STATSGO'))
 
@@ -107,35 +116,67 @@ downloadSSURGO <- function(WHERE = NULL,
   }
 
   # make WSS download URLs from areasymbol, template, date
-  urls <- .make_WSS_download_url(WHERE, include_template = include_template, db = db)
+  urls <- try({
+    .make_WSS_download_url(WHERE, include_template = include_template, db = db)
+  }, silent = TRUE)
 
   if (inherits(urls, 'try-error')) {
-    message(urls[1])
-    return(invisible(urls))
+    if (!quiet) {
+      warning("Unable to query remote WSS metadata; using cached ZIPs when available.", call. = FALSE)
+    }
+    urls <- character(0)
   }
 
-  if (!dir.exists(destdir)) {
-    dir.create(destdir, recursive = TRUE)
+  cache_mode <- is.null(destdir)
+  if (cache_mode) {
+    cache_root <- .wss_cache_root(create = TRUE)
+  } else {
+    if (!dir.exists(destdir)) {
+      dir.create(destdir, recursive = TRUE)
+    }
+    cache_root <- destdir
   }
 
-  # download files
-  for (i in seq_along(urls)) {
-    destfile <- file.path(destdir, basename(urls[i]))
-    if (!file.exists(destfile)) {
-      try(curl::curl_download(urls[i], destfile = destfile, quiet = quiet, mode = "wb", handle = .soilDB_curl_handle()), silent = quiet)
+  if (is.null(exdir)) {
+    exdir <- if (cache_mode) tempdir() else destdir
+  }
+
+  destfiles <- character(0)
+  if (length(urls) > 0) {
+    destfiles <- .wss_cache_download_urls(
+      urls = urls,
+      cache_root = cache_root,
+      cache_mode = cache_mode,
+      force = force,
+      quiet = quiet
+    )
+  }
+
+  paths2 <- destfiles[file.exists(destfiles)]
+
+  if (!isTRUE(force) && length(paths2) == 0 && cache_mode) {
+    fallback_areas <- if (!is.null(areasymbols)) areasymbols else .extract_wss_areasymbols(WHERE)
+    if (!is.null(fallback_areas)) {
+      cached <- .wss_cache_select(
+        .wss_cache_entries(cache_dir = cache_root),
+        areasymbols = fallback_areas,
+        db = db,
+        include_template = include_template,
+        latest_only = TRUE
+      )
+      if (nrow(cached) > 0) {
+        paths2 <- cached$file
+      }
     }
   }
 
-  paths <- list.files(destdir, pattern = "\\.zip$", full.names = TRUE)
-  paths2 <- paths[grep(".*wss_(SSA|gsmsoil)_(.*)_.*", paths)]
+  if (length(paths2) == 0) {
+    stop("Could not find SSURGO ZIP files in the resolved download directory.", call. = FALSE)
+  }
 
   if  (extract) {
     if (!quiet) {
       message("Extracting downloaded ZIP files...")
-    }
-
-    if (length(paths2) == 0) {
-      stop("Could not find SSURGO ZIP files in `destdir`: ", destdir, call. = FALSE)
     }
 
     if (!dir.exists(exdir)) {
@@ -176,7 +217,19 @@ downloadSSURGO <- function(WHERE = NULL,
     }
   }
 
-  invisible(paths2)
+  invisible(unname(paths2))
+}
+
+.extract_wss_areasymbols <- function(WHERE) {
+  if (is.null(WHERE) || !is.character(WHERE)) {
+    return(NULL)
+  }
+  x <- gregexpr("'[A-Za-z0-9]+'", WHERE, perl = TRUE)
+  vals <- unlist(regmatches(WHERE, x))
+  if (length(vals) == 0) {
+    return(NULL)
+  }
+  unique(toupper(gsub("'", "", vals)))
 }
 
 #' Create a database from SSURGO Exports
