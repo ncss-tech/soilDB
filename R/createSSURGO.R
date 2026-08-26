@@ -777,10 +777,23 @@ createSSURGO <- function(filename = NULL,
       character = as.character(y[[col]]),
       integer   = suppressWarnings(as.integer(as.character(y[[col]]))),
       numeric   = suppressWarnings(as.numeric(as.character(y[[col]]))),
-      logical   = as.logical(y[[col]])
+      logical   = .as_logical_ssurgo(y[[col]])
     )
   }
   y
+}
+
+# helper: consistent conversion of yes/no equivalents to logical
+.as_logical_ssurgo <- function(x) {
+  lookup <- c(
+    "yes" = TRUE, "no" = FALSE,
+    "1" = TRUE, "0" = FALSE,
+    "true" = TRUE, "false" = FALSE,
+    "y" = TRUE, "n" = FALSE,
+    "t" = TRUE, "f" = FALSE
+  )
+  x_out <- trimws(tolower(as.character(x)))
+  unname(lookup[x_out])
 }
 
 # helper: fast delimited text reader
