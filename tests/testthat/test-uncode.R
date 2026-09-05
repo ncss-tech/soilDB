@@ -6,7 +6,7 @@ test_that("uncode() works", {
 test_that("uncode() works w/ NASISDomainsAsFactor(TRUE)", {
   NASISDomainsAsFactor(TRUE)
   x <- data.frame(texcl = 1:10)
-  expect_equivalent(uncode(x)$texcl, structure(1:10, .Label = c("cos", "s", "fs", "vfs", "lcos", "ls", 
+  expect_equivalent(uncode(x)$texcl, structure(1:10, levels = c("cos", "s", "fs", "vfs", "lcos", "ls", 
                                                            "lfs", "lvfs", "cosl", "sl", "fsl", "vfsl", "l", "sil", "si", 
                                                            "scl", "cl", "sicl", "sc", "sic", "c"), class = "factor")) 
   NASISDomainsAsFactor(FALSE)
@@ -30,7 +30,7 @@ test_that("code() works w/ NASISDomainsAsFactor(TRUE)", {
 
 test_that("NASISChoiceList() works", {
   x <- NASISChoiceList(1:3, colnames = "texcl")
-  expect_equivalent(x, structure(c(3L, 12L, 5L), .Label = c("c", "cl", "cos", "cosl", 
+  expect_equivalent(x, structure(c(3L, 12L, 5L), levels = c("c", "cl", "cos", "cosl", 
                                        "fs", "fsl", "l", "lcos", "lfs", "ls", "lvfs", "s", "sc", "scl", 
                                        "si", "sic", "sicl", "sil", "sl", "vfs", "vfsl"), class = "factor"))
   
@@ -43,7 +43,7 @@ test_that("NASISChoiceList() works", {
 
   # ordered factor including obsolete choices
   x <- NASISChoiceList("common", colnames = "flodfreqcl", choice = "ChoiceName", obsolete = TRUE)
-  expect_equivalent(x, structure(5L, .Label = c("none", "very rare", "rare", "occasional", 
+  expect_equivalent(x, structure(5L, levels = c("none", "very rare", "rare", "occasional", 
                                            "common", "frequent", "very frequent"), 
                             class = c("ordered", "factor")))
   
