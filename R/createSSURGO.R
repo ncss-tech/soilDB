@@ -479,7 +479,7 @@ createSSURGO <- function(filename = NULL,
       .ssurgo_type_map <- c(
         String = "character", Choice = "character", Vtext = "character",
         `Date/Time` = "character",
-        Integer = "integer", Float = "numeric", Boolean = "logical"
+        Integer = "integer", Float = "numeric"#, Boolean = "nonop" # see #482
       )
     } else {
       .ssurgo_type_map <- NULL
@@ -776,8 +776,7 @@ createSSURGO <- function(filename = NULL,
       rtyp,
       character = as.character(y[[col]]),
       integer   = suppressWarnings(as.integer(as.character(y[[col]]))),
-      numeric   = suppressWarnings(as.numeric(as.character(y[[col]]))),
-      logical   = as.logical(y[[col]])
+      numeric   = suppressWarnings(as.numeric(as.character(y[[col]])))
     )
   }
   y
