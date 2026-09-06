@@ -6,11 +6,9 @@ context("Simplification of fragment data (from NASIS)")
 ## some complex data from NASIS phfrags table
 d.single.hz <- structure(
   list(
-    phiid = c(1202607L, 1202607L, 1202607L, 1202607L,
-              1202607L),
+    phiid = c(1202607L, 1202607L, 1202607L, 1202607L, 1202607L),
     fragvol = c(5, 30, 10, 30, 5),
-    fragsize_l = c(2L,
-                   76L, 76L, 2L, 251L),
+    fragsize_l = c(2L, 76L, 76L, 2L, 251L),
     fragsize_r = c(
       NA_integer_,
       NA_integer_,
@@ -18,8 +16,7 @@ d.single.hz <- structure(
       NA_integer_,
       NA_integer_
     ),
-    fragsize_h = c(75L, 250L,
-                   250L, 75L, 600L),
+    fragsize_h = c(75L, 250L, 250L, 75L, 600L),
     fragshp = structure(
       c(
         NA_integer_,
@@ -28,13 +25,12 @@ d.single.hz <- structure(
         NA_integer_,
         NA_integer_
       ),
-      .Label = c("flat", "nonflat"),
+      levels = c("flat", "nonflat"),
       class = "factor"
     ),
     fraghard = structure(
-      c(10L, 2L, 10L, 2L,
-        2L),
-      .Label = c(
+      c(10L, 2L, 10L, 2L, 2L),
+      levels = c(
         "noncemented",
         "indurated",
         "moderately cemented",
@@ -53,7 +49,7 @@ d.single.hz <- structure(
       class = "factor"
     )
   ),
-  .Names = c(
+  names = c(
     "phiid",
     "fragvol",
     "fragsize_l",
@@ -66,14 +62,13 @@ d.single.hz <- structure(
   class = "data.frame"
 )
 
+
 ## data from NASIS phfrags with NA fragvol
 d.missing.fragvol <- structure(
   list(
-    phiid = c(1386592L, 1386592L, 1386592L, 1386592L,
-              1386592L, 1386592L),
+    phiid = c(1386592L, 1386592L, 1386592L, 1386592L, 1386592L, 1386592L),
     fragvol = c(10, 10, 20, 20, 10, NA),
-    fragsize_l = c(2L,
-                   2L, 75L, 75L, 380L, NA),
+    fragsize_l = c(2L, 2L, 75L, 75L, 380L, NA),
     fragsize_r = c(
       NA_integer_,
       NA_integer_,
@@ -82,17 +77,15 @@ d.missing.fragvol <- structure(
       NA_integer_,
       NA_integer_
     ),
-    fragsize_h = c(75L,
-                   75L, 380L, 380L, 600L, NA),
+    fragsize_h = c(75L, 75L, 380L, 380L, 600L, NA),
     fragshp = structure(
-      c(1L, 1L, 1L,
-        1L, 1L, NA),
-      .Label = c("flat", "nonflat"),
+      c(1L, 1L, 1L, 1L, 1L, NA),
+      levels = c("flat", "nonflat"),
       class = "factor"
     ),
     fraghard = structure(
       c(11L, 9L, 11L, 9L, 11L, NA),
-      .Label = c(
+      levels = c(
         "noncemented",
         "indurated",
         "moderately cemented",
@@ -111,7 +104,7 @@ d.missing.fragvol <- structure(
       class = "factor"
     )
   ),
-  .Names = c(
+  names = c(
     "phiid",
     "fragvol",
     "fragsize_l",
@@ -204,7 +197,7 @@ d.missing.size <-
           NA_integer_,
           NA_integer_
         ),
-        .Label = c("flat", "nonflat"),
+        levels = c("flat", "nonflat"),
         class = "factor"
       ),
       fraghard = structure(
@@ -222,7 +215,7 @@ d.missing.size <-
           NA_integer_,
           NA_integer_
         ),
-        .Label = c(
+        levels = c(
           "noncemented",
           "indurated",
           "moderately cemented",
@@ -241,7 +234,7 @@ d.missing.size <-
         class = "factor"
       )
     ),
-    .Names = c(
+    names = c(
       "phiid",
       "fragvol",
       "fragsize_l",
