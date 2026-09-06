@@ -276,13 +276,15 @@ createSSURGO <- function(filename = NULL,
     }
   }
 
+  # extract database name from DBIConnection (all types)
+  if (inherits(conn, 'DBIConnection')) {
+    filename <- DBI::dbGetInfo(conn)$dbname
+  }
+  
   # DuckDB has special spatial format, so it gets custom handling for
   IS_DUCKDB <- inherits(conn, "duckdb_connection")
 
-  if (inherits(conn, 'SQLiteConnection')) {
-    IS_GPKG <- grepl("\\.gpkg$", conn@dbname, ignore.case = TRUE)[1]
-    filename <- conn@dbname
-  } else {
+  if (!inherits(conn, 'SQLiteConnection')) {
     IS_GPKG <- grepl("\\.gpkg$", filename, ignore.case = TRUE)[1]
     if (is.na(IS_GPKG)) {
       IS_GPKG <- FALSE
@@ -307,7 +309,7 @@ createSSURGO <- function(filename = NULL,
              ifelse(is.null(pattern), "*", pattern), "...")
   
     message(
-      "  Output:  ", ifelse(is.null(conn), filename, conn@dbname), "\n",
+      "  Output:  ", filename, "\n",
       "  Spatial: ", paste0(include_spatial, collapse = ", "), "\n",
       "  Tabular: ", paste0(include_tabular, collapse = ", ")
     )
