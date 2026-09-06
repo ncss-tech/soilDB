@@ -689,10 +689,12 @@ createSSURGO <- function(filename = NULL,
     idx <- paste0(shp.grp[, 1], "_", shp.grp[, 2]) %in% names(layer_names[layer_names %in% include_spatial])
     shp.grp <- shp.grp[idx, , drop = FALSE]
     f.shp <- f.shp[idx]
-    f.shp.sc <- files[grepl(paste0(
-    	paste0("soil", shp.grp[, 1], "_", shp.grp[, 2], "_", shp.grp[, 3]),
-    	collapse = "|"
-    ), files)]
+    prefixes <- unique(paste0("soil", shp.grp[, 1], "_", shp.grp[, 2], "_"))
+    if (length(prefixes) > 0) {
+      f.shp.sc <- files[grepl(paste0("^(", paste(prefixes, collapse = "|"), ")"), basename(files))]
+    } else {
+      f.shp.sc <- character(0)
+    }
     include_spatial <- TRUE
   }
 
