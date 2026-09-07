@@ -561,9 +561,12 @@ createSSURGO <- function(filename = NULL,
                 } else if (isTRUE(append)) {
                   append_arg <- TRUE
                   overwrite_arg <- FALSE
-                } else {
+                } else if (isTRUE(overwrite)) {
                   append_arg <- FALSE
-                  overwrite_arg <- overwrite
+                  overwrite_arg <- TRUE
+                } else {
+                  append_arg <- TRUE
+                  overwrite_arg <- FALSE
                 }
 
                 rec <- .write_table_with_log(
