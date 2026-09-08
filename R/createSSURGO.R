@@ -276,13 +276,15 @@ createSSURGO <- function(filename = NULL,
     }
   }
 
+  # extract database name from DBIConnection (all types)
+  if (inherits(conn, 'DBIConnection')) {
+    filename <- DBI::dbGetInfo(conn)$dbname
+  }
+  
   # DuckDB has special spatial format, so it gets custom handling for
   IS_DUCKDB <- inherits(conn, "duckdb_connection")
 
-  if (inherits(conn, 'SQLiteConnection')) {
-    IS_GPKG <- grepl("\\.gpkg$", conn@dbname, ignore.case = TRUE)[1]
-    filename <- conn@dbname
-  } else {
+  if (!inherits(conn, 'SQLiteConnection')) {
     IS_GPKG <- grepl("\\.gpkg$", filename, ignore.case = TRUE)[1]
     if (is.na(IS_GPKG)) {
       IS_GPKG <- FALSE
@@ -307,7 +309,7 @@ createSSURGO <- function(filename = NULL,
              ifelse(is.null(pattern), "*", pattern), "...")
   
     message(
-      "  Output:  ", ifelse(is.null(conn), filename, conn@dbname), "\n",
+      "  Output:  ", filename, "\n",
       "  Spatial: ", paste0(include_spatial, collapse = ", "), "\n",
       "  Tabular: ", paste0(include_tabular, collapse = ", ")
     )
@@ -559,9 +561,12 @@ createSSURGO <- function(filename = NULL,
                 } else if (isTRUE(append)) {
                   append_arg <- TRUE
                   overwrite_arg <- FALSE
-                } else {
+                } else if (isTRUE(overwrite)) {
                   append_arg <- FALSE
-                  overwrite_arg <- overwrite
+                  overwrite_arg <- TRUE
+                } else {
+                  append_arg <- TRUE
+                  overwrite_arg <- FALSE
                 }
 
                 rec <- .write_table_with_log(
@@ -687,10 +692,12 @@ createSSURGO <- function(filename = NULL,
     idx <- paste0(shp.grp[, 1], "_", shp.grp[, 2]) %in% names(layer_names[layer_names %in% include_spatial])
     shp.grp <- shp.grp[idx, , drop = FALSE]
     f.shp <- f.shp[idx]
-    f.shp.sc <- files[grepl(paste0(
-    	paste0("soil", shp.grp[, 1], "_", shp.grp[, 2], "_", shp.grp[, 3]),
-    	collapse = "|"
-    ), files)]
+    prefixes <- unique(paste0("soil", shp.grp[, 1], "_", shp.grp[, 2], "_"))
+    if (length(prefixes) > 0) {
+      f.shp.sc <- files[grepl(paste0("^(", paste(prefixes, collapse = "|"), ")"), basename(files))]
+    } else {
+      f.shp.sc <- character(0)
+    }
     include_spatial <- TRUE
   }
 
