@@ -148,13 +148,9 @@ downloadSSURGO <- function(WHERE = NULL,
     )
   }
   
-  if (is.null(exdir)) {
-    exdir <- ifelse(cache_mode, dirname(destfiles[1]), destdir)
-  }
-  
-  paths2 <- destfiles[file.exists(destfiles)]
+  zip_paths <- destfiles[file.exists(destfiles)]
 
-  if (!isTRUE(force) && length(paths2) == 0 && cache_mode) {
+  if (!isTRUE(force) && length(zip_paths) == 0 && cache_mode) {
     fallback_areas <- if (!is.null(areasymbols)) areasymbols else .extract_wss_areasymbols(WHERE)
     if (!is.null(fallback_areas)) {
       cached <- .wss_cache_select(
@@ -165,12 +161,28 @@ downloadSSURGO <- function(WHERE = NULL,
         latest_only = TRUE
       )
       if (nrow(cached) > 0) {
-        paths2 <- cached$file
+        zip_paths <- cached$file
       }
     }
   }
 
-  if (length(paths2) == 0) {
+  if (is.null(exdir)) {
+    if (cache_mode) {
+      target_files <- if (length(zip_paths) > 0) zip_paths else destfiles
+      unique_dirs <- unique(dirname(target_files[nzchar(target_files)]))
+      if (length(unique_dirs) > 1) {
+        stop("Cached ZIP files correspond to multiple fiscal years/directories. Explicit 'exdir' must be provided for extraction.", call. = FALSE)
+      } else if (length(unique_dirs) == 1) {
+        exdir <- unique_dirs[1]
+      } else {
+        exdir <- cache_root
+      }
+    } else {
+      exdir <- destdir
+    }
+  }
+
+  if (length(zip_paths) == 0) {
     stop("Could not find SSURGO ZIP files in the resolved download directory.", call. = FALSE)
   }
 
@@ -187,9 +199,9 @@ downloadSSURGO <- function(WHERE = NULL,
       if (isTRUE(include_spatial) && isTRUE(include_tabular)) {
         lz <- NULL
       } else {
-        lz <- utils::unzip(paths2[i], list = TRUE)$Name
+        lz <- utils::unzip(zip_paths[i], list = TRUE)$Name
         # need to pre-extract mstab data to map to real column names
-        utils::unzip(paths2[i], files = lz[grepl(
+        utils::unzip(zip_paths[i], files = lz[grepl(
           "^(mstab|mdstattabs|MetadataTable|mstabcol|mdstattabcol|MetadataColumnLookup|msidxdet|mdstatidxdet|MetadataIndexDetail)$",
           tools::file_path_sans_ext(basename(lz))
         )], exdir = exdir)
@@ -200,24 +212,24 @@ downloadSSURGO <- function(WHERE = NULL,
 
         lz <- unlist(c(inv$f.shp.sc, inv$f.txt.grp))
       }
-      uz <- utils::unzip(paths2[i], files = lz, exdir = exdir)
+      uz <- utils::unzip(zip_paths[i], files = lz, exdir = exdir)
       if (length(uz) == 0) {
-        message(paste('Invalid zipfile:', paths2[i]))
+        message(paste('Invalid zipfile:', zip_paths[i]))
       } else {
         if (!quiet) {
-          message("Extracted: ", paths2[i])
+          message("Extracted: ", zip_paths[i])
         }
       }
     }
 
-    res <- do.call(LAPPLY.FUN, c(list(seq_along(paths2), UNZIP.FUN), LAPPLY.FUN.ARGS))
+    res <- do.call(LAPPLY.FUN, c(list(seq_along(zip_paths), UNZIP.FUN), LAPPLY.FUN.ARGS))
 
     if (remove_zip) {
-      file.remove(paths2)
+      file.remove(zip_paths)
     }
   }
 
-  invisible(unname(paths2))
+  invisible(unname(zip_paths))
 }
 
 .extract_wss_areasymbols <- function(WHERE) {
@@ -311,8 +323,8 @@ createSSURGO <- function(filename = NULL,
   # when exdir is not specified, take most recent FY cache dir
   if (is.null(exdir)) {
     
-    wss_cache <- file.path(soilDB::soilDB_user_dir("cache"), "WSS")
-    wss_cache_dirs <- list.dirs(wss_cache, recursive = FALSE)
+    wss_cache <- .wss_cache_root(create = FALSE)
+    wss_cache_dirs <- if (dir.exists(wss_cache)) list.dirs(wss_cache, recursive = FALSE) else character(0)
     
     exdir <- sort(wss_cache_dirs[grepl("^FY\\d{2}$", basename(wss_cache_dirs))], decreasing = TRUE)
     
@@ -320,8 +332,8 @@ createSSURGO <- function(filename = NULL,
       exdir <- exdir[1]
     } else {
       stop(
-        "Must specify `exdir` or run `downloadSSURGO()` (without `destdir` specified) to populate cache folder ",
-        shQuote(wss_cache), call. = FALSE
+        "No WSS cache FY directories found in cache root. Specify 'exdir' directly or run downloadSSURGO() first.",
+        call. = FALSE
       )
     }
   }

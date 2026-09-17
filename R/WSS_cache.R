@@ -265,11 +265,14 @@ clear_WSS_cache <- function(areasymbols = NULL,
 }
 
 .normalize_wss_fiscal_year <- function(fiscal_year) {
-  fiscal_year <- toupper(as.character(fiscal_year))
-  fiscal_year <- sub("^FY", "", fiscal_year)
-  fiscal_year <- sub("^20", "", fiscal_year)
-  fiscal_year <- ifelse(nchar(fiscal_year) > 2, substr(fiscal_year, nchar(fiscal_year) - 1L, nchar(fiscal_year)), fiscal_year)
-  sprintf("FY%02d", suppressWarnings(as.integer(fiscal_year)))
+  if (is.null(fiscal_year) || length(fiscal_year) == 0) {
+    return(character(0))
+  }
+  fy_str <- trimws(as.character(fiscal_year))
+  fy_str <- sub("^FY", "", fy_str, ignore.case = TRUE)
+  yr <- suppressWarnings(as.integer(fy_str))
+  yr <- yr %% 100L
+  sprintf("FY%02d", yr)
 }
 
 .wss_fiscal_year <- function(x) {
