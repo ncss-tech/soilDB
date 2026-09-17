@@ -137,10 +137,6 @@ downloadSSURGO <- function(WHERE = NULL,
     cache_root <- destdir
   }
 
-  if (is.null(exdir)) {
-    exdir <- if (cache_mode) tempdir() else destdir
-  }
-
   destfiles <- character(0)
   if (length(urls) > 0) {
     destfiles <- .wss_cache_download_urls(
@@ -151,7 +147,11 @@ downloadSSURGO <- function(WHERE = NULL,
       quiet = quiet
     )
   }
-
+  
+  if (is.null(exdir)) {
+    exdir <- ifelse(cache_mode, dirname(destfiles[1]), destdir)
+  }
+  
   paths2 <- destfiles[file.exists(destfiles)]
 
   if (!isTRUE(force) && length(paths2) == 0 && cache_mode) {
@@ -194,7 +194,7 @@ downloadSSURGO <- function(WHERE = NULL,
           tools::file_path_sans_ext(basename(lz))
         )], exdir = exdir)
 
-        # explicitly fetch internal function our namespace to support parallel workers
+        # explicitly fetch internal function in our namespace to support parallel workers
         INV.FUN <- get(".inventory_ssurgo_files", envir = asNamespace("soilDB"))
         inv <- INV.FUN(lz, exdir = exdir, include_spatial = include_spatial, include_tabular = include_tabular)
 
