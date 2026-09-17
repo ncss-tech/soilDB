@@ -6,7 +6,7 @@
 \usage{
 createSSURGO(
   filename = NULL,
-  exdir,
+  exdir = NULL,
   conn = NULL,
   pattern = NULL,
   include_spatial = TRUE,

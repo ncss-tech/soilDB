@@ -288,7 +288,7 @@ downloadSSURGO <- function(WHERE = NULL,
 #'  createSSURGO("test.gpkg", "SSURGO_test")
 #' }
 createSSURGO <- function(filename = NULL,
-                         exdir,
+                         exdir = NULL,
                          conn = NULL,
                          pattern = NULL,
                          include_spatial = TRUE,
@@ -306,6 +306,24 @@ createSSURGO <- function(filename = NULL,
 
   if ((missing(filename) || length(filename) == 0) && missing(conn)) {
     stop("`filename` should be a path to a .gpkg or .sqlite file to create or append to, or a DBIConnection should be provided via `conn`.")
+  }
+  
+  # when exdir is not specified, take most recent FY cache dir
+  if (is.null(exdir)) {
+    
+    wss_cache <- file.path(soilDB::soilDB_user_dir("cache"), "WSS")
+    wss_cache_dirs <- list.dirs(wss_cache, recursive = FALSE)
+    
+    exdir <- sort(wss_cache_dirs[grepl("^FY\\d{2}$", basename(wss_cache_dirs))], decreasing = TRUE)
+    
+    if (length(exdir) >= 1) {
+      exdir <- exdir[1]
+    } else {
+      stop(
+        "Must specify `exdir` or run `downloadSSURGO()` (without `destdir` specified) to populate cache folder ",
+        shQuote(wss_cache), call. = FALSE
+      )
+    }
   }
   
   if (!dir.exists(exdir) ||
@@ -401,7 +419,16 @@ createSSURGO <- function(filename = NULL,
     on.exit(DBI::dbDisconnect(conn))
   }
 
-  if (nrow(inv$shp.grp) >= 1 && ncol(inv$shp.grp) == 3 && include_spatial) {
+  if (is.null(inv$shp.grp) && is.null(inv$mstabcn)) {
+    stop(
+      "Extraction directory `exdir` ",
+      shQuote(exdir),
+      " does not appear to contain SSURGO spatial data or tabular data",
+      call. = FALSE
+    )
+  }
+  
+  if (!is.null(inv$shp.grp) && nrow(inv$shp.grp) >= 1 && ncol(inv$shp.grp) == 3 && include_spatial) {
 
     f.shp.grp <- split(inv$f.shp,
                        list(feature = inv$shp.grp[, 1],
@@ -515,7 +542,7 @@ createSSURGO <- function(filename = NULL,
     on.exit(DBI::dbDisconnect(conn))
   }
 
-  if (include_tabular) {
+  if (!is.null(inv$mstabcn) && include_tabular) {
 
     if (length(inv$mstabcn) >= 1) {
       mstabcol <- read.delim(inv$mstabcn[1], sep = "|", stringsAsFactors = FALSE, header = header)
