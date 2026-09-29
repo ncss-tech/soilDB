@@ -132,7 +132,7 @@ test_that("downloadSSURGO fails when a forced redownload cannot replace the cach
   on.exit(options(old_opt), add = TRUE)
   on.exit(unlink(cache_root, recursive = TRUE, force = TRUE), add = TRUE)
 
-  areasymbol <- "CA067"
+  areasymbol <- "MH936"
 
   res1 <- downloadSSURGO(areasymbols = areasymbol, extract = FALSE, quiet = TRUE)
   expect_true(length(res1) >= 1)
@@ -240,7 +240,7 @@ test_that("downloadSSURGO warns and falls back when remote metadata lookup fails
   on.exit(options(old_opt), add = TRUE)
   on.exit(unlink(cache_root, recursive = TRUE, force = TRUE), add = TRUE)
 
-  areasymbol <- "CA067"
+  areasymbol <- "MH936"
 
   res1 <- downloadSSURGO(areasymbols = areasymbol, extract = FALSE, quiet = TRUE)
   expect_true(length(res1) >= 1)
