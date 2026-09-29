@@ -11,6 +11,9 @@ createSSURGO(
   pattern = NULL,
   include_spatial = TRUE,
   include_tabular = TRUE,
+  include_raster = FALSE,
+  LAPPLY.FUN = lapply,
+  LAPPLY.FUN.ARGS = NULL,
   dissolve_field = NULL,
   maxruledepth = 0,
   overwrite = FALSE,
@@ -19,6 +22,11 @@ createSSURGO(
   sep = "|",
   na.strings = c("", "NA"),
   quote = "",
+  fiscal_year = NULL,
+  template = NULL,
+  touches = FALSE,
+  grid_alignment = c("gssurgo", "target_aligned", "nlcd"),
+  resolution_m = 10,
   quiet = TRUE,
   areasymbols = NULL,
   ...
@@ -48,6 +56,17 @@ containing table names, only that set are written to file. e.g. \code{include_ta
 descriptions are stored in table \code{"featdesc"} and metadata for each soil survey area are stored
 in \code{"soil_metadata"} tables.}
 
+\item{include_raster}{\emph{logical}. Generate MUKEY GeoTIFF rasters for each SSA?
+Default: \code{FALSE} does not create raster outputs. Set to \code{TRUE} to create georeferenced rasters cached in
+\code{soilDB_user_dir("cache", "WSS", ...)} and output a combined/copied raster matching \code{filename}.
+Requires \code{terra} package.}
+
+\item{LAPPLY.FUN}{\emph{function}. \code{lapply()}-like function to use for iteration during rasterization
+phase. Only used if \code{include_raster=TRUE}. This allows for the rasterization operations to be run
+in parallel instead of sequential, custom progress reporting, or similar.}
+
+\item{LAPPLY.FUN.ARGS}{\emph{list}. Optional list of additional arguments to pass to \code{LAPPLY.FUN}.}
+
 \item{dissolve_field}{\emph{character}. Dissolve geometries to create MULTIPOLYGON features? Column
 name specified is the grouping variable. Default: \code{NULL} does no aggregation, giving 1
 \code{POLYGON} feature per delineation. \code{"mukey"} aggregates all related delineations within a soil
@@ -67,6 +86,26 @@ only shallowest ratings for smaller database size.}
 \item{na.strings}{\emph{character}. Passed to \code{data.table::fread()}. Default: \code{c("", "NA")}}
 
 \item{quote}{\emph{character}. Passed to \code{data.table::fread()}. Default: \code{""}}
+
+\item{fiscal_year}{\emph{character}. Optional fiscal year label for cache organization (e.g., \code{'FY2024'},
+\code{'FY26'}). If \code{NULL}, auto-detect from sacatalog saverest date. Allows organizing rasters by official
+release year or custom labels. Only used if \code{include_raster=TRUE}.}
+
+\item{template}{Optional \code{SpatRaster} template to align with. If \code{NULL} (default), creates a standard
+grid at \code{resolution_m} in the regional standard CRS (EPSG:5070 for CONUS, EPSG:3338 for AK, EPSG:6628 for HI,
+EPSG:32161 for PR/VI, EPSG:4326 for Pacific Islands) with bounds snapped according to \code{grid_alignment}.}
+
+\item{touches}{\emph{logical}. If \code{TRUE}, all cells touched by polygon boundaries are rasterized. Default
+\code{FALSE} rasterizes only cells whose centroids fall within polygons.}
+
+\item{grid_alignment}{\emph{character}. Grid alignment mode when \code{template = NULL}. Use
+\code{"gssurgo"} (default), \code{"target_aligned"}, or \code{"nlcd"}. The GSSURGO mode uses a
+half-cell origin matching official USDA-NRCS products;
+target-aligned uses a zero origin; and NLCD uses the canonical WGS84 Albers
+origin anchor \verb{(-2415585, 3314805)}. A supplied \code{template} takes precedence.}
+
+\item{resolution_m}{\emph{numeric}. Finite positive raster cell size in meters when \code{template = NULL}
+(default: \code{10}).}
 
 \item{quiet}{\emph{logical}. Suppress messages and other output from database read/write operations?}
 
@@ -89,6 +128,17 @@ The following database types are tested and fully supported:
 In theory any other DBI-compatible data source can be used for output. See \code{conn} argument. If
 you encounter issues using specific DBI connection types, please report in the soilDB issue
 tracker.
+
+When \code{include_raster=TRUE}, common resolutions include 10m, 30m, 300m, and 900m; any positive
+resolution can be requested. Custom \code{SpatRaster} templates can be supplied for arbitrary grids.
+The alignment modes are
+intentional: \code{gssurgo} matches official USDA-NRCS products, \code{target_aligned} follows
+zero-origin GDAL-style alignment, and \code{nlcd} uses the canonical WGS84 Albers origin. These
+choices support interoperability with federal raster products including NLCD, CDL, USGS 3DEP,
+and gNATSGO. Raster output uses \code{NAflag = 0}; MUKEY zero is reserved as NoData.
+
+A single SSURGO MUKEY per cell may be misleading at resolutions greater than 90 meters.
+A warning is issued for recognized SSURGO area symbols when the output grid exceeds this resolution.
 }
 \examples{
 \dontrun{
