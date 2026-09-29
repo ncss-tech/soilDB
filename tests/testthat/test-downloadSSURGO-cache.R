@@ -125,6 +125,7 @@ test_that("downloadSSURGO fails when a forced redownload cannot replace the cach
 
   skip_on_cran()
   skip_if_offline()
+  skip_if(as.logical(Sys.getenv("R_SOILDB_SKIP_LONG_EXAMPLES", unset = TRUE)))
 
   cache_root <- tempfile("soilDB-wss-cache-")
   old_opt <- options(soilDB.WSS.cache_dir = cache_root)
@@ -232,6 +233,7 @@ test_that("downloadSSURGO warns and falls back when remote metadata lookup fails
 
   skip_on_cran()
   skip_if_offline()
+  skip_if(as.logical(Sys.getenv("R_SOILDB_SKIP_LONG_EXAMPLES", unset = TRUE)))
 
   cache_root <- tempfile("soilDB-wss-cache-")
   old_opt <- options(soilDB.WSS.cache_dir = cache_root)
