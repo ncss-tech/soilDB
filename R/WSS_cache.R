@@ -154,10 +154,6 @@ clear_WSS_cache <- function(areasymbols = NULL,
     return(destfile)
   }
 
-  if (isTRUE(force) && file.exists(destfile)) {
-    unlink(destfile, recursive = TRUE, force = TRUE)
-  }
-
   tmp_destfile <- destfile
   if (isTRUE(force) || file.exists(destfile)) {
     tmp_destfile <- tempfile(pattern = "wss_", tmpdir = dirname(destfile), fileext = ".zip")
@@ -231,8 +227,8 @@ clear_WSS_cache <- function(areasymbols = NULL,
   }
 
   if (latest_only && nrow(res) > 0) {
-    res <- res[order(res$areasymbol, res$template, -as.numeric(res$saverest), res$basename), , drop = FALSE]
-    keep <- !duplicated(interaction(res$areasymbol, res$template, drop = TRUE, lex.order = TRUE))
+    res <- res[order(res$areasymbol, res$fiscal_year, res$template, -as.numeric(res$saverest), res$basename), , drop = FALSE]
+    keep <- !duplicated(interaction(res$areasymbol, res$fiscal_year, res$template, drop = TRUE, lex.order = TRUE))
     res <- res[keep, , drop = FALSE]
   } else if (nrow(res) > 0) {
     res <- res[order(res$fiscal_year, res$areasymbol, res$saverest, res$basename), , drop = FALSE]

@@ -58,9 +58,13 @@ test_that("downloadSSURGO throws error when cached files span multiple fiscal ye
   )
 
   expect_error(
-    soilDB::downloadSSURGO(areasymbols = c("CA067", "CA077"), extract = FALSE, exdir = NULL),
+    soilDB::downloadSSURGO(areasymbols = c("CA067", "CA077"), extract = TRUE, exdir = NULL),
     "Cached ZIP files correspond to multiple fiscal years/directories"
   )
+
+  # When extract = FALSE, multiple directories do not throw error
+  res <- soilDB::downloadSSURGO(areasymbols = c("CA067", "CA077"), extract = FALSE, exdir = NULL)
+  expect_identical(normalizePath(res, mustWork = FALSE), normalizePath(c(zip1, zip2), mustWork = FALSE))
 })
 
 
@@ -84,6 +88,7 @@ test_that("WSS cache selector respects template archives", {
   selected_template <- .wss_cache_select(
     entries,
     areasymbols = "CA067",
+    fiscal_year = "FY24",
     db = "SSURGO",
     include_template = TRUE,
     latest_only = TRUE
@@ -93,6 +98,7 @@ test_that("WSS cache selector respects template archives", {
   selected_non_template <- .wss_cache_select(
     entries,
     areasymbols = "CA067",
+    fiscal_year = "FY24",
     db = "SSURGO",
     include_template = FALSE,
     latest_only = TRUE
@@ -143,6 +149,82 @@ test_that("downloadSSURGO fails when a forced redownload cannot replace the cach
   expect_error(
     downloadSSURGO(areasymbols = areasymbol, extract = FALSE, quiet = TRUE, force = TRUE),
     "Forced re-download of SSURGO ZIP files failed"
+  )
+
+  # Verify cached file was preserved despite failed force download
+  expect_true(file.exists(res1))
+  expect_true(nrow(list_WSS_cache(areasymbols = areasymbol, cache_dir = cache_root)) >= 1)
+})
+
+test_that("clear_WSS_cache latest_only preserves latest per area and fiscal year", {
+  cache_root <- tempfile("soilDB-wss-cache-")
+  old_opt <- options(soilDB.WSS.cache_dir = cache_root)
+  on.exit(options(old_opt), add = TRUE)
+  on.exit(unlink(cache_root, recursive = TRUE, force = TRUE), add = TRUE)
+
+  fy23_dir <- file.path(cache_root, "FY23")
+  fy24_dir <- file.path(cache_root, "FY24")
+  dir.create(fy23_dir, recursive = TRUE)
+  dir.create(fy24_dir, recursive = TRUE)
+
+  # FY23 has two versions for CA067
+  f1_old <- file.path(fy23_dir, "wss_SSA_CA067_[2023-01-01].zip")
+  f1_new <- file.path(fy23_dir, "wss_SSA_CA067_[2023-06-01].zip")
+  # FY24 has one version for CA067
+  f2_fy24 <- file.path(fy24_dir, "wss_SSA_CA067_[2024-01-01].zip")
+
+  file.create(f1_old)
+  file.create(f1_new)
+  file.create(f2_fy24)
+
+  removed <- clear_WSS_cache(latest_only = TRUE, cache_dir = cache_root)
+
+  expect_true(basename(f1_old) %in% basename(removed))
+  expect_false(basename(f1_new) %in% basename(removed))
+  expect_false(basename(f2_fy24) %in% basename(removed))
+
+  remaining <- list_WSS_cache(cache_dir = cache_root)
+  expect_equal(nrow(remaining), 2)
+  expect_true(all(c("FY23", "FY24") %in% remaining$fiscal_year))
+})
+
+test_that("downloadSSURGO errors on partial download failure in multi-area download", {
+  cache_root <- tempfile("soilDB-wss-cache-")
+  old_opt <- options(soilDB.WSS.cache_dir = cache_root)
+  on.exit(options(old_opt), add = TRUE)
+  on.exit(unlink(cache_root, recursive = TRUE, force = TRUE), add = TRUE)
+
+  testthat::local_mocked_bindings(
+    .make_WSS_download_url = function(...) {
+      c(
+        "https://websoilsurvey.sc.egov.usda.gov/DSD/Download/Cache/SSA/wss_SSA_CA067_[2024-01-01].zip",
+        "https://websoilsurvey.sc.egov.usda.gov/DSD/Download/Cache/SSA/wss_SSA_CA077_[2024-01-01].zip"
+      )
+    },
+    curl_download = function(url, destfile, ...) {
+      if (grepl("CA077", url)) {
+        stop("mock network error for CA077")
+      }
+      file.create(destfile)
+      invisible(destfile)
+    },
+    .package = "soilDB"
+  )
+
+  testthat::local_mocked_bindings(
+    curl_download = function(url, destfile, ...) {
+      if (grepl("CA077", url)) {
+        stop("mock network error for CA077")
+      }
+      file.create(destfile)
+      invisible(destfile)
+    },
+    .package = "curl"
+  )
+
+  expect_error(
+    downloadSSURGO(areasymbols = c("CA067", "CA077"), extract = FALSE, quiet = TRUE),
+    "Failed to download one or more SSURGO ZIP files"
   )
 })
 
