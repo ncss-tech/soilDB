@@ -11,6 +11,9 @@ createSSURGO(
   pattern = NULL,
   include_spatial = TRUE,
   include_tabular = TRUE,
+  include_raster = FALSE,
+  LAPPLY.FUN = lapply,
+  LAPPLY.FUN.ARGS = NULL,
   dissolve_field = NULL,
   maxruledepth = 0,
   overwrite = FALSE,
@@ -19,6 +22,10 @@ createSSURGO(
   sep = "|",
   na.strings = c("", "NA"),
   quote = "",
+  fiscal_year = NULL,
+  template = NULL,
+  touches = FALSE,
+  grid_alignment = c("legacy_gssurgo", "legacy", "target_aligned", "nlcd"),
   quiet = TRUE,
   areasymbols = NULL,
   ...
@@ -48,6 +55,17 @@ containing table names, only that set are written to file. e.g. \code{include_ta
 descriptions are stored in table \code{"featdesc"} and metadata for each soil survey area are stored
 in \code{"soil_metadata"} tables.}
 
+\item{include_raster}{\emph{logical}. Generate 10m MUKEY GeoTIFF rasters for each SSA?
+Default: \code{FALSE} does not create raster outputs. Set to \code{TRUE} to create georeferenced rasters cached in
+\code{soilDB_user_dir("cache", "WSS", ...)} and output a combined/copied raster matching \code{filename}.
+Requires \code{terra} package.}
+
+\item{LAPPLY.FUN}{\emph{function}. \code{lapply()}-like function to use for iteration during rasterization
+phase. Only used if \code{include_raster=TRUE}. This allows for the rasterization operations to be run
+in parallel instead of sequential, custom progress reporting, or similar.}
+
+\item{LAPPLY.FUN.ARGS}{\emph{list}. Optional list of additional arguments to pass to \code{LAPPLY.FUN}.}
+
 \item{dissolve_field}{\emph{character}. Dissolve geometries to create MULTIPOLYGON features? Column
 name specified is the grouping variable. Default: \code{NULL} does no aggregation, giving 1
 \code{POLYGON} feature per delineation. \code{"mukey"} aggregates all related delineations within a soil
@@ -68,8 +86,20 @@ only shallowest ratings for smaller database size.}
 
 \item{quote}{\emph{character}. Passed to \code{data.table::fread()}. Default: \code{""}}
 
-\item{quiet}{\emph{logical}. Suppress messages and other output from database read/write operations?
-When \code{FALSE}, a progress message is shown while scanning \code{exdir}.}
+\item{fiscal_year}{\emph{character}. Optional fiscal year label for cache organization (e.g., \code{'FY2024'},
+\code{'FY26'}). If \code{NULL}, auto-detect from sacatalog saverest date. Allows organizing rasters by official
+release year or custom labels. Only used if \code{include_raster=TRUE}.}
+
+\item{template}{Optional \code{SpatRaster} template to align with. If \code{NULL} (default), creates a standard
+10m grid in the regional standard CRS (EPSG:5070 for CONUS, EPSG:3338 for AK, EPSG:6628 for HI,
+EPSG:32161 for PR/VI, EPSG:4326 for Pacific Islands) with bounds snapped according to \code{grid_alignment}.}
+
+\item{touches}{\emph{logical}. If \code{TRUE}, all cells touched by polygon boundaries are rasterized. Default
+\code{FALSE} rasterizes only cells whose centroids fall within polygons.}
+
+\item{grid_alignment}{\emph{character}. Grid alignment mode when \code{template = NULL}. One of \code{"legacy_gssurgo"} (or \code{"legacy"}, default, 5m offset matching official USDA-NRCS gSSURGO/gNATSGO/RSS products with \code{(coord - 5) \%\% 10 == 0}), \code{"target_aligned"} (0m offset standard GDAL -tap alignment with \code{coord \%\% 10 == 0}), or \code{"nlcd"} (canonical NLCD WGS84 Albers Equal Area CRS with origin anchor \verb{(-2415585, 3314805)}).}
+
+\item{quiet}{\emph{logical}. Suppress messages and other output from database read/write operations?}
 
 \item{areasymbols}{\emph{character}. Optional character vector of soil survey area symbols (e.g. \code{c("CA067", "CA077")}) used to subset the folders/files within \code{exdir} to process. Default \code{NULL} processes all SSURGO exports found in \code{exdir}.}
 
@@ -90,6 +120,11 @@ The following database types are tested and fully supported:
 In theory any other DBI-compatible data source can be used for output. See \code{conn} argument. If
 you encounter issues using specific DBI connection types, please report in the soilDB issue
 tracker.
+
+When \code{include_raster=TRUE}, the default coordinate reference systems (CRS) and 10m grid
+alignments are designed for seamless interoperability with standard federal rasters including
+NLCD (National Land Cover Database), CDL (Cropland Data Layer), USGS 3DEP elevation products,
+and gNATSGO 10m grids.
 }
 \examples{
 \dontrun{

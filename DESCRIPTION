@@ -22,4 +22,4 @@ Roxygen: list(markdown = TRUE)
 LazyData: false
 VignetteBuilder: knitr
 NeedsCompilation: no
-Config/roxygen2/version: 8.0.0
+Config/roxygen2/version: 8.1.0
