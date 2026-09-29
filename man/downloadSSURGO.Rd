@@ -34,7 +34,9 @@ persistent soilDB Web Soil Survey cache.}
 
 \item{exdir}{\emph{character}. Directory to extract ZIP archives into. May be a directory that does
 not yet exist. Each ZIP file will extract to a folder labeled with \code{areasymbol} in this
-directory. Default: \code{destdir}, or the soilDB WSS cache root when \code{destdir} is \code{NULL}.}
+directory. Default: \code{destdir}, or when \code{destdir} is \code{NULL}, the fiscal-year directory containing
+the cached ZIP files. When extraction is enabled (\code{extract = TRUE}) and the target ZIP files
+span multiple fiscal-year cache directories, an explicit \code{exdir} must be provided.}
 
 \item{include_template}{\emph{logical}. Include the (possibly state-specific) MS Access template
 database? Default: \code{FALSE}}

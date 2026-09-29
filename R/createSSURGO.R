@@ -14,7 +14,9 @@
 #'   persistent soilDB Web Soil Survey cache.
 #' @param exdir _character_. Directory to extract ZIP archives into. May be a directory that does
 #'   not yet exist. Each ZIP file will extract to a folder labeled with `areasymbol` in this
-#'   directory. Default: `destdir`, or the soilDB WSS cache root when `destdir` is `NULL`.
+#'   directory. Default: `destdir`, or when `destdir` is `NULL`, the fiscal-year directory containing
+#'   the cached ZIP files. When extraction is enabled (`extract = TRUE`) and the target ZIP files
+#'   span multiple fiscal-year cache directories, an explicit `exdir` must be provided.
 #' @param include_template _logical_. Include the (possibly state-specific) MS Access template
 #'   database? Default: `FALSE`
 #' @param include_spatial _logical_ or _character_. Extract spatial data layers from ZIP file?
@@ -146,6 +148,9 @@ downloadSSURGO <- function(WHERE = NULL,
       force = force,
       quiet = quiet
     )
+    if (length(destfiles) < length(urls)) {
+      stop("Failed to download one or more SSURGO ZIP files.", call. = FALSE)
+    }
   }
   
   zip_paths <- destfiles[file.exists(destfiles)]
@@ -166,27 +171,27 @@ downloadSSURGO <- function(WHERE = NULL,
     }
   }
 
-  if (is.null(exdir)) {
-    if (cache_mode) {
-      target_files <- if (length(zip_paths) > 0) zip_paths else destfiles
-      unique_dirs <- unique(dirname(target_files[nzchar(target_files)]))
-      if (length(unique_dirs) > 1) {
-        stop("Cached ZIP files correspond to multiple fiscal years/directories. Explicit 'exdir' must be provided for extraction.", call. = FALSE)
-      } else if (length(unique_dirs) == 1) {
-        exdir <- unique_dirs[1]
-      } else {
-        exdir <- cache_root
-      }
-    } else {
-      exdir <- destdir
-    }
-  }
-
   if (length(zip_paths) == 0) {
     stop("Could not find SSURGO ZIP files in the resolved download directory.", call. = FALSE)
   }
 
-  if  (extract) {
+  if (extract) {
+    if (is.null(exdir)) {
+      if (cache_mode) {
+        target_files <- if (length(zip_paths) > 0) zip_paths else destfiles
+        unique_dirs <- unique(dirname(target_files[nzchar(target_files)]))
+        if (length(unique_dirs) > 1) {
+          stop("Cached ZIP files correspond to multiple fiscal years/directories. Explicit 'exdir' must be provided for extraction.", call. = FALSE)
+        } else if (length(unique_dirs) == 1) {
+          exdir <- unique_dirs[1]
+        } else {
+          exdir <- cache_root
+        }
+      } else {
+        exdir <- destdir
+      }
+    }
+
     if (!quiet) {
       message("Extracting downloaded ZIP files...")
     }
