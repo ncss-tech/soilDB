@@ -262,8 +262,9 @@ downloadSSURGO <- function(WHERE = NULL,
 #'
 #' @param filename _character_. Output file name (e.g. `'db.sqlite'` or `'db.gpkg'`). Only used when
 #'   `con` is not specified by the user.
-#' @param exdir  _character_. Path containing containing input SSURGO spatial (.shp) and tabular
-#'   (.txt) files, downloaded and extracted by `downloadSSURGO()` or similar.
+#' @param exdir  _character_. Path containing input SSURGO spatial (.shp) and tabular
+#'   (.txt) files, downloaded and extracted by `downloadSSURGO()` or similar. Default: `NULL` selects the most recent fiscal-year cache directory.
+#' @param areasymbols _character_. Optional character vector of soil survey area symbols (e.g. `c("CA067", "CA077")`) used to subset the folders/files within `exdir` to process. Default `NULL` processes all SSURGO exports found in `exdir`.
 #' @param conn A _DBIConnection_ object. Default is a `SQLiteConnection` used for writing .sqlite or
 #'   .gpkg files. Alternate options are any DBI connection types. When `include_spatial=TRUE`, the
 #'   sf package is used to write spatial data to the database.
@@ -306,6 +307,7 @@ downloadSSURGO <- function(WHERE = NULL,
 #' }
 createSSURGO <- function(filename = NULL,
                          exdir = NULL,
+                         areasymbols = NULL,
                          conn = NULL,
                          pattern = NULL,
                          include_spatial = TRUE,
@@ -350,6 +352,19 @@ createSSURGO <- function(filename = NULL,
                  exdir, shQuote(exdir)),
          call. = FALSE)
   }
+
+  f_all <- list.files(exdir, recursive = TRUE, full.names = TRUE)
+  has_zips <- any(grepl("\\.zip$", f_all, ignore.case = TRUE))
+  has_data <- any(grepl("\\.(shp|txt)$", f_all, ignore.case = TRUE))
+  if (has_zips && !has_data) {
+    stop(
+      sprintf(
+        "SSURGO extraction directory (%s) contains ZIP files but no extracted SSURGO folders. Run 'downloadSSURGO(..., extract = TRUE)' or extract archives before calling createSSURGO().",
+        shQuote(exdir)
+      ),
+      call. = FALSE
+    )
+  }
   
   if (missing(conn) || is.null(conn)) {
     # delete existing file if overwrite=TRUE; does _not_ apply to DBIConnection
@@ -382,11 +397,33 @@ createSSURGO <- function(filename = NULL,
   }
 
   layer_names <- .get_spatial_layer_names()
-  f <- list.files(exdir, recursive = TRUE, full.names = TRUE)
+  f <- f_all
   fdx <- rep(TRUE, length(f))
 
+  if (!is.null(areasymbols)) {
+    areasymbols <- toupper(areasymbols)
+    # Match paths containing /areasymbol/ or \areasymbol\ or prefixed filename
+    ssa_pattern <- paste0("[/\\\\](", paste0(areasymbols, collapse = "|"), ")[/\\\\]")
+    ssa_match <- grepl(ssa_pattern, f, ignore.case = TRUE)
+    
+    # Check if any requested areasymbols were completely missing
+    matched_files <- f[ssa_match]
+    found_symbols <- character(0)
+    for (sym in areasymbols) {
+      if (any(grepl(paste0("[/\\\\]", sym, "[/\\\\]"), matched_files, ignore.case = TRUE))) {
+        found_symbols <- c(found_symbols, sym)
+      }
+    }
+    missing_symbols <- setdiff(areasymbols, found_symbols)
+    if (length(missing_symbols) > 0) {
+      warning("The following 'areasymbols' were not found in 'exdir': ",
+              paste0(missing_symbols, collapse = ", "), call. = FALSE)
+    }
+    fdx <- fdx & ssa_match
+  }
+
   if (!is.null(pattern)) {
-    fdx <- grepl(pattern, f)
+    fdx <- fdx & grepl(pattern, f)
   }
   
   

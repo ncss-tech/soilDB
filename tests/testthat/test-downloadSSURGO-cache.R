@@ -30,6 +30,46 @@ test_that("createSSURGO throws informative error when cache is empty and exdir i
   )
 })
 
+test_that("createSSURGO throws informative error when exdir contains ZIP files but no extracted SSURGO data", {
+  cache_root <- tempfile("soilDB-wss-cache-")
+  old_opt <- options(soilDB.WSS.cache_dir = cache_root)
+  on.exit(options(old_opt), add = TRUE)
+  on.exit(unlink(cache_root, recursive = TRUE, force = TRUE), add = TRUE)
+
+  fy24_dir <- file.path(cache_root, "FY24")
+  dir.create(fy24_dir, recursive = TRUE)
+  file.create(file.path(fy24_dir, "wss_SSA_CA067_[2024-01-01].zip"))
+
+  expect_error(
+    createSSURGO(filename = "test.gpkg", exdir = NULL),
+    "contains ZIP files but no extracted SSURGO folders"
+  )
+
+  expect_error(
+    createSSURGO(filename = "test.gpkg", exdir = fy24_dir),
+    "contains ZIP files but no extracted SSURGO folders"
+  )
+})
+
+test_that("createSSURGO filters files by areasymbols and warns on missing symbols", {
+  exdir <- tempfile("ssurgo-test-exdir-")
+  dir.create(file.path(exdir, "CA067", "tabular"), recursive = TRUE)
+  dir.create(file.path(exdir, "CA077", "tabular"), recursive = TRUE)
+  out_db <- tempfile(fileext = ".sqlite")
+  on.exit(unlink(exdir, recursive = TRUE, force = TRUE), add = TRUE)
+  on.exit(unlink(out_db, force = TRUE), add = TRUE)
+
+  # Create minimal dummy tabular files for CA067 and CA077
+  writeLines("mock|tabular|data", file.path(exdir, "CA067", "tabular", "mapunit.txt"))
+  writeLines("mock|tabular|data", file.path(exdir, "CA077", "tabular", "mapunit.txt"))
+
+  # Test warning on missing areasymbol
+  expect_warning(
+    try(createSSURGO(filename = out_db, exdir = exdir, areasymbols = c("CA067", "CA999")), silent = TRUE),
+    "The following 'areasymbols' were not found in 'exdir': CA999"
+  )
+})
+
 test_that("downloadSSURGO throws error when cached files span multiple fiscal years with exdir = NULL", {
   cache_root <- tempfile("soilDB-wss-cache-")
   old_opt <- options(soilDB.WSS.cache_dir = cache_root)
@@ -260,3 +300,62 @@ test_that("downloadSSURGO warns and falls back when remote metadata lookup fails
   expect_true(length(res2) >= 1)
   expect_identical(res1, res2)
 })
+
+test_that("sequential downloadSSURGO followed by createSSURGO ingests multiple SSAs correctly", {
+
+  skip_on_cran()
+  skip_if_offline()
+  skip_if_not_installed("RSQLite")
+  skip_if_not_installed("sf")
+  skip_if(as.logical(Sys.getenv("R_SOILDB_SKIP_LONG_EXAMPLES", unset = TRUE)))
+
+  cache_root <- tempfile("soilDB-wss-cache-")
+  old_opt <- options(soilDB.WSS.cache_dir = cache_root)
+  on.exit(options(old_opt), add = TRUE)
+  on.exit(unlink(cache_root, recursive = TRUE, force = TRUE), add = TRUE)
+
+  # Download two small SSAs sequentially into the default cache
+  zips1 <- downloadSSURGO(areasymbols = "MH936", extract = TRUE, quiet = TRUE)
+  zips2 <- downloadSSURGO(areasymbols = "FL616", extract = TRUE, quiet = TRUE)
+
+  expect_equal(length(zips1), 1)
+  expect_equal(length(zips2), 1)
+
+  # Run createSSURGO with exdir = NULL (auto resolves to latest FY cache)
+  out_db <- tempfile(fileext = ".sqlite")
+  on.exit(unlink(out_db, force = TRUE), add = TRUE)
+
+  res <- createSSURGO(filename = out_db, exdir = NULL, quiet = TRUE)
+  expect_true(length(res) > 0)
+
+  con <- DBI::dbConnect(RSQLite::SQLite(), out_db)
+  on.exit(try(DBI::dbDisconnect(con), silent = TRUE), add = TRUE)
+
+  # Check that legend, mapunit, or spatial tables contain data from both SSAs
+  if (DBI::dbExistsTable(con, "legend")) {
+    leg <- DBI::dbReadTable(con, "legend")
+    expect_true(all(c("MH936", "FL616") %in% leg$areasymbol))
+  }
+
+  if (DBI::dbExistsTable(con, "mupolygon")) {
+    mupolygon <- sf::st_read(out_db, "mupolygon", quiet = TRUE)
+    expect_true(nrow(mupolygon) > 0)
+    expect_true(all(c("MH936", "FL616") %in% unique(mupolygon$areasymbol)))
+  }
+
+  # Test filtering with areasymbols argument
+  out_db_filtered <- tempfile(fileext = ".sqlite")
+  on.exit(unlink(out_db_filtered, force = TRUE), add = TRUE)
+
+  createSSURGO(filename = out_db_filtered, exdir = NULL, areasymbols = "MH936", quiet = TRUE)
+
+  con_f <- DBI::dbConnect(RSQLite::SQLite(), out_db_filtered)
+  on.exit(try(DBI::dbDisconnect(con_f), silent = TRUE), add = TRUE)
+
+  if (DBI::dbExistsTable(con_f, "legend")) {
+    leg_f <- DBI::dbReadTable(con_f, "legend")
+    expect_true("MH936" %in% leg_f$areasymbol)
+    expect_false("FL616" %in% leg_f$areasymbol)
+  }
+})
+

@@ -7,6 +7,7 @@
 createSSURGO(
   filename = NULL,
   exdir = NULL,
+  areasymbols = NULL,
   conn = NULL,
   pattern = NULL,
   include_spatial = TRUE,
@@ -27,8 +28,10 @@ createSSURGO(
 \item{filename}{\emph{character}. Output file name (e.g. \code{'db.sqlite'} or \code{'db.gpkg'}). Only used when
 \code{con} is not specified by the user.}
 
-\item{exdir}{\emph{character}. Path containing containing input SSURGO spatial (.shp) and tabular
-(.txt) files, downloaded and extracted by \code{downloadSSURGO()} or similar.}
+\item{exdir}{\emph{character}. Path containing input SSURGO spatial (.shp) and tabular
+(.txt) files, downloaded and extracted by \code{downloadSSURGO()} or similar. Default: \code{NULL} selects the most recent fiscal-year cache directory.}
+
+\item{areasymbols}{\emph{character}. Optional character vector of soil survey area symbols (e.g. \code{c("CA067", "CA077")}) used to subset the folders/files within \code{exdir} to process. Default \code{NULL} processes all SSURGO exports found in \code{exdir}.}
 
 \item{conn}{A \emph{DBIConnection} object. Default is a \code{SQLiteConnection} used for writing .sqlite or
 .gpkg files. Alternate options are any DBI connection types. When \code{include_spatial=TRUE}, the
