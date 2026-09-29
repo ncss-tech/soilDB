@@ -241,7 +241,7 @@ downloadSSURGO <- function(WHERE = NULL,
   if (is.null(WHERE) || !is.character(WHERE)) {
     return(NULL)
   }
-  x <- gregexpr("'[A-Za-z0-9]+'", WHERE, perl = TRUE)
+  x <- gregexpr("'[A-Za-z0-9_%]+'", WHERE, perl = TRUE)
   vals <- unlist(regmatches(WHERE, x))
   if (length(vals) == 0) {
     return(NULL)

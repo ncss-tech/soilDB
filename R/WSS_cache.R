@@ -154,10 +154,7 @@ clear_WSS_cache <- function(areasymbols = NULL,
     return(destfile)
   }
 
-  tmp_destfile <- destfile
-  if (isTRUE(force) || file.exists(destfile)) {
-    tmp_destfile <- tempfile(pattern = "wss_", tmpdir = dirname(destfile), fileext = ".zip")
-  }
+  tmp_destfile <- tempfile(pattern = "wss_", tmpdir = dirname(destfile), fileext = ".zip")
 
   download_ok <- try(
     curl::curl_download(
@@ -171,7 +168,7 @@ clear_WSS_cache <- function(areasymbols = NULL,
   )
 
   if (inherits(download_ok, "try-error")) {
-    if (!identical(tmp_destfile, destfile) && file.exists(tmp_destfile)) {
+    if (file.exists(tmp_destfile)) {
       unlink(tmp_destfile)
     }
     if (isTRUE(force)) {
@@ -180,7 +177,7 @@ clear_WSS_cache <- function(areasymbols = NULL,
     return(NULL)
   }
 
-  if (!identical(tmp_destfile, destfile) && file.exists(tmp_destfile)) {
+  if (file.exists(tmp_destfile)) {
     if (file.exists(destfile)) {
       file.remove(destfile)
     }
@@ -210,12 +207,20 @@ clear_WSS_cache <- function(areasymbols = NULL,
   res <- entries[entries$db %in% db, , drop = FALSE]
 
   if (!is.null(areasymbols)) {
-    res <- res[toupper(res$areasymbol) %in% toupper(areasymbols), , drop = FALSE]
+    target_syms <- toupper(areasymbols)
+    if (any(grepl("[%_]", target_syms))) {
+      # Support SQL LIKE wildcards % and _
+      patterns <- paste0("^", gsub("%", ".*", gsub("_", ".", target_syms)), "$")
+      matches <- Reduce(`|`, lapply(patterns, function(p) grepl(p, toupper(res$areasymbol))))
+      res <- res[matches, , drop = FALSE]
+    } else {
+      res <- res[toupper(res$areasymbol) %in% target_syms, , drop = FALSE]
+    }
   }
 
   if (!is.null(fiscal_year)) {
     fy <- .normalize_wss_fiscal_year(fiscal_year)
-    res <- res[res$fiscal_year == fy, , drop = FALSE]
+    res <- res[res$fiscal_year %in% fy, , drop = FALSE]
   }
 
   if (!is.null(pattern)) {

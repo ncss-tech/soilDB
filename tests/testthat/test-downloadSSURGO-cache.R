@@ -144,6 +144,17 @@ test_that("WSS cache selector respects template archives", {
     latest_only = TRUE
   )
   expect_identical(selected_non_template$basename, "wss_SSA_CA067_[01/01/2024 00:00:00].zip")
+
+  # Wildcard LIKE support
+  selected_like <- .wss_cache_select(
+    entries,
+    areasymbols = "CA%",
+    fiscal_year = c("FY23", "FY24"),
+    db = "SSURGO",
+    include_template = FALSE,
+    latest_only = FALSE
+  )
+  expect_equal(nrow(selected_like), 2)
 })
 
 test_that("WSS cache download targets are organized by fiscal year", {
