@@ -374,7 +374,7 @@ fetchSCAN <- function(site.code = NULL, year = NULL, report = 'SCAN', timeseries
 }
 
 # req is a named vector or list
-.get_SCAN_data <- function(req) {
+.get_SCAN_data <- function(req, .response_content = NULL) {
   
   # convert to list as needed
   if (!inherits(req, 'list')) {
@@ -385,32 +385,36 @@ fetchSCAN <- function(site.code = NULL, year = NULL, report = 'SCAN', timeseries
   new.headers <- c("Referer" = "https://wcc.sc.egov.usda.gov/nwcc/")
   cf <- httr::config(followlocation = 1L)
   
-  # submit request
-  r <- try(httr::POST(
-    uri,
-    body = req,
-    encode = 'form',
-    config = cf,
-    httr::add_headers(new.headers),
-    httr::timeout(getOption("soilDB.timeout", default = 300))
-  ))
-  
-  if (inherits(r, 'try-error'))
-    return(NULL)
-  
-  res <- try(httr::stop_for_status(r), silent = TRUE)
-  
-  if (inherits(res, 'try-error')) {
-    return(NULL)
+  if (is.null(.response_content)) {
+    # submit request
+    r <- try(httr::POST(
+      uri,
+      body = req,
+      encode = 'form',
+      config = cf,
+      httr::add_headers(new.headers),
+      httr::timeout(getOption("soilDB.timeout", default = 300))
+    ))
+
+    if (inherits(r, 'try-error'))
+      return(NULL)
+
+    res <- try(httr::stop_for_status(r), silent = TRUE)
+
+    if (inherits(res, 'try-error')) {
+      return(NULL)
+    }
+
+    # extract content as text, cannot be directly read-in
+    r.content <- try(httr::content(r, as = 'text'), silent = TRUE)
+
+    if (inherits(r.content, 'try-error')) {
+      return(NULL)
+    }
+  } else {
+    r.content <- .response_content
   }
-  
-  # extract content as text, cannot be directly read-in
-  r.content <- try(httr::content(r, as = 'text'), silent = TRUE)
-  
-  if (inherits(r.content, 'try-error')) {
-    return(NULL)
-  }
-  
+
   # connect to the text as a standard file (trim leading whitespace! see below)
   tc <- textConnection(trimws(r.content))
   

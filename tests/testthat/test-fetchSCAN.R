@@ -28,6 +28,39 @@ test_that("fetchSCAN sensor formatter handles deterministic data", {
   expect_equal(format(result$datetime, "%z"), c("-0600", "-0500"))
 })
 
+test_that("fetchSCAN parser handles current and prior response layouts", {
+  responses <- list(
+    current = paste(
+      "",
+      "",
+      "SCAN station metadata",
+      "",
+      "Site,Date,Time,SMS_2,",
+      "2001,2015-01-01,00:00,10,",
+      sep = "\n"
+    ),
+    prior = paste(
+      "SCAN station metadata",
+      "",
+      "Site,Date,Time,SMS_2,",
+      "2001,2015-01-01,00:00,10,",
+      sep = "\n"
+    )
+  )
+  
+  for (response in responses) {
+    result <- soilDB:::.get_SCAN_data(
+      list(sitenum = 2001, y = 2015),
+      .response_content = response
+    )
+    
+    expect_identical(names(result), c("Site", "Date", "Time", "SMS_2"))
+    expect_equal(result$Site, 2001)
+    expect_equal(result$Date, as.Date("2015-01-01"))
+    expect_equal(result$SMS_2, 10)
+  }
+})
+
 test_that("fetchSCAN sensor formatter returns null for missing sensors", {
   data <- data.frame(
     Site = "2001",
