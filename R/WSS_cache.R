@@ -179,13 +179,38 @@ clear_WSS_cache <- function(areasymbols = NULL,
 
   if (file.exists(tmp_destfile)) {
     if (file.exists(destfile)) {
-      file.remove(destfile)
-    }
-    if (!file.rename(tmp_destfile, destfile)) {
-      if (file.exists(tmp_destfile)) {
-        unlink(tmp_destfile)
+      # Safely move existing file to a backup path before renaming new file into place
+      bkp_file <- tempfile(pattern = "wss_bkp_", tmpdir = dirname(destfile), fileext = ".zip")
+      bkp_ok <- file.rename(destfile, bkp_file)
+      if (bkp_ok) {
+        if (!file.rename(tmp_destfile, destfile)) {
+          # Restore backup if replacing fails
+          file.rename(bkp_file, destfile)
+          if (file.exists(tmp_destfile)) {
+            unlink(tmp_destfile)
+          }
+          stop("Failed to move downloaded ZIP into place: ", destfile, call. = FALSE)
+        }
+        # Rename succeeded, remove backup
+        if (file.exists(bkp_file)) {
+          unlink(bkp_file)
+        }
+      } else {
+        # Fallback if initial rename to backup fails
+        if (!file.rename(tmp_destfile, destfile)) {
+          if (file.exists(tmp_destfile)) {
+            unlink(tmp_destfile)
+          }
+          stop("Failed to move downloaded ZIP into place: ", destfile, call. = FALSE)
+        }
       }
-      stop("Failed to move downloaded ZIP into place: ", destfile, call. = FALSE)
+    } else {
+      if (!file.rename(tmp_destfile, destfile)) {
+        if (file.exists(tmp_destfile)) {
+          unlink(tmp_destfile)
+        }
+        stop("Failed to move downloaded ZIP into place: ", destfile, call. = FALSE)
+      }
     }
   }
 

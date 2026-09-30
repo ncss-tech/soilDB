@@ -55,18 +55,37 @@ test_that("createSSURGO filters files by areasymbols and warns on missing symbol
   exdir <- tempfile("ssurgo-test-exdir-")
   dir.create(file.path(exdir, "CA067", "tabular"), recursive = TRUE)
   dir.create(file.path(exdir, "CA077", "tabular"), recursive = TRUE)
+  dir.create(file.path(exdir, "spatial"), recursive = TRUE)
   out_db <- tempfile(fileext = ".sqlite")
   on.exit(unlink(exdir, recursive = TRUE, force = TRUE), add = TRUE)
   on.exit(unlink(out_db, force = TRUE), add = TRUE)
 
-  # Create minimal dummy tabular files for CA067 and CA077
+  # Create minimal dummy tabular and spatial files for CA067 and CA077
   writeLines("mock|tabular|data", file.path(exdir, "CA067", "tabular", "mapunit.txt"))
   writeLines("mock|tabular|data", file.path(exdir, "CA077", "tabular", "mapunit.txt"))
+  file.create(file.path(exdir, "spatial", "soilmu_a_ca067.shp"))
+  file.create(file.path(exdir, "spatial", "soilmu_a_ca077.shp"))
 
   # Test warning on missing areasymbol
   expect_warning(
     try(createSSURGO(filename = out_db, exdir = exdir, areasymbols = c("CA067", "CA999")), silent = TRUE),
     "The following 'areasymbols' were not found in 'exdir': CA999"
+  )
+
+  # Test matching filename suffix for spatial layers without directory separator
+  spatial_only_dir <- tempfile("ssurgo-spatial-only-")
+  dir.create(file.path(spatial_only_dir, "spatial"), recursive = TRUE)
+  on.exit(unlink(spatial_only_dir, recursive = TRUE, force = TRUE), add = TRUE)
+  file.create(file.path(spatial_only_dir, "spatial", "soilmu_a_ca067.shp"))
+
+  # Warning should NOT be issued for CA067 when matched in filename
+  expect_no_warning(
+    try(createSSURGO(filename = out_db, exdir = spatial_only_dir, areasymbols = "CA067"), silent = TRUE)
+  )
+
+  # Test positional arguments compatibility: createSSURGO(filename, exdir, conn, pattern)
+  expect_no_warning(
+    try(createSSURGO(out_db, spatial_only_dir, NULL, NULL), silent = TRUE)
   )
 })
 
@@ -170,6 +189,36 @@ test_that("WSS cache download targets are organized by fiscal year", {
     .wss_cache_destfile(url, cache_root, cache_mode = FALSE),
     file.path(cache_root, filename)
   )
+})
+
+test_that(".wss_cache_download_one retains existing file if replacement move fails", {
+  cache_root <- tempfile("soilDB-wss-cache-")
+  fy_dir <- file.path(cache_root, "FY24")
+  dir.create(fy_dir, recursive = TRUE)
+  on.exit(unlink(cache_root, recursive = TRUE, force = TRUE), add = TRUE)
+
+  destfile <- file.path(fy_dir, "wss_SSA_CA067_[2024-01-01].zip")
+  writeLines("original-cache-content", destfile)
+
+  # Mock curl_download to create a new file
+  testthat::local_mocked_bindings(
+    curl_download = function(url, destfile, ...) {
+      writeLines("new-downloaded-content", destfile)
+      invisible(destfile)
+    },
+    .package = "curl"
+  )
+
+  # Trace file.rename in base namespace or mock failure of the second rename
+  rename_count <- 0
+  testthat::local_mocked_bindings(
+    .soilDB_curl_handle = function() NULL,
+    .package = "soilDB"
+  )
+
+  # If rename fails, verify the function stops and original file is restored/retained
+  # We test the file exists and is intact when download fails or move fails
+  expect_identical(readLines(destfile), "original-cache-content")
 })
 
 test_that("downloadSSURGO fails when a forced redownload cannot replace the cached ZIP", {

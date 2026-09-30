@@ -7,7 +7,6 @@
 createSSURGO(
   filename = NULL,
   exdir = NULL,
-  areasymbols = NULL,
   conn = NULL,
   pattern = NULL,
   include_spatial = TRUE,
@@ -21,6 +20,7 @@ createSSURGO(
   na.strings = c("", "NA"),
   quote = "",
   quiet = TRUE,
+  areasymbols = NULL,
   ...
 )
 }
@@ -30,8 +30,6 @@ createSSURGO(
 
 \item{exdir}{\emph{character}. Path containing input SSURGO spatial (.shp) and tabular
 (.txt) files, downloaded and extracted by \code{downloadSSURGO()} or similar. Default: \code{NULL} selects the most recent fiscal-year cache directory.}
-
-\item{areasymbols}{\emph{character}. Optional character vector of soil survey area symbols (e.g. \code{c("CA067", "CA077")}) used to subset the folders/files within \code{exdir} to process. Default \code{NULL} processes all SSURGO exports found in \code{exdir}.}
 
 \item{conn}{A \emph{DBIConnection} object. Default is a \code{SQLiteConnection} used for writing .sqlite or
 .gpkg files. Alternate options are any DBI connection types. When \code{include_spatial=TRUE}, the
@@ -71,6 +69,8 @@ only shallowest ratings for smaller database size.}
 \item{quote}{\emph{character}. Passed to \code{data.table::fread()}. Default: \code{""}}
 
 \item{quiet}{\emph{logical}. Suppress messages and other output from database read/write operations?}
+
+\item{areasymbols}{\emph{character}. Optional character vector of soil survey area symbols (e.g. \code{c("CA067", "CA077")}) used to subset the folders/files within \code{exdir} to process. Default \code{NULL} processes all SSURGO exports found in \code{exdir}.}
 
 \item{...}{Additional arguments passed to \code{sf::write_sf()} for writing spatial layers.}
 }
