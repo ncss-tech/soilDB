@@ -177,6 +177,9 @@ test_that("fetchSCAN() returns the right kind of data", {
   expect_true(ncol(x$SMS) == 9)
   
   # empty results should have the same data type and dimensions
+  skip_if(inherits(y, 'try-error') || is.null(y),
+          "SCAN API unavailable or returned an invalid empty response")
+
   expect_true(inherits(y, 'list'))
   expect_equivalent(nrow(y$metadata), 1)
   
