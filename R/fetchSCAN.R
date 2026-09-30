@@ -133,7 +133,6 @@ fetchSCAN <- function(site.code = NULL, year = NULL, report = 'SCAN', timeseries
     stop('please install the `httr` package', call. = FALSE)
   
   # sanity check on granularity
-  # required to flatten possible arguments to single value
   timeseries <- match.arg(timeseries)
   
   ## allow for arbitrary queries using `req` argument or additional arguments via ...
@@ -187,9 +186,6 @@ fetchSCAN <- function(site.code = NULL, year = NULL, report = 'SCAN', timeseries
     # when there are no data, result is an empty data.frame
     d <- try(.get_SCAN_data(i), silent = TRUE)
     
-    # errors occur in exceptional situations 
-    # so we terminate the request loop 
-    # (rather than possibly incomplete results)
     if (inherits(d, 'try-error')) {
       message(d)
       return(NULL)
@@ -378,7 +374,7 @@ fetchSCAN <- function(site.code = NULL, year = NULL, report = 'SCAN', timeseries
 }
 
 # req is a named vector or list
-.get_SCAN_data <- function(req) {
+.get_SCAN_data <- function(req, .response_content = NULL) {
   
   # convert to list as needed
   if (!inherits(req, 'list')) {
@@ -389,43 +385,48 @@ fetchSCAN <- function(site.code = NULL, year = NULL, report = 'SCAN', timeseries
   new.headers <- c("Referer" = "https://wcc.sc.egov.usda.gov/nwcc/")
   cf <- httr::config(followlocation = 1L)
   
-  # submit request
-  r <- try(httr::POST(
-    uri,
-    body = req,
-    encode = 'form',
-    config = cf,
-    httr::add_headers(new.headers),
-    httr::timeout(getOption("soilDB.timeout", default = 300))
-  ))
-  
-  if (inherits(r, 'try-error'))
-    return(NULL)
-  
-  res <- try(httr::stop_for_status(r), silent = TRUE)
-  
-  if (inherits(res, 'try-error')) {
-    return(NULL)
+  if (is.null(.response_content)) {
+    # submit request
+    r <- try(httr::POST(
+      uri,
+      body = req,
+      encode = 'form',
+      config = cf,
+      httr::add_headers(new.headers),
+      httr::timeout(getOption("soilDB.timeout", default = 300))
+    ))
+
+    if (inherits(r, 'try-error'))
+      return(NULL)
+
+    res <- try(httr::stop_for_status(r), silent = TRUE)
+
+    if (inherits(res, 'try-error')) {
+      return(NULL)
+    }
+
+    # extract content as text, cannot be directly read-in
+    r.content <- try(httr::content(r, as = 'text'), silent = TRUE)
+
+    if (inherits(r.content, 'try-error')) {
+      return(NULL)
+    }
+  } else {
+    r.content <- .response_content
   }
-  
-  # extract content as text, cannot be directly read-in
-  r.content <- try(httr::content(r, as = 'text'), silent = TRUE)
-  
-  if (inherits(r.content, 'try-error')) {
-    return(NULL)
-  }
-  
-  # connect to the text as a standard file
-  tc <- textConnection(r.content)
+
+  # connect to the text as a standard file (trim leading whitespace! see below)
+  tc <- textConnection(trimws(r.content))
   
   # attempt to read column headers, after skipping the first two lines of data
-  # note: this moves the text connection cursor forward 3 lines
+  # note: this moves the text connection cursor forward `skip` lines
   # 2018-03-06 DEB: results have an extra line up top, now need to skip 3 lines
   # 2024-05-17 AGB: results have 2 more extra lines; thanks to Daniel Schlaepfer for reporting
+  # 2026-09-30 AGB: results have _3 more lines_ for n=8; no longer hard-coding extra `skip` (in case this changes again)
   h <- unlist(read.table(
     tc,
     nrows = 1,
-    skip = 5,
+    skip = 2, # this accounts for the metadata line plus whitespace before header (i.e. pre-2018 behavior)
     header = FALSE,
     stringsAsFactors = FALSE,
     sep = ',',
