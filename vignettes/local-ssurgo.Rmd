@@ -1,5 +1,5 @@
 ---
-title: "Local Soil Survey Geographic (SSURGO) Databases"
+title: "Local SSURGO Databases"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Local SSURGO Databases}
@@ -35,7 +35,7 @@ parameter to query your local database instead.
 
 ## Download SSURGO Data
 
-`downloadSSURGO()` will download the official SSURGO data from Web Soil Survey for the specified `areasymbol` and return the path to the ZIP archives.
+`downloadSSURGO()` will download the official SSURGO data from Web Soil Survey for the specified `areasymbol` and return the path to the ZIP archives. If you omit `destdir`, the ZIPs are stored in the persistent soilDB Web Soil Survey cache instead of a temporary directory.
 
 ```{r download-ssurgo}
 library(soilDB)
@@ -58,7 +58,11 @@ For example, to do all soil survey areas in Kansas, instead of `areasymbol` we c
 
 We specify `destdir` as the destination directory to download area-specific ZIP files.
 
-If unspecified, `exdir,`the directory the ZIP files get extracted to, is the same as `destdir`. If you want to keep the ZIP files and extracted data, set `destdir`. If you only want the extracted data, set `exdir`. If you want both to be kept only temporarily in order to create a new database, leave `destdir` as the default (`tempdir()`).
+If unspecified, `exdir`, the directory the ZIP files get extracted to, is the same as `destdir`. If you want to keep the ZIP files and extracted data, set `destdir`. If you only want the extracted data, set `exdir`. If you want the ZIPs to live in the persistent cache, leave `destdir` unspecified and use `list_WSS_cache()` or `clear_WSS_cache()` to inspect or clean cached ZIPs later. The cache policy keeps template and non-template ZIPs separate and organizes them by fiscal year. Set `force = TRUE` when you want to redownload even if a cached ZIP is fresh.
+
+The cache is organized by fiscal year, so older ZIPs can remain available for history until you remove them manually.
+
+In this example we keep `destdir` explicit so the ZIPs and extracted files stay together, but the default cache path is used whenever `destdir` is omitted.
 
 ## Create a Local SSURGO Database
 
