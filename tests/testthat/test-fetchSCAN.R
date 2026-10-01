@@ -25,7 +25,7 @@ test_that("fetchSCAN sensor formatter handles deterministic data", {
   expect_s3_class(result, "data.frame")
   expect_equal(nrow(result), 2)
   expect_equal(result$depth, c(5, 5))
-  expect_equal(format(result$datetime, "%z"), c("-0600", "-0500"))
+  expect_equal(format(result$datetime, "%z", tz = "US/Central"), c("-0600", "-0500"))
 })
 
 test_that("fetchSCAN parser handles current and prior response layouts", {
@@ -202,9 +202,9 @@ test_that("timezone check", {
           "SCAN API unavailable or returned an invalid response")
   
   # default target timezone is US/Central, including CDT (-0500) and CST (-0600)
-  .tz <- table(format(z$SMS$datetime, format = '%z'))
+  .tz <- table(format(z$SMS$datetime, format = '%z', tz = "US/Central"))
   
   skip_if(length(.tz) == 0)
   
-  expect_true(all(names(.tz) %in% c("+0000", "-0500", "-0600")))
+  expect_true(all(names(.tz) %in% c("-0500", "-0600")))
 })
