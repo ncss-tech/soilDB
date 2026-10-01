@@ -12,9 +12,9 @@ test_that("fetchSCAN sensor formatter handles deterministic data", {
     SMS_2 = c(10, 20),
     check.names = FALSE
   )
-  metadata <- soilDB::SCAN_site_metadata(2001)
+  metadata <- SCAN_site_metadata(2001)
   
-  result <- soilDB:::.formatSCAN_soil_sensor_suites(
+  result <- .formatSCAN_soil_sensor_suites(
     data,
     code = "SMS",
     meta = metadata,
@@ -49,7 +49,7 @@ test_that("fetchSCAN parser handles current and prior response layouts", {
   )
   
   for (response in responses) {
-    result <- soilDB:::.get_SCAN_data(
+    result <- .get_SCAN_data(
       list(sitenum = 2001, y = 2015),
       .response_content = response
     )
@@ -69,9 +69,9 @@ test_that("fetchSCAN sensor formatter returns null for missing sensors", {
     TEMP_2 = 10,
     check.names = FALSE
   )
-  metadata <- soilDB::SCAN_site_metadata(2001)
+  metadata <- SCAN_site_metadata(2001)
   
-  expect_null(soilDB:::.formatSCAN_soil_sensor_suites(
+  expect_null(.formatSCAN_soil_sensor_suites(
     data,
     code = "SMS",
     meta = metadata,
@@ -88,9 +88,9 @@ test_that("fetchSCAN formatter handles empty sensor data", {
     SMS_2 = NA_real_,
     check.names = FALSE
   )
-  metadata <- soilDB::SCAN_site_metadata(2001)
+  metadata <- SCAN_site_metadata(2001)
   
-  result <- soilDB:::.formatSCAN_soil_sensor_suites(
+  result <- .formatSCAN_soil_sensor_suites(
     data,
     code = "SMS",
     meta = metadata,
@@ -111,9 +111,9 @@ test_that("fetchSCAN formatter applies the requested timezone", {
     SMS_2 = 10,
     check.names = FALSE
   )
-  metadata <- soilDB::SCAN_site_metadata(2001)
+  metadata <- SCAN_site_metadata(2001)
   
-  result <- soilDB:::.formatSCAN_soil_sensor_suites(
+  result <- .formatSCAN_soil_sensor_suites(
     data,
     code = "SMS",
     meta = metadata,
