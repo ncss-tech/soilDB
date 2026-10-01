@@ -291,6 +291,7 @@ clear_WSS_cache <- function(areasymbols = NULL,
 }
 
 .normalize_wss_fiscal_year <- function(fiscal_year) {
+  # this is used to clean user input, it has no correction for month of year
   if (is.null(fiscal_year) || length(fiscal_year) == 0) {
     return(character(0))
   }
@@ -301,11 +302,14 @@ clear_WSS_cache <- function(areasymbols = NULL,
   sprintf("FY%02d", yr)
 }
 
-.wss_fiscal_year <- function(x) {
+.wss_fiscal_year <- function(x, offset = -2) {
+  # calculates fiscal year based on october 1 start date
+  # using -2 month offset for saverest dates before start next FY
+  # ASR begins in August, and new FY starts in October
   x <- as.Date(x)
   yr <- as.integer(format(x, "%Y"))
   mo <- as.integer(format(x, "%m"))
-  fy <- ifelse(mo >= 10L, yr + 1L, yr)
+  fy <- ifelse(mo >= 10L + offset, yr + 1L, yr)
   sprintf("FY%02d", fy %% 100L)
 }
 
