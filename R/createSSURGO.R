@@ -251,22 +251,17 @@ downloadSSURGO <- function(WHERE = NULL,
 
 .match_ssurgo_areasymbols <- function(files, areasymbols) {
   target_symbols <- unique(toupper(areasymbols))
-  file_symbols <- lapply(files, function(file) {
-    normalized <- gsub("\\\\", "/", file)
-    parts <- strsplit(normalized, "/", fixed = TRUE)[[1]]
-    basename_without_ext <- tools::file_path_sans_ext(tail(parts, 1))
-    c(
-      head(parts, -1),
+  parts <- strsplit(gsub("\\\\", "/", files), "/", fixed = TRUE)
+  file_symbols <- Map(function(path_parts) {
+    basename_without_ext <- tools::file_path_sans_ext(path_parts[length(path_parts)])
+    toupper(c(
+      if (length(path_parts) > 1L) path_parts[-length(path_parts)] else character(),
       strsplit(basename_without_ext, "_", fixed = TRUE)[[1]]
-    )
-  })
-  file_symbols <- lapply(file_symbols, toupper)
+    ))
+  }, parts)
   available_symbols <- unique(unlist(file_symbols, use.names = FALSE))
-  matches <- vapply(file_symbols, function(symbols) {
-    any(symbols %in% target_symbols)
-  }, logical(1))
   list(
-    match = matches,
+    match = vapply(file_symbols, function(symbols) any(symbols %in% target_symbols), logical(1)),
     found = intersect(target_symbols, available_symbols)
   )
 }
@@ -384,8 +379,9 @@ createSSURGO <- function(filename = NULL,
          call. = FALSE)
   }
 
-  has_zips <- any(grepl("\\.zip$", f_all, ignore.case = TRUE))
-  has_data <- any(grepl("\\.(shp|txt)$", f_all, ignore.case = TRUE))
+  file_extensions <- tolower(tools::file_ext(f_all))
+  has_zips <- any(file_extensions == "zip")
+  has_data <- any(file_extensions %in% c("shp", "txt"))
   if (has_zips && !has_data) {
     stop(
       sprintf(
@@ -458,13 +454,15 @@ createSSURGO <- function(filename = NULL,
       "  Tabular: ", paste0(include_tabular, collapse = ", ")
     )
   }
+  
+  f_inventory <- f[fdx]
 
   # initialize timing records for this run (collected locally and attached to result)
   write_timings <- list()
   zero_time <- Sys.time()
-
+  
   inv <- .inventory_ssurgo_files(
-    files = f[fdx],
+    files = f_inventory,
     layer_names = layer_names,
     include_spatial = include_spatial,
     include_tabular = include_tabular,

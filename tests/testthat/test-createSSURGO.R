@@ -58,6 +58,20 @@ test_that("areasymbol filtering avoids oversized regular expressions", {
   expect_setequal(matches$found, c("CA067", "CA077"))
 })
 
+test_that("areasymbol matching discovers symbols in non-data paths", {
+  files <- c(
+    file.path("exports", "CA067", "tabular", "mapunit.txt"),
+    file.path("exports", "spatial", "soilmu_a_ca077.shp"),
+    file.path("exports", "CA067", "wss_SSA_CA067_[2026-01-01].zip"),
+    file.path("exports", "README.txt.bak"),
+    file.path("exports", "notes.csv")
+  )
+
+  result <- .match_ssurgo_areasymbols(files, c("CA067", "CA077"))
+  expect_true(result$match[3])
+  expect_setequal(result$found, c("CA067", "CA077"))
+})
+
 test_that("createSSURGO exdir inventory messages and errors", {
   exdir <- tempfile("empty-ssurgo-")
   dir.create(exdir)
