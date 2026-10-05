@@ -68,7 +68,8 @@ only shallowest ratings for smaller database size.}
 
 \item{quote}{\emph{character}. Passed to \code{data.table::fread()}. Default: \code{""}}
 
-\item{quiet}{\emph{logical}. Suppress messages and other output from database read/write operations?}
+\item{quiet}{\emph{logical}. Suppress messages and other output from database read/write operations?
+When \code{FALSE}, a progress message is shown while scanning \code{exdir}.}
 
 \item{areasymbols}{\emph{character}. Optional character vector of soil survey area symbols (e.g. \code{c("CA067", "CA077")}) used to subset the folders/files within \code{exdir} to process. Default \code{NULL} processes all SSURGO exports found in \code{exdir}.}
 

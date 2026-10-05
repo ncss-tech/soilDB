@@ -152,7 +152,7 @@ downloadSSURGO <- function(WHERE = NULL,
       stop("Failed to download one or more SSURGO ZIP files.", call. = FALSE)
     }
   }
-  
+
   zip_paths <- destfiles[file.exists(destfiles)]
 
   if (!isTRUE(force) && length(zip_paths) == 0 && cache_mode) {
@@ -348,15 +348,15 @@ createSSURGO <- function(filename = NULL,
   if ((missing(filename) || length(filename) == 0) && missing(conn)) {
     stop("`filename` should be a path to a .gpkg or .sqlite file to create or append to, or a DBIConnection should be provided via `conn`.")
   }
-  
+
   # when exdir is not specified, take most recent FY cache dir
   if (is.null(exdir)) {
-    
+
     wss_cache <- .wss_cache_root(create = FALSE)
     wss_cache_dirs <- if (dir.exists(wss_cache)) list.dirs(wss_cache, recursive = FALSE) else character(0)
-    
+
     exdir <- sort(wss_cache_dirs[grepl("^FY\\d{2}$", basename(wss_cache_dirs))], decreasing = TRUE)
-    
+
     if (length(exdir) >= 1) {
       exdir <- exdir[1]
     } else {
@@ -366,16 +366,24 @@ createSSURGO <- function(filename = NULL,
       )
     }
   }
-  
-  if (!dir.exists(exdir) ||
-      length(list.dirs(exdir)) == 0 || 
-      length(list.files(exdir, recursive = TRUE)) == 0) {
+
+  if (!quiet) {
+    message("Scanning SSURGO extraction directory ", exdir, "...")
+  }
+
+  if (!dir.exists(exdir)) {
     stop(sprintf("SSURGO extraction directory (%s) appears to be empty, check that the path is correct.\n\nIf you want to download new data, run `downloadSSURGO(destdir=%s, ...)` first.",
                  exdir, shQuote(exdir)),
          call. = FALSE)
   }
 
   f_all <- list.files(exdir, recursive = TRUE, full.names = TRUE)
+  if (length(f_all) == 0) {
+    stop(sprintf("SSURGO extraction directory (%s) appears to be empty, check that the path is correct.\n\nIf you want to download new data, run `downloadSSURGO(destdir=%s, ...)` first.",
+                 exdir, shQuote(exdir)),
+         call. = FALSE)
+  }
+
   has_zips <- any(grepl("\\.zip$", f_all, ignore.case = TRUE))
   has_data <- any(grepl("\\.(shp|txt)$", f_all, ignore.case = TRUE))
   if (has_zips && !has_data) {
@@ -387,7 +395,7 @@ createSSURGO <- function(filename = NULL,
       call. = FALSE
     )
   }
-  
+
   if (missing(conn) || is.null(conn)) {
     # delete existing file if overwrite=TRUE; does _not_ apply to DBIConnection
     if (file.exists(filename)) {
@@ -438,23 +446,23 @@ createSSURGO <- function(filename = NULL,
   if (!is.null(pattern)) {
     fdx <- fdx & grepl(pattern, f)
   }
-  
-  
+
+
   if (!quiet) {
-    message("Creating SSURGO database from ", exdir, " using pattern ", 
+    message("Creating SSURGO database from ", exdir, " using pattern ",
              ifelse(is.null(pattern), "*", pattern), "...")
-  
+
     message(
       "  Output:  ", ifelse(is.null(conn), filename, conn@dbname), "\n",
       "  Spatial: ", paste0(include_spatial, collapse = ", "), "\n",
       "  Tabular: ", paste0(include_tabular, collapse = ", ")
     )
   }
-  
+
   # initialize timing records for this run (collected locally and attached to result)
   write_timings <- list()
   zero_time <- Sys.time()
-  
+
   inv <- .inventory_ssurgo_files(
     files = f[fdx],
     layer_names = layer_names,
@@ -469,8 +477,8 @@ createSSURGO <- function(filename = NULL,
   # inventory method converts partial sets (character vectors) to logical for include_* args
   include_spatial <- inv$include_spatial
   include_tabular <- inv$include_tabular
-  
-  
+
+
   if ((missing(conn) || is.null(conn)) && !IS_GPKG) {
 
     if (!requireNamespace("RSQLite")) {
@@ -494,7 +502,7 @@ createSSURGO <- function(filename = NULL,
       call. = FALSE
     )
   }
-  
+
   if (!is.null(inv$shp.grp) && nrow(inv$shp.grp) >= 1 && ncol(inv$shp.grp) == 3 && include_spatial) {
 
     f.shp.grp <- split(inv$f.shp,
@@ -586,14 +594,14 @@ createSSURGO <- function(filename = NULL,
           } else {
             rec <- .st_write_sf_conn(shp, conn, lnm, j, overwrite)
           }
-          
+
           if (!is.null(rec)) {
             write_timings[[length(write_timings) + 1L]] <- rec
           }
-        } 
-      } 
-    } 
-  } 
+        }
+      }
+    }
+  }
 
   if (IS_GPKG) {
 
@@ -631,13 +639,13 @@ createSSURGO <- function(filename = NULL,
     } else {
       .ssurgo_type_map <- NULL
     }
-    
+
     # environment variable (batching is helpful, but larger batch sizes not inherently faster)
     batch_env <- Sys.getenv("R_SOILDB_SSURGO_TABLE_WRITE_BATCH_SIZE", unset = "25")
     if (nzchar(batch_env)) {
       batch_size <- suppressWarnings(as.integer(batch_env))
     }
-    
+
     if (is.na(batch_size) || batch_size <= 0L) {
       warning(
         "Invalid R_SOILDB_SSURGO_TABLE_WRITE_BATCH_SIZE='", batch_env, "', using no batching"
@@ -659,15 +667,15 @@ createSSURGO <- function(filename = NULL,
       # process files in transaction batches
       files <- inv$f.txt.grp[[x]]
       files_n <- length(files)
-      
+
       if (files_n > 0) {
-        
+
         batch_n <- as.integer(batch_size)
-        
+
         for (start_idx in seq(1, files_n, by = batch_n)) {
-          
+
           end_idx <- min(start_idx + batch_n - 1L, files_n)
-          
+
           tryCatch({
             DBI::dbBegin(conn)
             for (i in seq(start_idx, end_idx)) {
@@ -783,7 +791,7 @@ createSSURGO <- function(filename = NULL,
     })
   }
   complete_time <- Sys.time()
-  
+
   if (!quiet) {
     message("Database creation complete in ", format(signif(difftime(complete_time, zero_time, units = "auto"), 3)), ".")
   }
@@ -949,7 +957,7 @@ createSSURGO <- function(filename = NULL,
     showProgress = FALSE,
     data.table = FALSE
   ))
-  
+
   if (length(dt) == 1) {
     if (grepl("soil_metadata", file)) {
       y <- data.frame(
@@ -965,7 +973,7 @@ createSSURGO <- function(filename = NULL,
       return(y)
     }
   }
-  
+
   y <- dt
   if (!is.null(mstabcol) && !header && !is.null(newnames) && length(y) > 0) {
     colnames(y) <- newnames
@@ -974,18 +982,18 @@ createSSURGO <- function(filename = NULL,
     return(try(stop("failed to read"), silent = TRUE))
   }
   y <- .coerce_ssurgo_types(y, tablename, mstabcol, type_map)
-  
+
   # cointerp is generally large; filter early by ruledepth by defaykt
   if (!is.null(maxruledepth) &&
       tablename == "cointerp" &&
       "ruledepth" %in% colnames(y)) {
     y <- y[y$ruledepth <= maxruledepth, , drop = FALSE]
   }
-  
+
   if ("musym" %in% colnames(y)) {
     y$musym <- as.character(y$musym)
   }
-  
+
   y
 }
 
@@ -996,7 +1004,7 @@ createSSURGO <- function(filename = NULL,
                                  append = FALSE,
                                  file = NULL,
                                  quiet = TRUE) {
-  
+
  # attempt to extract SSA identifier from file path if present
  ssa <- NA_character_
  if (!is.null(file) && nzchar(file)) {
@@ -1009,7 +1017,7 @@ createSSURGO <- function(filename = NULL,
 
  # environment variable (at this scale chunk size mostly negligible)
  chunk_size <- as.integer(Sys.getenv("R_SOILDB_SSURGO_ROW_CHUNK_SIZE", "100000"))
- 
+
  if (is.na(chunk_size) || chunk_size <= 0L) {
    warning(
      "Invalid R_SOILDB_SSURGO_ROW_CHUNK_SIZE='", chunk_size, "', using 100,000 row batches"
@@ -1057,7 +1065,7 @@ createSSURGO <- function(filename = NULL,
        )
      )
    }
-   
+
    flush.console()
 
    record <- list(
@@ -1082,11 +1090,11 @@ createSSURGO <- function(filename = NULL,
          conditionMessage(e)
        )
      )
-   }   
+   }
    flush.console()
    stop(e)
  })
- 
+
  res
 }
 

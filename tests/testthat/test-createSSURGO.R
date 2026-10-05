@@ -1,7 +1,7 @@
 test_that(".write_table_with_log creates and appends correctly with chunking", {
-  
+
   skip_on_cran()
-  
+
   skip_if_not_installed("RSQLite")
   skip_if_not_installed("DBI")
 
@@ -15,7 +15,7 @@ test_that(".write_table_with_log creates and appends correctly with chunking", {
   df_full <- data.frame(x = 1:50, y = letters[1:50], stringsAsFactors = FALSE)
   df_part1 <- df_full[1:10, , drop = FALSE]
   df_part2 <- df_full[11:50, , drop = FALSE]
-  
+
   rec1 <- .write_table_with_log(conn = con, name = "t_test", value = df_part1, overwrite = TRUE, append = FALSE, file = NULL, quiet = TRUE)
   expect_true(is.list(rec1))
   expect_equal(rec1$table, "t_test")
@@ -56,4 +56,19 @@ test_that("areasymbol filtering avoids oversized regular expressions", {
   expect_false(matches$match[3])
   expect_false(matches$match[4])
   expect_setequal(matches$found, c("CA067", "CA077"))
+})
+
+test_that("createSSURGO exdir inventory messages and errors", {
+  exdir <- tempfile("empty-ssurgo-")
+  dir.create(exdir)
+  on.exit(unlink(exdir, recursive = TRUE), add = TRUE)
+
+  expect_message(
+    expect_error(
+      createSSURGO(filename = tempfile(fileext = ".sqlite"),
+                   exdir = exdir, quiet = FALSE),
+      "appears to be empty"
+    ),
+    "Scanning SSURGO extraction directory"
+  )
 })
