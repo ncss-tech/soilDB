@@ -249,6 +249,28 @@ downloadSSURGO <- function(WHERE = NULL,
   unique(toupper(gsub("'", "", vals)))
 }
 
+.match_ssurgo_areasymbols <- function(files, areasymbols) {
+  target_symbols <- unique(toupper(areasymbols))
+  file_symbols <- lapply(files, function(file) {
+    normalized <- gsub("\\\\", "/", file)
+    parts <- strsplit(normalized, "/", fixed = TRUE)[[1]]
+    basename_without_ext <- tools::file_path_sans_ext(tail(parts, 1))
+    c(
+      head(parts, -1),
+      strsplit(basename_without_ext, "_", fixed = TRUE)[[1]]
+    )
+  })
+  file_symbols <- lapply(file_symbols, toupper)
+  available_symbols <- unique(unlist(file_symbols, use.names = FALSE))
+  matches <- vapply(file_symbols, function(symbols) {
+    any(symbols %in% target_symbols)
+  }, logical(1))
+  list(
+    match = matches,
+    found = intersect(target_symbols, available_symbols)
+  )
+}
+
 #' Create a database from SSURGO Exports
 #'
 #' The following database types are tested and fully supported:
@@ -401,27 +423,16 @@ createSSURGO <- function(filename = NULL,
   fdx <- rep(TRUE, length(f))
 
   if (!is.null(areasymbols)) {
-    areasymbols <- toupper(areasymbols)
-    # Match paths containing directory (/areasymbol/ or \areasymbol\) or filename suffix (_areasymbol. or _areasymbol_)
-    sym_choice <- paste0(areasymbols, collapse = "|")
-    ssa_pattern <- paste0("[/\\\\](", sym_choice, ")[/\\\\]|_+(", sym_choice, ")(_|[.])")
-    ssa_match <- grepl(ssa_pattern, f, ignore.case = TRUE)
-    
+    areasymbols <- unique(toupper(areasymbols))
+    ssa_matches <- .match_ssurgo_areasymbols(f, areasymbols)
+
     # Check if any requested areasymbols were completely missing
-    matched_files <- f[ssa_match]
-    found_symbols <- character(0)
-    for (sym in areasymbols) {
-      sym_pat <- paste0("[/\\\\]", sym, "[/\\\\]|_+(", sym, ")(_|[.])")
-      if (any(grepl(sym_pat, matched_files, ignore.case = TRUE))) {
-        found_symbols <- c(found_symbols, sym)
-      }
-    }
-    missing_symbols <- setdiff(areasymbols, found_symbols)
+    missing_symbols <- setdiff(areasymbols, ssa_matches$found)
     if (length(missing_symbols) > 0) {
       warning("The following 'areasymbols' were not found in 'exdir': ",
               paste0(missing_symbols, collapse = ", "), call. = FALSE)
     }
-    fdx <- fdx & ssa_match
+    fdx <- fdx & ssa_matches$match
   }
 
   if (!is.null(pattern)) {

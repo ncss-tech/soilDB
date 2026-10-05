@@ -34,3 +34,26 @@ test_that(".write_table_with_log creates and appends correctly with chunking", {
 
   expect_equal(db_df, df_full)
 })
+
+test_that("areasymbol filtering avoids oversized regular expressions", {
+  files <- c(
+    file.path("exports", "CA067", "tabular", "mapunit.txt"),
+    file.path("exports", "spatial", "soilmu_a_ca077.shp"),
+    file.path("exports", "spatial", "soilmu_a_ca0670.shp"),
+    file.path("exports", "spatial", "soilmu_a_ca9990.txt")
+  )
+  requested <- c(
+    sprintf("CA%03d", 1:999),
+    "CA067",
+    "CA077",
+    "CA999"
+  )
+
+  matches <- .match_ssurgo_areasymbols(files, requested)
+
+  expect_true(matches$match[1])
+  expect_true(matches$match[2])
+  expect_false(matches$match[3])
+  expect_false(matches$match[4])
+  expect_setequal(matches$found, c("CA067", "CA077"))
+})
