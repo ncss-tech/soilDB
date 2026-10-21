@@ -123,10 +123,7 @@ downloadSSURGO <- function(WHERE = NULL,
   }, silent = TRUE)
 
   if (inherits(urls, 'try-error')) {
-    if (!quiet) {
-      warning("Unable to query remote WSS metadata; using cached ZIPs when available.", call. = FALSE)
-    }
-    urls <- character(0)
+    stop("Failed to resolve remote WSS metadata for requested SSURGO download.", call. = FALSE)
   }
 
   cache_mode <- is.null(destdir)
@@ -154,22 +151,6 @@ downloadSSURGO <- function(WHERE = NULL,
   }
 
   zip_paths <- destfiles[file.exists(destfiles)]
-
-  if (!isTRUE(force) && length(zip_paths) == 0 && cache_mode) {
-    fallback_areas <- if (!is.null(areasymbols)) areasymbols else .extract_wss_areasymbols(WHERE)
-    if (!is.null(fallback_areas)) {
-      cached <- .wss_cache_select(
-        .wss_cache_entries(cache_dir = cache_root),
-        areasymbols = fallback_areas,
-        db = db,
-        include_template = include_template,
-        latest_only = TRUE
-      )
-      if (nrow(cached) > 0) {
-        zip_paths <- cached$file
-      }
-    }
-  }
 
   if (length(zip_paths) == 0) {
     stop("Could not find SSURGO ZIP files in the resolved download directory.", call. = FALSE)
@@ -235,18 +216,6 @@ downloadSSURGO <- function(WHERE = NULL,
   }
 
   invisible(unname(zip_paths))
-}
-
-.extract_wss_areasymbols <- function(WHERE) {
-  if (is.null(WHERE) || !is.character(WHERE)) {
-    return(NULL)
-  }
-  x <- gregexpr("'[A-Za-z0-9_%]+'", WHERE, perl = TRUE)
-  vals <- unlist(regmatches(WHERE, x))
-  if (length(vals) == 0) {
-    return(NULL)
-  }
-  unique(toupper(gsub("'", "", vals)))
 }
 
 .match_ssurgo_areasymbols <- function(files, areasymbols) {

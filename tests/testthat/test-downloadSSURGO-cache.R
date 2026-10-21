@@ -329,21 +329,15 @@ test_that("downloadSSURGO errors on partial download failure in multi-area downl
   )
 })
 
-test_that("downloadSSURGO warns and falls back when remote metadata lookup fails", {
-
-  skip_on_cran()
-  skip_if_offline()
-  skip_if(as.logical(Sys.getenv("R_SOILDB_SKIP_LONG_EXAMPLES", unset = TRUE)))
-
+test_that("downloadSSURGO errors on metadata lookup failure even when matching cache exists", {
   cache_root <- tempfile("soilDB-wss-cache-")
   old_opt <- options(soilDB.WSS.cache_dir = cache_root)
   on.exit(options(old_opt), add = TRUE)
   on.exit(unlink(cache_root, recursive = TRUE, force = TRUE), add = TRUE)
 
-  areasymbol <- "MH936"
-
-  res1 <- downloadSSURGO(areasymbols = areasymbol, extract = FALSE, quiet = TRUE)
-  expect_true(length(res1) >= 1)
+  fy_dir <- file.path(cache_root, "FY24")
+  dir.create(fy_dir, recursive = TRUE)
+  file.create(file.path(fy_dir, "wss_SSA_CA067_[2024-01-01].zip"))
 
   testthat::local_mocked_bindings(
     .make_WSS_download_url = function(...) {
@@ -352,13 +346,10 @@ test_that("downloadSSURGO warns and falls back when remote metadata lookup fails
     .package = "soilDB"
   )
 
-  res2 <- expect_warning(
-    downloadSSURGO(areasymbols = areasymbol, extract = FALSE, quiet = FALSE),
-    "Unable to query remote WSS metadata"
+  expect_error(
+    downloadSSURGO(areasymbols = "CA067", extract = FALSE, quiet = TRUE),
+    "Failed to resolve remote WSS metadata"
   )
-
-  expect_true(length(res2) >= 1)
-  expect_identical(res1, res2)
 })
 
 test_that("sequential downloadSSURGO followed by createSSURGO ingests multiple SSAs correctly", {
