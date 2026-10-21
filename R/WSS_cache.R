@@ -257,8 +257,8 @@ clear_WSS_cache <- function(areasymbols = NULL,
   }
 
   if (latest_only && nrow(res) > 0) {
-    res <- res[order(res$areasymbol, res$fiscal_year, res$template, -as.numeric(res$saverest), res$basename), , drop = FALSE]
-    keep <- !duplicated(interaction(res$areasymbol, res$fiscal_year, res$template, drop = TRUE, lex.order = TRUE))
+    res <- res[order(res$db, res$areasymbol, res$template, -as.numeric(res$saverest), res$basename), , drop = FALSE]
+    keep <- !duplicated(interaction(res$db, res$areasymbol, res$template, drop = TRUE, lex.order = TRUE))
     res <- res[keep, , drop = FALSE]
   } else if (nrow(res) > 0) {
     res <- res[order(res$fiscal_year, res$areasymbol, res$saverest, res$basename), , drop = FALSE]

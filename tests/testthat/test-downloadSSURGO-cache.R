@@ -257,7 +257,7 @@ test_that("downloadSSURGO fails when a forced redownload cannot replace the cach
   expect_true(nrow(list_WSS_cache(areasymbols = areasymbol, cache_dir = cache_root)) >= 1)
 })
 
-test_that("clear_WSS_cache latest_only preserves latest per area and fiscal year", {
+test_that("clear_WSS_cache latest_only preserves newest per db/area/template across FY", {
   cache_root <- tempfile("soilDB-wss-cache-")
   old_opt <- options(soilDB.WSS.cache_dir = cache_root)
   on.exit(options(old_opt), add = TRUE)
@@ -281,12 +281,112 @@ test_that("clear_WSS_cache latest_only preserves latest per area and fiscal year
   removed <- clear_WSS_cache(latest_only = TRUE, cache_dir = cache_root)
 
   expect_true(basename(f1_old) %in% basename(removed))
-  expect_false(basename(f1_new) %in% basename(removed))
   expect_false(basename(f2_fy24) %in% basename(removed))
+  expect_true(basename(f1_new) %in% basename(removed))
 
   remaining <- list_WSS_cache(cache_dir = cache_root)
-  expect_equal(nrow(remaining), 2)
-  expect_true(all(c("FY23", "FY24") %in% remaining$fiscal_year))
+  expect_equal(nrow(remaining), 1)
+  expect_identical(remaining$fiscal_year, "FY24")
+})
+
+test_that(".wss_cache_select latest_only uses lexicographically first basename for equal saverest", {
+  entries <- data.frame(
+    file = c("b.zip", "a.zip"),
+    basename = c(
+      "wss_SSA_CA067_[2024-01-01].zip",
+      "wss_SSA_CA067_[2024-01-01]_a.zip"
+    ),
+    db = c("SSURGO", "SSURGO"),
+    areasymbol = c("CA067", "CA067"),
+    saverest = as.Date(c("2024-01-01", "2024-01-01")),
+    fiscal_year = c("FY24", "FY24"),
+    template = c(FALSE, FALSE),
+    stringsAsFactors = FALSE
+  )
+
+  selected <- .wss_cache_select(entries, db = "SSURGO", latest_only = TRUE)
+  expect_equal(nrow(selected), 1)
+  expect_identical(selected$basename, "wss_SSA_CA067_[2024-01-01].zip")
+})
+
+test_that("downloadSSURGO extracts nested tabular/spatial members under explicit exdir", {
+  cache_root <- tempfile("soilDB-wss-cache-")
+  old_opt <- options(soilDB.WSS.cache_dir = cache_root)
+  on.exit(options(old_opt), add = TRUE)
+  on.exit(unlink(cache_root, recursive = TRUE, force = TRUE), add = TRUE)
+
+  fy_dir <- file.path(cache_root, "FY24")
+  dir.create(fy_dir, recursive = TRUE)
+
+  zip_name <- "wss_SSA_CA067_[2024-01-01].zip"
+  zip_path <- file.path(fy_dir, zip_name)
+
+  src_dir <- tempfile("soilDB-wss-zip-src-")
+  on.exit(unlink(src_dir, recursive = TRUE, force = TRUE), add = TRUE)
+
+  dir.create(file.path(src_dir, "nested", "CA067", "tabular"), recursive = TRUE)
+  dir.create(file.path(src_dir, "nested", "spatial"), recursive = TRUE)
+  writeLines("mapunit||||mapunit", file.path(src_dir, "nested", "CA067", "tabular", "mstab.txt"))
+  writeLines("", file.path(src_dir, "nested", "CA067", "tabular", "mstabcol.txt"))
+  writeLines("", file.path(src_dir, "nested", "CA067", "tabular", "msidxdet.txt"))
+  writeLines("1|mock", file.path(src_dir, "nested", "CA067", "tabular", "mapunit.txt"))
+  file.create(file.path(src_dir, "nested", "spatial", "soilmu_a_ca067.shp"))
+
+  old_wd <- getwd()
+  on.exit(setwd(old_wd), add = TRUE)
+  setwd(src_dir)
+  utils::zip(
+    zipfile = zip_path,
+    files = c(
+      "nested/CA067/tabular/mstab.txt",
+      "nested/CA067/tabular/mstabcol.txt",
+      "nested/CA067/tabular/msidxdet.txt",
+      "nested/CA067/tabular/mapunit.txt",
+      "nested/spatial/soilmu_a_ca067.shp"
+    )
+  )
+  if (!file.exists(zip_path)) {
+    skip("zip command unavailable for test setup")
+  }
+
+  captured_members <- NULL
+  inv_orig <- get(".inventory_ssurgo_files", envir = asNamespace("soilDB"))
+
+  testthat::local_mocked_bindings(
+    .make_WSS_download_url = function(...) {
+      paste0("https://websoilsurvey.sc.egov.usda.gov/DSD/Download/Cache/SSA/", zip_name)
+    },
+    .inventory_ssurgo_files = function(files, exdir, ...) {
+      captured_members <<- files
+      inv_orig(files, exdir = exdir, ...)
+    },
+    .package = "soilDB"
+  )
+
+  exdir <- tempfile("soilDB-wss-extract-")
+  dir.create(exdir, recursive = TRUE)
+
+  res <- downloadSSURGO(
+    areasymbols = "CA067",
+    exdir = exdir,
+    extract = TRUE,
+    include_spatial = "mupolygon",
+    include_tabular = "mapunit",
+    quiet = TRUE
+  )
+
+  expect_identical(normalizePath(res, winslash = "/", mustWork = FALSE), normalizePath(zip_path, winslash = "/", mustWork = FALSE))
+  expect_true(length(captured_members) > 0)
+  expect_false(any(grepl("\\\\", captured_members)))
+
+  exdir_norm <- normalizePath(exdir, winslash = "/", mustWork = FALSE)
+  tab_path <- normalizePath(file.path(exdir, "nested", "CA067", "tabular", "mapunit.txt"), winslash = "/", mustWork = FALSE)
+  shp_path <- normalizePath(file.path(exdir, "nested", "spatial", "soilmu_a_ca067.shp"), winslash = "/", mustWork = FALSE)
+
+  expect_true(file.exists(tab_path))
+  expect_true(file.exists(shp_path))
+  expect_true(startsWith(tab_path, exdir_norm))
+  expect_true(startsWith(shp_path, exdir_norm))
 })
 
 test_that("downloadSSURGO errors on partial download failure in multi-area download", {

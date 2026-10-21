@@ -186,17 +186,23 @@ downloadSSURGO <- function(WHERE = NULL,
         lz <- NULL
       } else {
         lz <- utils::unzip(zip_paths[i], list = TRUE)$Name
+        lz_rel <- gsub("\\\\", "/", lz)
+        names(lz) <- lz_rel
+
         # need to pre-extract mstab data to map to real column names
-        utils::unzip(zip_paths[i], files = lz[grepl(
+        lz_meta <- lz_rel[grepl(
           "^(mstab|mdstattabs|MetadataTable|mstabcol|mdstattabcol|MetadataColumnLookup|msidxdet|mdstatidxdet|MetadataIndexDetail)$",
-          tools::file_path_sans_ext(basename(lz))
-        )], exdir = exdir)
+          tools::file_path_sans_ext(basename(lz_rel))
+        )]
+        if (length(lz_meta) > 0) {
+          utils::unzip(zip_paths[i], files = unname(lz[lz_meta]), exdir = exdir)
+        }
 
         # explicitly fetch internal function in our namespace to support parallel workers
         INV.FUN <- get(".inventory_ssurgo_files", envir = asNamespace("soilDB"))
-        inv <- INV.FUN(lz, exdir = exdir, include_spatial = include_spatial, include_tabular = include_tabular)
+        inv <- INV.FUN(lz_rel, exdir = exdir, include_spatial = include_spatial, include_tabular = include_tabular)
 
-        lz <- unlist(c(inv$f.shp.sc, inv$f.txt.grp))
+        lz <- unname(lz[unlist(c(inv$f.shp.sc, inv$f.txt.grp))])
       }
       uz <- utils::unzip(zip_paths[i], files = lz, exdir = exdir)
       if (length(uz) == 0) {
