@@ -86,3 +86,80 @@ test_that("createSSURGO exdir inventory messages and errors", {
     "Scanning SSURGO extraction directory"
   )
 })
+
+test_that("createSSURGO does not append after failed table initialization", {
+
+  skip_on_cran()
+  skip_if_not_installed("RSQLite")
+  skip_if_not_installed("DBI")
+
+  exdir <- tempfile("ssurgo-init-fail-")
+  dir.create(file.path(exdir, "tabular"), recursive = TRUE)
+  on.exit(unlink(exdir, recursive = TRUE, force = TRUE), add = TRUE)
+
+  f1 <- file.path(exdir, "tabular", "mapunit_part1.txt")
+  f2 <- file.path(exdir, "tabular", "mapunit_part2.txt")
+  writeLines("1", f1)
+  writeLines("2", f2)
+
+  mstabcol_file <- file.path(exdir, "tabular", "mstabcol.txt")
+  writeLines("mapunit|1|mukey|Map Unit Key||String||10", mstabcol_file)
+
+  msidxdet_file <- file.path(exdir, "tabular", "msidxdet.txt")
+  writeLines("mapunit|IX_dummy|junk|junk", msidxdet_file)
+
+  out_db <- tempfile(fileext = ".sqlite")
+  on.exit(unlink(out_db, force = TRUE), add = TRUE)
+
+  append_calls <- logical(0)
+  write_call_n <- 0L
+
+  testthat::local_mocked_bindings(
+    .inventory_ssurgo_files = function(...) {
+      list(
+        f.shp = character(0),
+        shp.grp = NULL,
+        f.shp.sc = character(0),
+        include_spatial = FALSE,
+        f.txt.grp = list(mapunit = c(f1, f2)),
+        txt.first = character(0),
+        include_tabular = TRUE,
+        mstabn = character(0),
+        mstabcn = mstabcol_file,
+        msidxdn = msidxdet_file,
+        mstab = NULL,
+        mstab_lut = c(mapunit = "mapunit")
+      )
+    },
+    .read_delim_tabular = function(...) {
+      data.frame(mukey = "123", stringsAsFactors = FALSE)
+    },
+    .write_table_with_log = function(conn, name, value, overwrite = FALSE,
+                                     append = FALSE, file = NULL, quiet = TRUE) {
+      append_calls <<- c(append_calls, append)
+      write_call_n <<- write_call_n + 1L
+
+      if (write_call_n == 1L) {
+        DBI::dbWriteTable(conn, name, value[0, , drop = FALSE], append = FALSE, overwrite = FALSE)
+        stop("mock init failure", call. = FALSE)
+      }
+
+      list(table = name, ssa = NA_character_, rows = nrow(value), elapsed = 0)
+    },
+    .package = "soilDB"
+  )
+
+  expect_no_error(
+    createSSURGO(
+      filename = out_db,
+      exdir = exdir,
+      include_spatial = FALSE,
+      include_tabular = TRUE,
+      quiet = FALSE
+    )
+  )
+
+  expect_identical(write_call_n, 2L)
+  expect_identical(append_calls, c(FALSE, FALSE))
+  expect_false(append_calls[2])
+})

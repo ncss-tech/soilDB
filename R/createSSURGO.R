@@ -628,6 +628,8 @@ createSSURGO <- function(filename = NULL,
 
     lapply(names(inv$f.txt.grp), function(x) {
 
+      table_initialized <- FALSE
+
       if (!is.null(mstabcol)) {
         newnames <- mstabcol[[3]][mstabcol[[1]] == inv$mstab_lut[x]]
       }
@@ -684,7 +686,7 @@ createSSURGO <- function(filename = NULL,
                 if (!table_exists) {
                   append_arg <- FALSE
                   overwrite_arg <- FALSE
-                } else if (isTRUE(append) || i > 1) {
+                } else if (isTRUE(append) || isTRUE(table_initialized)) {
                   append_arg <- TRUE
                   overwrite_arg <- FALSE
                 } else {
@@ -704,6 +706,7 @@ createSSURGO <- function(filename = NULL,
 
                 if (!is.null(rec)) {
                   write_timings[[length(write_timings) + 1L]] <- rec
+                  table_initialized <- TRUE
                 }
               }, silent = quiet)
             }
