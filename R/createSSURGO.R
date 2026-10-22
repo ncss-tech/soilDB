@@ -683,10 +683,10 @@ createSSURGO <- function(filename = NULL,
                 append_arg <- FALSE
                 overwrite_arg <- overwrite
 
-                if (!table_exists) {
+                if (!table_exists || !isTRUE(table_initialized)) {
                   append_arg <- FALSE
-                  overwrite_arg <- FALSE
-                } else if (isTRUE(append) || isTRUE(table_initialized)) {
+                  overwrite_arg <- table_exists || overwrite
+                } else if (isTRUE(append)) {
                   append_arg <- TRUE
                   overwrite_arg <- FALSE
                 } else {
