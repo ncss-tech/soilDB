@@ -257,7 +257,7 @@ clear_WSS_cache <- function(areasymbols = NULL,
   }
 
   if (latest_only && nrow(res) > 0) {
-    res <- res[order(res$db, res$areasymbol, res$template, -as.numeric(res$saverest), res$basename), , drop = FALSE]
+    res <- res[order(res$db, res$areasymbol, res$template, -as.numeric(res$saverest), res$basename, method = "radix"), , drop = FALSE]
     keep <- !duplicated(interaction(res$db, res$areasymbol, res$template, drop = TRUE, lex.order = TRUE))
     res <- res[keep, , drop = FALSE]
   } else if (nrow(res) > 0) {
