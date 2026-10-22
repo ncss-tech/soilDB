@@ -10,10 +10,13 @@
 #'   defining the target extent.
 #' @param areasymbols _character_. Character vector of soil survey area symbols e.g. `c("CA067",
 #'   "CA077")`. Used in lieu of `WHERE` argument.
-#' @param destdir _character_. Directory to download ZIP files into. Default `tempdir()`.
+#' @param destdir _character_. Directory to download ZIP files into. Default `NULL` uses the
+#'   persistent soilDB Web Soil Survey cache.
 #' @param exdir _character_. Directory to extract ZIP archives into. May be a directory that does
 #'   not yet exist. Each ZIP file will extract to a folder labeled with `areasymbol` in this
-#'   directory. Default: `destdir`
+#'   directory. Default: `destdir`, or when `destdir` is `NULL`, the fiscal-year directory containing
+#'   the cached ZIP files. When extraction is enabled (`extract = TRUE`) and the target ZIP files
+#'   span multiple fiscal-year cache directories, an explicit `exdir` must be provided.
 #' @param include_template _logical_. Include the (possibly state-specific) MS Access template
 #'   database? Default: `FALSE`
 #' @param include_spatial _logical_ or _character_. Extract spatial data layers from ZIP file?
@@ -38,6 +41,8 @@
 #' @param overwrite _logical_. Overwrite by re-extracting if directory already exists? Default:
 #'   `FALSE`
 #' @param quiet _logical_. Passed to `curl::curl_download()`.
+#' @param force _logical_. Force re-download of ZIP files even when a cached copy exists. Default:
+#'   `FALSE`
 #'
 #' @export
 #'
@@ -64,13 +69,18 @@
 #'   the overall size of the data in `exdir`. These arguments can be used in conjunction with the
 #'   `pattern` argument to fine-tune the files included in the generated snapshot database.
 #'
+#'   When `destdir` is omitted, ZIP files are stored in the persistent soilDB Web Soil Survey cache.
+#'   Cache paths are organized by fiscal year, and the cache policy also distinguishes template and
+#'   non-template archives when choosing the ZIP to reuse. Use `list_WSS_cache()` or `clear_WSS_cache()` to inspect or
+#'   clean the cache.
+#'
 #' @return _character_. Paths to downloaded ZIP files (invisibly). May not exist if `remove_zip =
 #'   TRUE`.
-#' @seealso [createSSURGO()]
+#' @seealso [createSSURGO()], [list_WSS_cache()], [clear_WSS_cache()]
 downloadSSURGO <- function(WHERE = NULL,
                            areasymbols = NULL,
-                           destdir = tempdir(),
-                           exdir = destdir,
+                           destdir = NULL,
+                           exdir = NULL,
                            include_template = FALSE,
                            include_spatial = TRUE,
                            include_tabular = TRUE,
@@ -80,7 +90,8 @@ downloadSSURGO <- function(WHERE = NULL,
                            LAPPLY.FUN.ARGS = NULL,
                            remove_zip = FALSE,
                            overwrite = FALSE,
-                           quiet = FALSE) {
+                           quiet = FALSE,
+                           force = FALSE) {
 
   db <- match.arg(toupper(db), c('SSURGO', 'STATSGO'))
 
@@ -107,35 +118,63 @@ downloadSSURGO <- function(WHERE = NULL,
   }
 
   # make WSS download URLs from areasymbol, template, date
-  urls <- .make_WSS_download_url(WHERE, include_template = include_template, db = db)
+  urls <- try({
+    .make_WSS_download_url(WHERE, include_template = include_template, db = db)
+  }, silent = TRUE)
 
   if (inherits(urls, 'try-error')) {
-    message(urls[1])
-    return(invisible(urls))
+    stop("Failed to resolve remote WSS metadata for requested SSURGO download.", call. = FALSE)
   }
 
-  if (!dir.exists(destdir)) {
-    dir.create(destdir, recursive = TRUE)
+  cache_mode <- is.null(destdir)
+  if (cache_mode) {
+    cache_root <- .wss_cache_root(create = TRUE)
+  } else {
+    if (!dir.exists(destdir)) {
+      dir.create(destdir, recursive = TRUE)
+    }
+    cache_root <- destdir
   }
 
-  # download files
-  for (i in seq_along(urls)) {
-    destfile <- file.path(destdir, basename(urls[i]))
-    if (!file.exists(destfile)) {
-      try(curl::curl_download(urls[i], destfile = destfile, quiet = quiet, mode = "wb", handle = .soilDB_curl_handle()), silent = quiet)
+  destfiles <- character(0)
+  if (length(urls) > 0) {
+    destfiles <- .wss_cache_download_urls(
+      urls = urls,
+      cache_root = cache_root,
+      cache_mode = cache_mode,
+      force = force,
+      quiet = quiet
+    )
+    if (length(destfiles) < length(urls)) {
+      stop("Failed to download one or more SSURGO ZIP files.", call. = FALSE)
     }
   }
 
-  paths <- list.files(destdir, pattern = "\\.zip$", full.names = TRUE)
-  paths2 <- paths[grep(".*wss_(SSA|gsmsoil)_(.*)_.*", paths)]
+  zip_paths <- destfiles[file.exists(destfiles)]
 
-  if  (extract) {
+  if (length(zip_paths) == 0) {
+    stop("Could not find SSURGO ZIP files in the resolved download directory.", call. = FALSE)
+  }
+
+  if (extract) {
+    if (is.null(exdir)) {
+      if (cache_mode) {
+        target_files <- if (length(zip_paths) > 0) zip_paths else destfiles
+        unique_dirs <- unique(dirname(target_files[nzchar(target_files)]))
+        if (length(unique_dirs) > 1) {
+          stop("Cached ZIP files correspond to multiple fiscal years/directories. Explicit 'exdir' must be provided for extraction.", call. = FALSE)
+        } else if (length(unique_dirs) == 1) {
+          exdir <- unique_dirs[1]
+        } else {
+          exdir <- cache_root
+        }
+      } else {
+        exdir <- destdir
+      }
+    }
+
     if (!quiet) {
       message("Extracting downloaded ZIP files...")
-    }
-
-    if (length(paths2) == 0) {
-      stop("Could not find SSURGO ZIP files in `destdir`: ", destdir, call. = FALSE)
     }
 
     if (!dir.exists(exdir)) {
@@ -146,37 +185,60 @@ downloadSSURGO <- function(WHERE = NULL,
       if (isTRUE(include_spatial) && isTRUE(include_tabular)) {
         lz <- NULL
       } else {
-        lz <- utils::unzip(paths2[i], list = TRUE)$Name
+        lz <- utils::unzip(zip_paths[i], list = TRUE)$Name
+        lz_rel <- gsub("\\\\", "/", lz)
+        names(lz) <- lz_rel
+
         # need to pre-extract mstab data to map to real column names
-        utils::unzip(paths2[i], files = lz[grepl(
+        lz_meta <- lz_rel[grepl(
           "^(mstab|mdstattabs|MetadataTable|mstabcol|mdstattabcol|MetadataColumnLookup|msidxdet|mdstatidxdet|MetadataIndexDetail)$",
-          tools::file_path_sans_ext(basename(lz))
-        )], exdir = exdir)
+          tools::file_path_sans_ext(basename(lz_rel))
+        )]
+        if (length(lz_meta) > 0) {
+          utils::unzip(zip_paths[i], files = unname(lz[lz_meta]), exdir = exdir)
+        }
 
-        # explicitly fetch internal function our namespace to support parallel workers
+        # explicitly fetch internal function in our namespace to support parallel workers
         INV.FUN <- get(".inventory_ssurgo_files", envir = asNamespace("soilDB"))
-        inv <- INV.FUN(lz, exdir = exdir, include_spatial = include_spatial, include_tabular = include_tabular)
+        inv <- INV.FUN(lz_rel, exdir = exdir, include_spatial = include_spatial, include_tabular = include_tabular)
 
-        lz <- unlist(c(inv$f.shp.sc, inv$f.txt.grp))
+        lz <- unname(lz[unlist(c(inv$f.shp.sc, inv$f.txt.grp))])
       }
-      uz <- utils::unzip(paths2[i], files = lz, exdir = exdir)
+      uz <- utils::unzip(zip_paths[i], files = lz, exdir = exdir)
       if (length(uz) == 0) {
-        message(paste('Invalid zipfile:', paths2[i]))
+        message(paste('Invalid zipfile:', zip_paths[i]))
       } else {
         if (!quiet) {
-          message("Extracted: ", paths2[i])
+          message("Extracted: ", zip_paths[i])
         }
       }
     }
 
-    res <- do.call(LAPPLY.FUN, c(list(seq_along(paths2), UNZIP.FUN), LAPPLY.FUN.ARGS))
+    res <- do.call(LAPPLY.FUN, c(list(seq_along(zip_paths), UNZIP.FUN), LAPPLY.FUN.ARGS))
 
     if (remove_zip) {
-      file.remove(paths2)
+      file.remove(zip_paths)
     }
   }
 
-  invisible(paths2)
+  invisible(unname(zip_paths))
+}
+
+.match_ssurgo_areasymbols <- function(files, areasymbols) {
+  target_symbols <- unique(toupper(areasymbols))
+  parts <- strsplit(gsub("\\\\", "/", files), "/", fixed = TRUE)
+  file_symbols <- Map(function(path_parts) {
+    basename_without_ext <- tools::file_path_sans_ext(path_parts[length(path_parts)])
+    toupper(c(
+      if (length(path_parts) > 1L) path_parts[-length(path_parts)] else character(),
+      strsplit(basename_without_ext, "_", fixed = TRUE)[[1]]
+    ))
+  }, parts)
+  available_symbols <- unique(unlist(file_symbols, use.names = FALSE))
+  list(
+    match = vapply(file_symbols, function(symbols) any(symbols %in% target_symbols), logical(1)),
+    found = intersect(target_symbols, available_symbols)
+  )
 }
 
 #' Create a database from SSURGO Exports
@@ -192,8 +254,8 @@ downloadSSURGO <- function(WHERE = NULL,
 #'
 #' @param filename _character_. Output file name (e.g. `'db.sqlite'` or `'db.gpkg'`). Only used when
 #'   `con` is not specified by the user.
-#' @param exdir  _character_. Path containing containing input SSURGO spatial (.shp) and tabular
-#'   (.txt) files, downloaded and extracted by `downloadSSURGO()` or similar.
+#' @param exdir  _character_. Path containing input SSURGO spatial (.shp) and tabular
+#'   (.txt) files, downloaded and extracted by `downloadSSURGO()` or similar. Default: `NULL` selects the most recent fiscal-year cache directory.
 #' @param conn A _DBIConnection_ object. Default is a `SQLiteConnection` used for writing .sqlite or
 #'   .gpkg files. Alternate options are any DBI connection types. When `include_spatial=TRUE`, the
 #'   sf package is used to write spatial data to the database.
@@ -222,6 +284,7 @@ downloadSSURGO <- function(WHERE = NULL,
 #' @param na.strings _character_. Passed to `data.table::fread()`. Default: `c("", "NA")`
 #' @param quote _character_. Passed to `data.table::fread()`. Default: `""`
 #' @param quiet _logical_. Suppress messages and other output from database read/write operations?
+#' @param areasymbols _character_. Optional character vector of soil survey area symbols (e.g. `c("CA067", "CA077")`) used to subset the folders/files within `exdir` to process. Default `NULL` processes all SSURGO exports found in `exdir`.
 #' @param ... Additional arguments passed to `sf::write_sf()` for writing spatial layers.
 #'
 #' @return _character_. Vector of layer/table names in `filename`.
@@ -235,7 +298,7 @@ downloadSSURGO <- function(WHERE = NULL,
 #'  createSSURGO("test.gpkg", "SSURGO_test")
 #' }
 createSSURGO <- function(filename = NULL,
-                         exdir,
+                         exdir = NULL,
                          conn = NULL,
                          pattern = NULL,
                          include_spatial = TRUE,
@@ -249,20 +312,61 @@ createSSURGO <- function(filename = NULL,
                          na.strings = c("", "NA"),
                          quote = "",
                          quiet = TRUE,
+                         areasymbols = NULL,
                          ...) {
 
   if ((missing(filename) || length(filename) == 0) && missing(conn)) {
     stop("`filename` should be a path to a .gpkg or .sqlite file to create or append to, or a DBIConnection should be provided via `conn`.")
   }
-  
-  if (!dir.exists(exdir) ||
-      length(list.dirs(exdir)) == 0 || 
-      length(list.files(exdir, recursive = TRUE)) == 0) {
+
+  # when exdir is not specified, take most recent FY cache dir
+  if (is.null(exdir)) {
+
+    wss_cache <- .wss_cache_root(create = FALSE)
+    wss_cache_dirs <- if (dir.exists(wss_cache)) list.dirs(wss_cache, recursive = FALSE) else character(0)
+
+    exdir <- sort(wss_cache_dirs[grepl("^FY\\d{2}$", basename(wss_cache_dirs))], decreasing = TRUE)
+
+    if (length(exdir) >= 1) {
+      exdir <- exdir[1]
+    } else {
+      stop(
+        "No WSS cache FY directories found in cache root. Specify 'exdir' directly or run downloadSSURGO() first.",
+        call. = FALSE
+      )
+    }
+  }
+
+  if (!quiet) {
+    message("Scanning SSURGO extraction directory ", exdir, "...")
+  }
+
+  if (!dir.exists(exdir)) {
     stop(sprintf("SSURGO extraction directory (%s) appears to be empty, check that the path is correct.\n\nIf you want to download new data, run `downloadSSURGO(destdir=%s, ...)` first.",
                  exdir, shQuote(exdir)),
          call. = FALSE)
   }
-  
+
+  f_all <- list.files(exdir, recursive = TRUE, full.names = TRUE)
+  if (length(f_all) == 0) {
+    stop(sprintf("SSURGO extraction directory (%s) appears to be empty, check that the path is correct.\n\nIf you want to download new data, run `downloadSSURGO(destdir=%s, ...)` first.",
+                 exdir, shQuote(exdir)),
+         call. = FALSE)
+  }
+
+  file_extensions <- tolower(tools::file_ext(f_all))
+  has_zips <- any(file_extensions == "zip")
+  has_data <- any(file_extensions %in% c("shp", "txt"))
+  if (has_zips && !has_data) {
+    stop(
+      sprintf(
+        "SSURGO extraction directory (%s) contains ZIP files but no extracted SSURGO folders. Run 'downloadSSURGO(..., extract = TRUE)' or extract archives before calling createSSURGO().",
+        shQuote(exdir)
+      ),
+      call. = FALSE
+    )
+  }
+
   if (missing(conn) || is.null(conn)) {
     # delete existing file if overwrite=TRUE; does _not_ apply to DBIConnection
     if (file.exists(filename)) {
@@ -296,18 +400,31 @@ createSSURGO <- function(filename = NULL,
   }
 
   layer_names <- .get_spatial_layer_names()
-  f <- list.files(exdir, recursive = TRUE, full.names = TRUE)
+  f <- f_all
   fdx <- rep(TRUE, length(f))
 
-  if (!is.null(pattern)) {
-    fdx <- grepl(pattern, f)
+  if (!is.null(areasymbols)) {
+    areasymbols <- unique(toupper(areasymbols))
+    ssa_matches <- .match_ssurgo_areasymbols(f, areasymbols)
+
+    # Check if any requested areasymbols were completely missing
+    missing_symbols <- setdiff(areasymbols, ssa_matches$found)
+    if (length(missing_symbols) > 0) {
+      warning("The following 'areasymbols' were not found in 'exdir': ",
+              paste0(missing_symbols, collapse = ", "), call. = FALSE)
+    }
+    fdx <- fdx & ssa_matches$match
   }
-  
-  
+
+  if (!is.null(pattern)) {
+    fdx <- fdx & grepl(pattern, f)
+  }
+
+
   if (!quiet) {
-    message("Creating SSURGO database from ", exdir, " using pattern ", 
+    message("Creating SSURGO database from ", exdir, " using pattern ",
              ifelse(is.null(pattern), "*", pattern), "...")
-  
+
     message(
       "  Output:  ", filename, "\n",
       "  Spatial: ", paste0(include_spatial, collapse = ", "), "\n",
@@ -315,12 +432,14 @@ createSSURGO <- function(filename = NULL,
     )
   }
   
+  f_inventory <- f[fdx]
+
   # initialize timing records for this run (collected locally and attached to result)
   write_timings <- list()
   zero_time <- Sys.time()
   
   inv <- .inventory_ssurgo_files(
-    files = f[fdx],
+    files = f_inventory,
     layer_names = layer_names,
     include_spatial = include_spatial,
     include_tabular = include_tabular,
@@ -333,8 +452,8 @@ createSSURGO <- function(filename = NULL,
   # inventory method converts partial sets (character vectors) to logical for include_* args
   include_spatial <- inv$include_spatial
   include_tabular <- inv$include_tabular
-  
-  
+
+
   if ((missing(conn) || is.null(conn)) && !IS_GPKG) {
 
     if (!requireNamespace("RSQLite")) {
@@ -350,7 +469,16 @@ createSSURGO <- function(filename = NULL,
     on.exit(DBI::dbDisconnect(conn))
   }
 
-  if (nrow(inv$shp.grp) >= 1 && ncol(inv$shp.grp) == 3 && include_spatial) {
+  if (is.null(inv$shp.grp) && is.null(inv$mstabcn)) {
+    stop(
+      "Extraction directory `exdir` ",
+      shQuote(exdir),
+      " does not appear to contain SSURGO spatial data or tabular data",
+      call. = FALSE
+    )
+  }
+
+  if (!is.null(inv$shp.grp) && nrow(inv$shp.grp) >= 1 && ncol(inv$shp.grp) == 3 && include_spatial) {
 
     f.shp.grp <- split(inv$f.shp,
                        list(feature = inv$shp.grp[, 1],
@@ -441,14 +569,14 @@ createSSURGO <- function(filename = NULL,
           } else {
             rec <- .st_write_sf_conn(shp, conn, lnm, j, overwrite)
           }
-          
+
           if (!is.null(rec)) {
             write_timings[[length(write_timings) + 1L]] <- rec
           }
-        } 
-      } 
-    } 
-  } 
+        }
+      }
+    }
+  }
 
   if (IS_GPKG) {
 
@@ -464,7 +592,7 @@ createSSURGO <- function(filename = NULL,
     on.exit(DBI::dbDisconnect(conn))
   }
 
-  if (include_tabular) {
+  if (!is.null(inv$mstabcn) && include_tabular) {
 
     if (length(inv$mstabcn) >= 1) {
       mstabcol <- read.delim(inv$mstabcn[1], sep = "|", stringsAsFactors = FALSE, header = header)
@@ -486,13 +614,13 @@ createSSURGO <- function(filename = NULL,
     } else {
       .ssurgo_type_map <- NULL
     }
-    
+
     # environment variable (batching is helpful, but larger batch sizes not inherently faster)
     batch_env <- Sys.getenv("R_SOILDB_SSURGO_TABLE_WRITE_BATCH_SIZE", unset = "25")
     if (nzchar(batch_env)) {
       batch_size <- suppressWarnings(as.integer(batch_env))
     }
-    
+
     if (is.na(batch_size) || batch_size <= 0L) {
       warning(
         "Invalid R_SOILDB_SSURGO_TABLE_WRITE_BATCH_SIZE='", batch_env, "', using no batching"
@@ -501,6 +629,8 @@ createSSURGO <- function(filename = NULL,
     }
 
     lapply(names(inv$f.txt.grp), function(x) {
+
+      table_initialized <- FALSE
 
       if (!is.null(mstabcol)) {
         newnames <- mstabcol[[3]][mstabcol[[1]] == inv$mstab_lut[x]]
@@ -514,15 +644,15 @@ createSSURGO <- function(filename = NULL,
       # process files in transaction batches
       files <- inv$f.txt.grp[[x]]
       files_n <- length(files)
-      
+
       if (files_n > 0) {
-        
+
         batch_n <- as.integer(batch_size)
-        
+
         for (start_idx in seq(1, files_n, by = batch_n)) {
-          
+
           end_idx <- min(start_idx + batch_n - 1L, files_n)
-          
+
           tryCatch({
             DBI::dbBegin(conn)
             for (i in seq(start_idx, end_idx)) {
@@ -555,9 +685,9 @@ createSSURGO <- function(filename = NULL,
                 append_arg <- FALSE
                 overwrite_arg <- overwrite
 
-                if (!table_exists) {
+                if (!table_exists || !isTRUE(table_initialized)) {
                   append_arg <- FALSE
-                  overwrite_arg <- FALSE
+                  overwrite_arg <- table_exists || overwrite
                 } else if (isTRUE(append)) {
                   append_arg <- TRUE
                   overwrite_arg <- FALSE
@@ -581,6 +711,7 @@ createSSURGO <- function(filename = NULL,
 
                 if (!is.null(rec)) {
                   write_timings[[length(write_timings) + 1L]] <- rec
+                  table_initialized <- TRUE
                 }
               }, silent = quiet)
             }
@@ -641,7 +772,7 @@ createSSURGO <- function(filename = NULL,
     })
   }
   complete_time <- Sys.time()
-  
+
   if (!quiet) {
     message("Database creation complete in ", format(signif(difftime(complete_time, zero_time, units = "auto"), 3)), ".")
   }
@@ -809,7 +940,7 @@ createSSURGO <- function(filename = NULL,
     showProgress = FALSE,
     data.table = FALSE
   ))
-  
+
   if (length(dt) == 1) {
     if (grepl("soil_metadata", file)) {
       y <- data.frame(
@@ -825,7 +956,7 @@ createSSURGO <- function(filename = NULL,
       return(y)
     }
   }
-  
+
   y <- dt
   if (!is.null(mstabcol) && !header && !is.null(newnames) && length(y) > 0) {
     colnames(y) <- newnames
@@ -834,18 +965,18 @@ createSSURGO <- function(filename = NULL,
     return(try(stop("failed to read"), silent = TRUE))
   }
   y <- .coerce_ssurgo_types(y, tablename, mstabcol, type_map)
-  
+
   # cointerp is generally large; filter early by ruledepth by defaykt
   if (!is.null(maxruledepth) &&
       tablename == "cointerp" &&
       "ruledepth" %in% colnames(y)) {
     y <- y[y$ruledepth <= maxruledepth, , drop = FALSE]
   }
-  
+
   if ("musym" %in% colnames(y)) {
     y$musym <- as.character(y$musym)
   }
-  
+
   y
 }
 
@@ -856,7 +987,7 @@ createSSURGO <- function(filename = NULL,
                                  append = FALSE,
                                  file = NULL,
                                  quiet = TRUE) {
-  
+
  # attempt to extract SSA identifier from file path if present
  ssa <- NA_character_
  if (!is.null(file) && nzchar(file)) {
@@ -869,7 +1000,7 @@ createSSURGO <- function(filename = NULL,
 
  # environment variable (at this scale chunk size mostly negligible)
  chunk_size <- as.integer(Sys.getenv("R_SOILDB_SSURGO_ROW_CHUNK_SIZE", "100000"))
- 
+
  if (is.na(chunk_size) || chunk_size <= 0L) {
    warning(
      "Invalid R_SOILDB_SSURGO_ROW_CHUNK_SIZE='", chunk_size, "', using 100,000 row batches"
@@ -917,7 +1048,7 @@ createSSURGO <- function(filename = NULL,
        )
      )
    }
-   
+
    flush.console()
 
    record <- list(
@@ -942,11 +1073,11 @@ createSSURGO <- function(filename = NULL,
          conditionMessage(e)
        )
      )
-   }   
+   }
    flush.console()
    stop(e)
  })
- 
+
  res
 }
 
