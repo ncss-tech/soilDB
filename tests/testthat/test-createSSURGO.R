@@ -282,6 +282,14 @@ test_that(".resolve_ssa_crs resolves CRS correctly by region prefix and grid_ali
   expect_equal(nlcd_crs, "+proj=aea +lat_0=23 +lon_0=-96 +lat_1=29.5 +lat_2=45.5 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs")
 })
 
+test_that("named grid alignments resolve standard resolutions", {
+  expect_equal(.resolve_grid_spec("legacy_gssurgo")$resolution_m, 10)
+  expect_equal(.resolve_grid_spec("legacy_gssurgo_30m")$resolution_m, 30)
+  expect_equal(.resolve_grid_spec("target_aligned_300m")$resolution_m, 300)
+  expect_equal(.resolve_grid_spec("nlcd_900m")$resolution_m, 900)
+  expect_equal(.resolve_grid_spec("legacy_gssurgo_30m")$alignment, "legacy_gssurgo")
+})
+
 # .create_ssa_raster_template with template = NULL and default legacy_gssurgo alignment
 test_that(".create_ssa_raster_template with default legacy_gssurgo aligns to Peaslee 10k+5 grid and expands outward", {
   skip_on_cran()
@@ -526,10 +534,12 @@ test_that(".write_raster_with_cache writes INT4U datatype and COG format", {
     raster_obj = r,
     areasymbol = "CA067",
     cache_root = temp_dir,
+    resolution_m = 30,
     quiet = TRUE
   )
 
   expect_true(file.exists(file_path))
+  expect_match(basename(file_path), "^MUKEY_30m_CA067\\.tif$")
 
   read_r <- terra::rast(file_path)
   expect_equal(terra::datatype(read_r), "INT4U")
