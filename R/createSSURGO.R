@@ -1495,6 +1495,28 @@ createSSURGO <- function(filename = NULL,
   alignment <- .normalize_grid_alignment(grid_alignment)
   list(alignment = alignment, resolution_m = resolution_m)
 }
+
+.grid_origin <- function(grid_alignment, resolution_m) {
+  if (grid_alignment == "nlcd") {
+    c(-2415585, 3314805)
+  } else if (grid_alignment == "legacy_gssurgo") {
+    c(resolution_m / 2, resolution_m / 2)
+  } else {
+    c(0, 0)
+  }
+}
+
+.write_cog_raster <- function(raster_obj, filename) {
+  terra::writeRaster(
+    raster_obj,
+    filename,
+    overwrite = TRUE,
+    datatype = "INT4U",
+    NAflag = 0,
+    filetype = "COG",
+    gdal = c("COMPRESS=DEFLATE", "TILED=YES", "BIGTIFF=IF_SAFER")
+  )
+}
 #' Resolve Standard CRS for Soil Survey Area
 #'
 #' @param areasymbol Soil survey area symbol or state code (e.g. "CA067", "AK650", "HI")
@@ -1649,13 +1671,7 @@ createSSURGO <- function(filename = NULL,
     ymin <- extent_bbox[["ymin"]] - buffer_m
     ymax <- extent_bbox[["ymax"]] + buffer_m
 
-    origin <- if (grid_alignment == "nlcd") {
-      c(-2415585, 3314805)
-    } else if (grid_alignment == "legacy_gssurgo") {
-      c(resolution_m / 2, resolution_m / 2)
-    } else {
-      c(0.0, 0.0)
-    }
+    origin <- .grid_origin(grid_alignment, resolution_m)
 
     snapped <- .snap_extent_to_grid(
       xmin, xmax, ymin, ymax,
@@ -1915,15 +1931,7 @@ createSSURGO <- function(filename = NULL,
     }
 
     # Write raster to primary cache location
-    terra::writeRaster(
-      raster_obj,
-      cache_path,
-      overwrite = TRUE,
-      datatype = "INT4U",
-      NAflag = 0,
-      filetype = "COG",
-      gdal = c("COMPRESS=DEFLATE", "TILED=YES", "BIGTIFF=IF_SAFER")
-    )
+    .write_cog_raster(raster_obj, cache_path)
 
     if (!isTRUE(quiet)) {
       message("Wrote raster to cache: ", cache_path)
@@ -1938,15 +1946,7 @@ createSSURGO <- function(filename = NULL,
     tmppath <- file.path(tmpdir, filename)
 
     tryCatch({
-      terra::writeRaster(
-        raster_obj,
-        tmppath,
-        overwrite = TRUE,
-        datatype = "INT4U",
-        NAflag = 0,
-        filetype = "COG",
-        gdal = c("COMPRESS=DEFLATE", "TILED=YES", "BIGTIFF=IF_SAFER")
-      )
+      .write_cog_raster(raster_obj, tmppath)
 
       warning("Cache directory unavailable; raster written to temporary directory: ",
               tmppath, call. = FALSE)
@@ -2058,13 +2058,7 @@ createSSURGO <- function(filename = NULL,
         if (inherits(template, "SpatRaster")) {
           snapped <- c(xmin = xmin_val, xmax = xmax_val, ymin = ymin_val, ymax = ymax_val)
         } else {
-          origin <- if (grid_alignment == "nlcd") {
-            c(-2415585, 3314805)
-          } else if (grid_alignment == "legacy_gssurgo") {
-            c(resolution_m / 2, resolution_m / 2)
-          } else {
-            c(0.0, 0.0)
-          }
+          origin <- .grid_origin(grid_alignment, resolution_m)
 
           snapped <- .snap_extent_to_grid(
             xmin_val, xmax_val, ymin_val, ymax_val,
@@ -2080,15 +2074,7 @@ createSSURGO <- function(filename = NULL,
     }
 
     # Write final raster output as COG GeoTIFF
-    terra::writeRaster(
-      out_r,
-      target_file,
-      overwrite = TRUE,
-      datatype = "INT4U",
-      NAflag = 0,
-      filetype = "COG",
-      gdal = c("COMPRESS=DEFLATE", "TILED=YES", "BIGTIFF=IF_SAFER")
-    )
+    .write_cog_raster(out_r, target_file)
 
     if (!isTRUE(quiet)) {
       message("Created final raster output: ", target_file)
