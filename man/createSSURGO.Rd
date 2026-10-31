@@ -131,7 +131,8 @@ When \code{include_raster=TRUE}, standard named grids are available at 10m, 30m,
 modes are intentional: \code{legacy_gssurgo} matches official USDA-NRCS products,
 \code{target_aligned} follows zero-origin GDAL-style alignment, and \code{nlcd} uses the
 canonical WGS84 Albers origin. These choices support interoperability with federal raster
-products including NLCD, CDL, USGS 3DEP, and gNATSGO.
+products including NLCD, CDL, USGS 3DEP, and gNATSGO. Raster output uses
+\code{NAflag = 0}; MUKEY zero is reserved as NoData.
 }
 \examples{
 \dontrun{
