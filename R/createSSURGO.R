@@ -143,8 +143,7 @@ downloadSSURGO <- function(WHERE = NULL,
       cache_root = cache_root,
       cache_mode = cache_mode,
       force = force,
-      quiet = quiet,
-      resolution_m = resolution_m
+      quiet = quiet
     )
     if (length(destfiles) < length(urls)) {
       stop("Failed to download one or more SSURGO ZIP files.", call. = FALSE)

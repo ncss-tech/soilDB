@@ -25,7 +25,10 @@ createSSURGO(
   fiscal_year = NULL,
   template = NULL,
   touches = FALSE,
-  grid_alignment = c("legacy_gssurgo", "legacy", "target_aligned", "nlcd"),
+  grid_alignment = c("legacy_gssurgo", "legacy", "target_aligned", "nlcd",
+    "legacy_gssurgo_30m", "legacy_gssurgo_300m", "legacy_gssurgo_900m",
+    "target_aligned_30m", "target_aligned_300m", "target_aligned_900m",
+    "nlcd_30m", "nlcd_300m", "nlcd_900m"),
   quiet = TRUE,
   areasymbols = NULL,
   ...
