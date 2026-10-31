@@ -444,8 +444,11 @@ createSSURGO <- function(filename = NULL,
     }
   }
 
-  if (!IS_DUCKDB && !requireNamespace("sf")) {
-    stop("package `sf` is required to write spatial datasets to DBI data sources", call. = FALSE)
+  if ((!IS_DUCKDB && isTRUE(include_spatial)) ||
+      isTRUE(include_raster)) {
+    if (!requireNamespace("sf", quietly = TRUE)) {
+      stop("package `sf` is required for spatial output or rasterization", call. = FALSE)
+    }
   }
 
   layer_names <- .get_spatial_layer_names()
@@ -717,6 +720,7 @@ createSSURGO <- function(filename = NULL,
       target_bbox <- .compute_ssa_vector_bbox(
         mu_files = mu_files,
         ssa_list = ssa_list,
+        template = template,
         grid_alignment = grid_alignment,
         resolution_m = resolution_m
       )
@@ -734,7 +738,9 @@ createSSURGO <- function(filename = NULL,
         conn = conn,
         exdir = exdir,
         target_bbox = target_bbox,
+        template = template,
         grid_alignment = grid_alignment,
+        resolution_m = resolution_m,
         overwrite = overwrite,
         quiet = quiet
       )
@@ -1519,6 +1525,7 @@ createSSURGO <- function(filename = NULL,
 #' @noRd
 #' @keywords internal
 .compute_ssa_vector_bbox <- function(mu_files, ssa_list,
+                                     template = NULL,
                                      grid_alignment = c("legacy_gssurgo", "legacy", "target_aligned", "nlcd"),
                                      resolution_m = 10) {
   stopifnot(requireNamespace("sf", quietly = TRUE))
@@ -1533,7 +1540,11 @@ createSSURGO <- function(filename = NULL,
     return(NULL)
   }
 
-  first_crs <- .resolve_ssa_crs(ssa_list[[1]]$areasymbol, grid_alignment = grid_alignment)
+  first_crs <- if (inherits(template, "SpatRaster")) {
+    terra::crs(template)
+  } else {
+    .resolve_ssa_crs(ssa_list[[1]]$areasymbol, grid_alignment = grid_alignment)
+  }
   bounds <- lapply(seq_along(mu_files), function(i) {
     mu <- sf::read_sf(mu_files[[i]], quiet = TRUE)
     if (nrow(mu) == 0) {
@@ -1552,7 +1563,9 @@ createSSURGO <- function(filename = NULL,
   ymin <- min(vapply(bounds, function(x) x[["ymin"]], numeric(1)))
   ymax <- max(vapply(bounds, function(x) x[["ymax"]], numeric(1)))
 
-  origin <- if (grid_alignment == "nlcd") {
+  origin <- if (inherits(template, "SpatRaster")) {
+    terra::origin(template)
+  } else if (grid_alignment == "nlcd") {
     c(-2415585, 3314805)
   } else if (grid_alignment == "legacy_gssurgo") {
     c(resolution_m / 2, resolution_m / 2)
@@ -1644,7 +1657,11 @@ createSSURGO <- function(filename = NULL,
       c(0.0, 0.0)
     }
 
-    snapped <- .snap_extent_to_grid(xmin, xmax, ymin, ymax, origin = origin, resolution = c(resolution_m, resolution_m))
+    snapped <- .snap_extent_to_grid(
+      xmin, xmax, ymin, ymax,
+      origin = origin,
+      resolution = c(resolution_m, resolution_m)
+    )
     xmin_snap <- snapped[["xmin"]]
     xmax_snap <- snapped[["xmax"]]
     ymin_snap <- snapped[["ymin"]]
@@ -1954,6 +1971,7 @@ createSSURGO <- function(filename = NULL,
 #' @param conn DBIConnection (used to infer dbname if filename is NULL).
 #' @param exdir Directory containing SSURGO files.
 #' @param target_bbox Optional numeric bounding box or SpatExtent to crop the final output to.
+#' @param template Optional SpatRaster template defining the target grid.
 #' @param grid_alignment Grid alignment mode: `"legacy_gssurgo"` (default), `"target_aligned"`, or `"nlcd"`.
 #' @param resolution_m Target raster resolution in meters (default: 10).
 #' @param overwrite Overwrite existing output raster?
@@ -1967,6 +1985,7 @@ createSSURGO <- function(filename = NULL,
                                        conn = NULL,
                                        exdir = NULL,
                                        target_bbox = NULL,
+                                       template = NULL,
                                        grid_alignment = c("legacy_gssurgo", "legacy", "target_aligned", "nlcd"),
                                        resolution_m = 10,
                                        overwrite = FALSE,
@@ -2036,17 +2055,23 @@ createSSURGO <- function(filename = NULL,
         xmax_val <- if ("xmax" %in% tb_names) target_bbox[["xmax"]] else target_bbox[3]
         ymax_val <- if ("ymax" %in% tb_names) target_bbox[["ymax"]] else target_bbox[4]
 
-        origin <- if (grid_alignment == "nlcd") {
-          c(-2415585, 3314805)
-        } else if (grid_alignment == "legacy_gssurgo") {
-          c(resolution_m / 2, resolution_m / 2)
+        if (inherits(template, "SpatRaster")) {
+          snapped <- c(xmin = xmin_val, xmax = xmax_val, ymin = ymin_val, ymax = ymax_val)
         } else {
-          c(0.0, 0.0)
-        }
+          origin <- if (grid_alignment == "nlcd") {
+            c(-2415585, 3314805)
+          } else if (grid_alignment == "legacy_gssurgo") {
+            c(resolution_m / 2, resolution_m / 2)
+          } else {
+            c(0.0, 0.0)
+          }
 
-        snapped <- .snap_extent_to_grid(xmin_val, xmax_val, ymin_val, ymax_val,
-                                        origin = origin,
-                                        resolution = c(resolution_m, resolution_m))
+          snapped <- .snap_extent_to_grid(
+            xmin_val, xmax_val, ymin_val, ymax_val,
+            origin = origin,
+            resolution = c(resolution_m, resolution_m)
+          )
+        }
         crop_ext <- terra::ext(snapped[["xmin"]], snapped[["xmax"]], snapped[["ymin"]], snapped[["ymax"]])
         out_r <- terra::crop(out_r, crop_ext)
       } else if (inherits(target_bbox, "SpatExtent")) {
