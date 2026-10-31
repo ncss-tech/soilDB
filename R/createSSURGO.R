@@ -1464,6 +1464,7 @@ createSSURGO <- function(filename = NULL,
 #' @noRd
 #' @keywords internal
 .normalize_grid_alignment <- function(grid_alignment) {
+  grid_alignment <- grid_alignment[1]
   grid_alignment <- match.arg(
     grid_alignment,
     c("legacy_gssurgo", "legacy", "target_aligned", "nlcd",
@@ -1479,6 +1480,7 @@ createSSURGO <- function(filename = NULL,
 }
 
 .resolve_grid_spec <- function(grid_alignment) {
+  grid_alignment <- grid_alignment[1]
   grid_alignment <- match.arg(
     grid_alignment,
     c("legacy_gssurgo", "legacy", "target_aligned", "nlcd",
