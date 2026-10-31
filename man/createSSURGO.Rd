@@ -55,7 +55,7 @@ containing table names, only that set are written to file. e.g. \code{include_ta
 descriptions are stored in table \code{"featdesc"} and metadata for each soil survey area are stored
 in \code{"soil_metadata"} tables.}
 
-\item{include_raster}{\emph{logical}. Generate 10m MUKEY GeoTIFF rasters for each SSA?
+\item{include_raster}{\emph{logical}. Generate MUKEY GeoTIFF rasters for each SSA?
 Default: \code{FALSE} does not create raster outputs. Set to \code{TRUE} to create georeferenced rasters cached in
 \code{soilDB_user_dir("cache", "WSS", ...)} and output a combined/copied raster matching \code{filename}.
 Requires \code{terra} package.}
@@ -97,7 +97,12 @@ EPSG:32161 for PR/VI, EPSG:4326 for Pacific Islands) with bounds snapped accordi
 \item{touches}{\emph{logical}. If \code{TRUE}, all cells touched by polygon boundaries are rasterized. Default
 \code{FALSE} rasterizes only cells whose centroids fall within polygons.}
 
-\item{grid_alignment}{\emph{character}. Grid alignment mode when \code{template = NULL}. One of \code{"legacy_gssurgo"} (or \code{"legacy"}, default, 5m offset matching official USDA-NRCS gSSURGO/gNATSGO/RSS products with \code{(coord - 5) \%\% 10 == 0}), \code{"target_aligned"} (0m offset standard GDAL -tap alignment with \code{coord \%\% 10 == 0}), or \code{"nlcd"} (canonical NLCD WGS84 Albers Equal Area CRS with origin anchor \verb{(-2415585, 3314805)}).}
+\item{grid_alignment}{\emph{character}. Grid alignment mode when \code{template = NULL}. Use
+\code{"legacy_gssurgo"} (or \code{"legacy"}, default), \code{"target_aligned"}, or \code{"nlcd"}
+for 10m output. Append \code{"_30m"}, \code{"_300m"}, or \code{"_900m"} to select those
+standard grids. The legacy mode matches official USDA-NRCS products, target-aligned uses a
+zero-origin GDAL-style grid, and NLCD uses the canonical WGS84 Albers origin anchor
+\verb{(-2415585, 3314805)}. A supplied template takes precedence.}
 
 \item{quiet}{\emph{logical}. Suppress messages and other output from database read/write operations?}
 
@@ -121,10 +126,12 @@ In theory any other DBI-compatible data source can be used for output. See \code
 you encounter issues using specific DBI connection types, please report in the soilDB issue
 tracker.
 
-When \code{include_raster=TRUE}, the default coordinate reference systems (CRS) and 10m grid
-alignments are designed for seamless interoperability with standard federal rasters including
-NLCD (National Land Cover Database), CDL (Cropland Data Layer), USGS 3DEP elevation products,
-and gNATSGO 10m grids.
+When \code{include_raster=TRUE}, standard named grids are available at 10m, 30m, 300m, and
+900m. Custom \code{SpatRaster} templates can be supplied for arbitrary grids. The alignment
+modes are intentional: \code{legacy_gssurgo} matches official USDA-NRCS products,
+\code{target_aligned} follows zero-origin GDAL-style alignment, and \code{nlcd} uses the
+canonical WGS84 Albers origin. These choices support interoperability with federal raster
+products including NLCD, CDL, USGS 3DEP, and gNATSGO.
 }
 \examples{
 \dontrun{

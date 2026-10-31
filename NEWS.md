@@ -1,4 +1,7 @@
 # soilDB 2.9.3 (2026-09-17) 
+ - `createSSURGO()` now supports named 10m, 30m, 300m, and 900m MUKEY raster grids,
+   arbitrary `SpatRaster` templates, and documented `legacy_gssurgo`, `target_aligned`,
+   and `nlcd` alignment modes. Cached raster filenames include the selected resolution.
  - `createSSURGO()` fix bug in logical column handling (introduced in 2.9.2) due to metadata column type enforcement (#483)
  - Fix `structure()` usage of special argument names (.Label, .Names) in test fixtures for R-devel (#484)
  - `downloadSSURGO()` now uses a persistent soilDB Web Soil Survey ZIP cache when `destdir` is omitted, checks `sacatalog.saverest` for freshness, supports `force = TRUE` to bypass cache reuse, and falls back to cached ZIPs with a warning when the remote freshness check is unavailable. Added `list_WSS_cache()` and `clear_WSS_cache()` for cache inventory and manual cleanup.

@@ -143,7 +143,8 @@ downloadSSURGO <- function(WHERE = NULL,
       cache_root = cache_root,
       cache_mode = cache_mode,
       force = force,
-      quiet = quiet
+      quiet = quiet,
+      resolution_m = resolution_m
     )
     if (length(destfiles) < length(urls)) {
       stop("Failed to download one or more SSURGO ZIP files.", call. = FALSE)
@@ -252,7 +253,7 @@ downloadSSURGO <- function(WHERE = NULL,
 #' you encounter issues using specific DBI connection types, please report in the soilDB issue
 #' tracker.
 #'
-#' When `include_raster=TRUE`, the default coordinate reference systems (CRS) and 10m grid
+#' When `include_raster=TRUE`, the default coordinate reference systems (CRS) and standard grids
 #' alignments are designed for seamless interoperability with standard federal rasters including
 #' NLCD (National Land Cover Database), CDL (Cropland Data Layer), USGS 3DEP elevation products,
 #' and gNATSGO 10m grids.
@@ -276,7 +277,7 @@ downloadSSURGO <- function(WHERE = NULL,
 #'   "muaggatt")` writes only the `mapunit` and `muaggatt` tables. Note that special feature
 #'   descriptions are stored in table `"featdesc"` and metadata for each soil survey area are stored
 #'   in `"soil_metadata"` tables.
-#' @param include_raster _logical_. Generate 10m MUKEY GeoTIFF rasters for each SSA?
+#' @param include_raster _logical_. Generate MUKEY GeoTIFF rasters for each SSA?
 #'   Default: `FALSE` does not create raster outputs. Set to `TRUE` to create georeferenced rasters cached in
 #'   `soilDB_user_dir("cache", "WSS", ...)` and output a combined/copied raster matching `filename`.
 #'   Requires `terra` package.
@@ -304,7 +305,13 @@ downloadSSURGO <- function(WHERE = NULL,
 #'   EPSG:32161 for PR/VI, EPSG:4326 for Pacific Islands) with bounds snapped according to `grid_alignment`.
 #' @param touches _logical_. If `TRUE`, all cells touched by polygon boundaries are rasterized. Default
 #'   `FALSE` rasterizes only cells whose centroids fall within polygons.
-#' @param grid_alignment _character_. Grid alignment mode when `template = NULL`. One of `"legacy_gssurgo"` (or `"legacy"`, default, 5m offset matching official USDA-NRCS gSSURGO/gNATSGO/RSS products with `(coord - 5) %% 10 == 0`), `"target_aligned"` (0m offset standard GDAL -tap alignment with `coord %% 10 == 0`), or `"nlcd"` (canonical NLCD WGS84 Albers Equal Area CRS with origin anchor `(-2415585, 3314805)`).
+#' @param grid_alignment _character_. Grid alignment mode when `template = NULL`. Use
+#'   `"legacy_gssurgo"` (or `"legacy"`, default), `"target_aligned"`, or `"nlcd"` for
+#'   10m output. Append `"_30m"`, `"_300m"`, or `"_900m"` to any mode to select
+#'   that standard grid, for example `"legacy_gssurgo_30m"` or `"target_aligned_900m"`.
+#'   The legacy mode uses a half-cell origin matching official USDA-NRCS products;
+#'   target-aligned uses a zero origin; and NLCD uses the canonical WGS84 Albers
+#'   origin anchor `(-2415585, 3314805)`. A supplied `template` takes precedence.
 #' @param quiet _logical_. Suppress messages and other output from database read/write operations?
 #' @param areasymbols _character_. Optional character vector of soil survey area symbols (e.g. `c("CA067", "CA077")`) used to subset the folders/files within `exdir` to process. Default `NULL` processes all SSURGO exports found in `exdir`.
 #' @param ... Additional arguments passed to `sf::write_sf()` for writing spatial layers.
@@ -339,12 +346,17 @@ createSSURGO <- function(filename = NULL,
                          fiscal_year = NULL,
                          template = NULL,
                          touches = FALSE,
-                         grid_alignment = c("legacy_gssurgo", "legacy", "target_aligned", "nlcd"),
+                         grid_alignment = c("legacy_gssurgo", "legacy", "target_aligned", "nlcd",
+                                            "legacy_gssurgo_30m", "legacy_gssurgo_300m", "legacy_gssurgo_900m",
+                                            "target_aligned_30m", "target_aligned_300m", "target_aligned_900m",
+                                            "nlcd_30m", "nlcd_300m", "nlcd_900m"),
                          quiet = TRUE,
                          areasymbols = NULL,
                          ...) {
 
-  grid_alignment <- .normalize_grid_alignment(grid_alignment)
+  grid_spec <- .resolve_grid_spec(grid_alignment)
+  grid_alignment <- grid_spec$alignment
+  resolution_m <- grid_spec$resolution_m
 
   if ((missing(filename) || length(filename) == 0) && missing(conn)) {
     stop("`filename` should be a path to a .gpkg or .sqlite file to create or append to, or a DBIConnection should be provided via `conn`.")
@@ -675,7 +687,8 @@ createSSURGO <- function(filename = NULL,
           template = template,
           touches = touches,
           grid_alignment = grid_alignment,
-          quiet = quiet
+          quiet = quiet,
+          resolution_m = resolution_m
         )
 
         # Write raster to cache if rasterization succeeded
@@ -685,6 +698,7 @@ createSSURGO <- function(filename = NULL,
             areasymbol = areasymbol,
             fiscal_year = fiscal_year_arg,
             cache_root = NULL,
+            resolution_m = resolution_m,
             quiet = quiet
           )
 
@@ -704,7 +718,7 @@ createSSURGO <- function(filename = NULL,
         mu_files = mu_files,
         ssa_list = ssa_list,
         grid_alignment = grid_alignment,
-        resolution_m = 10
+        resolution_m = resolution_m
       )
 
       # Execute rasterization in parallel or sequential mode
@@ -1446,12 +1460,34 @@ createSSURGO <- function(filename = NULL,
 .normalize_grid_alignment <- function(grid_alignment) {
   grid_alignment <- match.arg(
     grid_alignment,
-    c("legacy_gssurgo", "legacy", "target_aligned", "nlcd")
+    c("legacy_gssurgo", "legacy", "target_aligned", "nlcd",
+      "legacy_gssurgo_30m", "legacy_gssurgo_300m", "legacy_gssurgo_900m",
+      "target_aligned_30m", "target_aligned_300m", "target_aligned_900m",
+      "nlcd_30m", "nlcd_300m", "nlcd_900m")
   )
+  grid_alignment <- sub("_(30|300|900)m$", "", grid_alignment)
   if (grid_alignment == "legacy") {
     grid_alignment <- "legacy_gssurgo"
   }
   grid_alignment
+}
+
+.resolve_grid_spec <- function(grid_alignment) {
+  grid_alignment <- match.arg(
+    grid_alignment,
+    c("legacy_gssurgo", "legacy", "target_aligned", "nlcd",
+      "legacy_gssurgo_30m", "legacy_gssurgo_300m", "legacy_gssurgo_900m",
+      "target_aligned_30m", "target_aligned_300m", "target_aligned_900m",
+      "nlcd_30m", "nlcd_300m", "nlcd_900m")
+  )
+  resolution_match <- regexpr("(30|300|900)m$", grid_alignment)
+  resolution_m <- if (resolution_match > 0) {
+    as.numeric(sub(".*_(30|300|900)m$", "\\1", grid_alignment))
+  } else {
+    10
+  }
+  alignment <- .normalize_grid_alignment(grid_alignment)
+  list(alignment = alignment, resolution_m = resolution_m)
 }
 #' Resolve Standard CRS for Soil Survey Area
 #'
@@ -1487,7 +1523,11 @@ createSSURGO <- function(filename = NULL,
                                      resolution_m = 10) {
   stopifnot(requireNamespace("sf", quietly = TRUE))
 
-  grid_alignment <- .normalize_grid_alignment(grid_alignment)
+  grid_spec <- .resolve_grid_spec(grid_alignment)
+  grid_alignment <- grid_spec$alignment
+  if (missing(resolution_m) || identical(resolution_m, 10)) {
+    resolution_m <- grid_spec$resolution_m
+  }
 
   if (length(mu_files) == 0 || length(ssa_list) == 0) {
     return(NULL)
@@ -1648,6 +1688,7 @@ createSSURGO <- function(filename = NULL,
 #' @keywords internal
 .rasterize_ssurgo_ssa <- function(ssa_dir, areasymbol, template = NULL, touches = FALSE,
                                   grid_alignment = c("legacy_gssurgo", "legacy", "target_aligned", "nlcd"),
+                                  resolution_m = 10,
                                   quiet = FALSE) {
 
   grid_alignment <- .normalize_grid_alignment(grid_alignment)
@@ -1819,6 +1860,7 @@ createSSURGO <- function(filename = NULL,
 #'
 #' @param raster_obj _SpatRaster_. In-memory raster object to persist.
 #' @param areasymbol _character_. Soil survey area symbol (e.g., "CA067") for filename.
+#' @param resolution_m _numeric_. Grid resolution in meters, used in the cache filename.
 #' @param cache_root _character_. Cache root directory. If NULL, defaults to
 #'   soilDB_user_dir("cache", "raster", create=TRUE).
 #' @param fiscal_year _character_. Optional fiscal year label for cache path organization
@@ -1829,7 +1871,8 @@ createSSURGO <- function(filename = NULL,
 #' @return _character_. Normalized path to written GeoTIFF, or NA_character_ if write failed.
 #' @noRd
 #' @keywords internal
-.write_raster_with_cache <- function(raster_obj, areasymbol, fiscal_year = NULL, cache_root = NULL, quiet = FALSE) {
+.write_raster_with_cache <- function(raster_obj, areasymbol, fiscal_year = NULL, cache_root = NULL,
+                                     resolution_m = 10, quiet = FALSE) {
 
   # Determine cache root directory
   if (is.null(cache_root)) {
@@ -1845,7 +1888,7 @@ createSSURGO <- function(filename = NULL,
   dir.create(cache_root, recursive = TRUE, showWarnings = FALSE)
 
   # Construct filename
-  filename <- paste0("MUKEY_10m_", toupper(areasymbol), ".tif")
+  filename <- paste0("MUKEY_", resolution_m, "m_", toupper(areasymbol), ".tif")
   cache_path <- file.path(cache_root, filename)
 
   tryCatch({
