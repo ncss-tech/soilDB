@@ -255,8 +255,6 @@ terra::lines(project(b, "EPSG:5070"))
 terra::points(project(p, "EPSG:5070"), pch = 16, cex = 2)
 ```
 
-![](wcs-ssurgo_files/figure-html/unnamed-chunk-5-1.png)
-
 #### Manual Creation of Bounding Boxes
 
 Sometimes it is convenient to specify a BBOX created from a website or
@@ -309,8 +307,6 @@ terra::plot(
 terra::lines(project(x, 'epsg:5070'))
 ```
 
-![](wcs-ssurgo_files/figure-html/unnamed-chunk-6-1.png)
-
 ## Map Unit Key Grids
 
 Use the
@@ -343,17 +339,6 @@ mu <- mukey.wcs(aoi = a, db = 'gssurgo')
 
 # check:
 print(mu)
-#> class       : SpatRaster
-#> size        : 147, 219, 1  (nrow, ncol, nlyr)
-#> resolution  : 30, 30  (x, y)
-#> extent      : -1365495, -1358925, 2869245, 2873655  (xmin, xmax, ymin, ymax)
-#> coord. ref. : NAD83 / Conus Albers (EPSG:5070)
-#> source(s)   : memory
-#> varname     : file24a0137e2388
-#> categories  : mukey
-#> name        :   mukey
-#> min value   :  144983
-#> max value   : 1716001
 
 terra::plot(
   mu, 
@@ -363,8 +348,6 @@ terra::plot(
   legend = FALSE
 )
 ```
-
-![](wcs-ssurgo_files/figure-html/unnamed-chunk-7-1.png)
 
 ### SSURGO Polygons from SDA
 
@@ -409,8 +392,6 @@ lines(p, col = 'white')
 mtext('CONUS Albers Equal Area Projection (EPSG:5070)', side = 1, line = 1)
 ```
 
-![](wcs-ssurgo_files/figure-html/unnamed-chunk-10-1.png)
-
 ### Grid Resolution Specification
 
 Requesting map unit key grids at a resolution other than 30m is
@@ -443,7 +424,6 @@ x.800 <- mukey.wcs(aoi = a.CA, db = 'gssurgo', res = 800)
 
 # approximately 800m
 res(x.800)
-#> [1] 799.8592 800.0613
 
 terra::plot(
   x.800,
@@ -453,8 +433,6 @@ terra::plot(
   legend = FALSE
 )
 ```
-
-![](wcs-ssurgo_files/figure-html/unnamed-chunk-11-1.png)
 
 ### Raster Soil Survey Data
 
@@ -471,45 +449,12 @@ a <- vect(a, crs = 'epsg:5070')
 
 # gSSURGO grid: 30m resolution
 (x <- mukey.wcs(a, db = 'gSSURGO'))
-#> class       : SpatRaster
-#> size        : 267, 200, 1  (nrow, ncol, nlyr)
-#> resolution  : 30, 30  (x, y)
-#> extent      : 1129005, 1135005, 1402995, 1411005  (xmin, xmax, ymin, ymax)
-#> coord. ref. : NAD83 / Conus Albers (EPSG:5070)
-#> source(s)   : memory
-#> varname     : file24a01f49e145
-#> categories  : mukey
-#> name        :  mukey
-#> min value   : 545800
-#> max value   : 545887
 
 # gNATSGO grid: 30m resolution
 (y <- mukey.wcs(a, db = 'gNATSGO'))
-#> class       : SpatRaster
-#> size        : 267, 200, 1  (nrow, ncol, nlyr)
-#> resolution  : 30, 30  (x, y)
-#> extent      : 1129005, 1135005, 1402995, 1411005  (xmin, xmax, ymin, ymax)
-#> coord. ref. : NAD83 / Conus Albers (EPSG:5070)
-#> source(s)   : memory
-#> varname     : file24a01d96b305
-#> categories  : mukey
-#> name        :   mukey
-#> min value   :  545800
-#> max value   : 3244759
 
 # RSS grid: 30m resolution
 (z <- mukey.wcs(a, db = 'RSS'))
-#> class       : SpatRaster
-#> size        : 267, 200, 1  (nrow, ncol, nlyr)
-#> resolution  : 30, 30  (x, y)
-#> extent      : 1129005, 1135005, 1402995, 1411005  (xmin, xmax, ymin, ymax)
-#> coord. ref. : NAD83 / Conus Albers (EPSG:5070)
-#> source(s)   : memory
-#> varname     : file24a01948811d
-#> categories  : mukey
-#> name        :   mukey
-#> min value   : 3244721
-#> max value   : 3244759
 
 # graphical comparison
 par(mfcol = c(1, 3))
@@ -543,8 +488,6 @@ terra::plot(
 lines(a)
 ```
 
-![](wcs-ssurgo_files/figure-html/unnamed-chunk-12-1.png)
-
 ### STATSGO
 
 Continuing from the example above, we can use `db='statsgo'` to compare
@@ -555,17 +498,6 @@ and resolution) as SSURGO products.
 ``` r
 
 (statsgo <- mukey.wcs(a, db = 'statsgo'))
-#> class       : SpatRaster
-#> size        : 267, 200, 1  (nrow, ncol, nlyr)
-#> resolution  : 30, 30  (x, y)
-#> extent      : 1129005, 1135005, 1402995, 1411005  (xmin, xmax, ymin, ymax)
-#> coord. ref. : NAD83 / Conus Albers (EPSG:5070)
-#> source(s)   : memory
-#> varname     : file24a03fb5447e
-#> categories  : mukey
-#> name        :  mukey
-#> min value   : 659074
-#> max value   : 664845
 
 # graphical comparison
 par(mfcol = c(1, 2))
@@ -586,8 +518,6 @@ terra::plot(
   main = paste0(metags(statsgo)$value, collapse = " - ")
 )
 ```
-
-![](wcs-ssurgo_files/figure-html/unnamed-chunk-13-1.png)
 
 ### Hawaii SSURGO
 
@@ -619,8 +549,6 @@ terra::plot(
 )
 ```
 
-![](wcs-ssurgo_files/figure-html/unnamed-chunk-14-1.png)
-
 ### Puerto Rico SSURGO
 
 A new 30m SSURGO map unit key WCS based on the `"EPSG:32161"` coordinate
@@ -649,8 +577,6 @@ terra::plot(
   main = paste0(metags(mu)$value, collapse = " - ")
 )
 ```
-
-![](wcs-ssurgo_files/figure-html/unnamed-chunk-15-1.png)
 
 ## Thematic Mapping
 
@@ -692,47 +618,6 @@ mu2 <- mu
 
 # extract raster attribute table for thematic mapping
 (rat <- cats(mu2)[[1]])
-#>         ID   mukey
-#> 1   144983  144983
-#> 2   144984  144984
-#> 3   144985  144985
-#> 4   144986  144986
-#> 5   145005  145005
-#> 6   145009  145009
-#> 7   145010  145010
-#> 8   145011  145011
-#> 9   145012  145012
-#> 10  145015  145015
-#> 11  145017  145017
-#> 12  145019  145019
-#> 13  145020  145020
-#> 14  145056  145056
-#> 15  145057  145057
-#> 16  145058  145058
-#> 17  145059  145059
-#> 18  145060  145060
-#> 19  145068  145068
-#> 20  145069  145069
-#> 21  145070  145070
-#> 22  145076  145076
-#> 23  145079  145079
-#> 24  145118  145118
-#> 25  145183  145183
-#> 26  145195  145195
-#> 27  145208  145208
-#> 28  145250  145250
-#> 29  145253  145253
-#> 30  145264  145264
-#> 31  145269  145269
-#> 32  145275  145275
-#> 33  145278  145278
-#> 34  145328  145328
-#> 35  145329  145329
-#> 36  145340  145340
-#> 37  145343  145343
-#> 38  145385  145385
-#> 39 1715935 1715935
-#> 40 1716001 1716001
 
 # optionally use convenience function:
 # * returns all fields from muaggatt table
@@ -749,13 +634,6 @@ tab <- SDA_query(.sql)
 
 # check
 head(tab)
-#>    mukey aws050wta aws0100wta
-#> 1 144983      7.26      14.02
-#> 2 144984      7.31      14.14
-#> 3 144985      7.36      14.27
-#> 4 144986      7.06      13.19
-#> 5 145005      5.21       9.34
-#> 6 145009      5.49       9.16
 
 # set raster categories
 levels(mu2) <- tab
@@ -775,8 +653,6 @@ terra::plot(
   range = c(0, 20)
 )
 ```
-
-![](wcs-ssurgo_files/figure-html/unnamed-chunk-18-1.png)
 
 ### Interpretations for Soil Suitability / Limitation
 
@@ -806,41 +682,6 @@ tab <- get_SDA_interpretation(
 
 # check
 head(tab)
-#>   areasymbol musym                                               muname  mukey
-#> 1      MT629   102      McCollum fine sandy loam, 2 to 4 percent slopes 144984
-#> 2      MT629   103      McCollum fine sandy loam, 4 to 8 percent slopes 144985
-#> 3      MT629   120         Niarada gravelly loam, 0 to 4 percent slopes 145005
-#> 4      MT629   123 Niarada gravelly loam, cool, 15 to 30 percent slopes 145009
-#> 5      MT629   124 Niarada gravelly loam, cool, 30 to 60 percent slopes 145010
-#> 6      MT629   125         Niarada-Kerl complex, 8 to 15 percent slopes 145011
-#>   rating_ENGConstructionMaterialsRoadfill rating_AWMIrrigationDisposalofWastewater
-#> 1                                    0.98                                     0.05
-#> 2                                    0.98                                     0.68
-#> 3                                    0.98                                     0.19
-#> 4                                    0.12                                     1.00
-#> 5                                    0.03                                     1.00
-#> 6                                    0.88                                     0.96
-#>   class_ENGConstructionMaterialsRoadfill class_AWMIrrigationDisposalofWastewater
-#> 1                 Moderately well suited                        Slightly limited
-#> 2                 Moderately well suited                      Moderately limited
-#> 3                 Moderately well suited                        Slightly limited
-#> 4                          Poorly suited                            Very limited
-#> 5                          Poorly suited                            Very limited
-#> 6                 Moderately well suited                      Moderately limited
-#>                                                                                                                                                                               reason_ENGConstructionMaterialsRoadfill
-#> 1                                                                                                                                                                                 Low strength (0.778); Dusty (0.785)
-#> 2                                                                                                                                                                                 Low strength (0.778); Dusty (0.785)
-#> 3                                                                                                                                                                         Dusty (0.981); Dusty (0.902); Dusty (0.981)
-#> 4 Slope (0.08); Dusty (0.981); Depth to bedrock (0); Slope (0); Not rated; Slope (); Not rated; Fragments 75 to 250mm (); Not rated; Fragments > 250m (); Not rated (); Low strength (0); Slope (0.08); Dusty (0.975)
-#> 5       Slope (0); Dusty (0.993); Depth to bedrock (0); Slope (0); Not rated; Slope (); Not rated; Fragments 75 to 250mm (); Not rated; Fragments > 250m (); Not rated (); Low strength (0); Slope (0); Dusty (0.975)
-#> 6                                                                                                       Dusty (0.981); Low strength (0); Dusty (0.783); Low strength (0); Dusty (0.785); Dusty (0.981); Dusty (0.902)
-#>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           reason_AWMIrrigationDisposalofWastewater
-#> 1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 Filtering capacity (1); Too steep for surface application (0.08)
-#> 2                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               Too steep for surface application (0.68); Too steep for surface application (0.68)
-#> 3                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   Large stones on the surface (0.141); Droughty (0.117); Filtering capacity (1); Droughty (0.918); Slow water movement (0.372); Droughty (0.133)
-#> 4 Too steep for surface application (1); Too steep for sprinkler application (1); Large stones on the surface (0.141); Droughty (0.117); Too steep for sprinkler application (1); Depth to bedrock (1); Large stones on the surface (0.684); Droughty (1); Too steep for surface application (1); Filtering capacity (1); Too steep for surface application (1); Droughty (0.918); Too steep for sprinkler application (0.395); Not rated; Ksat (); Not rated; Ksat (); Not rated; Fragments 75 to 250mm (); Not rated; pH (); Not rated; AWC (); Too steep for surface application (1); Too steep for sprinkler application (1); Droughty (0.061)
-#> 5                                                                                Too steep for surface application (1); Too steep for sprinkler application (1); Too steep for surface application (1); Too steep for sprinkler application (0.395); Droughty (0.072); Droughty (1); Too steep for surface application (1); Too steep for sprinkler application (1); Depth to bedrock (1); Large stones on the surface (0.684); Not rated; Ksat (); Not rated; Ksat (); Not rated; Fragments 75 to 250mm (); Not rated; pH (); Not rated; AWC (); Too steep for surface application (1); Too steep for sprinkler application (1); Droughty (0.061)
-#> 6                                                                                                                                                                                      Too steep for surface application (1); Too steep for sprinkler application (0.778); Large stones on the surface (0.141); Droughty (0.117); Sodium content (1); Too steep for surface application (0.68); Slow water movement (0.372); Too steep for surface application (1); Too steep for sprinkler application (0.778); Droughty (0.133); Too steep for sprinkler application (0.778); Slow water movement (0.372); Too steep for surface application (1)
 
 # set ordered factor levels (for nice label/legend order)
 tab$class_ENGConstructionMaterialsRoadfill <- factor(
@@ -867,8 +708,6 @@ boxplot(
   las = 1            # rotate axis labels 90 degrees
 )
 ```
-
-![](wcs-ssurgo_files/figure-html/unnamed-chunk-19-1.png)
 
 From above graph we can see that the different suitability rating
 classes `class_ENGConstructionMaterialsRoadfill` each correspond to a
@@ -899,8 +738,6 @@ terra::plot(
   )
 )
 ```
-
-![](wcs-ssurgo_files/figure-html/unnamed-chunk-20-1.png)
 
 ### Component-level Properties
 
@@ -944,8 +781,6 @@ terra::plot(
 )
 ```
 
-![](wcs-ssurgo_files/figure-html/unnamed-chunk-21-1.png)
-
 Another example is thematic mapping of the “simplified component parent
 material group”. First, set up a new AOI for the following examples:
 
@@ -970,8 +805,6 @@ terra::plot(
   main = 'gSSURGO Map Unit Key Grid'
 )
 ```
-
-![](wcs-ssurgo_files/figure-html/unnamed-chunk-22-1.png)
 
 We use
 [`get_SDA_pmgroupname()`](http://ncss-tech.github.io/soilDB/reference/get_SDA_pmgroupname.md)
@@ -999,8 +832,6 @@ activeCat(mu2) <- 'pmgroupname'
 terra::plot(mu2, axes = FALSE, mar = c(0.5, 0.5, 1, 10))
 ```
 
-![](wcs-ssurgo_files/figure-html/unnamed-chunk-23-1.png)
-
 We can also inspect a mapunit-level hydric rating derived from the
 default aggregation method in
 [`get_SDA_hydric()`](http://ncss-tech.github.io/soilDB/reference/get_SDA_hydric.md).
@@ -1022,8 +853,6 @@ levels(mu2) <- tab[, c('mukey', 'HYDRIC_RATING')]
 activeCat(mu2) <- 'HYDRIC_RATING'
 terra::plot(mu2, axes = FALSE, mar = c(0.5, 0.5, 1, 10))
 ```
-
-![](wcs-ssurgo_files/figure-html/unnamed-chunk-24-1.png)
 
 ### Several Horizon-level Soil Properties
 
@@ -1057,20 +886,6 @@ tab <- get_SDA_property(property = vars,
 
 # check
 head(tab)
-#>    mukey areasymbol musym                                          muname dbthirdbar_r awc_r
-#> 1 623396      OK113     1 Apperson silty clay loam, 1 to 3 percent slopes         1.45  0.18
-#> 2 623405      OK113    10        Bethany silt loam, 1 to 3 percent slopes         1.35  0.20
-#> 3 623406      OK113    11        Bethany silt loam, 3 to 5 percent slopes         1.30  0.20
-#> 4 623407      OK113    12 Bethany-Pawhuska complex, 1 to 5 percent slopes         1.34  0.20
-#> 5 623408      OK113    13     Lucien-Coyle complex, 3 to 8 percent slopes         1.43  0.18
-#> 6 623410      OK113    15           Agra silt loam, 1 to 3 percent slopes         1.34  0.20
-#>   ph1to1h2o_r
-#> 1       6.148
-#> 2       6.200
-#> 3       6.300
-#> 4       6.300
-#> 5       6.500
-#> 6       6.700
 
 # convert areasymbol into a factor easy plotting later
 tab$areasymbol <- factor(tab$areasymbol)
@@ -1080,7 +895,6 @@ levels(mu) <- tab[, c('mukey', vars)]
 
 # list variables in the RAT
 names(cats(mu)[[1]])
-#> [1] "mukey"        "dbthirdbar_r" "awc_r"        "ph1to1h2o_r"
 
 # convert categories associated with keys to values
 mu2 <- catalyze(mu)
@@ -1093,35 +907,19 @@ Inspect just the plant available water 0-25cm.
 terra::plot(mu2$awc_r, axes = FALSE)
 ```
 
-![](wcs-ssurgo_files/figure-html/unnamed-chunk-26-1.png)
-
 Plot aggregate soil properties.
 
 ``` r
 
 terra::plot(mu2[['dbthirdbar_r']], cex.main = 0.7,
      main = '1/3 Bar Bulk Density (g/cm^3)\nDominant Component\n0-25cm')
-```
-
-![](wcs-ssurgo_files/figure-html/unnamed-chunk-27-1.png)
-
-``` r
-
 
 terra::plot(mu2[['awc_r']], cex.main = 0.7,
      main = 'AWC (cm/cm)\nDominant Component\n0-25cm')
-```
-
-![](wcs-ssurgo_files/figure-html/unnamed-chunk-27-2.png)
-
-``` r
-
 
 terra::plot(mu2[['ph1to1h2o_r']], cex.main = 0.7,
      main = 'pH 1:1 H2O\nDominant Component\n0-25cm')
 ```
-
-![](wcs-ssurgo_files/figure-html/unnamed-chunk-27-3.png)
 
 ### Sand, Silt, and Clay at a Soil Survey Area Boundary
 
@@ -1146,8 +944,6 @@ mu <- mukey.wcs(aoi = x, db = 'gssurgo')
 # note SSA boundary
 terra::plot(mu, legend = FALSE, axes = FALSE)
 ```
-
-![](wcs-ssurgo_files/figure-html/unnamed-chunk-28-1.png)
 
 Then we derive aggregate sand, silt, clay (RV) values from the largest
 component, taking the weighted mean over 25-50cm depth interval. We also
@@ -1174,20 +970,6 @@ tab <-  get_SDA_property(property = vars,
 
 # check
 head(tab)
-#>     mukey areasymbol musym                                                            muname
-#> 1 2804574      AR049    17               Gepp very gravelly silt loam, 3 to 8 percent slopes
-#> 2 2804590      AR049    18              Gepp very gravelly silt loam, 8 to 20 percent slopes
-#> 3 2804581      AR049    25                          Peridge silt loam, 3 to 8 percent slopes
-#> 4 2804605      AR049     3            Arkana-Moko complex, 3 to 8 percent slopes, very rocky
-#> 5 2804592      AR049    30 Secesh and Elsah soils, 0 to 3 percent slopes, frequently flooded
-#> 6 2804602      AR049    32      Sturkie silt loam, 0 to 3 percent slopes, frequently flooded
-#>   sandtotal_r silttotal_r claytotal_r
-#> 1       10.00       26.00       64.00
-#> 2       10.00       26.00       64.00
-#> 3        6.64       64.84       28.52
-#> 4        9.76       28.32       61.92
-#> 5       21.00       52.20       26.80
-#> 6        6.00       75.00       19.00
 
 # set raster categories
 levels(mu) <- tab[, c('mukey', vars)]
@@ -1216,5 +998,3 @@ terra::plot(
   main = paste0(names(r), " - 25-50cm\nDominant Component")
 )
 ```
-
-![](wcs-ssurgo_files/figure-html/unnamed-chunk-29-1.png)

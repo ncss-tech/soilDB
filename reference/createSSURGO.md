@@ -13,7 +13,7 @@ The following database types are tested and fully supported:
 ``` r
 createSSURGO(
   filename = NULL,
-  exdir,
+  exdir = NULL,
   conn = NULL,
   pattern = NULL,
   include_spatial = TRUE,
@@ -27,6 +27,7 @@ createSSURGO(
   na.strings = c("", "NA"),
   quote = "",
   quiet = TRUE,
+  areasymbols = NULL,
   ...
 )
 ```
@@ -40,10 +41,11 @@ createSSURGO(
 
 - exdir:
 
-  *character*. Path containing containing input SSURGO spatial (.shp)
-  and tabular (.txt) files, downloaded and extracted by
+  *character*. Path containing input SSURGO spatial (.shp) and tabular
+  (.txt) files, downloaded and extracted by
   [`downloadSSURGO()`](http://ncss-tech.github.io/soilDB/reference/downloadSSURGO.md)
-  or similar.
+  or similar. Default: `NULL` selects the most recent fiscal-year cache
+  directory.
 
 - conn:
 
@@ -123,7 +125,15 @@ createSSURGO(
 - quiet:
 
   *logical*. Suppress messages and other output from database read/write
-  operations?
+  operations? When `FALSE`, a progress message is shown while scanning
+  `exdir`.
+
+- areasymbols:
+
+  *character*. Optional character vector of soil survey area symbols
+  (e.g. `c("CA067", "CA077")`) used to subset the folders/files within
+  `exdir` to process. Default `NULL` processes all SSURGO exports found
+  in `exdir`.
 
 - ...:
 

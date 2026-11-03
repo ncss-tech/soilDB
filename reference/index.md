@@ -48,6 +48,9 @@
 - [`WCS_details()`](http://ncss-tech.github.io/soilDB/reference/WCS_details.md)
   : Web Coverage Services Details
 
+- [`clear_WSS_cache()`](http://ncss-tech.github.io/soilDB/reference/clear_WSS_cache.md)
+  : Clean cached Web Soil Survey ZIP archives
+
 - [`createSSURGO()`](http://ncss-tech.github.io/soilDB/reference/createSSURGO.md)
   : Create a database from SSURGO Exports
 
@@ -352,6 +355,9 @@
 
 - [`get_veg_species_from_MT_veg_db()`](http://ncss-tech.github.io/soilDB/reference/get_veg_species_from_MT_veg_db.md)
   : Get species-level Data from a Montana RangeDB database
+
+- [`list_WSS_cache()`](http://ncss-tech.github.io/soilDB/reference/list_WSS_cache.md)
+  : List cached Web Soil Survey ZIP archives
 
 - [`loafercreek`](http://ncss-tech.github.io/soilDB/reference/loafercreek.md)
   [`gopheridge`](http://ncss-tech.github.io/soilDB/reference/loafercreek.md)

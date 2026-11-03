@@ -12,8 +12,8 @@ table, for example: `areasymbol = 'CA067'`,
 downloadSSURGO(
   WHERE = NULL,
   areasymbols = NULL,
-  destdir = tempdir(),
-  exdir = destdir,
+  destdir = NULL,
+  exdir = NULL,
   include_template = FALSE,
   include_spatial = TRUE,
   include_tabular = TRUE,
@@ -23,7 +23,8 @@ downloadSSURGO(
   LAPPLY.FUN.ARGS = NULL,
   remove_zip = FALSE,
   overwrite = FALSE,
-  quiet = FALSE
+  quiet = FALSE,
+  force = FALSE
 )
 ```
 
@@ -44,14 +45,18 @@ downloadSSURGO(
 
 - destdir:
 
-  *character*. Directory to download ZIP files into. Default
-  [`tempdir()`](https://rdrr.io/r/base/tempfile.html).
+  *character*. Directory to download ZIP files into. Default `NULL` uses
+  the persistent soilDB Web Soil Survey cache.
 
 - exdir:
 
   *character*. Directory to extract ZIP archives into. May be a
   directory that does not yet exist. Each ZIP file will extract to a
-  folder labeled with `areasymbol` in this directory. Default: `destdir`
+  folder labeled with `areasymbol` in this directory. Default:
+  `destdir`, or when `destdir` is `NULL`, the fiscal-year directory
+  containing the cached ZIP files. When extraction is enabled
+  (`extract = TRUE`) and the target ZIP files span multiple fiscal-year
+  cache directories, an explicit `exdir` must be provided.
 
 - include_template:
 
@@ -115,6 +120,11 @@ downloadSSURGO(
   *logical*. Passed to
   [`curl::curl_download()`](https://jeroen.r-universe.dev/curl/reference/curl_download.html).
 
+- force:
+
+  *logical*. Force re-download of ZIP files even when a cached copy
+  exists. Default: `FALSE`
+
 ## Value
 
 *character*. Paths to downloaded ZIP files (invisibly). May not exist if
@@ -154,6 +164,17 @@ the data in `exdir`. These arguments can be used in conjunction with the
 `pattern` argument to fine-tune the files included in the generated
 snapshot database.
 
+When `destdir` is omitted, ZIP files are stored in the persistent soilDB
+Web Soil Survey cache. Cache paths are organized by fiscal year, and the
+cache policy also distinguishes template and non-template archives when
+choosing the ZIP to reuse. Use
+[`list_WSS_cache()`](http://ncss-tech.github.io/soilDB/reference/list_WSS_cache.md)
+or
+[`clear_WSS_cache()`](http://ncss-tech.github.io/soilDB/reference/clear_WSS_cache.md)
+to inspect or clean the cache.
+
 ## See also
 
-[`createSSURGO()`](http://ncss-tech.github.io/soilDB/reference/createSSURGO.md)
+[`createSSURGO()`](http://ncss-tech.github.io/soilDB/reference/createSSURGO.md),
+[`list_WSS_cache()`](http://ncss-tech.github.io/soilDB/reference/list_WSS_cache.md),
+[`clear_WSS_cache()`](http://ncss-tech.github.io/soilDB/reference/clear_WSS_cache.md)

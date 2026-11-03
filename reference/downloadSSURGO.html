@@ -11,7 +11,7 @@ query of sacatalog table, for example: areasymbol = 'CA067', &quot;areasymbol IN
 
     <a class="navbar-brand me-2" href="../index.html">soilDB</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.9.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.9.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -24,7 +24,7 @@ query of sacatalog table, for example: areasymbol = 'CA067', &quot;areasymbol IN
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/dominant-es.html">Mapping Dominant Ecological Sites using SSURGO Data</a></li>
     <li><a class="dropdown-item" href="../articles/fetchNASIS.html">fetchNASIS(from='pedons') Columns</a></li>
-    <li><a class="dropdown-item" href="../articles/local-ssurgo.html">Local Soil Survey Geographic (SSURGO) Databases</a></li>
+    <li><a class="dropdown-item" href="../articles/local-ssurgo.html">Local SSURGO Databases</a></li>
     <li><a class="dropdown-item" href="../articles/sda.html">Soil Data Access</a></li>
     <li><a class="dropdown-item" href="../articles/soilweb-data-functions.html">Functions and Data Sources that Depend on SoilWeb</a></li>
     <li><a class="dropdown-item" href="../articles/wcs-ssurgo.html">Map Unit Key Grids and Thematic Maps of Soil Survey Geographic (SSURGO) Data</a></li>
@@ -42,7 +42,7 @@ query of sacatalog table, for example: areasymbol = 'CA067', &quot;areasymbol IN
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Get SSURGO ZIP files from Web Soil Survey 'Download Soils Data'</h1>
-      <small class="dont-index">Source: <a href="https://github.com/ncss-tech/soilDB/blob/2.9.2/R/createSSURGO.R" class="external-link"><code>R/createSSURGO.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/ncss-tech/soilDB/blob/master/R/createSSURGO.R" class="external-link"><code>R/createSSURGO.R</code></a></small>
       <div class="d-none name"><code>downloadSSURGO.Rd</code></div>
     </div>
 
@@ -57,8 +57,8 @@ query of <code>sacatalog</code> table, for example: <code>areasymbol = 'CA067'</
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">downloadSSURGO</span><span class="op">(</span></span>
 <span>  WHERE <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  areasymbols <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  destdir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  exdir <span class="op">=</span> <span class="va">destdir</span>,</span>
+<span>  destdir <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  exdir <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  include_template <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  include_spatial <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  include_tabular <span class="op">=</span> <span class="cn">TRUE</span>,</span>
@@ -68,7 +68,8 @@ query of <code>sacatalog</code> table, for example: <code>areasymbol = 'CA067'</
 <span>  LAPPLY.FUN.ARGS <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  remove_zip <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  overwrite <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  quiet <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  quiet <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  force <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -87,13 +88,16 @@ defining the target extent.</p></dd>
 
 
 <dt id="arg-destdir">destdir<a class="anchor" aria-label="anchor" href="#arg-destdir"></a></dt>
-<dd><p><em>character</em>. Directory to download ZIP files into. Default <code><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir()</a></code>.</p></dd>
+<dd><p><em>character</em>. Directory to download ZIP files into. Default <code>NULL</code> uses the
+persistent soilDB Web Soil Survey cache.</p></dd>
 
 
 <dt id="arg-exdir">exdir<a class="anchor" aria-label="anchor" href="#arg-exdir"></a></dt>
 <dd><p><em>character</em>. Directory to extract ZIP archives into. May be a directory that does
 not yet exist. Each ZIP file will extract to a folder labeled with <code>areasymbol</code> in this
-directory. Default: <code>destdir</code></p></dd>
+directory. Default: <code>destdir</code>, or when <code>destdir</code> is <code>NULL</code>, the fiscal-year directory containing
+the cached ZIP files. When extraction is enabled (<code>extract = TRUE</code>) and the target ZIP files
+span multiple fiscal-year cache directories, an explicit <code>exdir</code> must be provided.</p></dd>
 
 
 <dt id="arg-include-template">include_template<a class="anchor" aria-label="anchor" href="#arg-include-template"></a></dt>
@@ -149,6 +153,11 @@ in parallel instead of sequential, custom progress reporting, or similar.</p></d
 <dt id="arg-quiet">quiet<a class="anchor" aria-label="anchor" href="#arg-quiet"></a></dt>
 <dd><p><em>logical</em>. Passed to <code><a href="https://jeroen.r-universe.dev/curl/reference/curl_download.html" class="external-link">curl::curl_download()</a></code>.</p></dd>
 
+
+<dt id="arg-force">force<a class="anchor" aria-label="anchor" href="#arg-force"></a></dt>
+<dd><p><em>logical</em>. Force re-download of ZIP files even when a cached copy exists. Default:
+<code>FALSE</code></p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -176,10 +185,14 @@ that get extracted from ZIP files, not just filtering on file names (as is imple
 pre-existing <code>pattern</code> argument). This can dramatically improve efficiency of extraction and
 the overall size of the data in <code>exdir</code>. These arguments can be used in conjunction with the
 <code>pattern</code> argument to fine-tune the files included in the generated snapshot database.</p>
+<p>When <code>destdir</code> is omitted, ZIP files are stored in the persistent soilDB Web Soil Survey cache.
+Cache paths are organized by fiscal year, and the cache policy also distinguishes template and
+non-template archives when choosing the ZIP to reuse. Use <code><a href="list_WSS_cache.html">list_WSS_cache()</a></code> or <code><a href="clear_WSS_cache.html">clear_WSS_cache()</a></code> to inspect or
+clean the cache.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="createSSURGO.html">createSSURGO()</a></code></p></div>
+    <div class="dont-index"><p><code><a href="createSSURGO.html">createSSURGO()</a></code>, <code><a href="list_WSS_cache.html">list_WSS_cache()</a></code>, <code><a href="clear_WSS_cache.html">clear_WSS_cache()</a></code></p></div>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

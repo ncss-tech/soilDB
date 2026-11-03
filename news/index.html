@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">soilDB</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.9.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.9.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -20,7 +20,7 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/dominant-es.html">Mapping Dominant Ecological Sites using SSURGO Data</a></li>
     <li><a class="dropdown-item" href="../articles/fetchNASIS.html">fetchNASIS(from='pedons') Columns</a></li>
-    <li><a class="dropdown-item" href="../articles/local-ssurgo.html">Local Soil Survey Geographic (SSURGO) Databases</a></li>
+    <li><a class="dropdown-item" href="../articles/local-ssurgo.html">Local SSURGO Databases</a></li>
     <li><a class="dropdown-item" href="../articles/sda.html">Soil Data Access</a></li>
     <li><a class="dropdown-item" href="../articles/soilweb-data-functions.html">Functions and Data Sources that Depend on SoilWeb</a></li>
     <li><a class="dropdown-item" href="../articles/wcs-ssurgo.html">Map Unit Key Grids and Thematic Maps of Soil Survey Geographic (SSURGO) Data</a></li>
@@ -38,9 +38,17 @@
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Changelog</h1>
-      <small>Source: <a href="https://github.com/ncss-tech/soilDB/blob/2.9.2/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/ncss-tech/soilDB/blob/master/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="2.9.3" id="soildb-293-2026-09-17">soilDB 2.9.3 (2026-09-17)<a class="anchor" aria-label="anchor" href="#soildb-293-2026-09-17"></a></h2>
+<ul><li>
+<code><a href="../reference/createSSURGO.html">createSSURGO()</a></code> fix bug in logical column handling (introduced in 2.9.2) due to metadata column type enforcement (<a href="https://github.com/ncss-tech/soilDB/issues/483" class="external-link">#483</a>)</li>
+<li>Fix <code><a href="https://rdrr.io/r/base/structure.html" class="external-link">structure()</a></code> usage of special argument names (.Label, .Names) in test fixtures for R-devel (<a href="https://github.com/ncss-tech/soilDB/issues/484" class="external-link">#484</a>)</li>
+<li>
+<code><a href="../reference/downloadSSURGO.html">downloadSSURGO()</a></code> now uses a persistent soilDB Web Soil Survey ZIP cache when <code>destdir</code> is omitted, checks <code>sacatalog.saverest</code> for freshness, supports <code>force = TRUE</code> to bypass cache reuse, and falls back to cached ZIPs with a warning when the remote freshness check is unavailable. Added <code><a href="../reference/list_WSS_cache.html">list_WSS_cache()</a></code> and <code><a href="../reference/clear_WSS_cache.html">clear_WSS_cache()</a></code> for cache inventory and manual cleanup.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="2.9.2" id="soildb-292-2026-07-10">soilDB 2.9.2 (2026-07-10)<a class="anchor" aria-label="anchor" href="#soildb-292-2026-07-10"></a></h2><p class="text-muted">CRAN release: 2026-07-11</p>
 <ul><li>EDIT base URL (for <code><a href="../reference/get_EDIT_ecoclass_by_geoUnit.html">get_EDIT_ecoclass_by_geoUnit()</a></code> and <code><a href="../reference/make_EDIT_service_URL.html">make_EDIT_service_URL()</a></code>) updated to new USDA-managed server: <a href="https://edit.sc.egov.usda.gov/" class="external-link uri">https://edit.sc.egov.usda.gov/</a>

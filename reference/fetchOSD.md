@@ -231,15 +231,15 @@ D.E. Beaudette, A.G. Brown
 #>  $ flats           :'data.frame':    5 obs. of  7 variables:
 #>  $ shape_across    :'data.frame':    11 obs. of  8 variables:
 #>  $ shape_down      :'data.frame':    11 obs. of  8 variables:
-#>  $ pmkind          :'data.frame':    18 obs. of  5 variables:
-#>  $ pmorigin        :'data.frame':    32 obs. of  5 variables:
+#>  $ pmkind          :'data.frame':    19 obs. of  5 variables:
+#>  $ pmorigin        :'data.frame':    33 obs. of  5 variables:
 #>  $ geomorphons     :'data.frame':    11 obs. of  12 variables:
 #>  $ mlra            :'data.frame':    47 obs. of  4 variables:
 #>  $ ecoclassid      :'data.frame':    59 obs. of  5 variables:
 #>  $ climate.annual  :'data.frame':    88 obs. of  12 variables:
 #>  $ climate.monthly :'data.frame':    264 obs. of  14 variables:
 #>  $ NCCPI           :'data.frame':    11 obs. of  16 variables:
-#>  $ soilweb.metadata:'data.frame':    28 obs. of  2 variables:
+#>  $ soilweb.metadata:'data.frame':    29 obs. of  2 variables:
 
 # }
 ```

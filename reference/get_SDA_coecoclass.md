@@ -124,16 +124,16 @@ get_SDA_coecoclass(mukeys = c(463994, 463995))
 #> 9  463995      CA671 14129 YERMO GRAVELLY SANDY LOAM, 30 TO 50 PERCENT SLOPES
 #> 10 463995      CA671 14129 YERMO GRAVELLY SANDY LOAM, 30 TO 50 PERCENT SLOPES
 #>       cokey coecoclasskey comppct_r majcompflag     compname localphase
-#> 1  27410839      12765565        60         Yes   Wrightwood       <NA>
-#> 2  27410840      12765566        25         Yes   Bull Trail       <NA>
-#> 3  27410841            NA         5         No  Haploxeralfs       <NA>
-#> 4  27410842            NA         5         No       Avawatz       <NA>
-#> 5  27410843            NA         3         No       Hanford       <NA>
-#> 6  27410844            NA         2         No       Tujunga       <NA>
-#> 7  27410845      12765567        85         Yes        Yermo       <NA>
-#> 8  27410846            NA         5         No       Trigger      soils
-#> 9  27410847            NA         5         No        Joshua       <NA>
-#> 10 27410848            NA         5         No  Rock outcrop       <NA>
+#> 1  28658077      14014810        60         Yes   Wrightwood       <NA>
+#> 2  28658078      14014811        25         Yes   Bull Trail       <NA>
+#> 3  28658079            NA         5         No  Haploxeralfs       <NA>
+#> 4  28658080            NA         5         No       Avawatz       <NA>
+#> 5  28658081            NA         3         No       Hanford       <NA>
+#> 6  28658082            NA         2         No       Tujunga       <NA>
+#> 7  28658083      14014812        85         Yes        Yermo       <NA>
+#> 8  28658084            NA         5         No       Trigger      soils
+#> 9  28658085            NA         5         No        Joshua       <NA>
+#> 10 28658086            NA         5         No  Rock outcrop       <NA>
 #>              compkind   ecoclassid          ecoclassname    ecoclasstypename
 #> 1              Series  R019XE018CA                 SANDY NRCS Rangeland Site
 #> 2              Series  R019XE003CA          COARSE LOAMY NRCS Rangeland Site
@@ -1567,13 +1567,13 @@ get_SDA_coecoclass(WHERE = "ecoclassid LIKE 'R%' AND areasymbol LIKE 'HI%'")
 #> 657                      Lahaina silty clay, 7 to 15 percent slopes, severely eroded, MLRA 158
 #> 658                                                 Leilehua silty clay, 2 to 6 percent slopes
 #> 659                                                       Leilehua silty clay, 6 to 12 percent
-#> 660                                                  Lolekaa silty clay, 3 to 8 percent slopes
-#> 661                                                  Lolekaa silty clay, 3 to 8 percent slopes
-#> 662                                                  Lolekaa silty clay, 3 to 8 percent slopes
-#> 663                                                 Lolekaa silty clay, 8 to 15 percent slopes
-#> 664                                                Lolekaa silty clay, 15 to 25 percent slopes
-#> 665                                                Lolekaa silty clay, 25 to 40 percent slopes
-#> 666                                                Lolekaa silty clay, 40 to 70 percent slopes
+#> 660                                                  Iolekaa silty clay, 3 to 8 percent slopes
+#> 661                                                  Iolekaa silty clay, 3 to 8 percent slopes
+#> 662                                                  Iolekaa silty clay, 3 to 8 percent slopes
+#> 663                                                 Iolekaa silty clay, 8 to 15 percent slopes
+#> 664                                                Iolekaa silty clay, 15 to 25 percent slopes
+#> 665                                                Iolekaa silty clay, 25 to 40 percent slopes
+#> 666                                                Iolekaa silty clay, 40 to 70 percent slopes
 #> 667                          Lualualei extremely cobbly clay, 3 to 35 percent slopes, MLRA 166
 #> 668                                            Lualualei clay, 0 to 2 percent slopes, MLRA 163
 #> 669                                            Lualualei clay, 0 to 2 percent slopes, MLRA 163
@@ -1655,752 +1655,752 @@ get_SDA_coecoclass(WHERE = "ecoclassid LIKE 'R%' AND areasymbol LIKE 'HI%'")
 #> 745                                                  Waipahu silty clay, 2 to 6 percent slopes
 #> 746                                                 Waipahu silty clay, 6 to 12 percent slopes
 #>        cokey coecoclasskey comppct_r majcompflag             compname
-#> 1   27482249      12838179        55         Yes           Lava flows
-#> 2   27482265      12838183        60         Yes                Mawae
-#> 3   27482269      12838184        60         Yes                Mawae
-#> 4   27482285      12838189        25         Yes               Kekake
-#> 5   27482287      12838190        20         Yes               Kekake
-#> 6   27482289      12838191        60         Yes              Iwalani
-#> 7   27482291      12838192        70         Yes              Iwalani
-#> 8   27482293      12838193        95         Yes               Ihuanu
-#> 9   27482295      12838194        95         Yes               Ihuanu
-#> 10  27482345      12838217        60         Yes               Ihuanu
-#> 11  27482347      12838218        95         Yes               Ihuanu
-#> 12  27482349      12838219        95         Yes               Ihuanu
-#> 13  27482351      12838220        30         Yes              Iwalani
-#> 14  27482353      12838221        60         Yes              Iwalani
-#> 15  27482355      12838222        70         Yes              Iwalani
-#> 16  27482373      12838234        95         Yes               Lalaau
-#> 17  27482376      12838236        60         Yes              Kahaluu
-#> 18  27482381      12838238        55         Yes               Ihuanu
-#> 19  27482383      12838239        95         Yes     Humic Durustands
-#> 20  27482392      12838245        60         Yes             Kaholimo
-#> 21  27482543      12838312        60         Yes             Kaholimo
-#> 22  27482407      12838254        40         Yes Lithic Ustipsamments
-#> 23  27482412      12838256        50         Yes   Lithic Haplustands
-#> 24  27482413      12838257        25         Yes   Lithic Haplustands
-#> 25  27482415      12838258        65         Yes              Alahapa
-#> 26  27482416      12838259        25         Yes                Heake
-#> 27  27482420      12838260        90         Yes              Alahapa
-#> 28  27482422      12838261        50         Yes              Alahapa
-#> 29  27482426      12838262        90         Yes           Halemaumau
-#> 30  27482429      12838263        85         Yes                Heake
-#> 31  27482433      12838264        45         Yes                Heake
-#> 32  27482438      12838265        90         Yes              Kilauea
-#> 33  27482440      12838266        20         Yes             Kaholimo
-#> 34  27482441      12838267        13         Yes                Puiwa
-#> 35  27482442      12838268        20         Yes             Kaholimo
-#> 36  27482443      12838269        12         Yes                Puiwa
-#> 37  27482448      12838270        20         Yes             Kaholimo
-#> 38  27482449      12838271        10         No              Kaholimo
-#> 39  27482462      12838278        55         Yes              Kahalii
-#> 40  27482466      12838279        60         Yes             Kanohina
-#> 41  27482475      12838282        55         Yes              Nakanui
-#> 42  27482479      12838283        90         Yes   Vitric Haplustands
-#> 43  27482481      12838284        60         Yes                 Ahiu
-#> 44  27482484      12838285        95         Yes               Pakini
-#> 45  27482487      12838287         2         No                Oneula
-#> 46  27482488      12838288         3         No               Maunaiu
-#> 47  27482506      12838298        90         Yes               Oneula
-#> 48  27482508      12838299        25         Yes             Menehune
-#> 49  27482514      12838300        76         Yes                 Wahi
-#> 50  27482522      12838302        95         Yes               Oneula
-#> 51  27482528      12838305        40         Yes               Oneula
-#> 52  27482538      12838309        45         Yes                 Ahiu
-#> 53  27482539      12838310        40         Yes   Vitric Haplustands
-#> 54  27482920      12838540        15         No              Waikaloa
-#> 55  27482946      12838585        40         Yes            Honokohau
-#> 56  27483042      12838814        60         Yes                Mawae
-#> 57  27483046      12838739        60         Yes                Mawae
-#> 58  27483158      12838439        25         Yes               Kekake
-#> 59  27483160      12838511        20         Yes               Kekake
-#> 60  27483163      12838756        60         Yes               Puuiki
-#> 61  27483166      12838866        60         Yes               Puuiki
-#> 62  27483169      12838947        25         Yes               Puuiki
-#> 63  27482558      12838864        60         Yes              Iwalani
-#> 64  27483172      12838904        60         Yes               Puuiki
-#> 65  27483177      12838846        35         Yes               Puuiki
-#> 66  27483180      12838686        35         Yes               Puuiki
-#> 67  27483187      12838936        35         Yes              Kamawai
-#> 68  27482560      12838933        70         Yes              Iwalani
-#> 69  27482562      12838521        40         Yes             Kanohina
-#> 70  27482564      12838415        90         Yes             Kanohina
-#> 71  27483308      12838423        90         Yes         Auwaiakeakua
-#> 72  27483310      12838524        90         Yes         Auwaiakeakua
-#> 73  27483556      12838712        40         Yes         Auwaiakeakua
-#> 74  27483313      12838563        30         Yes               Kiholo
-#> 75  27483315      12838852        60         Yes               Kiholo
-#> 76  27483317      12838967        60         Yes            Kahaumanu
-#> 77  27483319      12838442        60         Yes            Kahaumanu
-#> 78  27483321      12838504        30         Yes            Kahaumanu
-#> 79  27483454      12838973       100         Yes               Puu Pa
-#> 80  27483455      12838590       100         Yes               Puu Pa
-#> 81  27483456      12838660        70         Yes             Waikaloa
-#> 82  27483457      12838526        30         Yes               Puu Pa
-#> 83  27483458      12838572       100         Yes                Puako
-#> 84  27483459      12838924        70         Yes             Waikaloa
-#> 85  27483461      12838638        28         Yes               Puu Pa
-#> 86  27483462      12838407        90         Yes             Waikaloa
-#> 87  27483327      12838994        90         Yes             Waikaloa
-#> 88  27483465      12838416        90         Yes             Waikaloa
-#> 89  27483328      12838443        90         Yes               Nanuku
-#> 90  27483467      12838826        90         Yes               Nanuku
-#> 91  27483469      12838758        40         Yes               Nanuku
-#> 92  27483471      12838991        30         Yes               Hapuna
-#> 93  27483472      12838460        70         Yes               Waikui
-#> 94  27483473      12838747        70         Yes               Waikui
-#> 95  27483474      12838679        30         Yes               Hapuna
-#> 96  27483475      12838796        35         Yes               Waikui
-#> 97  27483476      12838688        20         Yes             Lalamilo
-#> 98  27483477      12838885        40         Yes               Hapuna
-#> 99  27483479      12838983        30         Yes               Waikui
-#> 100 27483480      12838619        20         Yes               Hapuna
-#> 101 27483483      12838804        95         Yes             Kawaihae
-#> 102 27483485      12838853        90         Yes             Kawaihae
-#> 103 27483487      12838767        90         Yes             Kawaihae
-#> 104 27483489      12838772        25         Yes              Kamakoa
-#> 105 27483495      12838529        95         Yes              Kamakoa
-#> 106 27483496      12838748       100         Yes               Waimea
-#> 107 27483497      12838560       100         Yes               Waimea
-#> 108 27483498      12838419       100         Yes               Waimea
-#> 109 27483499      12838921       100         Yes               Waimea
-#> 110 27483375      12838591        60         Yes               Ihuanu
-#> 111 27482592      12838573        95         Yes               Ihuanu
-#> 112 27482594      12838669        95         Yes               Ihuanu
-#> 113 27482596      12838676        90         Yes              Iwalani
-#> 114 27482598      12838620        30         Yes              Iwalani
-#> 115 27482600      12838611        60         Yes              Iwalani
-#> 116 27482602      12838714        70         Yes              Iwalani
-#> 117 27482604      12838890        95         Yes              Iwalani
-#> 118 27483377      12838496       100         Yes             Nawahine
-#> 119 27483501      12838909        85         Yes             Mahukona
-#> 120 27483504      12838447        85         Yes             Mahukona
-#> 121 27483506      12838409        95         Yes                 Hawi
-#> 122 27483508      12838665        95         Yes                 Hawi
-#> 123 27483510      12838680        95         Yes                 Hawi
-#> 124 27483512      12839000       100         Yes               Kohala
-#> 125 27483513      12838762        85         Yes               Waimea
-#> 126 27483516      12838963        85         Yes               Waimea
-#> 127 27483519      12838628        85         Yes               Waimea
-#> 128 27483520      12838856        15         No                Waimea
-#> 129 27483578      12838682       100         Yes               Kohala
-#> 130 27483579      12838733       100         Yes               Kohala
-#> 131 27483580      12838888       100         Yes               Kohala
-#> 132 27483581      12838832       100         Yes               Kohala
-#> 133 27483582      12838773       100         Yes              Ainakea
-#> 134 27483583      12838720       100         Yes              Ainakea
-#> 135 27483584      12838552       100         Yes              Ainakea
-#> 136 27483658      12838574        95         Yes               Kemole
-#> 137 27483660      12838672        95         Yes               Kemole
-#> 138 27483662      12838684       100         Yes              Paauhau
-#> 139 27483420      12838857        60         Yes              Nenenui
-#> 140 27483422      12838805        60         Yes              Nenenui
-#> 141 27483666      12838774       100         Yes              Paauhau
-#> 142 27483424      12838851        90         Yes              Ohianui
-#> 143 27483427      12838960        90         Yes              Ohianui
-#> 144 27483667      12838768        70         Yes              Paauhau
-#> 145 27483433      12838775        90         Yes               Huikau
-#> 146 27483600      12838730       100         Yes               Kikoni
-#> 147 27482607      12838723        95         Yes             Kaalualu
-#> 148 27482608      12838928        95         Yes             Kaalualu
-#> 149 27482611      12838493        95         Yes             Kaalualu
-#> 150 27482612      12838968        40         Yes               Pakini
-#> 151 27482613      12838435        60         Yes             Kaalualu
-#> 152 27482614      12838800        95         Yes               Pakini
-#> 153 27482616      12838878        40         Yes             Kaalualu
-#> 154 27482617      12838475        60         Yes               Pakini
-#> 155 27482628      12838964        95         Yes               Lalaau
-#> 156 27482645      12838440        60         Yes              Kahaluu
-#> 157 27482647      12838411        70         Yes Lithic Haplotorrands
-#> 158 27482660      12838623        88         Yes                Puiwa
-#> 159 27482706      12838578        55         Yes               Ihuanu
-#> 160 27482708      12838629        95         Yes     Humic Durustands
-#> 161 27482723      12838958        75         Yes             Kaholimo
-#> 162 27482733      12838882        60         Yes             Kaholimo
-#> 163 27482740      12838760        60         Yes             Kaholimo
-#> 164 27482757      12838470        90         Yes              Kahaluu
-#> 165 27482780      12838535        50         Yes               Lalaau
-#> 166 27482783      12838873        45         Yes              Kahaluu
-#> 167 27482784      12838883        25         Yes              Ainahou
-#> 168 27482791      12838855        50         Yes               Nanaia
-#> 169 27482792      12838432        40         Yes              Ohaikea
-#> 170 27482805      12838884        60         Yes               Nanaia
-#> 171 27482868      12838507        40         Yes Lithic Ustipsamments
-#> 172 27483827      12838879        90         Yes              Alahapa
-#> 173 27482870      12838465        50         Yes              Alahapa
-#> 174 27483829      12838910        85         Yes                Heake
-#> 175 27483833      12838603        45         Yes                Heake
-#> 176 27483747      12838697        20         Yes             Kaholimo
-#> 177 27483748      12838427        10         No              Kaholimo
-#> 178 27483554      12838494        60         Yes             Kanohina
-#> 179 27483550      12838527        95         Yes               Pakini
-#> 180 27482883      12838750         2         No                Oneula
-#> 181 27482884      12838955         3         No               Maunaiu
-#> 182 27482902      12838597        90         Yes               Oneula
-#> 183 27482904      12838588        25         Yes             Menehune
-#> 184 27483849      12838731        76         Yes                 Wahi
-#> 185 27483855      12838445        40         Yes               Oneula
-#> 186 27483537      12838449        70         Yes               Puu Pa
-#> 187 27483538      12838709        20         Yes             Waikaloa
-#> 188 27483540      12838514         5         No                Puu Pa
-#> 189 27483543      12838703        25         Yes               Puu Pa
-#> 190 27483544      12838911        65         Yes               Puu Pa
-#> 191 27483736      12838437        15         No            Lanapohaku
-#> 192 27483549      12838580       100         Yes                Puako
-#> 193 27483783      12838428        15         No            Lanapohaku
-#> 194 27483785      12838434        15         No            Lanapohaku
-#> 195 27483789      12838735        65         Yes           Lanapohaku
-#> 196 27483805      12838663        85         Yes           Pohakulehu
-#> 197 27483808      12838875        30         Yes           Pohakulehu
-#> 198 27483809      12838642        30         Yes                 Lapa
-#> 199 27483609      12838728        45         Yes           Lanapohaku
-#> 200 27483610      12838922        35         Yes           Pohakulehu
-#> 201 27483621      12838457        85         Yes                 Hilo
-#> 202 27483624      12838807        80         Yes                 Hilo
-#> 203 27483627      12838781        80         Yes                 Hilo
-#> 204 27483647      12838771        40         Yes               Onomea
-#> 205 27483631      12838920        10         No                Onomea
-#> 206 27483643      12838932        65         Yes                 Hilo
-#> 207 27483698      12838566        95         Yes               Ookala
-#> 208 27483654      12839012        95         Yes               Ookala
-#> 209 27483701      12838732        95         Yes               Ookala
-#> 210 27483704      12838757        55         Yes               Ookala
-#> 211 27483687      12838982        95         Yes              Paauhau
-#> 212 27483720      12838710        95         Yes                 Olaa
-#> 213 27483751      12838907        30         Yes               Onomea
-#> 214 27483863      12839098       100         Yes              Alaeloa
-#> 215 27483860      12839095       100         Yes              Alaeloa
-#> 216 27483861      12839096       100         Yes              Alaeloa
-#> 217 27483862      12839097       100         Yes              Alaeloa
-#> 218 27483869      12839101       100         Yes              Haleiwa
-#> 219 27483870      12839102       100         Yes              Haleiwa
-#> 220 27483867      12839099       100         Yes               Halawa
-#> 221 27483868      12839100       100         Yes               Halawa
-#> 222 27483871      12839103       100         Yes              Holomua
-#> 223 27483872      12839104       100         Yes              Holomua
-#> 224 27483873      12839105       100         Yes              Holomua
-#> 225 27483874      12839106       100         Yes              Holomua
-#> 226 27483875      12839107       100         Yes              Holomua
-#> 227 27483877      12839108         5         No               Molokai
-#> 228 27483878      12839109        90         Yes             Hoolehua
-#> 229 27483879      12839110       100         Yes             Hoolehua
-#> 230 27483880      12839111       100         Yes             Hoolehua
-#> 231 27483881      12839112       100         Yes             Hoolehua
-#> 232 27483882      12839113       100         Yes             Hoolehua
-#> 233 27483885      12839115       100         Yes               Jaucas
-#> 234 27483883      12839114        55         Yes               Jaucas
-#> 235 27483896      12839122       100         Yes                Kalae
-#> 236 27483897      12839123       100         Yes                Kalae
-#> 237 27483898      12839124       100         Yes                Kalae
-#> 238 27483899      12839125       100         Yes                Kalae
-#> 239 27483900      12839126       100         Yes                Kalae
-#> 240 27483887      12839117        85         Yes            Kalaupapa
-#> 241 27483889      12839118        90         Yes           Kapuhikani
-#> 242 27483901      12839127       100         Yes           Kawaihapai
-#> 243 27483902      12839128       100         Yes           Kawaihapai
-#> 244 27483903      12839129       100         Yes           Kawaihapai
-#> 245 27483904      12839130       100         Yes           Kawaihapai
-#> 246 27483892      12839119        85         Yes               Kealia
-#> 247 27483893      12839120        10         No                Kealia
-#> 248 27483895      12839121        70         Yes                Koele
-#> 249 27483905      12839131       100         Yes              Lahaina
-#> 250 27483906      12839132       100         Yes              Lahaina
-#> 251 27483907      12839133       100         Yes              Lahaina
-#> 252 27483908      12839134       100         Yes              Lahaina
-#> 253 27483909      12839135       100         Yes              Lahaina
-#> 254 27483910      12839136       100         Yes              Lahaina
-#> 255 27483911      12839137        95         Yes            Lualualei
-#> 256 27483912      12839138         5         No                   Ewa
-#> 257 27483914      12839139       100         Yes                 Mala
-#> 258 27483915      12839140       100         Yes                 Mala
-#> 259 27483916      12839141       100         Yes              Molokai
-#> 260 27483917      12839142       100         Yes              Molokai
-#> 261 27483918      12839143       100         Yes              Molokai
-#> 262 27483919      12839144       100         Yes              Molokai
-#> 263 27483920      12839145       100         Yes              Molokai
-#> 264 27483923      12839146         5         No                   Oli
-#> 265 27483924      12839147        85         Yes                Naiwa
-#> 266 27483925      12839148         5         No                 Naiwa
-#> 267 27483926      12839149         5         No                 Olelo
-#> 268 27483927      12839150       100         Yes                Naiwa
-#> 269 27483928      12839151       100         Yes               Niulii
-#> 270 27483929      12839152       100         Yes               Niulii
-#> 271 27483930      12839153       100         Yes                Olelo
-#> 272 27483931      12839154        90         Yes                  Oli
-#> 273 27483932      12839155        10         No                 Naiwa
-#> 274 27483933      12839156        90         Yes                  Oli
-#> 275 27483934      12839157        10         No                 Naiwa
-#> 276 27483937      12839160       100         Yes                Pamoa
-#> 277 27483938      12839161       100         Yes                Pamoa
-#> 278 27483939      12839162       100         Yes                Pamoa
-#> 279 27483941      12839164       100         Yes               Pulehu
-#> 280 27483940      12839163       100         Yes               Pulehu
-#> 281 27483942      12839165        85         Yes               Pulehu
-#> 282 27483947      12839166       100         Yes              Waihuna
-#> 283 27483948      12839167       100         Yes              Waihuna
-#> 284 27483949      12839168       100         Yes              Waihuna
-#> 285 27483953      12839169        85         Yes              Waikapu
-#> 286 27483954      12839170       100         Yes              Waikapu
-#> 287 27483955      12839171       100         Yes              Waikapu
-#> 288 27483959      12839172        80         Yes              Waikapu
-#> 289 27483982      12839177        40         Yes               Mahana
-#> 290 27483989      12839181       100         Yes                Halii
-#> 291 27483990      12839182       100         Yes                Halii
-#> 292 27483991      12839183       100         Yes                Halii
-#> 293 27483992      12839184       100         Yes                Halii
-#> 294 27483993      12839185        95         Yes              Hanalei
-#> 295 27483994      12839186         5         No              Mokuleia
-#> 296 27483986      12839178       100         Yes             Hihimanu
-#> 297 27483996      12839188        85         Yes              Hanalei
-#> 298 27483997      12839189       100         Yes              Hanalei
-#> 299 27483998      12839190       100         Yes              Hanalei
-#> 300 27483999      12839191       100         Yes            Hanamaulu
-#> 301 27484000      12839192       100         Yes            Hanamaulu
-#> 302 27484001      12839193       100         Yes            Hanamaulu
-#> 303 27484002      12839194       100         Yes            Hanamaulu
-#> 304 27484003      12839195       100         Yes            Hanamaulu
-#> 305 27484004      12839196       100         Yes            Hanamaulu
-#> 306 27484005      12839197       100         Yes               Ioleau
-#> 307 27484006      12839198       100         Yes               Ioleau
-#> 308 27484007      12839199       100         Yes               Ioleau
-#> 309 27484008      12839200       100         Yes               Ioleau
-#> 310 27484009      12839201       100         Yes               Jaucas
-#> 311 27484010      12839202       100         Yes       Jaucas variant
-#> 312 27484020      12839211       100         Yes        Kaena variant
-#> 313 27484021      12839212       100         Yes        Kaena variant
-#> 314 27484022      12839213       100         Yes               Kalapa
-#> 315 27484023      12839214       100         Yes               Kalapa
-#> 316 27484024      12839215       100         Yes               Kalapa
-#> 317 27484025      12839216       100         Yes               Kalihi
-#> 318 27484011      12839203        75         Yes               Kalapa
-#> 319 27484026      12839217        60         Yes               Kaloko
-#> 320 27484027      12839218        40         Yes      Kaloko, drained
-#> 321 27484028      12839219        85         Yes               Kaloko
-#> 322 27484029      12839220        15         No                Kaloko
-#> 323 27484030      12839221       100         Yes                Kapaa
-#> 324 27484031      12839222       100         Yes                Kapaa
-#> 325 27484032      12839223       100         Yes                Kapaa
-#> 326 27484033      12839224       100         Yes                Kapaa
-#> 327 27484034      12839225       100         Yes               Kekaha
-#> 328 27484035      12839226       100         Yes               Kekaha
-#> 329 27484036      12839227       100         Yes               Kekaha
-#> 330 27484013      12839204       100         Yes               Kekaha
-#> 331 27484016      12839207       100         Yes             Kolokolo
-#> 332 27484037      12839228       100         Yes                Koloa
-#> 333 27484038      12839229       100         Yes                Koloa
-#> 334 27484039      12839230       100         Yes                Koloa
-#> 335 27484018      12839209       100         Yes               Koolau
-#> 336 27484040      12839231       100         Yes             Kolokolo
-#> 337 27484042      12839233       100         Yes                Lawai
-#> 338 27484043      12839234       100         Yes                Lawai
-#> 339 27484044      12839235       100         Yes                Lawai
-#> 340 27484045      12839236       100         Yes                Lihue
-#> 341 27484046      12839237       100         Yes                Lihue
-#> 342 27484047      12839238       100         Yes                Lihue
-#> 343 27484048      12839239       100         Yes                Lihue
-#> 344 27484049      12839240       100         Yes                Lihue
-#> 345 27484050      12839241       100         Yes                Lihue
-#> 346 27484041      12839232       100         Yes            Lualualei
-#> 347 27484051      12839242        95         Yes            Lualualei
-#> 348 27484052      12839243         5         No                   Ewa
-#> 349 27484053      12839244       100         Yes            Lualualei
-#> 350 27484055      12839245       100         Yes               Mahana
-#> 351 27484056      12839246       100         Yes               Mahana
-#> 352 27484057      12839247       100         Yes               Mahana
-#> 353 27484058      12839248       100         Yes               Mahana
-#> 354 27484059      12839249       100         Yes               Mahana
-#> 355 27484060      12839250       100         Yes             Makapili
-#> 356 27484061      12839251       100         Yes             Makapili
-#> 357 27484062      12839252       100         Yes             Makapili
-#> 358 27484063      12839253       100         Yes             Makapili
-#> 359 27484064      12839254       100         Yes             Makaweli
-#> 360 27484065      12839255       100         Yes             Makaweli
-#> 361 27484066      12839256       100         Yes             Makaweli
-#> 362 27484067      12839257       100         Yes             Makaweli
-#> 363 27484068      12839258       100         Yes             Makaweli
-#> 364 27484069      12839259       100         Yes             Makaweli
-#> 365 27484070      12839260       100         Yes             Makaweli
-#> 366 27484071      12839261       100         Yes             Makaweli
-#> 367 27484072      12839262        90         Yes               Mamala
-#> 368 27484074      12839263       100         Yes             Mokuleia
-#> 369 27484075      12839264       100         Yes     Mokuleia variant
-#> 370 27484076      12839265       100         Yes                  Niu
-#> 371 27484077      12839266       100         Yes                  Niu
-#> 372 27484078      12839267       100         Yes                  Niu
-#> 373 27484079      12839268       100         Yes                  Niu
-#> 374 27484080      12839269       100         Yes               Nohili
-#> 375 27484081      12839270       100         Yes             Nonopahu
-#> 376 27484082      12839271       100         Yes             Nonopahu
-#> 377 27484088      12839276        90         Yes                  Oli
-#> 378 27484083      12839272        90         Yes                  Oli
-#> 379 27484084      12839273        10         No                 Naiwa
-#> 380 27484085      12839274        90         Yes                  Oli
-#> 381 27484086      12839275        10         No                 Naiwa
-#> 382 27484092      12839280       100         Yes               Pakala
-#> 383 27484093      12839281       100         Yes               Pakala
-#> 384 27484091      12839279       100         Yes               Pakala
-#> 385 27484094      12839282        90         Yes             Pohakupu
-#> 386 27484097      12839283       100         Yes                Pooku
-#> 387 27484098      12839284       100         Yes                Pooku
-#> 388 27484099      12839285       100         Yes                Pooku
-#> 389 27484100      12839286       100         Yes                Pooku
-#> 390 27484101      12839287       100         Yes                Pooku
-#> 391 27484102      12839288       100         Yes                Pooku
-#> 392 27484103      12839289       100         Yes                 Puhi
-#> 393 27484104      12839290       100         Yes                 Puhi
-#> 394 27484105      12839291       100         Yes                 Puhi
-#> 395 27484106      12839292       100         Yes                 Puhi
-#> 396 27484107      12839293       100         Yes                 Puhi
-#> 397 27484108      12839294       100         Yes             Puu Opae
-#> 398 27484109      12839295       100         Yes             Puu Opae
-#> 399 27484110      12839296       100         Yes             Puu Opae
-#> 400 27484112      12839297        60         Yes               Waiawa
-#> 401 27484114      12839298       100         Yes              Waikomo
-#> 402 27484115      12839299        65         Yes              Waikomo
-#> 403 27484117      12839300        60         Yes              Waikomo
-#> 404 27486179      12839353        15         No                Mamala
-#> 405 27486103      12839304       100         Yes               Jaucas
-#> 406 27486107      12839307       100         Yes                Kalae
-#> 407 27486108      12839308       100         Yes                Kalae
-#> 408 27486109      12839309       100         Yes                Kalae
-#> 409 27486110      12839310        95         Yes              Kanepuu
-#> 410 27486112      12839311        85         Yes              Kanepuu
-#> 411 27486115      12839312        95         Yes              Kanepuu
-#> 412 27486116      12839313        85         Yes              Kanepuu
-#> 413 27486118      12839314       100         Yes                Koele
-#> 414 27486119      12839315       100         Yes                Koele
-#> 415 27486120      12839316       100         Yes                Koele
-#> 416 27486106      12839306        70         Yes                Koele
-#> 417 27486121      12839317       100         Yes              Lahaina
-#> 418 27486122      12839318       100         Yes              Lahaina
-#> 419 27486123      12839319       100         Yes              Lahaina
-#> 420 27486124      12839320       100         Yes              Lahaina
-#> 421 27486125      12839321       100         Yes              Lahaina
-#> 422 27486126      12839322       100         Yes              Lahaina
-#> 423 27486127      12839323       100         Yes              Lahaina
-#> 424 27486128      12839324        95         Yes            Lualualei
-#> 425 27486129      12839325         5         No                   Ewa
-#> 426 27486130      12839326       100         Yes                 Mala
-#> 427 27486131      12839327       100         Yes                 Mala
-#> 428 27486132      12839328       100         Yes              Molokai
-#> 429 27486133      12839329       100         Yes              Molokai
-#> 430 27486134      12839330       100         Yes              Molokai
-#> 431 27486135      12839331       100         Yes              Molokai
-#> 432 27486138      12839332         5         No                   Oli
-#> 433 27486139      12839333        85         Yes                Naiwa
-#> 434 27486140      12839334         5         No                 Naiwa
-#> 435 27486141      12839335         5         No                 Olelo
-#> 436 27486144      12839338       100         Yes                Pamoa
-#> 437 27486145      12839339       100         Yes                Pamoa
-#> 438 27486147      12839341       100         Yes               Pulehu
-#> 439 27486146      12839340       100         Yes               Pulehu
-#> 440 27486148      12839342        85         Yes               Pulehu
-#> 441 27486152      12839343       100         Yes                Uwala
-#> 442 27486153      12839344       100         Yes                Uwala
-#> 443 27486154      12839345       100         Yes                Uwala
-#> 444 27486156      12839346       100         Yes              Waihuna
-#> 445 27486157      12839347       100         Yes              Waihuna
-#> 446 27486158      12839348       100         Yes              Waihuna
-#> 447 27486159      12839349       100         Yes              Waihuna
-#> 448 27486160      12839350       100         Yes              Waihuna
-#> 449 27486164      12839351        85         Yes              Waikapu
-#> 450 27486168      12839352        80         Yes              Waikapu
-#> 451 27486186      12839354        90         Yes                 Alae
-#> 452 27486189      12839355        90         Yes                 Alae
-#> 453 27486190      12839356       100         Yes                 Alae
-#> 454 27486191      12839357       100         Yes              Alaeloa
-#> 455 27486192      12839358       100         Yes              Alaeloa
-#> 456 27486193      12839359       100         Yes              Alaeloa
-#> 457 27486196      12839360       100         Yes                  Ewa
-#> 458 27486197      12839361       100         Yes                  Ewa
-#> 459 27486198      12839362       100         Yes                  Ewa
-#> 460 27486199      12839363       100         Yes                  Ewa
-#> 461 27486200      12839364       100         Yes                  Ewa
-#> 462 27486201      12839365       100         Yes                  Ewa
-#> 463 27486210      12839371        82         Yes                Haiku
-#> 464 27486214      12839372        85         Yes                Haiku
-#> 465 27486218      12839373        85         Yes                Haiku
-#> 466 27486221      12839374        85         Yes                Haiku
-#> 467 27486224      12839375       100         Yes           Haliimaile
-#> 468 27486225      12839376       100         Yes           Haliimaile
-#> 469 27486226      12839377         5         No                Keahua
-#> 470 27486227      12839378         5         No                  Paia
-#> 471 27486228      12839379        90         Yes           Haliimaile
-#> 472 27486229      12839380       100         Yes           Haliimaile
-#> 473 27486203      12839366       100         Yes               Halawa
-#> 474 27486230      12839381       100         Yes           Haliimaile
-#> 475 27486204      12839367       100         Yes                 Hana
-#> 476 27486205      12839368       100         Yes                 Hana
-#> 477 27486206      12839369       100         Yes         Hana variant
-#> 478 27486207      12839370       100         Yes         Hana variant
-#> 479 27486231      12839382       100         Yes          Hamakuapoko
-#> 480 27486232      12839383       100         Yes          Hamakuapoko
-#> 481 27486233      12839384       100         Yes          Hamakuapoko
-#> 482 27486234      12839385       100         Yes              Honolua
-#> 483 27486235      12839386       100         Yes              Honolua
-#> 484 27486237      12839388        95         Yes                  Iao
-#> 485 27486239      12839389        90         Yes                  Iao
-#> 486 27486242      12839390       100         Yes                  Iao
-#> 487 27486243      12839391       100         Yes                  Iao
-#> 488 27486246      12839392        85         Yes                  Iao
-#> 489 27486248      12839393        90         Yes                  Iao
-#> 490 27486236      12839387       100         Yes                   Io
-#> 491 27486252      12839394       100         Yes               Jaucas
-#> 492 27486253      12839395       100         Yes               Jaucas
-#> 493 27486274      12839408       100         Yes               Kahana
-#> 494 27486275      12839409       100         Yes               Kahana
-#> 495 27486276      12839410       100         Yes               Kahana
-#> 496 27486254      12839396       100         Yes               Kailua
-#> 497 27486255      12839397       100         Yes                Kaimu
-#> 498 27486259      12839400       100         Yes              Kamaole
-#> 499 27486260      12839401       100         Yes              Kamaole
-#> 500 27486261      12839402        95         Yes                Kaupo
-#> 501 27486263      12839403        95         Yes                Kaupo
-#> 502 27486265      12839404        85         Yes               Kealia
-#> 503 27486266      12839405        10         No                Kealia
-#> 504 27486279      12839413       100         Yes               Keahua
-#> 505 27486280      12839414       100         Yes               Keahua
-#> 506 27486281      12839415       100         Yes               Keahua
-#> 507 27486277      12839411       100         Yes               Keahua
-#> 508 27486282      12839416       100         Yes               Keahua
-#> 509 27486278      12839412       100         Yes               Keahua
-#> 510 27486283      12839417       100         Yes               Keahua
-#> 511 27486284      12839418       100         Yes               Keahua
-#> 512 27486285      12839419       100         Yes               Keahua
-#> 513 27486268      12839406        75         Yes            Keawakapu
-#> 514 27486272      12839407        40         Yes                Koele
-#> 515 27486288      12839422       100         Yes                 Kula
-#> 516 27486289      12839423        80         Yes                 Kula
-#> 517 27486286      12839420       100         Yes                 Kula
-#> 518 27486287      12839421       100         Yes                 Kula
-#> 519 27486294      12839427       100         Yes              Lahaina
-#> 520 27486295      12839428       100         Yes              Lahaina
-#> 521 27486296      12839429       100         Yes              Lahaina
-#> 522 27486307      12839437         5         No                Kailua
-#> 523 27486308      12839438         5         No                 Haiku
-#> 524 27486309      12839439        90         Yes              Makawao
-#> 525 27486310      12839440       100         Yes              Makawao
-#> 526 27486297      12839430       100         Yes             Makaalae
-#> 527 27486298      12839431       100         Yes             Makaalae
-#> 528 27486311      12839441       100         Yes              Molokai
-#> 529 27486312      12839442       100         Yes              Molokai
-#> 530 27486313      12839443       100         Yes              Molokai
-#> 531 27486299      12839432       100         Yes             Makaalae
-#> 532 27486300      12839433         3         No             Keawakapu
-#> 533 27486302      12839434        46         Yes               Makena
-#> 534 27486303      12839435         2         No              Oanapuka
-#> 535 27486305      12839436        90         Yes               Malama
-#> 536 27486314      12839444        90         Yes                Naiwa
-#> 537 27486315      12839445         5         No                 Naiwa
-#> 538 27486316      12839446         5         No                 Olelo
-#> 539 27486319      12839447        90         Yes             Oanapuka
-#> 540 27486320      12839448       100         Yes             Oanapuka
-#> 541 27486321      12839449       100         Yes                Olelo
-#> 542 27486322      12839450        90         Yes                  Oli
-#> 543 27486324      12839451       100         Yes               Olinda
-#> 544 27486325      12839452       100         Yes               Olinda
-#> 545 27486335      12839460       100         Yes                 Paia
-#> 546 27486336      12839461       100         Yes                 Paia
-#> 547 27486337      12839462       100         Yes                 Paia
-#> 548 27486338      12839463         5         No                Kailua
-#> 549 27486339      12839464         5         No                 Haiku
-#> 550 27486340      12839465        90         Yes              Pauwela
-#> 551 27486341      12839466       100         Yes              Pauwela
-#> 552 27486342      12839467       100         Yes              Pauwela
-#> 553 27486343      12839468       100         Yes               Pulehu
-#> 554 27486344      12839469       100         Yes               Pulehu
-#> 555 27486345      12839470       100         Yes               Pulehu
-#> 556 27486346      12839471       100         Yes               Pulehu
-#> 557 27486347      12839472        85         Yes               Pulehu
-#> 558 27486351      12839473       100         Yes               Pulehu
-#> 559 27486352      12839474       100         Yes               Pulehu
-#> 560 27486329      12839455       100         Yes                 Pane
-#> 561 27486330      12839456         5         No                   Iao
-#> 562 27486331      12839457         5         No                Jaucas
-#> 563 27486332      12839458        90         Yes               Puuone
-#> 564 27486333      12839459        90         Yes               Puu Pa
-#> 565 27486354      12839475       100         Yes           Ulupalakua
-#> 566 27486357      12839478        93         Yes                  Uma
-#> 567 27486361      12839480       100         Yes             Wahikuli
-#> 568 27486362      12839481       100         Yes             Wahikuli
-#> 569 27486363      12839482       100         Yes             Wahikuli
-#> 570 27486364      12839483       100         Yes             Wahikuli
-#> 571 27486365      12839484       100         Yes              Waiakoa
-#> 572 27486366      12839485       100         Yes              Waiakoa
-#> 573 27486367      12839486       100         Yes              Waiakoa
-#> 574 27486370      12839487        90         Yes              Waiakoa
-#> 575 27486371      12839488       100         Yes              Waiakoa
-#> 576 27486372      12839489       100         Yes              Waiakoa
-#> 577 27486373      12839490       100         Yes              Waiakoa
-#> 578 27486360      12839479       100         Yes              Waiakoa
-#> 579 27486374      12839491       100         Yes              Wailuku
-#> 580 27486375      12839492         5         No                   Iao
-#> 581 27486376      12839493        90         Yes              Wailuku
-#> 582 27486377      12839494         5         No                Pulehu
-#> 583 27486378      12839495       100         Yes              Wailuku
-#> 584 27486379      12839496       100         Yes               Wainee
-#> 585 27486380      12839497       100         Yes               Wainee
-#> 586 27486381      12839498       100         Yes               Wainee
-#> 587 27486382      12839499        90         Yes               Wainee
-#> 588 27486409      12840201       100         Yes              Alaeloa
-#> 589 27486408      12840200       100         Yes              Alaeloa
-#> 590 27486411      12840202        15         No                Mamala
-#> 591 27486413      12840203       100         Yes                  Ewa
-#> 592 27486414      12840204       100         Yes                  Ewa
-#> 593 27486415      12840205       100         Yes                  Ewa
-#> 594 27486416      12840206       100         Yes                  Ewa
-#> 595 27486417      12840207       100         Yes                  Ewa
-#> 596 27486418      12840208       100         Yes                  Ewa
-#> 597 27486419      12840209       100         Yes                  Ewa
-#> 598 27486425      12840213        95         Yes              Haleiwa
-#> 599 27486427      12840215       100         Yes              Haleiwa
-#> 600 27486422      12840210       100         Yes               Halawa
-#> 601 27486423      12840211       100         Yes               Halawa
-#> 602 27486424      12840212       100         Yes             Helemano
-#> 603 27486429      12840217        85         Yes              Hanalei
-#> 604 27486431      12840219        85         Yes              Hanalei
-#> 605 27486432      12840220        85         Yes              Hanalei
-#> 606 27486434      12840222       100         Yes           Honouliuli
-#> 607 27486435      12840223       100         Yes           Honouliuli
-#> 608 27486436      12840224       100         Yes               Jaucas
-#> 609 27486437      12840225       100         Yes               Jaucas
-#> 610 27486447      12840233       100         Yes                Kaena
-#> 611 27486448      12840234       100         Yes                Kaena
-#> 612 27486449      12840235       100         Yes                Kaena
-#> 613 27486450      12840236       100         Yes                Kaena
-#> 614 27486451      12840237       100         Yes                Kaena
-#> 615 27486452      12840238       100         Yes                Kaena
-#> 616 27486453      12840239        85         Yes               Kaloko
-#> 617 27486454      12840240        15         No                Kaloko
-#> 618 27486455      12840241        10         No            Kawaihapai
-#> 619 27486456      12840242        90         Yes       Kaloko variant
-#> 620 27486457      12840243       100         Yes              Kaneohe
-#> 621 27486458      12840244       100         Yes              Kaneohe
-#> 622 27486438      12840226       100         Yes              Kaneohe
-#> 623 27486439      12840227       100         Yes              Kaneohe
-#> 624 27486440      12840228       100         Yes              Kaneohe
-#> 625 27486441      12840229       100         Yes              Kaneohe
-#> 626 27486442      12840230        75         Yes                Kapaa
-#> 627 27486459      12840245       100         Yes           Kawaihapai
-#> 628 27486462      12840248       100         Yes           Kawaihapai
-#> 629 27486463      12840249       100         Yes           Kawaihapai
-#> 630 27486460      12840246       100         Yes           Kawaihapai
-#> 631 27486464      12840250       100         Yes           Kawaihapai
-#> 632 27486461      12840247       100         Yes           Kawaihapai
-#> 633 27486466      12840251        10         No          Pearl Harbor
-#> 634 27486467      12840252        85         Yes                Keaau
-#> 635 27486468      12840253       100         Yes                Keaau
-#> 636 27486469      12840254       100         Yes                Keaau
-#> 637 27486470      12840255       100         Yes                Kemoo
-#> 638 27486471      12840256       100         Yes                Kemoo
-#> 639 27486472      12840257       100         Yes                Kemoo
-#> 640 27486473      12840258       100         Yes                Kemoo
-#> 641 27486474      12840259       100         Yes                Kemoo
-#> 642 27486444      12840231        60         Yes                Kemoo
-#> 643 27486475      12840260       100         Yes                 Koko
-#> 644 27486476      12840261       100         Yes                 Koko
-#> 645 27486477      12840262       100         Yes                 Koko
-#> 646 27486478      12840263       100         Yes             Kokokahi
-#> 647 27486446      12840232       100         Yes             Kokokahi
-#> 648 27486479      12840264       100         Yes             Kolekole
-#> 649 27486480      12840265       100         Yes             Kolekole
-#> 650 27486481      12840266       100         Yes             Kolekole
-#> 651 27486482      12840267       100         Yes                Kunia
-#> 652 27486483      12840268       100         Yes                Kunia
-#> 653 27486484      12840269       100         Yes                Kunia
-#> 654 27486486      12840271       100         Yes              Lahaina
-#> 655 27486487      12840272       100         Yes              Lahaina
-#> 656 27486488      12840273       100         Yes              Lahaina
-#> 657 27486489      12840274       100         Yes              Lahaina
-#> 658 27486490      12840275       100         Yes             Leilehua
-#> 659 27486491      12840276       100         Yes             Leilehua
-#> 660 27486492      12840277         3         No               Hanalei
-#> 661 27486493      12840278         2         No               Kaneohe
-#> 662 27486494      12840279        95         Yes              Lolekaa
-#> 663 27486495      12840280       100         Yes              Lolekaa
-#> 664 27486496      12840281       100         Yes              Lolekaa
-#> 665 27486497      12840282       100         Yes              Lolekaa
-#> 666 27486498      12840283       100         Yes              Lolekaa
-#> 667 27486485      12840270       100         Yes            Lualualei
-#> 668 27486499      12840284        95         Yes            Lualualei
-#> 669 27486500      12840285         5         No                   Ewa
-#> 670 27486501      12840286       100         Yes            Lualualei
-#> 671 27486502      12840287       100         Yes            Lualualei
-#> 672 27486503      12840288       100         Yes            Lualualei
-#> 673 27486504      12840289        55         Yes               Mahana
-#> 674 27486507      12840290       100         Yes               Mahana
-#> 675 27486508      12840291       100         Yes               Mahana
-#> 676 27486509      12840292       100         Yes               Mahana
-#> 677 27486510      12840293         5         No                Mamala
-#> 678 27486511      12840294        95         Yes             Makalapa
-#> 679 27486512      12840295       100         Yes             Makalapa
-#> 680 27486513      12840296       100         Yes             Makalapa
-#> 681 27486514      12840297       100         Yes               Makiki
-#> 682 27486515      12840298       100         Yes               Makiki
-#> 683 27486516      12840299        90         Yes               Mamala
-#> 684 27486518      12840300       100         Yes               Manana
-#> 685 27486519      12840301       100         Yes               Manana
-#> 686 27486520      12840302       100         Yes               Manana
-#> 687 27486521      12840303       100         Yes               Manana
-#> 688 27486522      12840304       100         Yes               Manana
-#> 689 27486523      12840305       100         Yes               Manana
-#> 690 27486524      12840306       100         Yes               Manana
-#> 691 27486525      12840307       100         Yes               Manana
-#> 692 27486526      12840308       100         Yes             Mokuleia
-#> 693 27486527      12840309       100         Yes             Mokuleia
-#> 694 27486528      12840310       100         Yes             Mokuleia
-#> 695 27486529      12840311       100         Yes              Molokai
-#> 696 27486530      12840312       100         Yes              Molokai
-#> 697 27486531      12840313       100         Yes              Molokai
-#> 698 27486532      12840314       100         Yes              Molokai
-#> 699 27486539      12840320         3         No                Manana
-#> 700 27486540      12840321         2         No              Leilehua
-#> 701 27486541      12840322        95         Yes               Paaloa
-#> 702 27486542      12840323       100         Yes               Paaloa
-#> 703 27486543      12840324       100         Yes              Paumalu
-#> 704 27486544      12840325       100         Yes              Paumalu
-#> 705 27486545      12840326       100         Yes              Paumalu
-#> 706 27486546      12840327       100         Yes              Paumalu
-#> 707 27486547      12840328       100         Yes              Paumalu
-#> 708 27486548      12840329       100         Yes         Pearl Harbor
-#> 709 27486533      12840315       100         Yes                Pamoa
-#> 710 27486549      12840330         5         No               Waialua
-#> 711 27486550      12840331        90         Yes             Pohakupu
-#> 712 27486551      12840332         5         No               Alaeloa
-#> 713 27486552      12840333       100         Yes             Pohakupu
-#> 714 27486553      12840334        85         Yes               Pulehu
-#> 715 27486557      12840335       100         Yes               Pulehu
-#> 716 27486558      12840336       100         Yes               Pulehu
-#> 717 27486534      12840316       100         Yes                Papaa
-#> 718 27486535      12840317       100         Yes                Papaa
-#> 719 27486536      12840318       100         Yes                Papaa
-#> 720 27486537      12840319        60         Yes              Paumalu
-#> 721 27486559      12840337       100         Yes             Tantalus
-#> 722 27486560      12840338       100         Yes             Tantalus
-#> 723 27486561      12840339       100         Yes             Tantalus
-#> 724 27486562      12840340       100         Yes             Tantalus
-#> 725 27486566      12840341       100         Yes              Wahiawa
-#> 726 27486567      12840342       100         Yes              Wahiawa
-#> 727 27486568      12840343       100         Yes              Wahiawa
-#> 728 27486569      12840344       100         Yes              Wahiawa
-#> 729 27486570      12840345       100         Yes              Waialua
-#> 730 27486571      12840346       100         Yes              Waialua
-#> 731 27486572      12840347       100         Yes              Waialua
-#> 732 27486573      12840348       100         Yes              Waialua
-#> 733 27486574      12840349       100         Yes              Waialua
-#> 734 27486575      12840350       100         Yes              Waialua
-#> 735 27486584      12840359       100         Yes              Waikane
-#> 736 27486598      12840351       100         Yes              Waikane
-#> 737 27486576      12840352       100         Yes              Waikane
-#> 738 27486577      12840353        94         Yes              Waikane
-#> 739 27486578      12840354         2         No               Lolekaa
-#> 740 27486579      12840355         2         No               Kaneohe
-#> 741 27486580      12840356         2         No               Alaeloa
-#> 742 27486581      12840357       100         Yes              Waikane
-#> 743 27486582      12840358        98         Yes              Waikane
-#> 744 27486585      12840360       100         Yes              Waipahu
-#> 745 27486586      12840361       100         Yes              Waipahu
-#> 746 27486587      12840362       100         Yes              Waipahu
+#> 1   29192597      14568617        55         Yes           Lava flows
+#> 2   29192613      14568621        60         Yes                Mawae
+#> 3   29192617      14568622        60         Yes                Mawae
+#> 4   29192633      14568627        25         Yes               Kekake
+#> 5   29192635      14568628        20         Yes               Kekake
+#> 6   29192637      14568629        60         Yes              Iwalani
+#> 7   29192639      14568630        70         Yes              Iwalani
+#> 8   29192641      14568631        95         Yes               Ihuanu
+#> 9   29192643      14568632        95         Yes               Ihuanu
+#> 10  29192693      14568655        60         Yes               Ihuanu
+#> 11  29192695      14568656        95         Yes               Ihuanu
+#> 12  29192697      14568657        95         Yes               Ihuanu
+#> 13  29192699      14568658        30         Yes              Iwalani
+#> 14  29192701      14568659        60         Yes              Iwalani
+#> 15  29192703      14568660        70         Yes              Iwalani
+#> 16  29192721      14568672        95         Yes               Lalaau
+#> 17  29192724      14568674        60         Yes              Kahaluu
+#> 18  29192729      14568676        55         Yes               Ihuanu
+#> 19  29192731      14568677        95         Yes     Humic Durustands
+#> 20  29192740      14568683        60         Yes             Kaholimo
+#> 21  29192891      14568750        60         Yes             Kaholimo
+#> 22  29192755      14568692        40         Yes Lithic Ustipsamments
+#> 23  29192760      14568694        50         Yes   Lithic Haplustands
+#> 24  29192761      14568695        25         Yes   Lithic Haplustands
+#> 25  29192763      14568696        65         Yes              Alahapa
+#> 26  29192764      14568697        25         Yes                Heake
+#> 27  29192768      14568698        90         Yes              Alahapa
+#> 28  29192770      14568699        50         Yes              Alahapa
+#> 29  29192774      14568700        90         Yes           Halemaumau
+#> 30  29192777      14568701        85         Yes                Heake
+#> 31  29192781      14568702        45         Yes                Heake
+#> 32  29192786      14568703        90         Yes              Kilauea
+#> 33  29192788      14568704        20         Yes             Kaholimo
+#> 34  29192789      14568705        13         Yes                Puiwa
+#> 35  29192790      14568706        20         Yes             Kaholimo
+#> 36  29192791      14568707        12         Yes                Puiwa
+#> 37  29192796      14568708        20         Yes             Kaholimo
+#> 38  29192797      14568709        10         No              Kaholimo
+#> 39  29192810      14568716        55         Yes              Kahalii
+#> 40  29192814      14568717        60         Yes             Kanohina
+#> 41  29192823      14568720        55         Yes              Nakanui
+#> 42  29192827      14568721        90         Yes   Vitric Haplustands
+#> 43  29192829      14568722        60         Yes                 Ahiu
+#> 44  29192832      14568723        95         Yes               Pakini
+#> 45  29192835      14568725         2         No                Oneula
+#> 46  29192836      14568726         3         No               Maunaiu
+#> 47  29192854      14568736        90         Yes               Oneula
+#> 48  29192856      14568737        25         Yes             Menehune
+#> 49  29192862      14568738        76         Yes                 Wahi
+#> 50  29192870      14568740        95         Yes               Oneula
+#> 51  29192876      14568743        40         Yes               Oneula
+#> 52  29192886      14568747        45         Yes                 Ahiu
+#> 53  29192887      14568748        40         Yes   Vitric Haplustands
+#> 54  29208475      14569928        15         No              Waikaloa
+#> 55  29208501      14569934        40         Yes            Honokohau
+#> 56  29208597      14569965        60         Yes                Mawae
+#> 57  29208601      14569966        60         Yes                Mawae
+#> 58  29208713      14570006        25         Yes               Kekake
+#> 59  29208715      14570007        20         Yes               Kekake
+#> 60  29208718      14570008        60         Yes               Puuiki
+#> 61  29208721      14570009        60         Yes               Puuiki
+#> 62  29208724      14570010        25         Yes               Puuiki
+#> 63  29208113      14569742        60         Yes              Iwalani
+#> 64  29208727      14570012        60         Yes               Puuiki
+#> 65  29208732      14570014        35         Yes               Puuiki
+#> 66  29208735      14570016        35         Yes               Puuiki
+#> 67  29208742      14570019        35         Yes              Kamawai
+#> 68  29208115      14569743        70         Yes              Iwalani
+#> 69  29208117      14569744        40         Yes             Kanohina
+#> 70  29208119      14569745        90         Yes             Kanohina
+#> 71  29208863      14570065        90         Yes         Auwaiakeakua
+#> 72  29208865      14570066        90         Yes         Auwaiakeakua
+#> 73  29209215      14570246        40         Yes         Auwaiakeakua
+#> 74  29208868      14570067        30         Yes               Kiholo
+#> 75  29208870      14570068        60         Yes               Kiholo
+#> 76  29208872      14570069        60         Yes            Kahaumanu
+#> 77  29208874      14570070        60         Yes            Kahaumanu
+#> 78  29208876      14570071        30         Yes            Kahaumanu
+#> 79  29209009      14570130       100         Yes               Puu Pa
+#> 80  29209010      14570131       100         Yes               Puu Pa
+#> 81  29209011      14570132        70         Yes             Waikaloa
+#> 82  29209012      14570133        30         Yes               Puu Pa
+#> 83  29209013      14570134       100         Yes                Puako
+#> 84  29209014      14570135        70         Yes             Waikaloa
+#> 85  29209016      14570136        28         Yes               Puu Pa
+#> 86  29209017      14570137        90         Yes             Waikaloa
+#> 87  29208882      14570075        90         Yes             Waikaloa
+#> 88  29209020      14570138        90         Yes             Waikaloa
+#> 89  29208883      14570076        90         Yes               Nanuku
+#> 90  29209022      14570139        90         Yes               Nanuku
+#> 91  29209024      14570140        40         Yes               Nanuku
+#> 92  29209026      14570141        30         Yes               Hapuna
+#> 93  29209027      14570142        70         Yes               Waikui
+#> 94  29209028      14570143        70         Yes               Waikui
+#> 95  29209029      14570144        30         Yes               Hapuna
+#> 96  29209030      14570145        35         Yes               Waikui
+#> 97  29209031      14570146        20         Yes             Lalamilo
+#> 98  29209032      14570147        40         Yes               Hapuna
+#> 99  29209034      14570148        30         Yes               Waikui
+#> 100 29209035      14570149        20         Yes               Hapuna
+#> 101 29209038      14570150        95         Yes             Kawaihae
+#> 102 29209040      14570151        90         Yes             Kawaihae
+#> 103 29209042      14570152        90         Yes             Kawaihae
+#> 104 29209044      14570153        25         Yes              Kamakoa
+#> 105 29209050      14570154        95         Yes              Kamakoa
+#> 106 29209051      14570155       100         Yes               Waimea
+#> 107 29209052      14570156       100         Yes               Waimea
+#> 108 29209053      14570157       100         Yes               Waimea
+#> 109 29209054      14570158       100         Yes               Waimea
+#> 110 29208930      14570098        60         Yes               Ihuanu
+#> 111 29208147      14569757        95         Yes               Ihuanu
+#> 112 29208149      14569758        95         Yes               Ihuanu
+#> 113 29208151      14569759        90         Yes              Iwalani
+#> 114 29208153      14569760        30         Yes              Iwalani
+#> 115 29208155      14569761        60         Yes              Iwalani
+#> 116 29208157      14569762        70         Yes              Iwalani
+#> 117 29208159      14569763        95         Yes              Iwalani
+#> 118 29208932      14570099       100         Yes             Nawahine
+#> 119 29209056      14570159        85         Yes             Mahukona
+#> 120 29209059      14570160        85         Yes             Mahukona
+#> 121 29209061      14570161        95         Yes                 Hawi
+#> 122 29209063      14570162        95         Yes                 Hawi
+#> 123 29209065      14570163        95         Yes                 Hawi
+#> 124 29209067      14570164       100         Yes               Kohala
+#> 125 29209068      14570165        85         Yes               Waimea
+#> 126 29209071      14570166        85         Yes               Waimea
+#> 127 29209074      14570167        85         Yes               Waimea
+#> 128 29209075      14570168        15         No                Waimea
+#> 129 29209237      14570264       100         Yes               Kohala
+#> 130 29209238      14570265       100         Yes               Kohala
+#> 131 29209239      14570266       100         Yes               Kohala
+#> 132 29209240      14570267       100         Yes               Kohala
+#> 133 29209241      14570268       100         Yes              Ainakea
+#> 134 29209242      14570269       100         Yes              Ainakea
+#> 135 29209243      14570270       100         Yes              Ainakea
+#> 136 29209317      14570306        95         Yes               Kemole
+#> 137 29209319      14570307        95         Yes               Kemole
+#> 138 29209321      14570308       100         Yes              Paauhau
+#> 139 29208975      14570118        60         Yes              Nenenui
+#> 140 29208977      14570119        60         Yes              Nenenui
+#> 141 29209325      14570310       100         Yes              Paauhau
+#> 142 29208979      14570120        90         Yes              Ohianui
+#> 143 29208982      14570121        90         Yes              Ohianui
+#> 144 29209326      14570311        70         Yes              Paauhau
+#> 145 29208988      14570123        90         Yes               Huikau
+#> 146 29209259      14570280       100         Yes               Kikoni
+#> 147 29208162      14569764        95         Yes             Kaalualu
+#> 148 29208163      14569765        95         Yes             Kaalualu
+#> 149 29208166      14569766        95         Yes             Kaalualu
+#> 150 29208167      14569767        40         Yes               Pakini
+#> 151 29208168      14569768        60         Yes             Kaalualu
+#> 152 29208169      14569769        95         Yes               Pakini
+#> 153 29208171      14569770        40         Yes             Kaalualu
+#> 154 29208172      14569771        60         Yes               Pakini
+#> 155 29208183      14569781        95         Yes               Lalaau
+#> 156 29208200      14569795        60         Yes              Kahaluu
+#> 157 29208202      14569796        70         Yes Lithic Haplotorrands
+#> 158 29208215      14569802        88         Yes                Puiwa
+#> 159 29208261      14569831        55         Yes               Ihuanu
+#> 160 29208263      14569832        95         Yes     Humic Durustands
+#> 161 29208278      14569841        75         Yes             Kaholimo
+#> 162 29208288      14569845        60         Yes             Kaholimo
+#> 163 29208295      14569851        60         Yes             Kaholimo
+#> 164 29208312      14569863        90         Yes              Kahaluu
+#> 165 29208335      14569875        50         Yes               Lalaau
+#> 166 29208338      14569876        45         Yes              Kahaluu
+#> 167 29208339      14569877        25         Yes              Ainahou
+#> 168 29208346      14569880        50         Yes               Nanaia
+#> 169 29208347      14569881        40         Yes              Ohaikea
+#> 170 29208360      14569885        60         Yes               Nanaia
+#> 171 29208423      14569906        40         Yes Lithic Ustipsamments
+#> 172 29209175      14570232        90         Yes              Alahapa
+#> 173 29208425      14569907        50         Yes              Alahapa
+#> 174 29209177      14570233        85         Yes                Heake
+#> 175 29209181      14570234        45         Yes                Heake
+#> 176 29209406      14570346        20         Yes             Kaholimo
+#> 177 29209407      14570347        10         No              Kaholimo
+#> 178 29209213      14570245        60         Yes             Kanohina
+#> 179 29209209      14570244        95         Yes               Pakini
+#> 180 29208438      14569914         2         No                Oneula
+#> 181 29208439      14569915         3         No               Maunaiu
+#> 182 29208457      14569925        90         Yes               Oneula
+#> 183 29208459      14569926        25         Yes             Menehune
+#> 184 29209197      14570238        76         Yes                 Wahi
+#> 185 29209203      14570241        40         Yes               Oneula
+#> 186 29209092      14570180        70         Yes               Puu Pa
+#> 187 29209093      14570181        20         Yes             Waikaloa
+#> 188 29209095      14570182         5         No                Puu Pa
+#> 189 29209098      14570183        25         Yes               Puu Pa
+#> 190 29209099      14570184        65         Yes               Puu Pa
+#> 191 29209395      14570341        15         No            Lanapohaku
+#> 192 29209208      14570243       100         Yes                Puako
+#> 193 29209131      14570207        15         No            Lanapohaku
+#> 194 29209133      14570209        15         No            Lanapohaku
+#> 195 29209137      14570213        65         Yes           Lanapohaku
+#> 196 29209153      14570220        85         Yes           Pohakulehu
+#> 197 29209156      14570221        30         Yes           Pohakulehu
+#> 198 29209157      14570222        30         Yes                 Lapa
+#> 199 29209268      14570285        45         Yes           Lanapohaku
+#> 200 29209269      14570286        35         Yes           Pohakulehu
+#> 201 29209280      14570291        85         Yes                 Hilo
+#> 202 29209283      14570292        80         Yes                 Hilo
+#> 203 29209286      14570293        80         Yes                 Hilo
+#> 204 29209306      14570302        40         Yes               Onomea
+#> 205 29209290      14570295        10         No                Onomea
+#> 206 29209302      14570300        65         Yes                 Hilo
+#> 207 29209357      14570323        95         Yes               Ookala
+#> 208 29209313      14570305        95         Yes               Ookala
+#> 209 29209360      14570324        95         Yes               Ookala
+#> 210 29209363      14570325        55         Yes               Ookala
+#> 211 29209346      14570319        95         Yes              Paauhau
+#> 212 29209379      14570333        95         Yes                 Olaa
+#> 213 29209410      14570348        30         Yes               Onomea
+#> 214 29196125      14569536       100         Yes              Alaeloa
+#> 215 29196122      14569533       100         Yes              Alaeloa
+#> 216 29196123      14569534       100         Yes              Alaeloa
+#> 217 29196124      14569535       100         Yes              Alaeloa
+#> 218 29196131      14569539       100         Yes              Haleiwa
+#> 219 29196132      14569540       100         Yes              Haleiwa
+#> 220 29196129      14569537       100         Yes               Halawa
+#> 221 29196130      14569538       100         Yes               Halawa
+#> 222 29196133      14569541       100         Yes              Holomua
+#> 223 29196134      14569542       100         Yes              Holomua
+#> 224 29196135      14569543       100         Yes              Holomua
+#> 225 29196136      14569544       100         Yes              Holomua
+#> 226 29196137      14569545       100         Yes              Holomua
+#> 227 29196139      14569546         5         No               Molokai
+#> 228 29196140      14569547        90         Yes             Hoolehua
+#> 229 29196141      14569548       100         Yes             Hoolehua
+#> 230 29196142      14569549       100         Yes             Hoolehua
+#> 231 29196143      14569550       100         Yes             Hoolehua
+#> 232 29196144      14569551       100         Yes             Hoolehua
+#> 233 29196147      14569553       100         Yes               Jaucas
+#> 234 29196145      14569552        55         Yes               Jaucas
+#> 235 29196158      14569560       100         Yes                Kalae
+#> 236 29196159      14569561       100         Yes                Kalae
+#> 237 29196160      14569562       100         Yes                Kalae
+#> 238 29196161      14569563       100         Yes                Kalae
+#> 239 29196162      14569564       100         Yes                Kalae
+#> 240 29196149      14569555        85         Yes            Kalaupapa
+#> 241 29196151      14569556        90         Yes           Kapuhikani
+#> 242 29196163      14569565       100         Yes           Kawaihapai
+#> 243 29196164      14569566       100         Yes           Kawaihapai
+#> 244 29196165      14569567       100         Yes           Kawaihapai
+#> 245 29196166      14569568       100         Yes           Kawaihapai
+#> 246 29196154      14569557        85         Yes               Kealia
+#> 247 29196155      14569558        10         No                Kealia
+#> 248 29196157      14569559        70         Yes                Koele
+#> 249 29196167      14569569       100         Yes              Lahaina
+#> 250 29196168      14569570       100         Yes              Lahaina
+#> 251 29196169      14569571       100         Yes              Lahaina
+#> 252 29196170      14569572       100         Yes              Lahaina
+#> 253 29196171      14569573       100         Yes              Lahaina
+#> 254 29196172      14569574       100         Yes              Lahaina
+#> 255 29196173      14569575        95         Yes            Lualualei
+#> 256 29196174      14569576         5         No                   Ewa
+#> 257 29196176      14569577       100         Yes                 Mala
+#> 258 29196177      14569578       100         Yes                 Mala
+#> 259 29196178      14569579       100         Yes              Molokai
+#> 260 29196179      14569580       100         Yes              Molokai
+#> 261 29196180      14569581       100         Yes              Molokai
+#> 262 29196181      14569582       100         Yes              Molokai
+#> 263 29196182      14569583       100         Yes              Molokai
+#> 264 29196185      14569584         5         No                   Oli
+#> 265 29196186      14569585        85         Yes                Naiwa
+#> 266 29196187      14569586         5         No                 Naiwa
+#> 267 29196188      14569587         5         No                 Olelo
+#> 268 29196189      14569588       100         Yes                Naiwa
+#> 269 29196190      14569589       100         Yes               Niulii
+#> 270 29196191      14569590       100         Yes               Niulii
+#> 271 29196192      14569591       100         Yes                Olelo
+#> 272 29196193      14569592        90         Yes                  Oli
+#> 273 29196194      14569593        10         No                 Naiwa
+#> 274 29196195      14569594        90         Yes                  Oli
+#> 275 29196196      14569595        10         No                 Naiwa
+#> 276 29196199      14569598       100         Yes                Pamoa
+#> 277 29196200      14569599       100         Yes                Pamoa
+#> 278 29196201      14569600       100         Yes                Pamoa
+#> 279 29196203      14569602       100         Yes               Pulehu
+#> 280 29196202      14569601       100         Yes               Pulehu
+#> 281 29196204      14569603        85         Yes               Pulehu
+#> 282 29196209      14569604       100         Yes              Waihuna
+#> 283 29196210      14569605       100         Yes              Waihuna
+#> 284 29196211      14569606       100         Yes              Waihuna
+#> 285 29196215      14569607        85         Yes              Waikapu
+#> 286 29196216      14569608       100         Yes              Waikapu
+#> 287 29196217      14569609       100         Yes              Waikapu
+#> 288 29196221      14569610        80         Yes              Waikapu
+#> 289 29196316      14569615        40         Yes               Mahana
+#> 290 29196323      14569619       100         Yes                Halii
+#> 291 29196324      14569620       100         Yes                Halii
+#> 292 29196325      14569621       100         Yes                Halii
+#> 293 29196326      14569622       100         Yes                Halii
+#> 294 29196327      14569623        95         Yes              Hanalei
+#> 295 29196328      14569624         5         No              Mokuleia
+#> 296 29196320      14569616       100         Yes             Hihimanu
+#> 297 29196330      14569626        85         Yes              Hanalei
+#> 298 29196331      14569627       100         Yes              Hanalei
+#> 299 29196332      14569628       100         Yes              Hanalei
+#> 300 29196333      14569629       100         Yes            Hanamaulu
+#> 301 29196334      14569630       100         Yes            Hanamaulu
+#> 302 29196335      14569631       100         Yes            Hanamaulu
+#> 303 29196336      14569632       100         Yes            Hanamaulu
+#> 304 29196337      14569633       100         Yes            Hanamaulu
+#> 305 29196338      14569634       100         Yes            Hanamaulu
+#> 306 29196339      14569635       100         Yes               Ioleau
+#> 307 29196340      14569636       100         Yes               Ioleau
+#> 308 29196341      14569637       100         Yes               Ioleau
+#> 309 29196342      14569638       100         Yes               Ioleau
+#> 310 29196343      14569639       100         Yes               Jaucas
+#> 311 29196344      14569640       100         Yes       Jaucas variant
+#> 312 29196354      14569649       100         Yes        Kaena variant
+#> 313 29196355      14569650       100         Yes        Kaena variant
+#> 314 29196356      14569651       100         Yes               Kalapa
+#> 315 29196357      14569652       100         Yes               Kalapa
+#> 316 29196358      14569653       100         Yes               Kalapa
+#> 317 29196359      14569654       100         Yes               Kalihi
+#> 318 29196345      14569641        75         Yes               Kalapa
+#> 319 29196360      14569655        60         Yes               Kaloko
+#> 320 29196361      14569656        40         Yes      Kaloko, drained
+#> 321 29196362      14569657        85         Yes               Kaloko
+#> 322 29196363      14569658        15         No                Kaloko
+#> 323 29196364      14569659       100         Yes                Kapaa
+#> 324 29196365      14569660       100         Yes                Kapaa
+#> 325 29196366      14569661       100         Yes                Kapaa
+#> 326 29196367      14569662       100         Yes                Kapaa
+#> 327 29196368      14569663       100         Yes               Kekaha
+#> 328 29196369      14569664       100         Yes               Kekaha
+#> 329 29196370      14569665       100         Yes               Kekaha
+#> 330 29196347      14569642       100         Yes               Kekaha
+#> 331 29196350      14569645       100         Yes             Kolokolo
+#> 332 29196371      14569666       100         Yes                Koloa
+#> 333 29196372      14569667       100         Yes                Koloa
+#> 334 29196373      14569668       100         Yes                Koloa
+#> 335 29196352      14569647       100         Yes               Koolau
+#> 336 29196374      14569669       100         Yes             Kolokolo
+#> 337 29196376      14569671       100         Yes                Lawai
+#> 338 29196377      14569672       100         Yes                Lawai
+#> 339 29196378      14569673       100         Yes                Lawai
+#> 340 29196379      14569674       100         Yes                Lihue
+#> 341 29196380      14569675       100         Yes                Lihue
+#> 342 29196381      14569676       100         Yes                Lihue
+#> 343 29196382      14569677       100         Yes                Lihue
+#> 344 29196383      14569678       100         Yes                Lihue
+#> 345 29196384      14569679       100         Yes                Lihue
+#> 346 29196375      14569670       100         Yes            Lualualei
+#> 347 29196385      14569680        95         Yes            Lualualei
+#> 348 29196386      14569681         5         No                   Ewa
+#> 349 29196387      14569682       100         Yes            Lualualei
+#> 350 29196389      14569683       100         Yes               Mahana
+#> 351 29196390      14569684       100         Yes               Mahana
+#> 352 29196391      14569685       100         Yes               Mahana
+#> 353 29196392      14569686       100         Yes               Mahana
+#> 354 29196393      14569687       100         Yes               Mahana
+#> 355 29196394      14569688       100         Yes             Makapili
+#> 356 29196395      14569689       100         Yes             Makapili
+#> 357 29196396      14569690       100         Yes             Makapili
+#> 358 29196397      14569691       100         Yes             Makapili
+#> 359 29196398      14569692       100         Yes             Makaweli
+#> 360 29196399      14569693       100         Yes             Makaweli
+#> 361 29196400      14569694       100         Yes             Makaweli
+#> 362 29196401      14569695       100         Yes             Makaweli
+#> 363 29196402      14569696       100         Yes             Makaweli
+#> 364 29196403      14569697       100         Yes             Makaweli
+#> 365 29196404      14569698       100         Yes             Makaweli
+#> 366 29196405      14569699       100         Yes             Makaweli
+#> 367 29196406      14569700        90         Yes               Mamala
+#> 368 29196408      14569701       100         Yes             Mokuleia
+#> 369 29196409      14569702       100         Yes     Mokuleia variant
+#> 370 29196410      14569703       100         Yes                  Niu
+#> 371 29196411      14569704       100         Yes                  Niu
+#> 372 29196412      14569705       100         Yes                  Niu
+#> 373 29196413      14569706       100         Yes                  Niu
+#> 374 29196414      14569707       100         Yes               Nohili
+#> 375 29196415      14569708       100         Yes             Nonopahu
+#> 376 29196416      14569709       100         Yes             Nonopahu
+#> 377 29196422      14569714        90         Yes                  Oli
+#> 378 29196417      14569710        90         Yes                  Oli
+#> 379 29196418      14569711        10         No                 Naiwa
+#> 380 29196419      14569712        90         Yes                  Oli
+#> 381 29196420      14569713        10         No                 Naiwa
+#> 382 29196426      14569718       100         Yes               Pakala
+#> 383 29196427      14569719       100         Yes               Pakala
+#> 384 29196425      14569717       100         Yes               Pakala
+#> 385 29196428      14569720        90         Yes             Pohakupu
+#> 386 29196431      14569721       100         Yes                Pooku
+#> 387 29196432      14569722       100         Yes                Pooku
+#> 388 29196433      14569723       100         Yes                Pooku
+#> 389 29196434      14569724       100         Yes                Pooku
+#> 390 29196435      14569725       100         Yes                Pooku
+#> 391 29196436      14569726       100         Yes                Pooku
+#> 392 29196437      14569727       100         Yes                 Puhi
+#> 393 29196438      14569728       100         Yes                 Puhi
+#> 394 29196439      14569729       100         Yes                 Puhi
+#> 395 29196440      14569730       100         Yes                 Puhi
+#> 396 29196441      14569731       100         Yes                 Puhi
+#> 397 29196442      14569732       100         Yes             Puu Opae
+#> 398 29196443      14569733       100         Yes             Puu Opae
+#> 399 29196444      14569734       100         Yes             Puu Opae
+#> 400 29196446      14569735        60         Yes               Waiawa
+#> 401 29196448      14569736       100         Yes              Waikomo
+#> 402 29196449      14569737        65         Yes              Waikomo
+#> 403 29196451      14569738        60         Yes              Waikomo
+#> 404 29196954      14570710        15         No                Mamala
+#> 405 29196878      14570661       100         Yes               Jaucas
+#> 406 29196882      14570664       100         Yes                Kalae
+#> 407 29196883      14570665       100         Yes                Kalae
+#> 408 29196884      14570666       100         Yes                Kalae
+#> 409 29196885      14570667        95         Yes              Kanepuu
+#> 410 29196887      14570668        85         Yes              Kanepuu
+#> 411 29196890      14570669        95         Yes              Kanepuu
+#> 412 29196891      14570670        85         Yes              Kanepuu
+#> 413 29196893      14570671       100         Yes                Koele
+#> 414 29196894      14570672       100         Yes                Koele
+#> 415 29196895      14570673       100         Yes                Koele
+#> 416 29196881      14570663        70         Yes                Koele
+#> 417 29196896      14570674       100         Yes              Lahaina
+#> 418 29196897      14570675       100         Yes              Lahaina
+#> 419 29196898      14570676       100         Yes              Lahaina
+#> 420 29196899      14570677       100         Yes              Lahaina
+#> 421 29196900      14570678       100         Yes              Lahaina
+#> 422 29196901      14570679       100         Yes              Lahaina
+#> 423 29196902      14570680       100         Yes              Lahaina
+#> 424 29196904      14570682         5         No                   Ewa
+#> 425 29196903      14570681        95         Yes            Lualualei
+#> 426 29196905      14570683       100         Yes                 Mala
+#> 427 29196906      14570684       100         Yes                 Mala
+#> 428 29196907      14570685       100         Yes              Molokai
+#> 429 29196908      14570686       100         Yes              Molokai
+#> 430 29196909      14570687       100         Yes              Molokai
+#> 431 29196910      14570688       100         Yes              Molokai
+#> 432 29196916      14570692         5         No                 Olelo
+#> 433 29196915      14570691         5         No                 Naiwa
+#> 434 29196914      14570690        85         Yes                Naiwa
+#> 435 29196913      14570689         5         No                   Oli
+#> 436 29196919      14570695       100         Yes                Pamoa
+#> 437 29196920      14570696       100         Yes                Pamoa
+#> 438 29196922      14570698       100         Yes               Pulehu
+#> 439 29196921      14570697       100         Yes               Pulehu
+#> 440 29196923      14570699        85         Yes               Pulehu
+#> 441 29196927      14570700       100         Yes                Uwala
+#> 442 29196928      14570701       100         Yes                Uwala
+#> 443 29196929      14570702       100         Yes                Uwala
+#> 444 29196931      14570703       100         Yes              Waihuna
+#> 445 29196932      14570704       100         Yes              Waihuna
+#> 446 29196933      14570705       100         Yes              Waihuna
+#> 447 29196934      14570706       100         Yes              Waihuna
+#> 448 29196935      14570707       100         Yes              Waihuna
+#> 449 29196939      14570708        85         Yes              Waikapu
+#> 450 29196943      14570709        80         Yes              Waikapu
+#> 451 29201022      14570510        90         Yes                 Alae
+#> 452 29201025      14570509        90         Yes                 Alae
+#> 453 29201026      14570508       100         Yes                 Alae
+#> 454 29201027      14570507       100         Yes              Alaeloa
+#> 455 29201028      14570506       100         Yes              Alaeloa
+#> 456 29201029      14570505       100         Yes              Alaeloa
+#> 457 29201032      14570504       100         Yes                  Ewa
+#> 458 29201033      14570503       100         Yes                  Ewa
+#> 459 29201034      14570502       100         Yes                  Ewa
+#> 460 29201035      14570501       100         Yes                  Ewa
+#> 461 29201036      14570500       100         Yes                  Ewa
+#> 462 29201037      14570499       100         Yes                  Ewa
+#> 463 29201046      14570493        82         Yes                Haiku
+#> 464 29201050      14570492        85         Yes                Haiku
+#> 465 29201054      14570491        85         Yes                Haiku
+#> 466 29201057      14570490        85         Yes                Haiku
+#> 467 29201060      14570489       100         Yes           Haliimaile
+#> 468 29201061      14570488       100         Yes           Haliimaile
+#> 469 29201062      14570487         5         No                Keahua
+#> 470 29201063      14570486         5         No                  Paia
+#> 471 29201064      14570485        90         Yes           Haliimaile
+#> 472 29201065      14570484       100         Yes           Haliimaile
+#> 473 29201039      14570498       100         Yes               Halawa
+#> 474 29201066      14570483       100         Yes           Haliimaile
+#> 475 29201040      14570497       100         Yes                 Hana
+#> 476 29201041      14570496       100         Yes                 Hana
+#> 477 29201042      14570495       100         Yes         Hana variant
+#> 478 29201043      14570494       100         Yes         Hana variant
+#> 479 29201067      14570482       100         Yes          Hamakuapoko
+#> 480 29201068      14570481       100         Yes          Hamakuapoko
+#> 481 29201069      14570480       100         Yes          Hamakuapoko
+#> 482 29201070      14570479       100         Yes              Honolua
+#> 483 29201071      14570478       100         Yes              Honolua
+#> 484 29201073      14570476        95         Yes                  Iao
+#> 485 29201075      14570475        90         Yes                  Iao
+#> 486 29201078      14570474       100         Yes                  Iao
+#> 487 29201079      14570473       100         Yes                  Iao
+#> 488 29201082      14570472        85         Yes                  Iao
+#> 489 29201084      14570471        90         Yes                  Iao
+#> 490 29201072      14570477       100         Yes                   Io
+#> 491 29201088      14570470       100         Yes               Jaucas
+#> 492 29201089      14570469       100         Yes               Jaucas
+#> 493 29201110      14570441       100         Yes               Kahana
+#> 494 29201111      14570442       100         Yes               Kahana
+#> 495 29201112      14570443       100         Yes               Kahana
+#> 496 29201090      14570468       100         Yes               Kailua
+#> 497 29201091      14570467       100         Yes                Kaimu
+#> 498 29201095      14570433       100         Yes              Kamaole
+#> 499 29201096      14570434       100         Yes              Kamaole
+#> 500 29201097      14570435        95         Yes                Kaupo
+#> 501 29201099      14570436        95         Yes                Kaupo
+#> 502 29201101      14570437        85         Yes               Kealia
+#> 503 29201102      14570438        10         No                Kealia
+#> 504 29201115      14570446       100         Yes               Keahua
+#> 505 29201116      14570447       100         Yes               Keahua
+#> 506 29201117      14570448       100         Yes               Keahua
+#> 507 29201113      14570444       100         Yes               Keahua
+#> 508 29201118      14570449       100         Yes               Keahua
+#> 509 29201114      14570445       100         Yes               Keahua
+#> 510 29201119      14570450       100         Yes               Keahua
+#> 511 29201120      14570451       100         Yes               Keahua
+#> 512 29201121      14570452       100         Yes               Keahua
+#> 513 29201104      14570439        75         Yes            Keawakapu
+#> 514 29201108      14570440        40         Yes                Koele
+#> 515 29201124      14570455       100         Yes                 Kula
+#> 516 29201125      14570456        80         Yes                 Kula
+#> 517 29201122      14570453       100         Yes                 Kula
+#> 518 29201123      14570454       100         Yes                 Kula
+#> 519 29201130      14570460       100         Yes              Lahaina
+#> 520 29201131      14570461       100         Yes              Lahaina
+#> 521 29201132      14570462       100         Yes              Lahaina
+#> 522 29201143      14570516         5         No                Kailua
+#> 523 29201144      14570517         5         No                 Haiku
+#> 524 29201145      14570518        90         Yes              Makawao
+#> 525 29201146      14570519       100         Yes              Makawao
+#> 526 29201133      14570463       100         Yes             Makaalae
+#> 527 29201134      14570464       100         Yes             Makaalae
+#> 528 29201147      14570520       100         Yes              Molokai
+#> 529 29201148      14570521       100         Yes              Molokai
+#> 530 29201149      14570522       100         Yes              Molokai
+#> 531 29201135      14570511       100         Yes             Makaalae
+#> 532 29201136      14570512         3         No             Keawakapu
+#> 533 29201138      14570513        46         Yes               Makena
+#> 534 29201139      14570514         2         No              Oanapuka
+#> 535 29201141      14570515        90         Yes               Malama
+#> 536 29201150      14570523        90         Yes                Naiwa
+#> 537 29201151      14570524         5         No                 Naiwa
+#> 538 29201152      14570525         5         No                 Olelo
+#> 539 29201155      14570526        90         Yes             Oanapuka
+#> 540 29201156      14570527       100         Yes             Oanapuka
+#> 541 29201157      14570528       100         Yes                Olelo
+#> 542 29201158      14570529        90         Yes                  Oli
+#> 543 29201160      14570530       100         Yes               Olinda
+#> 544 29201161      14570531       100         Yes               Olinda
+#> 545 29201171      14570539       100         Yes                 Paia
+#> 546 29201172      14570540       100         Yes                 Paia
+#> 547 29201173      14570541       100         Yes                 Paia
+#> 548 29201174      14570542         5         No                Kailua
+#> 549 29201175      14570543         5         No                 Haiku
+#> 550 29201176      14570544        90         Yes              Pauwela
+#> 551 29201177      14570545       100         Yes              Pauwela
+#> 552 29201178      14570546       100         Yes              Pauwela
+#> 553 29201179      14570547       100         Yes               Pulehu
+#> 554 29201180      14570548       100         Yes               Pulehu
+#> 555 29201181      14570549       100         Yes               Pulehu
+#> 556 29201182      14570550       100         Yes               Pulehu
+#> 557 29201183      14570551        85         Yes               Pulehu
+#> 558 29201187      14570552       100         Yes               Pulehu
+#> 559 29201188      14570553       100         Yes               Pulehu
+#> 560 29201165      14570534       100         Yes                 Pane
+#> 561 29201166      14570535         5         No                   Iao
+#> 562 29201167      14570536         5         No                Jaucas
+#> 563 29201168      14570537        90         Yes               Puuone
+#> 564 29201169      14570538        90         Yes               Puu Pa
+#> 565 29201190      14570554       100         Yes           Ulupalakua
+#> 566 29201193      14570557        93         Yes                  Uma
+#> 567 29201197      14570559       100         Yes             Wahikuli
+#> 568 29201198      14570560       100         Yes             Wahikuli
+#> 569 29201199      14570561       100         Yes             Wahikuli
+#> 570 29201200      14570562       100         Yes             Wahikuli
+#> 571 29201201      14570563       100         Yes              Waiakoa
+#> 572 29201202      14570564       100         Yes              Waiakoa
+#> 573 29201203      14570565       100         Yes              Waiakoa
+#> 574 29201206      14570566        90         Yes              Waiakoa
+#> 575 29201207      14570567       100         Yes              Waiakoa
+#> 576 29201208      14570568       100         Yes              Waiakoa
+#> 577 29201209      14570569       100         Yes              Waiakoa
+#> 578 29201196      14570558       100         Yes              Waiakoa
+#> 579 29201210      14570570       100         Yes              Wailuku
+#> 580 29201211      14570571         5         No                   Iao
+#> 581 29201212      14570572        90         Yes              Wailuku
+#> 582 29201213      14570573         5         No                Pulehu
+#> 583 29201214      14570574       100         Yes              Wailuku
+#> 584 29201215      14570575       100         Yes               Wainee
+#> 585 29201216      14570576       100         Yes               Wainee
+#> 586 29201217      14570577       100         Yes               Wainee
+#> 587 29201218      14570578        90         Yes               Wainee
+#> 588 29239983      14582752       100         Yes              Alaeloa
+#> 589 29239982      14582751       100         Yes              Alaeloa
+#> 590 29239985      14582753        15         No                Mamala
+#> 591 29239987      14582754       100         Yes                  Ewa
+#> 592 29239988      14582755       100         Yes                  Ewa
+#> 593 29239989      14582756       100         Yes                  Ewa
+#> 594 29239990      14582757       100         Yes                  Ewa
+#> 595 29239991      14582758       100         Yes                  Ewa
+#> 596 29239992      14582759       100         Yes                  Ewa
+#> 597 29239993      14582760       100         Yes                  Ewa
+#> 598 29239999      14582764        95         Yes              Haleiwa
+#> 599 29240001      14582766       100         Yes              Haleiwa
+#> 600 29239996      14582761       100         Yes               Halawa
+#> 601 29239997      14582762       100         Yes               Halawa
+#> 602 29239998      14582763       100         Yes             Helemano
+#> 603 29240003      14582768        85         Yes              Hanalei
+#> 604 29240005      14582770        85         Yes              Hanalei
+#> 605 29240006      14582771        85         Yes              Hanalei
+#> 606 29240008      14582773       100         Yes           Honouliuli
+#> 607 29240009      14582774       100         Yes           Honouliuli
+#> 608 29240010      14582775       100         Yes               Jaucas
+#> 609 29240011      14582776       100         Yes               Jaucas
+#> 610 29240021      14582784       100         Yes                Kaena
+#> 611 29240022      14582785       100         Yes                Kaena
+#> 612 29240023      14582786       100         Yes                Kaena
+#> 613 29240024      14582787       100         Yes                Kaena
+#> 614 29240025      14582788       100         Yes                Kaena
+#> 615 29240026      14582789       100         Yes                Kaena
+#> 616 29240027      14582790        85         Yes               Kaloko
+#> 617 29240028      14582791        15         No                Kaloko
+#> 618 29240029      14582792        10         No            Kawaihapai
+#> 619 29240030      14582793        90         Yes       Kaloko variant
+#> 620 29240031      14582794       100         Yes              Kaneohe
+#> 621 29240032      14582795       100         Yes              Kaneohe
+#> 622 29240012      14582777       100         Yes              Kaneohe
+#> 623 29240013      14582778       100         Yes              Kaneohe
+#> 624 29240014      14582779       100         Yes              Kaneohe
+#> 625 29240015      14582780       100         Yes              Kaneohe
+#> 626 29240016      14582781        75         Yes                Kapaa
+#> 627 29240033      14582796       100         Yes           Kawaihapai
+#> 628 29240036      14582799       100         Yes           Kawaihapai
+#> 629 29240037      14582800       100         Yes           Kawaihapai
+#> 630 29240034      14582797       100         Yes           Kawaihapai
+#> 631 29240038      14582801       100         Yes           Kawaihapai
+#> 632 29240035      14582798       100         Yes           Kawaihapai
+#> 633 29240040      14582802        10         No          Pearl Harbor
+#> 634 29240041      14582803        85         Yes                Keaau
+#> 635 29240042      14582804       100         Yes                Keaau
+#> 636 29240043      14582805       100         Yes                Keaau
+#> 637 29240044      14582806       100         Yes                Kemoo
+#> 638 29240045      14582807       100         Yes                Kemoo
+#> 639 29240046      14582808       100         Yes                Kemoo
+#> 640 29240047      14582809       100         Yes                Kemoo
+#> 641 29240048      14582810       100         Yes                Kemoo
+#> 642 29240018      14582782        60         Yes                Kemoo
+#> 643 29240049      14582811       100         Yes                 Koko
+#> 644 29240050      14582812       100         Yes                 Koko
+#> 645 29240051      14582813       100         Yes                 Koko
+#> 646 29240052      14582814       100         Yes             Kokokahi
+#> 647 29240020      14582783       100         Yes             Kokokahi
+#> 648 29240053      14582815       100         Yes             Kolekole
+#> 649 29240054      14582816       100         Yes             Kolekole
+#> 650 29240055      14582817       100         Yes             Kolekole
+#> 651 29240056      14582818       100         Yes                Kunia
+#> 652 29240057      14582819       100         Yes                Kunia
+#> 653 29240058      14582820       100         Yes                Kunia
+#> 654 29240060      14582822       100         Yes              Lahaina
+#> 655 29240061      14582823       100         Yes              Lahaina
+#> 656 29240062      14582824       100         Yes              Lahaina
+#> 657 29240063      14582825       100         Yes              Lahaina
+#> 658 29240064      14582826       100         Yes             Leilehua
+#> 659 29240065      14582827       100         Yes             Leilehua
+#> 660 29240066      14582828         3         No               Hanalei
+#> 661 29240067      14582829         2         No               Kaneohe
+#> 662 29240068      14582830        95         Yes              Iolekaa
+#> 663 29240069      14582831       100         Yes              Iolekaa
+#> 664 29240070      14582832       100         Yes              Iolekaa
+#> 665 29240071      14582833       100         Yes              Iolekaa
+#> 666 29240072      14582834       100         Yes              Iolekaa
+#> 667 29240059      14582821       100         Yes            Lualualei
+#> 668 29240073      14582835        95         Yes            Lualualei
+#> 669 29240074      14582836         5         No                   Ewa
+#> 670 29240075      14582837       100         Yes            Lualualei
+#> 671 29240076      14582838       100         Yes            Lualualei
+#> 672 29240077      14582839       100         Yes            Lualualei
+#> 673 29240078      14582840        55         Yes               Mahana
+#> 674 29240081      14582841       100         Yes               Mahana
+#> 675 29240082      14582842       100         Yes               Mahana
+#> 676 29240083      14582843       100         Yes               Mahana
+#> 677 29240084      14582844         5         No                Mamala
+#> 678 29240085      14582845        95         Yes             Makalapa
+#> 679 29240086      14582846       100         Yes             Makalapa
+#> 680 29240087      14582847       100         Yes             Makalapa
+#> 681 29240088      14582848       100         Yes               Makiki
+#> 682 29240089      14582849       100         Yes               Makiki
+#> 683 29240090      14582850        90         Yes               Mamala
+#> 684 29240092      14582851       100         Yes               Manana
+#> 685 29240093      14582852       100         Yes               Manana
+#> 686 29240094      14582853       100         Yes               Manana
+#> 687 29240095      14582854       100         Yes               Manana
+#> 688 29240096      14582855       100         Yes               Manana
+#> 689 29240097      14582856       100         Yes               Manana
+#> 690 29240098      14582857       100         Yes               Manana
+#> 691 29240099      14582858       100         Yes               Manana
+#> 692 29240100      14582859       100         Yes             Mokuleia
+#> 693 29240101      14582860       100         Yes             Mokuleia
+#> 694 29240102      14582861       100         Yes             Mokuleia
+#> 695 29240103      14582862       100         Yes              Molokai
+#> 696 29240104      14582863       100         Yes              Molokai
+#> 697 29240105      14582864       100         Yes              Molokai
+#> 698 29240106      14582865       100         Yes              Molokai
+#> 699 29240113      14582871         3         No                Manana
+#> 700 29240114      14582872         2         No              Leilehua
+#> 701 29240115      14582873        95         Yes               Paaloa
+#> 702 29240116      14582874       100         Yes               Paaloa
+#> 703 29240117      14582875       100         Yes              Paumalu
+#> 704 29240118      14582876       100         Yes              Paumalu
+#> 705 29240119      14582877       100         Yes              Paumalu
+#> 706 29240120      14582878       100         Yes              Paumalu
+#> 707 29240121      14582879       100         Yes              Paumalu
+#> 708 29240122      14582880       100         Yes         Pearl Harbor
+#> 709 29240107      14582866       100         Yes                Pamoa
+#> 710 29240123      14582881         5         No               Waialua
+#> 711 29240124      14582882        90         Yes             Pohakupu
+#> 712 29240125      14582883         5         No               Alaeloa
+#> 713 29240126      14582884       100         Yes             Pohakupu
+#> 714 29240127      14582885        85         Yes               Pulehu
+#> 715 29240131      14582886       100         Yes               Pulehu
+#> 716 29240132      14582887       100         Yes               Pulehu
+#> 717 29240108      14582867       100         Yes                Papaa
+#> 718 29240109      14582868       100         Yes                Papaa
+#> 719 29240110      14582869       100         Yes                Papaa
+#> 720 29240111      14582870        60         Yes              Paumalu
+#> 721 29240133      14582888       100         Yes             Tantalus
+#> 722 29240134      14582889       100         Yes             Tantalus
+#> 723 29240135      14582890       100         Yes             Tantalus
+#> 724 29240136      14582891       100         Yes             Tantalus
+#> 725 29240140      14582892       100         Yes              Wahiawa
+#> 726 29240141      14582893       100         Yes              Wahiawa
+#> 727 29240142      14582894       100         Yes              Wahiawa
+#> 728 29240143      14582895       100         Yes              Wahiawa
+#> 729 29240144      14582896       100         Yes              Waialua
+#> 730 29240145      14582897       100         Yes              Waialua
+#> 731 29240146      14582898       100         Yes              Waialua
+#> 732 29240147      14582899       100         Yes              Waialua
+#> 733 29240148      14582900       100         Yes              Waialua
+#> 734 29240149      14582901       100         Yes              Waialua
+#> 735 29240159      14582910       100         Yes              Waikane
+#> 736 29240150      14582902       100         Yes              Waikane
+#> 737 29240151      14582903       100         Yes              Waikane
+#> 738 29240152      14582904        94         Yes              Waikane
+#> 739 29240153      14582905         2         No               Kaneohe
+#> 740 29240154      14582906         2         No               Alaeloa
+#> 741 29240155      14582907         2         No               Iolekaa
+#> 742 29240156      14582908       100         Yes              Waikane
+#> 743 29240157      14582909        98         Yes              Waikane
+#> 744 29240160      14582911       100         Yes              Waipahu
+#> 745 29240161      14582912       100         Yes              Waipahu
+#> 746 29240162      14582913       100         Yes              Waipahu
 #>                      localphase           compkind  ecoclassid
 #> 1      `a`a, sparsely vegetated Miscellaneous area R161AY008HI
 #> 2                          <NA>             Series R161AY003HI
@@ -2825,18 +2825,18 @@ get_SDA_coecoclass(WHERE = "ecoclassid LIKE 'R%' AND areasymbol LIKE 'HI%'")
 #> 421                        <NA>             Series R158XY401HI
 #> 422                        <NA>             Series R158XY401HI
 #> 423                        <NA>             Series R158XY401HI
-#> 424                        <NA>             Series R163XY001HI
-#> 425                        <NA>             Series R158XY002HI
+#> 424                        <NA>             Series R158XY002HI
+#> 425                        <NA>             Series R163XY001HI
 #> 426                        <NA>             Series R166XY001HI
 #> 427                        <NA>             Series R166XY001HI
 #> 428                        <NA>             Series R158XY002HI
 #> 429                        <NA>             Series R158XY002HI
 #> 430                        <NA>             Series R158XY002HI
 #> 431                        <NA>             Series R158XY002HI
-#> 432                        <NA>             Series R165XY001HI
-#> 433                        <NA>             Series R158XY005HI
-#> 434             severely eroded             Series R158XY005HI
-#> 435                        <NA>             Series R158XY005HI
+#> 432                        <NA>             Series R158XY005HI
+#> 433             severely eroded             Series R158XY005HI
+#> 434                        <NA>             Series R158XY005HI
+#> 435                        <NA>             Series R165XY001HI
 #> 436                        <NA>             Series R158XY002HI
 #> 437                      eroded             Series R158XY002HI
 #> 438                       stony             Series R158XY002HI
@@ -3141,8 +3141,8 @@ get_SDA_coecoclass(WHERE = "ecoclassid LIKE 'R%' AND areasymbol LIKE 'HI%'")
 #> 737                        <NA>             Series R167XY001HI
 #> 738                        <NA>             Series R167XY001HI
 #> 739                        <NA>             Series R167XY001HI
-#> 740                        <NA>             Series R167XY001HI
-#> 741                        <NA>             Series R158XY401HI
+#> 740                        <NA>             Series R158XY401HI
+#> 741                        <NA>             Series R167XY001HI
 #> 742                        <NA>             Series R167XY001HI
 #> 743                        <NA>             Series R167XY001HI
 #> 744                        <NA>             Series R163XY004HI
@@ -3572,18 +3572,18 @@ get_SDA_coecoclass(WHERE = "ecoclassid LIKE 'R%' AND areasymbol LIKE 'HI%'")
 #> 421                              Isohyperthermic Ustic Naturalized Grassland Koa haole/guineagrass/glycine (Leucaena leucocephala/Urochloa maxima/Neonotonia wightii)
 #> 422                              Isohyperthermic Ustic Naturalized Grassland Koa haole/guineagrass/glycine (Leucaena leucocephala/Urochloa maxima/Neonotonia wightii)
 #> 423                              Isohyperthermic Ustic Naturalized Grassland Koa haole/guineagrass/glycine (Leucaena leucocephala/Urochloa maxima/Neonotonia wightii)
-#> 424                                                                                                                                                 Shrink-Swell Clay
-#> 425                                                              Isohyperthermic Torric Naturalized Grassland Kiawe/buffelgrass (Prosopis pallida/Pennisetum ciliare)
+#> 424                                                              Isohyperthermic Torric Naturalized Grassland Kiawe/buffelgrass (Prosopis pallida/Pennisetum ciliare)
+#> 425                                                                                                                                                 Shrink-Swell Clay
 #> 426                                                                                                                      Isohyperthermic Torric Naturalized Grassland
 #> 427                                                                                                                      Isohyperthermic Torric Naturalized Grassland
 #> 428                                                              Isohyperthermic Torric Naturalized Grassland Kiawe/buffelgrass (Prosopis pallida/Pennisetum ciliare)
 #> 429                                                              Isohyperthermic Torric Naturalized Grassland Kiawe/buffelgrass (Prosopis pallida/Pennisetum ciliare)
 #> 430                                                              Isohyperthermic Torric Naturalized Grassland Kiawe/buffelgrass (Prosopis pallida/Pennisetum ciliare)
 #> 431                                                              Isohyperthermic Torric Naturalized Grassland Kiawe/buffelgrass (Prosopis pallida/Pennisetum ciliare)
-#> 432                                                                                                                            Isothermic Ustic Naturalized Grassland
+#> 432                                                   Naturalized Grassland 50 to 90 inch PZ Ohia lehua/kikuyugrass (Metrosideros polymorpha/Pennisetum clandestinum)
 #> 433                                                   Naturalized Grassland 50 to 90 inch PZ Ohia lehua/kikuyugrass (Metrosideros polymorpha/Pennisetum clandestinum)
 #> 434                                                   Naturalized Grassland 50 to 90 inch PZ Ohia lehua/kikuyugrass (Metrosideros polymorpha/Pennisetum clandestinum)
-#> 435                                                   Naturalized Grassland 50 to 90 inch PZ Ohia lehua/kikuyugrass (Metrosideros polymorpha/Pennisetum clandestinum)
+#> 435                                                                                                                            Isothermic Ustic Naturalized Grassland
 #> 436                                                              Isohyperthermic Torric Naturalized Grassland Kiawe/buffelgrass (Prosopis pallida/Pennisetum ciliare)
 #> 437                                                              Isohyperthermic Torric Naturalized Grassland Kiawe/buffelgrass (Prosopis pallida/Pennisetum ciliare)
 #> 438                                                              Isohyperthermic Torric Naturalized Grassland Kiawe/buffelgrass (Prosopis pallida/Pennisetum ciliare)
@@ -3888,8 +3888,8 @@ get_SDA_coecoclass(WHERE = "ecoclassid LIKE 'R%' AND areasymbol LIKE 'HI%'")
 #> 737                                                                                                                                          Oxidic Dissected Lowland
 #> 738                                                                                                                                          Oxidic Dissected Lowland
 #> 739                                                                                                                                          Oxidic Dissected Lowland
-#> 740                                                                                                                                          Oxidic Dissected Lowland
-#> 741                              Isohyperthermic Ustic Naturalized Grassland Koa haole/guineagrass/glycine (Leucaena leucocephala/Urochloa maxima/Neonotonia wightii)
+#> 740                              Isohyperthermic Ustic Naturalized Grassland Koa haole/guineagrass/glycine (Leucaena leucocephala/Urochloa maxima/Neonotonia wightii)
+#> 741                                                                                                                                          Oxidic Dissected Lowland
 #> 742                                                                                                                                          Oxidic Dissected Lowland
 #> 743                                                                                                                                          Oxidic Dissected Lowland
 #> 744                                                                                                       South and West Aspect Isohyperthermic Naturalized Grassland

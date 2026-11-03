@@ -25,6 +25,7 @@
 <url><loc>http://ncss-tech.github.io/soilDB/reference/STRplot.html</loc></url>
 <url><loc>http://ncss-tech.github.io/soilDB/reference/SoilWeb_spatial_query.html</loc></url>
 <url><loc>http://ncss-tech.github.io/soilDB/reference/WCS_details.html</loc></url>
+<url><loc>http://ncss-tech.github.io/soilDB/reference/clear_WSS_cache.html</loc></url>
 <url><loc>http://ncss-tech.github.io/soilDB/reference/createSSURGO.html</loc></url>
 <url><loc>http://ncss-tech.github.io/soilDB/reference/createStaticNASIS.html</loc></url>
 <url><loc>http://ncss-tech.github.io/soilDB/reference/dbConnectNASIS.html</loc></url>
@@ -101,6 +102,7 @@
 <url><loc>http://ncss-tech.github.io/soilDB/reference/get_veg_other_from_MT_veg_db.html</loc></url>
 <url><loc>http://ncss-tech.github.io/soilDB/reference/get_veg_species_from_MT_veg_db.html</loc></url>
 <url><loc>http://ncss-tech.github.io/soilDB/reference/index.html</loc></url>
+<url><loc>http://ncss-tech.github.io/soilDB/reference/list_WSS_cache.html</loc></url>
 <url><loc>http://ncss-tech.github.io/soilDB/reference/loafercreek.html</loc></url>
 <url><loc>http://ncss-tech.github.io/soilDB/reference/local_NASIS_defined.html</loc></url>
 <url><loc>http://ncss-tech.github.io/soilDB/reference/makeChunks.html</loc></url>

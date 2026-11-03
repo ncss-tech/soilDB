@@ -81,15 +81,15 @@ head(soil_polygons)
     ## Simple feature collection with 6 features and 2 fields
     ## Geometry type: POLYGON
     ## Dimension:     XY
-    ## Bounding box:  xmin: -120.8235 ymin: 37.98283 xmax: -120.7807 ymax: 38.01469
+    ## Bounding box:  xmin: -120.8344 ymin: 37.97266 xmax: -120.7725 ymax: 38.00302
     ## Geodetic CRS:  WGS 84
-    ##     mukey    area_ac                           geom
-    ## 1 2441798 187.863380 POLYGON ((-120.7961 38.0051...
-    ## 2 2924886   6.788244 POLYGON ((-120.8201 37.9839...
-    ## 3 2450844  30.732837 POLYGON ((-120.7897 37.9864...
-    ## 4 2924752  11.813110 POLYGON ((-120.7836 37.9887...
-    ## 5 2441798  32.166563 POLYGON ((-120.7884 37.9883...
-    ## 6 2450844  48.484422 POLYGON ((-120.7985 37.9945...
+    ##     mukey   area_ac                           geom
+    ## 1 2766838  21.57474 POLYGON ((-120.7833 37.9753...
+    ## 2 2450844  37.79529 POLYGON ((-120.7763 37.9786...
+    ## 3 2924890 134.20716 POLYGON ((-120.8076 37.9742...
+    ## 4 2924908 355.95940 POLYGON ((-120.7984 37.9749...
+    ## 5 2766836 122.03797 POLYGON ((-120.8108 37.9882...
+    ## 6 2766836  63.85324 POLYGON ((-120.7943 38.0030...
 
 You can also set `geomIntersection = TRUE` so that intersecting
 geometries are cropped to the AOI. This is convenient if you have a very
@@ -266,22 +266,22 @@ head(mu_statsgo)
     ## Simple feature collection with 6 features and 6 fields
     ## Geometry type: POLYGON
     ## Dimension:     XY
-    ## Bounding box:  xmin: -121.1757 ymin: 36.96048 xmax: -119.6675 ymax: 38.69719
+    ## Bounding box:  xmin: -121.2368 ymin: 37.07511 xmax: -119.9157 ymax: 38.18986
     ## Geodetic CRS:  WGS 84
     ##    mukey areasymbol nationalmusym      areaname
     ## 1 660921         US          q5r1 United States
-    ## 2 660921         US          q5r1 United States
-    ## 3 660921         US          q5r1 United States
-    ## 4 660921         US          q5r1 United States
-    ## 5 660921         US          q5r1 United States
-    ## 6 660921         US          q5r1 United States
+    ## 2 660939         US          q5rm United States
+    ## 3 660960         US          q5s9 United States
+    ## 4 660960         US          q5s9 United States
+    ## 5 660939         US          q5rm United States
+    ## 6 660939         US          q5rm United States
     ##                                 muname farmlndcl                           geom
-    ## 1 Whiterock-Rock outcrop-Auburn (s818)      <NA> POLYGON ((-120.5276 37.9624...
-    ## 2 Whiterock-Rock outcrop-Auburn (s818)      <NA> POLYGON ((-121.1396 38.6962...
-    ## 3 Whiterock-Rock outcrop-Auburn (s818)      <NA> POLYGON ((-120.794 38.18986...
-    ## 4 Whiterock-Rock outcrop-Auburn (s818)      <NA> POLYGON ((-119.7066 36.9942...
-    ## 5 Whiterock-Rock outcrop-Auburn (s818)      <NA> POLYGON ((-120.2493 37.7735...
-    ## 6 Whiterock-Rock outcrop-Auburn (s818)      <NA> POLYGON ((-120.2653 37.8824...
+    ## 1 Whiterock-Rock outcrop-Auburn (s818)      <NA> POLYGON ((-120.794 38.18986...
+    ## 2                  Peters-Pentz (s836)      <NA> POLYGON ((-120.9141 38.0735...
+    ## 3       Finrod-Cogna-Archerdale (s857)      <NA> POLYGON ((-120.9711 37.9490...
+    ## 4       Finrod-Cogna-Archerdale (s857)      <NA> POLYGON ((-121.1592 38.0989...
+    ## 5                  Peters-Pentz (s836)      <NA> POLYGON ((-120.8224 37.7205...
+    ## 6                  Peters-Pentz (s836)      <NA> POLYGON ((-120.5867 37.7205...
 
 ``` r
 
@@ -392,12 +392,12 @@ head(eco_data)
 ```
 
     ##     mukey areasymbol  lkey                                      muname    cokey
-    ## 1 1403409      CA632 17969 Archerdale clay loam, 0 to 2 percent slopes 27449761
-    ## 2 1403409      CA632 17969 Archerdale clay loam, 0 to 2 percent slopes 27449762
-    ## 3 1403409      CA632 17969 Archerdale clay loam, 0 to 2 percent slopes 27449763
-    ## 4 1403409      CA632 17969 Archerdale clay loam, 0 to 2 percent slopes 27449764
-    ## 5 1403409      CA632 17969 Archerdale clay loam, 0 to 2 percent slopes 27449765
-    ## 6 1403409      CA632 17969 Archerdale clay loam, 0 to 2 percent slopes 27449766
+    ## 1 1403409      CA632 17969 Archerdale clay loam, 0 to 2 percent slopes 29283734
+    ## 2 1403409      CA632 17969 Archerdale clay loam, 0 to 2 percent slopes 29283735
+    ## 3 1403409      CA632 17969 Archerdale clay loam, 0 to 2 percent slopes 29283736
+    ## 4 1403409      CA632 17969 Archerdale clay loam, 0 to 2 percent slopes 29283737
+    ## 5 1403409      CA632 17969 Archerdale clay loam, 0 to 2 percent slopes 29283738
+    ## 6 1403409      CA632 17969 Archerdale clay loam, 0 to 2 percent slopes 29283739
     ##   coecoclasskey comppct_r majcompflag   compname localphase compkind
     ## 1            NA         4         No       Capay       clay   Series
     ## 2            NA         1         No     Chuloak sandy loam   Series
@@ -450,19 +450,19 @@ head(eco_data_domcond)
     ## 30 1540892      CA632 17969
     ## 31 1605509      CA632 17969
     ##                                                          muname    cokey
-    ## 8                   Archerdale clay loam, 0 to 2 percent slopes 27449768
-    ## 13 Hicksville loam, 0 to 2 percent slopes, occasionally flooded 27449813
-    ## 15            Redding gravelly loam, 0 to 8 percent slopes, dry 27449968
-    ## 19              Peters-Pentz association, 2 to 8 percent slopes 27450031
-    ## 30                     Mckeonhills clay, 5 to 15 percent slopes 27450072
-    ## 31             Pentz-Peters association, 2 to 50 percent slopes 27450044
+    ## 8                   Archerdale clay loam, 0 to 2 percent slopes 29283741
+    ## 13 Hicksville loam, 0 to 2 percent slopes, occasionally flooded 29283786
+    ## 15            Redding gravelly loam, 0 to 8 percent slopes, dry 29283862
+    ## 19              Peters-Pentz association, 2 to 8 percent slopes 29283905
+    ## 30                     Mckeonhills clay, 5 to 15 percent slopes 29283953
+    ## 31             Pentz-Peters association, 2 to 50 percent slopes 29283954
     ##    coecoclasskey comppct_r majcompflag    compname      localphase compkind
-    ## 8       12784144        85         Yes  Archerdale       clay loam   Series
-    ## 13      12784163        85         Yes  Hicksville            loam   Series
-    ## 15      12784219        85         Yes     Redding   gravelly loam   Series
-    ## 19      12784259        60         Yes      Peters silty clay loam   Series
-    ## 30      12784278        90         Yes Mckeonhills            clay   Series
-    ## 31      12784267        62         Yes       Pentz       silt loam   Series
+    ## 8       14626341        85         Yes  Archerdale       clay loam   Series
+    ## 13      14626330        85         Yes  Hicksville            loam   Series
+    ## 15      14626293        85         Yes     Redding   gravelly loam   Series
+    ## 19      14626366        60         Yes      Peters silty clay loam   Series
+    ## 30      14626327        90         Yes Mckeonhills            clay   Series
+    ## 31      14626315        62         Yes       Pentz       silt loam   Series
     ##     ecoclassid                    ecoclassname    ecoclasstypename
     ## 8  R017XY903CA Stream Channels and Floodplains NRCS Rangeland Site
     ## 13 R017XY905CA  Dry Alluvial Fans and Terraces NRCS Rangeland Site
@@ -509,19 +509,19 @@ head(eco_data_domcond)
     ## 30 1540892      CA632 17969
     ## 31 1605509      CA632 17969
     ##                                                          muname    cokey
-    ## 8                   Archerdale clay loam, 0 to 2 percent slopes 27449768
-    ## 13 Hicksville loam, 0 to 2 percent slopes, occasionally flooded 27449813
-    ## 15            Redding gravelly loam, 0 to 8 percent slopes, dry 27449968
-    ## 19              Peters-Pentz association, 2 to 8 percent slopes 27450031
-    ## 30                     Mckeonhills clay, 5 to 15 percent slopes 27450072
-    ## 31             Pentz-Peters association, 2 to 50 percent slopes 27450044
+    ## 8                   Archerdale clay loam, 0 to 2 percent slopes 29283741
+    ## 13 Hicksville loam, 0 to 2 percent slopes, occasionally flooded 29283786
+    ## 15            Redding gravelly loam, 0 to 8 percent slopes, dry 29283862
+    ## 19              Peters-Pentz association, 2 to 8 percent slopes 29283905
+    ## 30                     Mckeonhills clay, 5 to 15 percent slopes 29283953
+    ## 31             Pentz-Peters association, 2 to 50 percent slopes 29283954
     ##    coecoclasskey comppct_r majcompflag    compname      localphase compkind
-    ## 8       12784144        85         Yes  Archerdale       clay loam   Series
-    ## 13      12784163        85         Yes  Hicksville            loam   Series
-    ## 15      12784219        85         Yes     Redding   gravelly loam   Series
-    ## 19      12784259        60         Yes      Peters silty clay loam   Series
-    ## 30      12784278        90         Yes Mckeonhills            clay   Series
-    ## 31      12784267        62         Yes       Pentz       silt loam   Series
+    ## 8       14626341        85         Yes  Archerdale       clay loam   Series
+    ## 13      14626330        85         Yes  Hicksville            loam   Series
+    ## 15      14626293        85         Yes     Redding   gravelly loam   Series
+    ## 19      14626366        60         Yes      Peters silty clay loam   Series
+    ## 30      14626327        90         Yes Mckeonhills            clay   Series
+    ## 31      14626315        62         Yes       Pentz       silt loam   Series
     ##     ecoclassid                    ecoclassname    ecoclasstypename
     ## 8  R017XY903CA Stream Channels and Floodplains NRCS Rangeland Site
     ## 13 R017XY905CA  Dry Alluvial Fans and Terraces NRCS Rangeland Site

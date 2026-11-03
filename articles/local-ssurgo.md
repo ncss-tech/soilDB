@@ -1,4 +1,4 @@
-# Local Soil Survey Geographic (SSURGO) Databases
+# Local SSURGO Databases
 
 ## Overview
 
@@ -32,7 +32,9 @@ your local database instead.
 
 [`downloadSSURGO()`](http://ncss-tech.github.io/soilDB/reference/downloadSSURGO.md)
 will download the official SSURGO data from Web Soil Survey for the
-specified `areasymbol` and return the path to the ZIP archives.
+specified `areasymbol` and return the path to the ZIP archives. If you
+omit `destdir`, the ZIPs are stored in the persistent soilDB Web Soil
+Survey cache instead of a temporary directory.
 
 ``` r
 
@@ -65,12 +67,25 @@ to determine area symbols of interest.
 We specify `destdir` as the destination directory to download
 area-specific ZIP files.
 
-If unspecified, `exdir,`the directory the ZIP files get extracted to, is
-the same as `destdir`. If you want to keep the ZIP files and extracted
-data, set `destdir`. If you only want the extracted data, set `exdir`.
-If you want both to be kept only temporarily in order to create a new
-database, leave `destdir` as the default
-([`tempdir()`](https://rdrr.io/r/base/tempfile.html)).
+If unspecified, `exdir`, the directory the ZIP files get extracted to,
+is the same as `destdir`. If you want to keep the ZIP files and
+extracted data, set `destdir`. If you only want the extracted data, set
+`exdir`. If you want the ZIPs to live in the persistent cache, leave
+`destdir` unspecified and use
+[`list_WSS_cache()`](http://ncss-tech.github.io/soilDB/reference/list_WSS_cache.md)
+or
+[`clear_WSS_cache()`](http://ncss-tech.github.io/soilDB/reference/clear_WSS_cache.md)
+to inspect or clean cached ZIPs later. The cache policy keeps template
+and non-template ZIPs separate and organizes them by fiscal year. Set
+`force = TRUE` when you want to redownload even if a cached ZIP is
+fresh.
+
+The cache is organized by fiscal year, so older ZIPs can remain
+available for history until you remove them manually.
+
+In this example we keep `destdir` explicit so the ZIPs and extracted
+files stay together, but the default cache path is used whenever
+`destdir` is omitted.
 
 ## Create a Local SSURGO Database
 
@@ -143,36 +158,35 @@ dbListTables(con)
     ## [35] "cotext"                      "cotreestomng"               
     ## [37] "cotxfmother"                 "distinterpmd"               
     ## [39] "distlegendmd"                "distmd"                     
-    ## [41] "featdesc"                    "featline"                   
-    ## [43] "featpoint"                   "gpkg_contents"              
-    ## [45] "gpkg_extensions"             "gpkg_geometry_columns"      
-    ## [47] "gpkg_ogr_contents"           "gpkg_spatial_ref_sys"       
-    ## [49] "gpkg_tile_matrix"            "gpkg_tile_matrix_set"       
-    ## [51] "laoverlap"                   "legend"                     
-    ## [53] "mapunit"                     "mdstatdomdet"               
-    ## [55] "mdstatdommas"                "mdstatidxdet"               
-    ## [57] "mdstatidxmas"                "mdstatrshipdet"             
-    ## [59] "mdstatrshipmas"              "mdstattabcols"              
-    ## [61] "mdstattabs"                  "muaggatt"                   
-    ## [63] "muaoverlap"                  "muline"                     
-    ## [65] "mupoint"                     "mupolygon"                  
-    ## [67] "rtree_featline_geom"         "rtree_featline_geom_node"   
-    ## [69] "rtree_featline_geom_parent"  "rtree_featline_geom_rowid"  
-    ## [71] "rtree_featpoint_geom"        "rtree_featpoint_geom_node"  
-    ## [73] "rtree_featpoint_geom_parent" "rtree_featpoint_geom_rowid" 
-    ## [75] "rtree_muline_geom"           "rtree_muline_geom_node"     
-    ## [77] "rtree_muline_geom_parent"    "rtree_muline_geom_rowid"    
-    ## [79] "rtree_mupoint_geom"          "rtree_mupoint_geom_node"    
-    ## [81] "rtree_mupoint_geom_parent"   "rtree_mupoint_geom_rowid"   
-    ## [83] "rtree_mupolygon_geom"        "rtree_mupolygon_geom_node"  
-    ## [85] "rtree_mupolygon_geom_parent" "rtree_mupolygon_geom_rowid" 
-    ## [87] "rtree_sapolygon_geom"        "rtree_sapolygon_geom_node"  
-    ## [89] "rtree_sapolygon_geom_parent" "rtree_sapolygon_geom_rowid" 
-    ## [91] "sacatalog"                   "sainterp"                   
-    ## [93] "sapolygon"                   "sdvalgorithm"               
-    ## [95] "sdvattribute"                "sdvfolder"                  
-    ## [97] "sdvfolderattribute"          "soil_metadata"              
-    ## [99] "sqlite_sequence"
+    ## [41] "featline"                    "featpoint"                  
+    ## [43] "gpkg_contents"               "gpkg_extensions"            
+    ## [45] "gpkg_geometry_columns"       "gpkg_ogr_contents"          
+    ## [47] "gpkg_spatial_ref_sys"        "gpkg_tile_matrix"           
+    ## [49] "gpkg_tile_matrix_set"        "laoverlap"                  
+    ## [51] "legend"                      "mapunit"                    
+    ## [53] "mdstatdomdet"                "mdstatdommas"               
+    ## [55] "mdstatidxdet"                "mdstatidxmas"               
+    ## [57] "mdstatrshipdet"              "mdstatrshipmas"             
+    ## [59] "mdstattabcols"               "mdstattabs"                 
+    ## [61] "muaggatt"                    "muaoverlap"                 
+    ## [63] "muline"                      "mupoint"                    
+    ## [65] "mupolygon"                   "rtree_featline_geom"        
+    ## [67] "rtree_featline_geom_node"    "rtree_featline_geom_parent" 
+    ## [69] "rtree_featline_geom_rowid"   "rtree_featpoint_geom"       
+    ## [71] "rtree_featpoint_geom_node"   "rtree_featpoint_geom_parent"
+    ## [73] "rtree_featpoint_geom_rowid"  "rtree_muline_geom"          
+    ## [75] "rtree_muline_geom_node"      "rtree_muline_geom_parent"   
+    ## [77] "rtree_muline_geom_rowid"     "rtree_mupoint_geom"         
+    ## [79] "rtree_mupoint_geom_node"     "rtree_mupoint_geom_parent"  
+    ## [81] "rtree_mupoint_geom_rowid"    "rtree_mupolygon_geom"       
+    ## [83] "rtree_mupolygon_geom_node"   "rtree_mupolygon_geom_parent"
+    ## [85] "rtree_mupolygon_geom_rowid"  "rtree_sapolygon_geom"       
+    ## [87] "rtree_sapolygon_geom_node"   "rtree_sapolygon_geom_parent"
+    ## [89] "rtree_sapolygon_geom_rowid"  "sacatalog"                  
+    ## [91] "sainterp"                    "sapolygon"                  
+    ## [93] "sdvalgorithm"                "sdvattribute"               
+    ## [95] "sdvfolder"                   "sdvfolderattribute"         
+    ## [97] "soil_metadata"               "sqlite_sequence"
 
 ### View Table Structure
 
@@ -279,7 +293,7 @@ library(sf)
 spatial_mu <- st_read(gpkg_path, layer = "mupolygon")
 ```
 
-    ## Reading layer `mupolygon' from data source `/tmp/RtmpeNCJeb/ssurgo.gpkg' using driver `GPKG'
+    ## Reading layer `mupolygon' from data source `/tmp/RtmpIzlUoY/ssurgo.gpkg' using driver `GPKG'
     ## Simple feature collection with 3333 features and 4 fields
     ## Geometry type: POLYGON
     ## Dimension:     XY
@@ -382,12 +396,12 @@ head(component)
 ```
 
     ##   comppct_l comppct_r comppct_h compname compkind majcompflag        otherph
-    ## 1        NA        90        NA Atchison   Series          NA           <NA>
-    ## 2        NA        10        NA    Otero   Series          NA HIGH PPT, NIRR
-    ## 3        NA         5        NA   Bigbow   Series          NA           <NA>
-    ## 4        NA        70        NA Atchison   Series          NA           <NA>
-    ## 5        NA        25        NA    Otero   Series          NA HIGH PPT, NIRR
-    ## 6        NA         5        NA  Satanta   Series          NA PE<31, MAAT>45
+    ## 1        NA        90        NA Atchison   Series         Yes           <NA>
+    ## 2        NA        10        NA    Otero   Series          No HIGH PPT, NIRR
+    ## 3        NA         5        NA   Bigbow   Series          No           <NA>
+    ## 4        NA        70        NA Atchison   Series         Yes           <NA>
+    ## 5        NA        25        NA    Otero   Series          No HIGH PPT, NIRR
+    ## 6        NA         5        NA  Satanta   Series          No PE<31, MAAT>45
     ##   localphase slope_l slope_r slope_h slopelenusle_l slopelenusle_r
     ## 1       <NA>       3       5       6             NA             61
     ## 2       <NA>       4      10      15             NA             23
@@ -508,12 +522,12 @@ head(component)
     ## 5           <NA>           <NA>         N/A           N/A       <NA>
     ## 6           <NA>           <NA>         N/A           N/A       <NA>
     ##   innitrateleachi misoimgmtgrp vasoimgtgrp   mukey    cokey
-    ## 1              NA         <NA>        <NA> 1382580 26369989
-    ## 2              NA         <NA>        <NA> 1382580 26369990
-    ## 3              NA         <NA>        <NA> 1382581 26369991
-    ## 4              NA         <NA>        <NA> 1382581 26369992
-    ## 5              NA         <NA>        <NA> 1382581 26369993
-    ## 6              NA         <NA>        <NA> 1382582 26370017
+    ## 1              NA         <NA>        <NA> 1382580 28078918
+    ## 2              NA         <NA>        <NA> 1382580 28078919
+    ## 3              NA         <NA>        <NA> 1382581 28078920
+    ## 4              NA         <NA>        <NA> 1382581 28078921
+    ## 5              NA         <NA>        <NA> 1382581 28078922
+    ## 6              NA         <NA>        <NA> 1382582 28078946
 
 ``` r
 
@@ -540,12 +554,12 @@ head(dominant_comp)
 ```
 
     ##     mukey comppct_r
-    ## 1 1382580        90
-    ## 2 1382581        70
-    ## 3 1382582        85
-    ## 4 1382583        80
-    ## 5 1382584        90
-    ## 6 1382585        90
+    ## 1 1382547        90
+    ## 2 1382548        85
+    ## 3 1382549        90
+    ## 4 1382550        96
+    ## 5 1382551        95
+    ## 6 1382552        90
 
 ``` r
 
@@ -610,20 +624,20 @@ hyd_tab <- get_SDA_property(
 head(hyd_tab)
 ```
 
-    ##     mukey areasymbol musym
-    ## 1 1382580      KS129  1510
-    ## 2 1382581      KS129  5110
-    ## 3 1382582      KS129  1511
-    ## 4 1382583      KS129  1512
-    ## 5 1382584      KS129  1515
-    ## 6 1382585      KS129  1550
-    ##                                                  muname hydgrp   drainagecl
-    ## 1             Atchison clay loam, 3 to 6 percent slopes      B Well drained
-    ## 2       Atchison fine sandy loam, 1 to 3 percent slopes      B Well drained
-    ## 3                  Atchison loam, 1 to 3 percent slopes      B Well drained
-    ## 4                  Atchison loam, 6 to 9 percent slopes      B Well drained
-    ## 5 Atchison-Rock outcrop complex, 6 to 20 percent slopes      B Well drained
-    ## 6         Belfon clay loam, cool, 0 to 1 percent slopes      B Well drained
+    ##     mukey areasymbol musym                                        muname hydgrp
+    ## 1 1382547      KS187  1510     Atchison clay loam, 3 to 6 percent slopes      B
+    ## 2 1382548      KS187  1511          Atchison loam, 1 to 3 percent slopes      B
+    ## 3 1382549      KS187  1550 Belfon clay loam, cool, 0 to 1 percent slopes      B
+    ## 4 1382550      KS187  1342          Bridgeport clay loam, rarely flooded      B
+    ## 5 1382551      KS187  1349    Bridgeport silty clay loam, rarely flooded      B
+    ## 6 1382552      KS187  2554       Campus clay loam, 0 to 3 percent slopes      C
+    ##     drainagecl
+    ## 1 Well drained
+    ## 2 Well drained
+    ## 3 Well drained
+    ## 4 Well drained
+    ## 5 Well drained
+    ## 6 Well drained
 
 `soilDB` also includes a function,
 [`NASISChoiceList()`](http://ncss-tech.github.io/soilDB/reference/NASISChoiceList.md),
@@ -647,12 +661,12 @@ hyd_tab[component_properties] <- NASISChoiceList(hyd_tab[component_properties])
 str(hyd_tab)
 ```
 
-    ## 'data.frame':    39 obs. of  6 variables:
-    ##  $ mukey     : chr  "1382580" "1382581" "1382582" "1382583" ...
-    ##  $ areasymbol: chr  "KS129" "KS129" "KS129" "KS129" ...
-    ##  $ musym     : chr  "1510" "5110" "1511" "1512" ...
-    ##  $ muname    : chr  "Atchison clay loam, 3 to 6 percent slopes" "Atchison fine sandy loam, 1 to 3 percent slopes" "Atchison loam, 1 to 3 percent slopes" "Atchison loam, 6 to 9 percent slopes" ...
-    ##  $ hydgrp    : Factor w/ 7 levels "a","b","c","d",..: 2 2 2 2 2 2 2 2 2 2 ...
+    ## 'data.frame':    75 obs. of  6 variables:
+    ##  $ mukey     : chr  "1382547" "1382548" "1382549" "1382550" ...
+    ##  $ areasymbol: chr  "KS187" "KS187" "KS187" "KS187" ...
+    ##  $ musym     : chr  "1510" "1511" "1550" "1342" ...
+    ##  $ muname    : chr  "Atchison clay loam, 3 to 6 percent slopes" "Atchison loam, 1 to 3 percent slopes" "Belfon clay loam, cool, 0 to 1 percent slopes" "Bridgeport clay loam, rarely flooded" ...
+    ##  $ hydgrp    : Factor w/ 7 levels "a","b","c","d",..: 2 2 2 2 2 3 3 2 2 2 ...
     ##  $ drainagecl: Ord.factor w/ 8 levels "excessively"<..: 3 3 3 3 3 3 3 3 3 3 ...
 
 Above we see that `hydgrp` and `drainagecl` are now factors and drainage
@@ -679,16 +693,16 @@ spatial_mu <- merge(spatial_mu, hyd_tab)
 str(spatial_mu)
 ```
 
-    ## Classes 'sf' and 'data.frame':   1378 obs. of  9 variables:
+    ## Classes 'sf' and 'data.frame':   3333 obs. of  9 variables:
     ##  $ areasymbol  : chr  "KS129" "KS129" "KS129" "KS129" ...
     ##  $ musym       : chr  "1158" "1158" "1158" "1158" ...
     ##  $ mukey       : chr  "1382599" "1382599" "1382599" "1382599" ...
-    ##  $ spatialver  : num  6 6 6 6 6 6 6 6 6 6 ...
+    ##  $ spatialver  : int  6 6 6 6 6 6 6 6 6 6 ...
     ##  $ domcomppct_r: int  85 85 85 85 85 85 85 85 95 95 ...
     ##  $ muname      : chr  "Glenberg fine sandy loam, occasionally flooded" "Glenberg fine sandy loam, occasionally flooded" "Glenberg fine sandy loam, occasionally flooded" "Glenberg fine sandy loam, occasionally flooded" ...
     ##  $ hydgrp      : Factor w/ 7 levels "a","b","c","d",..: 1 1 1 1 1 1 1 1 1 1 ...
     ##  $ drainagecl  : Ord.factor w/ 8 levels "excessively"<..: 3 3 3 3 3 3 3 3 3 3 ...
-    ##  $ geom        :sfc_POLYGON of length 1378; first list element: List of 1
+    ##  $ geom        :sfc_POLYGON of length 3333; first list element: List of 1
     ##   ..$ : num [1:619, 1:2] -102 -102 -102 -102 -102 ...
     ##   ..- attr(*, "class")= chr [1:3] "XY" "POLYGON" "sfg"
     ##  - attr(*, "sf_column")= chr "geom"

@@ -287,9 +287,9 @@ soil series.
 
 | series | mlra | area_ac | membership |
 |:-------|:-----|--------:|-----------:|
-| LUCY   | 133A |  431842 |       0.51 |
+| LUCY   | 133A |  433344 |       0.51 |
 | LUCY   | 133C |  295749 |       0.35 |
-| LUCY   | 137  |   71537 |       0.09 |
+| LUCY   | 137  |   72174 |       0.09 |
 | LUCY   | 133B |   20082 |       0.02 |
 | LUCY   | 135A |    7913 |       0.01 |
 | LUCY   | 134  |    6952 |       0.01 |
@@ -349,20 +349,20 @@ head(x$shape_down)
 
 | series  | Toeslope | Footslope | Backslope | Shoulder | Summit |    n | shannon_entropy |
 |:--------|---------:|----------:|----------:|---------:|-------:|-----:|----------------:|
-| LUCY    |     0.00 |      0.00 |      0.31 |     0.34 |   0.35 |  541 |            1.61 |
+| LUCY    |     0.00 |      0.00 |      0.31 |     0.34 |   0.34 |  545 |            1.61 |
 | MIAMI   |     0.03 |      0.06 |      0.41 |     0.37 |   0.13 | 1968 |            1.85 |
 | MUSICK  |     0.00 |      0.00 |      0.75 |     0.19 |   0.05 |   77 |            0.99 |
-| PIERRE  |     0.00 |      0.14 |      0.73 |     0.01 |   0.12 |  432 |            1.16 |
+| PIERRE  |     0.00 |      0.13 |      0.73 |     0.01 |   0.12 |  426 |            1.17 |
 | TRISTAN |     0.00 |      0.00 |      1.00 |     0.00 |   0.00 |   14 |            0.00 |
 
 hillslope position {.table}
 
 | series | Interfluve | Crest | Head Slope | Nose Slope | Side Slope | Base Slope | n | shannon_entropy |
 |:---|---:|---:|---:|---:|---:|---:|---:|---:|
-| LUCY | 0.68 | 0.04 | 0.00 | 0.00 | 0.27 | 0.00 | 427 | 1.13 |
+| LUCY | 0.68 | 0.04 | 0.00 | 0.00 | 0.28 | 0.00 | 429 | 1.13 |
 | MIAMI | 0.06 | 0.12 | 0.12 | 0.14 | 0.51 | 0.05 | 1419 | 2.08 |
 | MUSICK | 0.11 | 0.00 | 0.00 | 0.00 | 0.89 | 0.00 | 19 | 0.49 |
-| PIERRE | 0.05 | 0.00 | 0.03 | 0.08 | 0.84 | 0.00 | 114 | 0.86 |
+| PIERRE | 0.05 | 0.00 | 0.03 | 0.08 | 0.84 | 0.00 | 112 | 0.87 |
 | TRISTAN | 0.00 | 0.00 | 0.17 | 0.00 | 0.83 | 0.00 | 12 | 0.65 |
 
 geomorphic component: hills {.table}
@@ -386,25 +386,26 @@ geomorphic component: terraces {.table}
 |:-------|----:|-----:|-----:|-----:|----:|----------------:|
 | LUCY   |   0 | 0.00 |    0 | 1.00 | 111 |            0.00 |
 | MIAMI  |   0 | 0.02 |    0 | 0.98 | 126 |            0.16 |
+| PIERRE |   0 | 0.00 |    0 | 1.00 |   1 |            0.00 |
 
 geomorphic component: flats {.table}
 
 | series  | Concave | Linear | Convex | Complex | Undulating |   n | shannon_entropy |
 |:--------|--------:|-------:|-------:|--------:|-----------:|----:|----------------:|
-| LUCY    |    0.03 |   0.40 |   0.57 |       0 |          0 | 373 |            1.13 |
+| LUCY    |    0.03 |   0.41 |   0.57 |       0 |          0 | 377 |            1.13 |
 | MIAMI   |    0.04 |   0.71 |   0.26 |       0 |          0 | 979 |            1.03 |
 | MUSICK  |    0.23 |   0.45 |   0.32 |       0 |          0 |  60 |            1.53 |
-| PIERRE  |    0.00 |   0.95 |   0.05 |       0 |          0 | 457 |            0.31 |
+| PIERRE  |    0.00 |   0.95 |   0.05 |       0 |          0 | 454 |            0.30 |
 | TRISTAN |    0.44 |   0.31 |   0.25 |       0 |          0 |  32 |            1.55 |
 
 surface curvature across-slope {.table}
 
 | series  | Concave | Linear | Convex | Complex | Undulating |   n | shannon_entropy |
 |:--------|--------:|-------:|-------:|--------:|-----------:|----:|----------------:|
-| LUCY    |    0.03 |   0.09 |   0.87 |       0 |          0 | 373 |            0.65 |
+| LUCY    |    0.03 |   0.09 |   0.88 |       0 |          0 | 377 |            0.64 |
 | MIAMI   |    0.02 |   0.43 |   0.55 |       0 |          0 | 979 |            1.10 |
 | MUSICK  |    0.45 |   0.50 |   0.05 |       0 |          0 |  60 |            1.23 |
-| PIERRE  |    0.00 |   0.70 |   0.29 |       0 |          0 | 457 |            0.91 |
+| PIERRE  |    0.00 |   0.70 |   0.30 |       0 |          0 | 454 |            0.92 |
 | TRISTAN |    0.34 |   0.62 |   0.03 |       0 |          0 |  32 |            1.11 |
 
 surface curvature down-slope {.table}
@@ -456,10 +457,10 @@ head(x$NCCPI)
 
 | series | n | nccpi_irrigated_q01 | nccpi_irrigated_q05 | nccpi_irrigated_q25 | nccpi_irrigated_q50 | nccpi_irrigated_q75 | nccpi_irrigated_q95 | nccpi_irrigated_q99 | nccpi_q01 | nccpi_q05 | nccpi_q25 | nccpi_q50 | nccpi_q75 | nccpi_q95 | nccpi_q99 |
 |:---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| LUCY | 341 | 0.43 | 0.58 | 0.73 | 0.80 | 0.82 | 0.84 | 0.86 | 0.09 | 0.31 | 0.41 | 0.50 | 0.54 | 0.58 | 0.61 |
+| LUCY | 345 | 0.43 | 0.58 | 0.73 | 0.80 | 0.82 | 0.84 | 0.86 | 0.09 | 0.31 | 0.41 | 0.50 | 0.54 | 0.58 | 0.61 |
 | MIAMI | 731 | NA | NA | NA | NA | NA | NA | NA | 0.15 | 0.35 | 0.55 | 0.62 | 0.67 | 0.79 | 0.83 |
 | MUSICK | 103 | 0.29 | 0.37 | 0.77 | 0.82 | 0.90 | 0.99 | 0.99 | 0.11 | 0.14 | 0.43 | 0.64 | 0.75 | 0.84 | 0.84 |
-| PIERRE | 295 | 0.29 | 0.31 | 0.41 | 0.43 | 0.51 | 0.52 | 0.58 | 0.06 | 0.09 | 0.19 | 0.26 | 0.29 | 0.33 | 0.35 |
+| PIERRE | 293 | 0.29 | 0.31 | 0.41 | 0.43 | 0.51 | 0.57 | 0.59 | 0.06 | 0.09 | 0.19 | 0.26 | 0.29 | 0.33 | 0.35 |
 | TRISTAN | 32 | 0.32 | 0.32 | 0.32 | 0.32 | 0.32 | 0.32 | 0.32 | 0.00 | 0.00 | 0.02 | 0.02 | 0.02 | 0.08 | 0.09 |
 
 Ecological classification membership are computed from map unit polygon
@@ -495,9 +496,9 @@ head(x$pmorigin)
 
 | series | pmkind                |   n | total |    P |
 |:-------|:----------------------|----:|------:|-----:|
-| LUCY   | Marine deposits       | 180 |   195 | 0.92 |
-| LUCY   | Fluviomarine deposits |  13 |   195 | 0.07 |
-| LUCY   | Alluvium              |   2 |   195 | 0.01 |
+| LUCY   | Marine deposits       | 184 |   199 | 0.92 |
+| LUCY   | Fluviomarine deposits |  13 |   199 | 0.07 |
+| LUCY   | Alluvium              |   2 |   199 | 0.01 |
 | MIAMI  | Till                  | 537 |   831 | 0.65 |
 | MIAMI  | Loess                 | 267 |   831 | 0.32 |
 | MIAMI  | Outwash               |  14 |   831 | 0.02 |
@@ -556,21 +557,21 @@ head(x$climate.monthly)
 
 |  | series | climate_var | minimum | q01 | q05 | q25 | q50 | q75 | q95 | q99 | maximum | n |
 |:---|:---|:---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| 2 | LUCY | Effective Precipitation (mm) | 148 | 198 | 212 | 238 | 320 | 421 | 597 | 687 | 754 | 32459 |
-| 3 | LUCY | Frost-Free Days | 197 | 219 | 233 | 239 | 245 | 256 | 273 | 283 | 299 | 32459 |
-| 4 | LUCY | Mean Annual Air Temperature (degrees C) | 14 | 16 | 17 | 18 | 18 | 19 | 20 | 20 | 20 | 32459 |
-| 5 | LUCY | Mean Annual Precipitation (mm) | 1071 | 1113 | 1124 | 1160 | 1268 | 1380 | 1577 | 1723 | 1786 | 32459 |
-| 6 | LUCY | Growing Degree Days (degrees C) | 2465 | 2930 | 3135 | 3258 | 3351 | 3535 | 3710 | 3760 | 3923 | 32459 |
-| 7 | LUCY | Fraction of Annual PPT as Rain | 96 | 98 | 99 | 99 | 100 | 100 | 100 | 100 | 100 | 32459 |
+| 2 | LUCY | Effective Precipitation (mm) | 148 | 198 | 212 | 237 | 319 | 421 | 596 | 687 | 754 | 32630 |
+| 3 | LUCY | Frost-Free Days | 197 | 219 | 233 | 239 | 245 | 256 | 273 | 283 | 299 | 32630 |
+| 4 | LUCY | Mean Annual Air Temperature (degrees C) | 14 | 16 | 17 | 18 | 18 | 19 | 20 | 20 | 20 | 32630 |
+| 5 | LUCY | Mean Annual Precipitation (mm) | 1071 | 1113 | 1124 | 1160 | 1267 | 1379 | 1577 | 1723 | 1786 | 32630 |
+| 6 | LUCY | Growing Degree Days (degrees C) | 2465 | 2933 | 3135 | 3258 | 3349 | 3534 | 3710 | 3760 | 3923 | 32630 |
+| 7 | LUCY | Fraction of Annual PPT as Rain | 96 | 98 | 99 | 99 | 100 | 100 | 100 | 100 | 100 | 32630 |
 
 |  | series | climate_var | minimum | q01 | q05 | q25 | q50 | q75 | q95 | q99 | maximum | n | month | variable |
 |:---|:---|:---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|:---|:---|
-| 1 | LUCY | ppt1 | 85 | 92 | 98 | 109 | 119 | 128 | 142 | 152 | 160 | 32459 | 1 | Precipitation (mm) |
-| 10 | LUCY | ppt2 | 72 | 82 | 88 | 102 | 113 | 123 | 134 | 143 | 156 | 32459 | 2 | Precipitation (mm) |
-| 11 | LUCY | ppt3 | 88 | 96 | 99 | 117 | 133 | 145 | 156 | 162 | 170 | 32459 | 3 | Precipitation (mm) |
-| 12 | LUCY | ppt4 | 63 | 69 | 72 | 78 | 87 | 99 | 117 | 124 | 134 | 32459 | 4 | Precipitation (mm) |
-| 13 | LUCY | ppt5 | 56 | 61 | 65 | 72 | 79 | 92 | 115 | 132 | 143 | 32459 | 5 | Precipitation (mm) |
-| 14 | LUCY | ppt6 | 82 | 92 | 99 | 109 | 122 | 135 | 162 | 179 | 197 | 32459 | 6 | Precipitation (mm) |
+| 1 | LUCY | ppt1 | 85 | 92 | 98 | 109 | 119 | 128 | 142 | 152 | 160 | 32630 | 1 | Precipitation (mm) |
+| 10 | LUCY | ppt2 | 72 | 82 | 88 | 102 | 113 | 123 | 134 | 143 | 156 | 32630 | 2 | Precipitation (mm) |
+| 11 | LUCY | ppt3 | 88 | 96 | 99 | 117 | 133 | 145 | 156 | 162 | 170 | 32630 | 3 | Precipitation (mm) |
+| 12 | LUCY | ppt4 | 63 | 69 | 72 | 78 | 87 | 99 | 117 | 124 | 134 | 32630 | 4 | Precipitation (mm) |
+| 13 | LUCY | ppt5 | 56 | 61 | 65 | 72 | 79 | 92 | 115 | 132 | 143 | 32630 | 5 | Precipitation (mm) |
+| 14 | LUCY | ppt6 | 82 | 92 | 99 | 109 | 122 | 135 | 162 | 179 | 197 | 32630 | 6 | Precipitation (mm) |
 
 #### Frost-Free Period
 
@@ -761,7 +762,7 @@ head(x$geomorphons)
 | LUCY | 0.39 | 0.01 | 0.14 | 0.15 | 0.04 | 0.09 | 0.02 | 0.09 | 0.07 | 0.00 | 2.61 |
 | MIAMI | 0.74 | 0.00 | 0.05 | 0.11 | 0.01 | 0.04 | 0.01 | 0.04 | 0.01 | 0.00 | 1.46 |
 | MUSICK | 0.00 | 0.03 | 0.17 | 0.00 | 0.21 | 0.24 | 0.16 | 0.00 | 0.16 | 0.02 | 2.55 |
-| PIERRE | 0.24 | 0.01 | 0.12 | 0.14 | 0.05 | 0.16 | 0.04 | 0.14 | 0.10 | 0.00 | 2.90 |
+| PIERRE | 0.24 | 0.01 | 0.12 | 0.14 | 0.05 | 0.16 | 0.04 | 0.14 | 0.10 | 0.00 | 2.89 |
 | TRISTAN | 0.00 | 0.03 | 0.16 | 0.00 | 0.23 | 0.25 | 0.16 | 0.00 | 0.15 | 0.01 | 2.48 |
 
 geomorphon summary {.table style="width:100%;"}

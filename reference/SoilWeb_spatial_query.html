@@ -17,7 +17,7 @@ servers, or a "snapshot" via SoilWeb.'></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">soilDB</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.9.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.9.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -30,7 +30,7 @@ servers, or a "snapshot" via SoilWeb.'></head><body>
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/dominant-es.html">Mapping Dominant Ecological Sites using SSURGO Data</a></li>
     <li><a class="dropdown-item" href="../articles/fetchNASIS.html">fetchNASIS(from='pedons') Columns</a></li>
-    <li><a class="dropdown-item" href="../articles/local-ssurgo.html">Local Soil Survey Geographic (SSURGO) Databases</a></li>
+    <li><a class="dropdown-item" href="../articles/local-ssurgo.html">Local SSURGO Databases</a></li>
     <li><a class="dropdown-item" href="../articles/sda.html">Soil Data Access</a></li>
     <li><a class="dropdown-item" href="../articles/soilweb-data-functions.html">Functions and Data Sources that Depend on SoilWeb</a></li>
     <li><a class="dropdown-item" href="../articles/wcs-ssurgo.html">Map Unit Key Grids and Thematic Maps of Soil Survey Geographic (SSURGO) Data</a></li>
@@ -48,7 +48,7 @@ servers, or a "snapshot" via SoilWeb.'></head><body>
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Get SSURGO Data via Spatial Query</h1>
-      <small class="dont-index">Source: <a href="https://github.com/ncss-tech/soilDB/blob/2.9.2/R/SSURGO_spatial_query.R" class="external-link"><code>R/SSURGO_spatial_query.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/ncss-tech/soilDB/blob/master/R/SSURGO_spatial_query.R" class="external-link"><code>R/SSURGO_spatial_query.R</code></a></small>
       <div class="d-none name"><code>SoilWeb_spatial_query.Rd</code></div>
     </div>
 
@@ -211,59 +211,59 @@ See examples below.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 47                                                                    Riverwash</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 48                                          Soquel loam, 9 to 15 percent slopes</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    soilweb_last_update</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1           2025-09-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2           2025-09-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3           2025-09-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4           2025-09-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5           2025-09-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6           2025-09-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7           2025-09-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8           2025-09-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9           2025-09-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10          2025-09-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11          2025-09-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12          2025-09-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13          2025-09-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14          2025-09-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15          2025-09-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16          2025-09-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17          2025-09-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18          2025-09-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19          2025-09-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20          2025-09-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 21          2025-09-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 22          2025-09-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 23          2025-09-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 24          2025-09-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 25          2025-09-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 26          2025-09-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 27          2025-09-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 28          2025-09-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 29          2025-09-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 30          2025-09-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 31          2025-09-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 32          2025-09-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 33          2025-09-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 34          2025-09-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 35          2025-09-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 36          2025-09-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 37          2025-09-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 38          2025-09-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 39          2025-09-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 40          2025-09-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 41          2025-09-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 42          2025-09-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 43          2025-09-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 44          2025-09-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 45          2025-09-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 46          2025-09-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 47          2025-09-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 48          2025-09-02</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1           2026-09-15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2           2026-09-15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3           2026-09-15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4           2026-09-15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5           2026-09-15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6           2026-09-15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7           2026-09-15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8           2026-09-15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9           2026-09-15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10          2026-09-15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11          2026-09-15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12          2026-09-15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13          2026-09-15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14          2026-09-15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15          2026-09-15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16          2026-09-15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17          2026-09-15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18          2026-09-15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19          2026-09-15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20          2026-09-15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21          2026-09-15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22          2026-09-15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23          2026-09-15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24          2026-09-15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 25          2026-09-15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 26          2026-09-15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 27          2026-09-15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28          2026-09-15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 29          2026-09-15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 30          2026-09-15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 31          2026-09-15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 32          2026-09-15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 33          2026-09-15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 34          2026-09-15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 35          2026-09-15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 36          2026-09-15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 37          2026-09-15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 38          2026-09-15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 39          2026-09-15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 40          2026-09-15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 41          2026-09-15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 42          2026-09-15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 43          2026-09-15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 44          2026-09-15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 45          2026-09-15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 46          2026-09-15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 47          2026-09-15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 48          2026-09-15</span>
 <span class="r-in"><span>    </span></span>
 <span class="r-in"><span>    <span class="co"># query by coordinate pair</span></span></span>
 <span class="r-in"><span>    <span class="fu">SoilWeb_spatial_query</span><span class="op">(</span>coords<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">121</span>, <span class="fl">38</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ogc_fid areasymbol musym  mukey soilweb_last_update dist_meters</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 1524073      ca077   220 462112          2025-09-09 92.17456302</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 1537842      ca077   220 462112          2026-09-15 92.17456302</span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>

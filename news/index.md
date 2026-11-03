@@ -1,5 +1,24 @@
 # Changelog
 
+## soilDB 2.9.3 (2026-09-17)
+
+- [`createSSURGO()`](http://ncss-tech.github.io/soilDB/reference/createSSURGO.md)
+  fix bug in logical column handling (introduced in 2.9.2) due to
+  metadata column type enforcement
+  ([\#483](https://github.com/ncss-tech/soilDB/issues/483))
+- Fix [`structure()`](https://rdrr.io/r/base/structure.html) usage of
+  special argument names (.Label, .Names) in test fixtures for R-devel
+  ([\#484](https://github.com/ncss-tech/soilDB/issues/484))
+- [`downloadSSURGO()`](http://ncss-tech.github.io/soilDB/reference/downloadSSURGO.md)
+  now uses a persistent soilDB Web Soil Survey ZIP cache when `destdir`
+  is omitted, checks `sacatalog.saverest` for freshness, supports
+  `force = TRUE` to bypass cache reuse, and falls back to cached ZIPs
+  with a warning when the remote freshness check is unavailable. Added
+  [`list_WSS_cache()`](http://ncss-tech.github.io/soilDB/reference/list_WSS_cache.md)
+  and
+  [`clear_WSS_cache()`](http://ncss-tech.github.io/soilDB/reference/clear_WSS_cache.md)
+  for cache inventory and manual cleanup.
+
 ## soilDB 2.9.2 (2026-07-10)
 
 CRAN release: 2026-07-11
