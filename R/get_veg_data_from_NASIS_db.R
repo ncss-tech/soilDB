@@ -15,21 +15,12 @@
 #' @return A list of data.frame 
 #' @author Jay M. Skovlin and Dylan E. Beaudette
 #' @keywords manip
-#' @examples
-#' 
-#' \donttest{
-#' if(local_NASIS_defined()) {
-#'  # query text note data
-#'  v <- try(get_veg_from_NASIS_db())
-#' 
-#'  # show contents veg data returned
-#'  str(v)
-#' }
-#' }
-#' 
+#' @seealso [fetchVegdata()]
 #' @export get_veg_data_from_NASIS_db
 get_veg_data_from_NASIS_db <- function(SS=TRUE, dsn = NULL) {
-
+  
+  .Deprecated("fetchVegdata")
+  
   # existing veg
   # NOTE: left join of siteobs:vegplot ensures that all site/siteobs are in this result, 
   #       records will be NA filled when no vegplot available
@@ -41,12 +32,12 @@ get_veg_data_from_NASIS_db <- function(SS=TRUE, dsn = NULL) {
   LEFT OUTER JOIN plant ON plant.plantiid = ppi.plantiidref;"
 
   # toggle selected set vs. local DB
-  if (SS == FALSE) {
+  if (isFALSE(SS)) {
     q.veg <- gsub(pattern = '_View_1', replacement = '', x = q.veg, fixed = TRUE)
   }
   
   # veg transect
-  q.vegtransect <- "SELECT siteiid, vegplotiid, vegplotid, vegplotname, obsdate, primarydatacollector, datacollectionpurpose, assocuserpedonid, vegtransectid, vegtransplantsummiid vtpsiid, transectlength, plantsym, plantsciname, plantnatvernm
+  q.vegtransect <- "SELECT siteiid, vegplotiid, vegplotid, vegplotname, obsdate, primarydatacollector, datacollectionpurpose, assocuserpedonid, vegtransectid, vegtransplantsummiid AS vtpsiid, vegtransplantsummiid, transectlength, plantsym, plantsciname, plantnatvernm
   
     FROM site_View_1 AS s
     INNER JOIN siteobs ON siteobs.siteiidref=s.siteiid
@@ -57,7 +48,7 @@ get_veg_data_from_NASIS_db <- function(SS=TRUE, dsn = NULL) {
     ORDER BY s.siteiid;"
   
   # toggle selected set vs. local DB
-  if (SS == FALSE) {
+  if (isFALSE(SS)) {
     q.vegtransect <- gsub(pattern = '_View_1', replacement = '', x = q.vegtransect, fixed = TRUE)
   }
   

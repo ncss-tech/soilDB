@@ -1,5 +1,7 @@
 # currently only queries SoilWeb for mapunit-level data
 
+## TODO: this should be deprecated
+
 
 #' @title Get SSURGO Data via Spatial Query
 #' 
@@ -21,8 +23,7 @@
 #' @note SDA now supports spatial queries, consider using [SDA_spatialQuery()] instead.
 #' @author D.E. Beaudette
 #' @keywords manip
-#' @examplesIf curl::has_internet()
-#' @examples
+#' @examplesIf curl::has_internet() && requireNamespace("httr", quietly = TRUE)
 #' 
 #' \donttest{
 #'     # query by bbox
@@ -39,9 +40,6 @@ SoilWeb_spatial_query <- function(bbox=NULL, coords=NULL, what='mapunit', source
   if(!requireNamespace('jsonlite', quietly = TRUE))
     stop('please install the `jsonlite` package', call.=FALSE)
   
-  # no factors in resulting DFs
-  options(stringsAsFactors=FALSE)
-  
   # sanity-check: user must supply some kind of criteria
   if(missing(coords) & missing(bbox)) {
     stop('you must provide some filtering criteria')
@@ -54,16 +52,16 @@ SoilWeb_spatial_query <- function(bbox=NULL, coords=NULL, what='mapunit', source
   
   # process filter components
   if(!missing(coords)) {
-    f <- paste('&lon=', coords[1], '&lat=', coords[2], sep='')
+    f <- paste0('&lon=', coords[1], '&lat=', coords[2])
   }
   
   if(!missing(bbox)) {
     bbox <- paste(bbox, collapse=',')
-    f <- paste('&bbox=', bbox, sep='')
+    f <- paste0('&bbox=', bbox)
   }
   
   # build URL
-  the.url <- paste('https://casoilresource.lawr.ucdavis.edu/soil_web/api/ssurgo.php?what=mapunit', f, sep='')
+  the.url <- paste0('https://casoilresource.lawr.ucdavis.edu/soil_web/api/ssurgo.php?what=mapunit', f)
   
   # attempt to load data from URL/JSON
   # note: this may fail when done over gov VPN

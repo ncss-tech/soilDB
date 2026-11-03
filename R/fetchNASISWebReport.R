@@ -1,13 +1,7 @@
 
 #' Get component tables from NASIS Web Reports
 #'
-#' @aliases fetchNASISWebReport get_project_from_NASISWebReport
-#' get_progress_from_NASISWebReport get_project_correlation_from_NASISWebReport
-#' get_legend_from_NASISWebReport get_mapunit_from_NASISWebReport
-#' get_projectmapunit_from_NASISWebReport
-#' get_projectmapunit2_from_NASISWebReport get_component_from_NASISWebReport
-#' get_chorizon_from_NASISWebReport get_cosoilmoist_from_NASISWebReport
-#' get_sitesoilmoist_from_NASISWebReport get_lmuaoverlap_from_NASISWebReport
+#' @aliases fetchNASISWebReport get_project_from_NASISWebReport get_progress_from_NASISWebReport get_project_correlation_from_NASISWebReport get_legend_from_NASISWebReport get_mapunit_from_NASISWebReport get_projectmapunit_from_NASISWebReport get_projectmapunit2_from_NASISWebReport get_component_from_NASISWebReport get_chorizon_from_NASISWebReport get_cosoilmoist_from_NASISWebReport get_sitesoilmoist_from_NASISWebReport get_lmuaoverlap_from_NASISWebReport
 #'
 #' @param projectname text string vector of project names to be inserted into a
 #' SQL WHERE clause (default: `NA`)
@@ -25,7 +19,6 @@
 #' @param fill should rows with missing component ids be removed (default: `FALSE`)
 #' @param rmHzErrors should pedons with horizonation errors be removed from the
 #' results? (default: `FALSE`)
-#' @param stringsAsFactors deprecated
 #' @param droplevels logical: indicating whether to drop unused levels in
 #' classifying factors. This is useful when a class has large number of unused
 #' classes, which can waste space in tables and figures.
@@ -38,12 +31,10 @@
 #' @keywords manip
 #'
 #' @export fetchNASISWebReport
-fetchNASISWebReport <- function(projectname, rmHzErrors = FALSE, fill = FALSE,
-                                stringsAsFactors = NULL) {
+fetchNASISWebReport <- function(projectname, rmHzErrors = FALSE, fill = FALSE) {
   
-  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
-    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
-    NASISDomainsAsFactor(stringsAsFactors)
+  if (!requireNamespace("aqp")) {
+    stop("package 'aqp' is required", call. = FALSE)
   }
   
   # load data in pieces
@@ -56,7 +47,6 @@ fetchNASISWebReport <- function(projectname, rmHzErrors = FALSE, fill = FALSE,
     message("One or more inputs for fetchNASISWebReport (mapunit, component, or horizon) is NULL, returning NULL.")
     return(NULL)
   }
-
 
   # optionally test for bad horizonation... flag, and remove
   if (rmHzErrors) {
@@ -77,16 +67,13 @@ fetchNASISWebReport <- function(projectname, rmHzErrors = FALSE, fill = FALSE,
   }
 
   # upgrade to SoilProfilecollection
-  depths(f.chorizon) <- coiid ~ hzdept_r + hzdepb_r
+  aqp::depths(f.chorizon) <- coiid ~ hzdept_r + hzdepb_r
 
-
-  ## TODO: this will fail in the presence of duplicates
-  ## TODO: make this error more informative
   # add site data to object
-  site(f.chorizon) <- f.component # left-join via coiid
+  aqp::site(f.chorizon) <- f.component # left-join via coiid
 
   # set NASIS-specific horizon identifier
-  hzidname(f.chorizon) <- 'chiid'
+  aqp::hzidname(f.chorizon) <- 'chiid'
 
   # print any messages on possible data quality problems:
   if (exists('component.hz.problems', envir=get_soilDB_env()))
@@ -99,19 +86,14 @@ fetchNASISWebReport <- function(projectname, rmHzErrors = FALSE, fill = FALSE,
 
 #' @rdname fetchNASISWebReport
 #' @export
-get_component_from_NASISWebReport <- function(projectname, stringsAsFactors = NULL) {
- 
-  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
-    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
-    NASISDomainsAsFactor(stringsAsFactors)
-  }
+get_component_from_NASISWebReport <- function(projectname) {
   
   url <- "https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=get_component_from_NASISWebReport"
 
   d.component <- lapply(projectname, function(x) {
     message("getting project '", x, "' from NasisReportsWebSite \n", sep = "")
-    args = list(p_projectname = x)
-    d    =  tryCatch(parseWebReport(url, args),
+    args <- list(p_projectname = x)
+    d <- tryCatch(parseWebReport(url, args),
                      error = function(e) {
                        message(e)
                        return(NULL)
@@ -137,33 +119,24 @@ get_component_from_NASISWebReport <- function(projectname, stringsAsFactors = NU
 
 #' @rdname fetchNASISWebReport
 #' @export
-get_chorizon_from_NASISWebReport <- function(projectname, fill = FALSE, stringsAsFactors = NULL) {
-  
-  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
-    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
-    NASISDomainsAsFactor(stringsAsFactors)
-  }
+get_chorizon_from_NASISWebReport <- function(projectname, fill = FALSE) {
   
   url <- "https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=get_chorizon_from_NASISWebReport"
 
   d.chorizon <- lapply(projectname, function(x) {
-    args = list(p_projectname = x)
-    d    =  parseWebReport(url, args)
+    args <- list(p_projectname = x)
+    d <- parseWebReport(url, args)
   })
   d.chorizon <- do.call("rbind", d.chorizon)
 
-  ## TODO: might be nice to abstract this into a new function
-  # hacks to make R CMD check --as-cran happy:
-  metadata <- NULL
-  # load local copy of metadata
-  load(system.file("data/metadata.rda", package="soilDB")[1])
-
+  metadata <- get_NASIS_metadata()
+  
   # transform variables and metadata
   if (!all(is.na(d.chorizon$chiid))) {
     d.chorizon <- within(d.chorizon, {
-      texture = tolower(texture)
+      texture <- tolower(texture)
       if (getOption("stringsAsFactors", default = FALSE)) {
-        texcl = factor(texcl,
+        texcl <- factor(texcl,
                        levels = metadata[metadata$ColumnPhysicalName == "texcl", "ChoiceValue"],
                        labels = metadata[metadata$ColumnPhysicalName == "texcl", "ChoiceName"]
         )
@@ -172,7 +145,7 @@ get_chorizon_from_NASISWebReport <- function(projectname, fill = FALSE, stringsA
   }
 
   # fill
-  if (fill == FALSE) {
+  if (isFALSE(fill)) {
     d.chorizon <- d.chorizon[!is.na(d.chorizon$chiid), ]
   }
 
@@ -185,12 +158,7 @@ get_chorizon_from_NASISWebReport <- function(projectname, fill = FALSE, stringsA
 
 #' @rdname fetchNASISWebReport
 #' @export
-get_legend_from_NASISWebReport <- function(mlraoffice, areasymbol, droplevels = TRUE, stringsAsFactors = NULL) {
-  
-  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
-    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
-    NASISDomainsAsFactor(stringsAsFactors)
-  }
+get_legend_from_NASISWebReport <- function(mlraoffice, areasymbol, droplevels = TRUE) {
   
   url <- "https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=get_legend_from_NASISWebReport"
 
@@ -213,19 +181,14 @@ get_legend_from_NASISWebReport <- function(mlraoffice, areasymbol, droplevels = 
 
 #' @rdname fetchNASISWebReport
 #' @export
-get_lmuaoverlap_from_NASISWebReport <- function(areasymbol, droplevels = TRUE, stringsAsFactors = NULL) {  
+get_lmuaoverlap_from_NASISWebReport <- function(areasymbol, droplevels = TRUE) {  
   
-  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
-    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
-    NASISDomainsAsFactor(stringsAsFactors)
-  }
-    
   url <- "https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=get_lmuaoverlap_from_NASISWebReport"
 
   d <- lapply(areasymbol, function(x) {
     message("getting legend for '", x, "' from NasisReportsWebSite \n", sep = "")
-    args = list(p_areasymbol = x)
-    d    =  parseWebReport(url, args)
+    args <- list(p_areasymbol = x)
+    d <- parseWebReport(url, args)
   })
   d <- do.call("rbind", d)
 
@@ -242,19 +205,14 @@ get_lmuaoverlap_from_NASISWebReport <- function(areasymbol, droplevels = TRUE, s
 
 #' @rdname fetchNASISWebReport
 #' @export
-get_mapunit_from_NASISWebReport <- function(areasymbol, droplevels = TRUE, stringsAsFactors = NULL) {
+get_mapunit_from_NASISWebReport <- function(areasymbol, droplevels = TRUE) {
 
-  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
-    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
-    NASISDomainsAsFactor(stringsAsFactors)
-  }
-  
   url <- "https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=get_mapunit_from_NASISWebReport"
 
   d.mapunit <- lapply(areasymbol, function(x) {
     message("getting map units for '", x, "' from NasisReportsWebSite \n", sep = "")
-    args = list(p_areasymbol = x)
-    d    =  parseWebReport(url, args)
+    args <- list(p_areasymbol = x)
+    d <- parseWebReport(url, args)
   })
   d.mapunit <- do.call("rbind", d.mapunit)
 
@@ -272,19 +230,14 @@ get_mapunit_from_NASISWebReport <- function(areasymbol, droplevels = TRUE, strin
 
 #' @rdname fetchNASISWebReport
 #' @export
-get_projectmapunit_from_NASISWebReport <- function(projectname, stringsAsFactors = NULL) {
-
-  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
-    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
-    NASISDomainsAsFactor(stringsAsFactors)
-  }
+get_projectmapunit_from_NASISWebReport <- function(projectname) {
   
   url <-"https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=get_projectmapunit_from_NASISWebReport"
 
 
   d.mapunit <- lapply(projectname, function(x) {
-    args = list(p_projectname = x)
-    d    =  parseWebReport(url, args)
+    args <- list(p_projectname = x)
+    d <- parseWebReport(url, args)
   })
   d.mapunit <- do.call("rbind", d.mapunit)
 
@@ -301,18 +254,12 @@ get_projectmapunit_from_NASISWebReport <- function(projectname, stringsAsFactors
 
 #' @rdname fetchNASISWebReport
 #' @export
-get_projectmapunit2_from_NASISWebReport <- function(mlrassoarea, fiscalyear, projectname, stringsAsFactors = NULL) {
+get_projectmapunit2_from_NASISWebReport <- function(mlrassoarea, fiscalyear, projectname) {
 
-  
-  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
-    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
-    NASISDomainsAsFactor(stringsAsFactors)
-  }
-  
   url <-"https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=get_projectmapunit2_from_NASISWebReport"
 
-  args = list(p_mlrassoarea = mlrassoarea, p_fy = fiscalyear, p_projectname = projectname)
-  d.mapunit    =  parseWebReport(url, args)
+  args <- list(p_mlrassoarea = mlrassoarea, p_fy = fiscalyear, p_projectname = projectname)
+  d.mapunit <- parseWebReport(url, args)
 
   d.mapunit$musym = as.character(d.mapunit$musym)
 
@@ -381,16 +328,16 @@ get_project_correlation_from_NASISWebReport <- function(mlrassoarea, fiscalyear,
   if (! is.null(d.rcor)) {
 
     d.rcor <- within(d.rcor, {
-      n         = nchar(musym)
-      begin_1   = substr(musym, 2, n)
-      end_1     = substr(musym, 1, n - 1)
-      end_4     = substr(musym, 1, n - 4)
+      n <- nchar(musym)
+      begin_1 <- substr(musym, 2, n)
+      end_1 <- substr(musym, 1, n - 1)
+      end_4 <- substr(musym, 1, n - 4)
 
-      idx       = musym != new_musym & !is.na(new_musym)
-      orig_musym = ifelse(idx & musym != begin_1 & (new_musym == begin_1 | substr(musym, 1, 1) %in% c("x", "z")), begin_1, musym)
+      idx <- musym != new_musym & !is.na(new_musym)
+      orig_musym <- ifelse(idx & musym != begin_1 & (new_musym == begin_1 | substr(musym, 1, 1) %in% c("x", "z")), begin_1, musym)
       # Joe recommended using |\\+${1}, but appears to be legit in some cases
-      orig_musym = ifelse(idx & musym != end_1   & new_musym == end_1 , end_1   , orig_musym)
-      orig_musym = ifelse(idx & musym != end_4   & new_musym == end_4 , end_4   , orig_musym)
+      orig_musym <- ifelse(idx & musym != end_1   & new_musym == end_1 , end_1   , orig_musym)
+      orig_musym <- ifelse(idx & musym != end_4   & new_musym == end_4 , end_4   , orig_musym)
     })
   }
 

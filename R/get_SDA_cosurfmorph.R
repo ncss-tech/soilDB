@@ -106,11 +106,11 @@ get_SDA_cosurfmorph <- function(table = c("cosurfmorphgc", "cosurfmorphhpp", "co
 
   .NULL_FILTER <- function(v, miscellaneous_areas = FALSE) {
     if (miscellaneous_areas) return("1=1")
-    paste0(paste0(v, collapse = " IS NOT NULL OR "), " IS NOT NULL")
+    paste0(paste(v, collapse = " IS NOT NULL OR "), " IS NOT NULL")
   }
   
   .ORDER_COLUMNS <- function(v) {
-    paste0(paste0(paste0("p_", v), collapse = " DESC, "), " DESC")
+    paste0(paste(paste0("p_", v), collapse = " DESC, "), " DESC")
   }
 
   # excludes custom calculated columns (e.g. surfaceshape concatenated from across/down)
@@ -134,7 +134,7 @@ get_SDA_cosurfmorph <- function(table = c("cosurfmorphgc", "cosurfmorphhpp", "co
                  WHERE ", statsgo_filter, "
                    AND (", .NULL_FILTER(vars_default, miscellaneous_areas), ")
                    AND ", WHERE, "
-                 GROUP BY [BYVAR], ", paste0(vars_default, collapse = ", "), "
+                 GROUP BY [BYVAR], ", toString(vars_default), "
                ) AS a JOIN (SELECT [BYVAR] AS BYVAR, CAST(count([BYVAR]) AS numeric) AS total
                  FROM legend
                    INNER JOIN mapunit ON mapunit.lkey = legend.lkey
@@ -158,7 +158,7 @@ get_SDA_cosurfmorph <- function(table = c("cosurfmorphgc", "cosurfmorphhpp", "co
     }
     
     q <- paste0("SELECT mapunit.mukey, component.cokey, compname, compkind, comppct_r, majcompflag, cogeomordesc.rvindicator,",
-                paste0(vars, collapse = ", "), "
+                toString(vars), "
                 FROM legend
                   INNER JOIN mapunit ON mapunit.lkey = legend.lkey
                   INNER JOIN component ON mapunit.mukey = component.mukey ", 

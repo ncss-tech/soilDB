@@ -9,7 +9,7 @@ estimateColorMixture(x, wt = "pct", backTransform = FALSE)
 \arguments{
 \item{x}{data.frame, typically from NASIS containing at least CIE LAB ('L', 'A', 'B') and some kind of weight}
 
-\item{wt}{fractional weights, usually area of hz face}
+\item{wt}{numeric. fractional weights, usually area of horizon face}
 
 \item{backTransform}{logical, should the mixed sRGB representation of soil color be transformed to closest Munsell chips? This is performed by \code{\link[aqp:col2Munsell]{aqp::col2Munsell()}} default: \code{FALSE}}
 }

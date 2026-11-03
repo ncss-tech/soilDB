@@ -32,7 +32,7 @@
 #'
 #' @export get_text_notes_from_NASIS_db
 get_text_notes_from_NASIS_db <- function(SS=TRUE, fixLineEndings=TRUE, dsn = NULL) {
-
+  
 	# petext
 	q.petext <- "SELECT recdate, recauthor, pedontextkind, textcat, textsubcat, peiidref AS peiid, petextiid, CAST(textentry as text) AS textentry FROM petext_View_1;"
 
@@ -40,7 +40,7 @@ get_text_notes_from_NASIS_db <- function(SS=TRUE, fixLineEndings=TRUE, dsn = NUL
 	q.sitetext <- "SELECT recdate, recauthor, sitetextkind, textcat, textsubcat, siteiidref AS siteiid, sitetextiid, CAST(textentry as text) AS textentry FROM sitetext_View_1;"
 
 	# siteobstext
-	q.siteobstext <- "SELECT recdate, recauthor, siteobstextkind, textcat, textsubcat, siteiidref AS site_id, siteobstextiid, CAST(textentry as text) AS textentry FROM (
+	q.siteobstext <- "SELECT recdate, recauthor, siteobstextkind, textcat, textsubcat, siteiidref AS siteiid, siteobstextiid, CAST(textentry as text) AS textentry FROM (
 siteobs_View_1 LEFT OUTER JOIN
 siteobstext_View_1 ON siteobs_View_1.siteobsiid = siteobstext_View_1.siteobsiidref);"
 
@@ -48,10 +48,10 @@ siteobstext_View_1 ON siteobs_View_1.siteobsiid = siteobstext_View_1.siteobsiidr
 	q.phtext <- "SELECT recdate, recauthor, phorizontextkind, textcat, textsubcat, phiidref AS phiid, phtextiid, CAST(textentry as text) AS textentry FROM phtext_View_1;"
 
 	# photo links
-	q.photos <- "SELECT recdate, recauthor, siteobstextkind, textcat, textsubcat, siteiidref AS site_id, siteobstextiid, CAST(textentry as text) AS textentry FROM (siteobs_View_1 LEFT OUTER JOIN siteobstext_View_1 ON siteobs_View_1.siteobsiid = siteobstext_View_1.siteobsiidref) WHERE siteobstext_View_1.textcat LIKE 'Photo%' ORDER BY siteobstext_View_1.siteobstextkind;"
+	q.photos <- "SELECT recdate, recauthor, siteobstextkind, textcat, textsubcat, siteiidref AS siteiid, siteobstextiid, CAST(textentry as text) AS textentry FROM (siteobs_View_1 LEFT OUTER JOIN siteobstext_View_1 ON siteobs_View_1.siteobsiid = siteobstext_View_1.siteobsiidref) WHERE siteobstext_View_1.textcat LIKE 'Photo%' ORDER BY siteobstext_View_1.siteobstextkind;"
 
 	# toggle selected set vs. local DB
-	if (SS == FALSE) {
+	if (isFALSE(SS)) {
 	  q.petext <- gsub(pattern = '_View_1', replacement = '', x = q.petext, fixed = TRUE)
 	  q.sitetext <- gsub(pattern = '_View_1', replacement = '', x = q.sitetext, fixed = TRUE)
 	  q.siteobstext <- gsub(pattern = '_View_1', replacement = '', x = q.siteobstext, fixed = TRUE)
@@ -114,7 +114,7 @@ get_mutext_from_NASIS_db <- function(SS = TRUE, fixLineEndings = TRUE, dsn = NUL
     return(data.frame())
   
   # toggle selected set vs. local DB
-  if (SS == FALSE) {
+  if (isFALSE(SS)) {
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
   }
   
@@ -153,7 +153,7 @@ get_cotext_from_NASIS_db <- function(SS = TRUE, fixLineEndings = TRUE, dsn = NUL
   INNER JOIN cotext_View_1 AS cot ON co.coiid = cot.coiidref;"
   
   # toggle selected set vs. local DB
-  if (SS == FALSE) {
+  if (isFALSE(SS)) {
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
   }
   

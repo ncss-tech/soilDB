@@ -1,9 +1,17 @@
 #' Get SoilGrids 2.0 Property Estimates for Points or Spatial Extent
 #'
-#' This function obtains [SoilGrids 2.0](https://soilgrids.org) properties information (250m raster resolution) given a \code{data.frame} containing site IDs, latitudes and longitudes, or a spatial extent (see `grid=TRUE` argument).
-#' 
-#' SoilGrids API and maps return values as whole (integer) numbers to minimize the storage space used. These values have conversion factors applied by `fetchSoilGrids()` to produce conventional units shown in the table below (see Details).
-#' 
+#' @description
+#'
+#' This function obtains [SoilGrids 2.0](https://soilgrids.org) properties
+#' information (250m raster resolution) given a \code{data.frame} containing
+#' site IDs, latitudes and longitudes, or a spatial extent (see `grid=TRUE`
+#' argument).
+#'
+#' SoilGrids API and maps return values as whole (integer) numbers to minimize
+#' the storage space used. These values have conversion factors applied by
+#' `fetchSoilGrids()` to produce conventional units shown in the table below
+#' (see Details).
+#'
 #' @details
 #' 
 #' ## Properties
@@ -24,54 +32,89 @@
 #' |wv0010   |Volumetric Water Content at 10kPa                                                  |0.1 v% or 1 mm/m|                10|volume (%)         |
 #' |wv0033   |Volumetric Water Content at 33kPa                                                  |0.1 v% or 1 mm/m|                10|volume (%)         |
 #' |wv1500   |Volumetric Water Content at 1500kPa                                                |0.1 v% or 1 mm/m|                10|volume (%)         |
+#'
+#' SoilGrids predictions are made for the six standard depth intervals specified
+#' in the GlobalSoilMap IUSS working group and its specifications. The default
+#' depth intervals returned are (in centimeters): `"0-5"`, `"5-15"`, `"15-30"`,
+#' `"30-60"`, `"60-100"`, `"100-200"` for the properties `"bdod"`, `"cec"`,
+#' `"cfvo"`, `"clay"`, `"nitrogen"`, `"phh2o"`, `"sand"`, `"silt"`, `"soc"`,
+#' `"ocd"`, `"wv0010"`, `"wv0033"`, `"wv1500"`--each with percentiles (5th,
+#' 50th, 95th), mean and uncertainty values. The summary statistic name will be
+#' appended to the abbreviate variable name for each depth interval returned.
+#' Soil organic carbon stocks (0-30cm) (`variables="ocs"`) are returned only for
+#' `depth_intervals="0-30"`. The uncertainty values are the ratio between the
+#' inter-quantile range (90% prediction interval width) and the median :
+#' `(Q0.95-Q0.05)/Q0.50.` All values are converted from "mapped" to
+#' "conventional" based on above table conversion factors. Point data requests
+#' are made through `"properties/query"` endpoint of the [SoilGrids v2.0 REST
+#' API](https://docs.isric.org/globaldata/soilgrids/SoilGrids_faqs.html). Please check
+#' ISRIC's data policy, disclaimer and citation:
+#' \url{https://isric.org/privacy-and-personal-data/}.
+#'
+#' Find out more information about the SoilGrids and GlobalSoilMap products
+#' here:
 #' 
-#' SoilGrids predictions are made for the six standard depth intervals specified in the GlobalSoilMap IUSS working group and its specifications. The default depth 
-#' intervals returned are (in centimeters): `"0-5"`, `"5-15"`, `"15-30"`, `"30-60"`, `"60-100"`, `"100-200"` for the properties `"bdod"`, `"cec"`, `"cfvo"`, 
-#' `"clay"`, `"nitrogen"`, `"phh2o"`, `"sand"`, `"silt"`, `"soc"`, `"ocd"`, `"wv0010"`, `"wv0033"`, `"wv1500"`--each with 5th, 50th, 95th, mean and uncertainty values. Soil organic carbon stocks (0-30cm) (`variables="ocs"`) are returned only for `depth_intervals="0-30"`. The uncertainty values are the ratio
-#' between the inter-quantile range (90% prediction interval width) and the median : `(Q0.95-Q0.05)/Q0.50.` All values are converted from "mapped" to "conventional" 
-#' based on above table conversion factors. Point data requests are made through `"properties/query"` endpoint of the [SoilGrids v2.0 REST API](https://www.isric.org/explore/soilgrids/faq-soilgrids). 
-#' Please check ISRIC's data policy, disclaimer and citation: \url{https://www.isric.org/about/data-policy}.
+#'  - \url{https://docs.isric.org/globaldata/soilgrids/SoilGrids_faqs.html}
+#'  - \url{https://files.isric.org/public/documents/GlobalSoilMap_specifications_december_2015_2.pdf}
 #' 
-#' Find out more information about the SoilGrids and GlobalSoilMap products here: 
-#' 
-#'  - \url{https://www.isric.org/explore/soilgrids/faq-soilgrids}
-#'  - \url{https://www.isric.org/sites/default/files/GlobalSoilMap_specifications_december_2015_2.pdf}
-#' 
-#' @references 
+#' @references
 #'  - **Common soil chemical and physical properties:**
-#'    Poggio, L., de Sousa, L. M., Batjes, N. H., Heuvelink, G. B. M., Kempen, B., Ribeiro, E., and Rossiter, D.: SoilGrids 2.0: producing soil information for the globe with quantified spatial uncertainty, SOIL, 7, 217–240, 2021. DOI: \doi{https://doi.org/10.5194/soil-7-217-2021}
+#' Poggio, L., de Sousa, L. M., Batjes, N. H., Heuvelink, G. B. M., Kempen, B.,
+#' Ribeiro, E., and Rossiter, D.: SoilGrids 2.0: producing soil information for
+#' the globe with quantified spatial uncertainty, SOIL, 7, 217–240, 2021. DOI:
+#' \doi{https://doi.org/10.5194/soil-7-217-2021}
 #'  - **Soil water content at different pressure heads:**
-#'    Turek, M.E.,  Poggio, L., Batjes, N. H., Armindo, R. A.,  de Jong van Lier, Q.,  de Sousa, L.M.,  Heuvelink, G. B. M. : Global mapping of volumetric water retention at 100, 330 and 15000 cm suction using the WoSIS database, International Soil and Water Conservation Research, 11-2, 225-239, 2023. DOI: \doi{https://doi.org/10.1016/j.iswcr.2022.08.001}
+#' Turek, M.E.,  Poggio, L., Batjes, N. H., Armindo, R. A.,  de Jong van Lier,
+#' Q.,  de Sousa, L.M.,  Heuvelink, G. B. M. : Global mapping of volumetric
+#' water retention at 100, 330 and 15000 cm suction using the WoSIS database,
+#' International Soil and Water Conservation Research, 11-2, 225-239, 2023. DOI:
+#' \doi{https://doi.org/10.1016/j.iswcr.2022.08.001}
 #' 
 #' @importFrom utils packageVersion
 #'
-#' @param x A `data.frame` containing 3 columns referring to site ID, latitude and longitude. Or a spatial (sf, terra) object for which a bounding box can be calculated when `grid=TRUE`.
-#' @param loc.names Optional: Column names referring to site ID, latitude and longitude. Default: `c("id", "lat", "lon")`
-#' @param depth_intervals Default: `"0-5"`, `"5-15"`, `"15-30"`, `"30-60"`, `"60-100"`, `"100-200"`
-#' @param variables Default: `"bdod"`, `"cec"`, `"cfvo"`, `"clay"`, `"nitrogen"`, `"phh2o"`, `"sand"`, `"silt"`, `"soc"`, `"ocd"`, `"wv0010"`, `"wv0033"`, `"wv1500"`. Optionally `"ocs"` (only for 0 to 30 cm interval). 
-#' @param grid Download subset of SoilGrids Cloud Optimized GeoTIFF? Default: `FALSE`
-#' @param filename Only used when `grid=TRUE`. If `NULL` defaults to an in-memory raster, or temporary file if result does not fit in memory.
+#' @param x A `data.frame` containing 3 columns referring to site ID, latitude
+#'   and longitude. Or a spatial (sf, terra) object for which a bounding box can
+#'   be calculated when `grid=TRUE`.
+#' @param loc.names Optional: Column names referring to site ID, latitude and
+#'   longitude. Default: `c("id", "lat", "lon")`
+#' @param depth_intervals Default: `"0-5"`, `"5-15"`, `"15-30"`, `"30-60"`,
+#'   `"60-100"`, `"100-200"`
+#' @param variables Default: `"bdod"`, `"cec"`, `"cfvo"`, `"clay"`,
+#'   `"nitrogen"`, `"phh2o"`, `"sand"`, `"silt"`, `"soc"`, `"ocd"`, `"wv0010"`,
+#'   `"wv0033"`, `"wv1500"`. Optionally `"ocs"` (only for 0 to 30 cm interval).
+#' @param grid Download subset of SoilGrids Cloud Optimized GeoTIFF? Default:
+#'   `FALSE`
+#' @param filename Only used when `grid=TRUE`. If `NULL` defaults to an
+#'   in-memory raster, or temporary file if result does not fit in memory.
 #' @param overwrite Only used when `grid=TRUE`. Default: `FALSE`
-#' @param target_resolution Only used when `grid=TRUE`. Default: `c(250, 250)` (250m x 250m pixels)
-#' @param summary_type Only used when `grid=TRUE`. One or more of `"Q0.05"`, `"Q0.5"`, `"Q0.95"`, `"mean"`; these are summary statistics that
-#'  correspond to 5th, 50th, 95th percentiles, and mean value for selected `variables`.
-#' @param endpoint Optional: custom API endpoint. Default: `"https://rest.isric.org/soilgrids/v2.0/properties/query"` when `grid=FALSE`; `"https://files.isric.org/soilgrids/latest/data/"` when `grid=TRUE`.
-#' @param ... Additional arguments passed to `terra::writeRaster()` when `grid=TRUE`.
+#' @param target_resolution Only used when `grid=TRUE`. Default: `c(250, 250)`
+#'   (250m x 250m pixels)
+#' @param summary_type Only used when `grid=TRUE`. One or more of `"Q0.05"`,
+#'   `"Q0.5"`, `"Q0.95"`, `"mean"`; these are summary statistics that correspond
+#'   to 5th, 50th, 95th percentiles, and mean value for selected `variables`.
+#' @param endpoint Optional: custom API endpoint. Default:
+#'   `"https://rest.isric.org/soilgrids/v2.0/properties/query"` when
+#'   `grid=FALSE`; `"https://files.isric.org/soilgrids/latest/data/"` when
+#'   `grid=TRUE`.
+#' @param ... Additional arguments passed to `terra::writeRaster()` when
+#'   `grid=TRUE`.
 #' @param verbose Print messages? Default: `FALSE`
-#' @param progress logical, give progress when iterating over multiple requests; Default: `FALSE`
+#' @param progress logical, give progress when iterating over multiple requests;
+#'   Default: `FALSE`
 #' 
-#' @return A _SoilProfileCollection_ or _SpatRaster_ when `grid=TRUE`. Returns `try-error` if all requests fail. Any error messages resulting from parsing will be echoed when `verbose=TRUE`.
+#' @return A _SoilProfileCollection_ (or _SpatRaster_ when `grid=TRUE`). Returns
+#'   `try-error` if all requests fail. Any error messages resulting from parsing
+#'   will be echoed when `verbose=TRUE`.
 #' @export fetchSoilGrids
-#' @importFrom aqp initSpatial<-
 #' @author Andrew G. Brown
-#' @examplesIf curl::has_internet()
+#' @examplesIf curl::has_internet() && requireNamespace("aqp")
 #' \dontrun{
 #'   library(aqp)
 #'   
 #'   your.points <- data.frame(id  = c("A", "B"), 
-#'                            lat = c(37.9, 38.1), 
-#'                            lon = c(-120.3, -121.5), 
-#'                            stringsAsFactors = FALSE)
+#'                             lat = c(37.9, 38.1), 
+#'                             lon = c(-120.3, -121.5), 
+#'                             stringsAsFactors = FALSE)
 #'   x <- try(fetchSoilGrids(your.points))
 #'  
 #'   if (!inherits(x, 'try-error'))
@@ -122,14 +165,12 @@ fetchSoilGrids <- function(x,
   locations <- x
   spatial_input <- FALSE
   
-  if (inherits(locations, 'sf') || inherits(locations, 'Spatial')) {
-    if (requireNamespace("sf")) {
-      if (inherits(locations, 'Spatial') ||
-          inherits(locations, 'SpatVector')) {
-        # convert sp -> sf & terra -> sf
-        locations <- sf::st_as_sf(locations)
-      }
-    }
+  if (!requireNamespace("sf")) {
+    stop("package 'sf' is required")
+  }
+  
+  if (inherits(locations, c("Spatial", "SpatVector"))) {
+    locations <- sf::st_as_sf(locations)
   }
   
   if (grid) {
@@ -144,16 +185,13 @@ fetchSoilGrids <- function(x,
                           ...,
                           verbose = verbose))
   } else if (!inherits(locations, 'data.frame')) {
-    if (inherits(locations, 'SpatVector')) {
-      locations <- sf::st_as_sf(locations)
-    }
     # only supporting POINT geometry for now
     if (inherits(sf::st_geometry(locations), 'sfc_POINT')) {
       if (is.na(sf::st_crs(locations)$wkt)) {
         message("CRS is missing; assuming WGS84 decimal degrees (EPSG:4326)")
         sf::st_crs(locations) <- sf::st_crs(4326)
       }
-      locations <- data.frame(id = 1:nrow(locations),
+      locations <- data.frame(id = seq_len(nrow(locations)),
                               do.call('rbind', sf::st_geometry(locations)))
       spatial_input <- TRUE
       colnames(locations) <- c("id", "lon", "lat")
@@ -167,7 +205,7 @@ fetchSoilGrids <- function(x,
     loc.names <- c("id", "lat", "lon")
   }
   
-  if (length(loc.names) != 3 | any(!loc.names %in% colnames(locations))) {
+  if (length(loc.names) != 3 | !all(loc.names %in% colnames(locations))) {
     stop("argument `loc.names` must contain three column names: site ID, latitude and longitude", call. = FALSE)
   }
   
@@ -216,14 +254,14 @@ fetchSoilGrids <- function(x,
     }
     
     # add handling for messages from api about erroneous input
-    if (!is.null(jres$detail)) {
-      if (!is.null(jres$detail$msg)) {
-        if (!is.null(jres$detail$loc) && length(jres$detail$loc) > 0)
-          message("Check ", 
-                  paste0(jres$detail$loc[[1]], collapse = " "), 
-                  " (", loc.names[1], ":", locations[[loc.names[1]]][i], "); ",
-                  jres$detail$msg)
-      }
+    if (!is.null(jres$detail) &&
+        is.null(jres$detail$msg) &&
+        !is.null(jres$detail$loc) &&
+        length(jres$detail$loc) > 0) {
+      message("Check ", 
+              paste(jres$detail$loc[[1]], collapse = " "), 
+              " (", loc.names[1], ":", locations[[loc.names[1]]][i], "); ",
+              jres$detail$msg)
     }
     
     # create new horizon data, merge in each property using standard depth labels
@@ -248,7 +286,7 @@ fetchSoilGrids <- function(x,
     data.factor <- data.factors[data.types]
     hz.data <- hz.data0
     all_x <- FALSE
-    for (d in 1:length(data.types)) {
+    for (d in seq_along(data.types)) {
       if (nrow(hz.data0) > 0 && !inherits(jres[[1]], 'try-error')) {
         hz.data <- merge(
             merge(hz.data0, hz.data, by = c("label", "id", "latitude", "longitude"),
@@ -286,6 +324,10 @@ fetchSoilGrids <- function(x,
   spc$hzdepb <- as.numeric(lapply(labelsplit, function(x) x[2]))
   spc <- spc[order(spc$id, spc$hzdept, spc$hzdepb), ]
   
+  if (!requireNamespace("aqp")) {
+    stop("package 'aqp' is required", call. = FALSE)
+  }
+  
   # promote to SoilProfileCollection
   aqp::depths(spc) <- id ~ hzdept + hzdepb
   
@@ -297,14 +339,16 @@ fetchSoilGrids <- function(x,
   
   # merge the rest of the sf object into the site table 
   if (spatial_input) {
-    aqp::site(spc) <- cbind(id = 1:nrow(x), sf::st_drop_geometry(x))
+    aqp::site(spc) <- cbind(id = seq_len(nrow(x)), sf::st_drop_geometry(x))
   }
+  
   if (ncol(aqp::horizons(spc)) == 5) {
-    res <- try(stop("SoilGrids API is not accessible", call. = FALSE), silent = !verbose)
-    return(invisible(res))
     # this occurs if all requests fail to retrieve data/JSON response
+    return(invisible(try(stop("SoilGrids API is not accessible", call. = FALSE), silent = !verbose)))
+  } else {
+    return(spc)
+    
   }
-  return(spc)
 }
 
 .extractSGLayerProperties <- function(jsonres, x, scaling.factor = 1) {
@@ -392,7 +436,7 @@ fetchSoilGrids <- function(x,
     vd <- strsplit(vardepth[i], "_")[[1]]
     v <- vd[1]; d <- vd[2]; s <- vd[3]
     
-    sf::gdal_utils(
+    try(sf::gdal_utils(
       util = "translate",
       source = paste0(sg_url, paste0(v, '/', v, '_', s, '_', d, '.vrt')),
       destination = tfs[i],
@@ -405,10 +449,15 @@ fetchSoilGrids <- function(x,
         )
       ),
       quiet = !verbose
-    )
+    ), silent = FALSE)
   }
   
-  stk <- terra::rast(tfs)
+  stk <- try(terra::rast(tfs), silent = TRUE)
+  
+  if (inherits(stk, 'try-error')) {
+    stop("Failed to initialize SpatRaster with remote SoilGrids GeoTIFF: ", stk[1], call. = FALSE)
+  }
+  
   names(stk) <- vardepth
   
   if (!is.null(filename)) {

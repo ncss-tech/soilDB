@@ -5,16 +5,9 @@
 \alias{code}
 \title{Convert coded values returned from NASIS and SDA queries into human-readable values}
 \usage{
-uncode(
-  df,
-  invert = FALSE,
-  db = "NASIS",
-  droplevels = FALSE,
-  stringsAsFactors = NULL,
-  dsn = NULL
-)
+uncode(df, invert = FALSE, db = "NASIS", droplevels = FALSE, dsn = NULL)
 
-code(df, db = NULL, droplevels = FALSE, stringsAsFactors = NULL, dsn = NULL)
+code(df, db = NULL, droplevels = FALSE, dsn = NULL)
 }
 \arguments{
 \item{df}{data.frame}
@@ -28,8 +21,6 @@ indicates whether or not to query metadata from local NASIS database
 \item{droplevels}{logical: indicating whether to drop unused levels in
 classifying factors. This is useful when a class has large number of unused
 classes, which can waste space in tables and figures.}
-
-\item{stringsAsFactors}{deprecated}
 
 \item{dsn}{Optional: path to local SQLite database containing NASIS
 table structure; default: \code{NULL}}

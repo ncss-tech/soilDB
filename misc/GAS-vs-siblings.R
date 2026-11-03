@@ -2,7 +2,7 @@ library(aqp)
 library(soilDB)
 library(venn)
 
-s <- 'drummer'
+s <- 'marshall'
 o <- fetchOSD(s, extended = TRUE)
 
 # if missing, `geog_assoc_soils` is FALSE --> should probably be an empty DF
@@ -28,7 +28,7 @@ l <- list(
 )
 
 par(mar = c(0, 0, 2, 0))
-venn(l, ellipse = FALSE, ilcs = 1, sncs = 0.66, par = FALSE, zcolor = 'style', box = FALSE)
+venn(l, ellipse = FALSE, ilcs = 1, sncs = 0.66, par = FALSE, zcolor = 'style', box = FALSE, ilabels = 'counts')
 title(toupper(s))
 
 
@@ -40,7 +40,7 @@ l <- list(
 )
 
 par(mar = c(0, 0, 2, 0))
-venn(l, ellipse = TRUE, ilcs = 1, sncs = 0.66, par = FALSE, zcolor = 'style', box = FALSE)
+venn(l, ellipse = TRUE, ilcs = 1, sncs = 0.66, par = FALSE, zcolor = 'style', box = FALSE, ilabels = 'counts')
 title(toupper(s))
 
 
@@ -53,8 +53,22 @@ l <- list(
 )
 
 par(mar = c(0, 0, 2, 0))
-venn(l, ellipse = TRUE, ilcs = 1, sncs = 0.66, par = FALSE, zcolor = 'style', box = FALSE)
+venn(l, ellipse = TRUE, ilcs = 1, sncs = 0.66, par = FALSE, zcolor = 'style', box = FALSE, ilabels = 'counts')
 title(toupper(s))
+
+
+l <- list(
+  `Geog.\nAssoc. Soils\n` = gas,
+  `Siblings\n(All)` = sib.all,
+  `Competing\nSeries` = o$competing$competing
+)
+
+par(mar = c(0, 0, 2, 0))
+venn(l, ellipse = TRUE, ilcs = 1, sncs = 0.66, par = FALSE, zcolor = 'style', box = FALSE, ilabels = 'counts')
+title(toupper(s))
+
+
+## TODO: how to quantify overlap across conceptual classification systems?
 
 
 # search for series with no specified GAS

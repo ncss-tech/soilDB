@@ -42,14 +42,10 @@ make_EDIT_service_URL(
 A character vector containing URLs with specified parameters. This function is vectorized.
 }
 \description{
-Construct a URL for Ecological Dynamics Interpretive Tool (EDIT) web services (\verb{https://edit.jornada.nmsu.edu/services/...}) to return PDF, TXT or JSON results.
+Construct a URL for Ecological Dynamics Interpretive Tool (EDIT) web services (\verb{https://edit.sc.egov.usda.gov/services/...}) to return PDF, TXT or JSON results.
 }
 \details{
-See the following official EDIT developer resources to see which endpoints are available for Ecological Site Description (ESD) or Ecological Site Group (ESG) catalogs:
-\itemize{
-\item \url{https://edit.jornada.nmsu.edu/resources/esd}
-\item \url{https://edit.jornada.nmsu.edu/resources/esg}
-}
+See the official EDIT developer resources to see which endpoints are available for Ecological Site Description (ESD) or Ecological Site Group (ESG) catalogs:
 }
 \examples{
 # url for all geoUnit keys as PDF

@@ -15,9 +15,8 @@
 #' @return An R spatial object, class depending on `type` and `as_Spatial` arguments
 #' @references \url{https://casoilresource.lawr.ucdavis.edu/see/}
 #' @author D.E. Beaudette
-#' @examplesIf curl::has_internet() && requireNamespace("terra") && requireNamespace("sf")
 #' @export
-#' @examples
+#' @examplesIf curl::has_internet() && requireNamespace("httr", quietly = TRUE) && requireNamespace("terra") && packageVersion("terra") >= '1.8.93' && terra::proj_ok() && requireNamespace("sf")
 #' \dontrun{
 #'   
 #'   # specify a soil series name
@@ -77,7 +76,16 @@ seriesExtent <- function(s, type = c('vector', 'raster'), timeout = 60,
   # base URL to cached data
   u <- URLencode(paste0('http://casoilresource.lawr.ucdavis.edu/series-extent-cache/json/', s, '.json'))
   
-  res <- .soilDB_curl_get_JSON(u, gzip = FALSE, FUN = function(x) sf::st_read(x, quiet = TRUE), quiet = TRUE)
+  # init sf object from geoJSON
+  # known error conditions:
+  #  * corrupt sf/proj installation (missing proj.db)
+  res <- try(.soilDB_curl_get_JSON(u, gzip = FALSE, FUN = function(x) sf::st_read(x, quiet = TRUE), quiet = TRUE))
+  
+  # stop here with a suggestion
+  if(inherits(res, 'try-error')) {
+    message('cannot init SpatRaster, check terra package installation')
+    return(NULL)
+  }
   
   # trapped errors return NULL
   if (is.null(res)) {
@@ -113,13 +121,20 @@ seriesExtent <- function(s, type = c('vector', 'raster'), timeout = 60,
   
   # trap errors
   if (inherits(res, 'try-error')) {
-    # message(res[1])
     message('no data returned')
     return(NULL)
   }
   
   # init SpatRaster
-  x <- terra::rast(tf)
+  # known error conditions:
+  #  * corrupt terra/proj installation (missing proj.db)
+  x <- try(terra::rast(tf), silent = FALSE)
+  
+  # stop here with a suggestion
+  if(inherits(x, 'try-error')) {
+    message('cannot init SpatRaster, check terra package installation')
+    return(NULL)
+  }
   
   # load all values into memory
   terra::values(x) <- terra::values(x)

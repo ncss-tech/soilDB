@@ -1,19 +1,11 @@
 # fetchEDIT_tools: tools for getting information from Jornada EDIT web services
-# More information: https://edit.jornada.nmsu.edu/resources/esd
+# More information: https://edit.sc.egov.usda.gov/resources/esd
 
-###
-### New function to build a JSON service URL that matches XYZ criteria
-###
-###
 #' Make Ecological Dynamics Interpretive Tool (EDIT) web services URL
 #'
-#' @description Construct a URL for Ecological Dynamics Interpretive Tool (EDIT) web services (`https://edit.jornada.nmsu.edu/services/...`) to return PDF, TXT or JSON results.
+#' @description Construct a URL for Ecological Dynamics Interpretive Tool (EDIT) web services (`https://edit.sc.egov.usda.gov/services/...`) to return PDF, TXT or JSON results.
 #'
-#' @details See the following official EDIT developer resources to see which endpoints are available for Ecological Site Description (ESD) or Ecological Site Group (ESG) catalogs:
-#'
-#' - \url{https://edit.jornada.nmsu.edu/resources/esd}
-#'
-#' - \url{https://edit.jornada.nmsu.edu/resources/esg}
+#' @details See the official EDIT developer resources to see which endpoints are available for Ecological Site Description (ESD) or Ecological Site Group (ESG) catalogs:
 #'
 #' @param src One of: `descriptions`, `downloads`, `plant-community-tables`, `models`, `keys`
 #' @param catalog Catalog ID. One of: `esd` or `esg`
@@ -83,7 +75,7 @@ make_EDIT_service_URL <- function(src = c("descriptions", "downloads",
                                   endpoint = NULL,
                                   querystring = NULL) {
   # base URL
-  base_url <- "https://edit.jornada.nmsu.edu"
+  base_url <- "https://edit.sc.egov.usda.gov"
 
   # root services URL
   service_url <- "services"
@@ -132,7 +124,7 @@ make_EDIT_service_URL <- function(src = c("descriptions", "downloads",
 
 #' Get Ecological Dynamics Information Tool (EDIT) ecological sites by catalog (ESD/ESG) and MLRA 
 #'  
-#' @description  Data are accessed via Ecological Dynamics Interpretive Tool (EDIT) web services: https://edit.jornada.nmsu.edu/resources/esd. `geoUnit` refers to MLRA codes, possibly with a leading zero and trailing "X" for two digit MLRA symbols.
+#' @description  Data are accessed via Ecological Dynamics Interpretive Tool (EDIT) web services: https://edit.sc.egov.usda.gov/resources/esd. `geoUnit` refers to MLRA codes, possibly with a leading zero and trailing "X" for two digit MLRA symbols.
 #'
 #' @param geoUnit A character vector of `geoUnit` codes e.g. `c("018X","022A")` for MLRAs 18 and 22A.
 #' @param catalog Catalog ID. One of: `"esd"` or `"esg"`
@@ -140,8 +132,7 @@ make_EDIT_service_URL <- function(src = c("descriptions", "downloads",
 #' @return A `data.frame` containing: `geoUnit`, `id`, `legacyId`, `name`. `NULL` if no result.
 #'
 #' @export
-#' @examplesIf curl::has_internet()
-#' @examples
+#' @examplesIf curl::has_internet() && requireNamespace("httr", quietly = TRUE)
 #' \dontrun{
 #'    get_EDIT_ecoclass_by_geoUnit(c("018X","022A"))
 #' }

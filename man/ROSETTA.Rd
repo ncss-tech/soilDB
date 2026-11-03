@@ -9,22 +9,28 @@ ROSETTA(
   vars,
   v = c("1", "2", "3"),
   include.sd = FALSE,
+  est.type = c("log", "arith", "geo"),
   chunkSize = 10000,
   conf = NULL
 )
 }
 \arguments{
-\item{x}{a \code{data.frame} of required soil properties, may contain other columns, see details}
+\item{x}{a \code{data.frame} of required soil properties, may contain other columns; see details}
 
-\item{vars}{character vector of column names in \code{x} containing relevant soil property values, see details}
+\item{vars}{character vector of column names in \code{x} containing relevant soil property values; see details}
 
 \item{v}{ROSETTA model version number: '1', '2', or '3', see details and references.}
 
 \item{include.sd}{logical, include bootstrap standard deviation for estimated parameters}
 
+\item{est.type}{character, one of 'log' (default), 'arith', or 'geo'; see details}
+
 \item{chunkSize}{number of records per API call}
 
 \item{conf}{configuration passed to \code{httr::POST()} such as \code{verbose()}.}
+}
+\value{
+a \code{data.frame} with as many rows as \code{x}
 }
 \description{
 A simple interface to the \href{https://www.ars.usda.gov/pacific-west-area/riverside-ca/agricultural-water-efficiency-and-salinity-research-unit/docs/model/rosetta-model/}{ROSETTA model} for predicting hydraulic parameters from soil properties. The ROSETTA API was developed by Dr. Todd Skaggs (USDA-ARS) and links to the work of Zhang and Schaap, (2017). See the \href{http://ncss-tech.github.io/AQP/soilDB/ROSETTA-API.html}{related tutorial} for additional examples.
@@ -32,24 +38,35 @@ A simple interface to the \href{https://www.ars.usda.gov/pacific-west-area/river
 \details{
 Soil properties supplied in \code{x} must be described, in order, via \code{vars} argument. The API does not use the names but column ordering must follow: sand, silt, clay, bulk density, volumetric water content at 33kPa (1/3 bar), and volumetric water content at 1500kPa (15 bar).
 
+Column names not specified in \code{vars} are retained in the output.
+
 The ROSETTA model relies on a minimum of 3 soil properties, with increasing (expected) accuracy as additional properties are included:
 \itemize{
 \item required, sand, silt, clay: USDA soil texture separates (percentages) that sum to 100 percent
-\item optional, bulk density (any moisture basis): mass per volume after accounting for >2mm fragments, units of gm/cm3
+\item optional, bulk density (any moisture basis): mass per volume after accounting for >2mm fragments, units of g/cm3
 \item optional, volumetric water content at 33 kPa: roughly "field capacity" for most soils, units of cm^3/cm^3
 \item optional, volumetric water content at 1500 kPa: roughly "permanent wilting point" for most plants, units of cm^3/cm^3
 }
 
-The Rosetta pedotransfer function predicts five parameters for the van Genuchten model of unsaturated soil hydraulic properties
+Model results include estimated mean parameters of the Mualem-van Genuchten model of unsaturated soil hydraulic properties:
 \itemize{
-\item theta_r : residual volumetric water content
-\item theta_s : saturated volumetric water content
-\item log10(alpha) : retention shape parameter \verb{[log10(1/cm)]}
-\item log10(npar) : retention shape parameter
-\item log10(ksat) : saturated hydraulic conductivity \verb{[log10(cm/d)]}
+\item \code{theta_r}: residual volumetric water content
+\item \code{theta_s}: saturated volumetric water content
+\item \code{alpha}: retention shape parameter \verb{[1/cm]}
+\item \code{npar}: retention shape parameter
+\item \code{ksat} : saturated hydraulic conductivity \verb{[cm/d]}
+\item \code{Ko}: "matching point" hydraulic conductivity \verb{[cm/d]}
+\item \code{L}: fitting parameter, describing pore tortuosity and pore connectivity
 }
 
-Column names not specified in \code{vars} are retained in the output.
+Standard deviations of these parameters are included if \code{include.sd = TRUE}.
+
+The \code{est.type} argument selects from the following summary styles (note units):
+\itemize{
+\item \code{log} (default and historically used by USDA-NRCS staff): estimates represent ensemble mean values for theta_s, theta_r, log10(alpha) \verb{[log10(1/cm)]}, log10(npar), log10(ksat) \verb{[log10(cm/d)]}, log10(Ko) \verb{[log10(cm/d)]}, and log10(L)
+\item \code{arith}: estimates represent ensemble mean values for theta_s, theta_r, alpha \verb{[1/cm]}, npar, ksat \verb{[cm/d]}, Ko \verb{[cm/d]}, and L
+\item \code{geo}: estimates represent ensemble mean values for theta_s, theta_r, L, and \emph{geometric mean} values for alpha \verb{[1/cm]}, npar, ksat \verb{[cm/d]}, and Ko \verb{[cm/d]}
+}
 
 Three versions of the ROSETTA model are available, selected using "v = 1", "v = 2", or "v = 3".
 \itemize{
@@ -90,5 +107,5 @@ Schaap, M.G., A. Nemes, and M.T. van Genuchten. 2004. Comparison of Models for I
 Zhang, Y., and M.G. Schaap. 2017. Weighted recalibration of the Rosetta pedotransfer model with improved estimates of hydraulic parameter distributions and summary statistics (Rosetta3). Journal of Hydrology 547: 39-53. doi: \doi{10.1016/j.jhydrol.2017.01.004}.
 }
 \author{
-D.E. Beaudette, Todd Skaggs (ARS), Richard Reid
+D.E. Beaudette (NRCS), Todd Skaggs (ARS), Richard Reid (Ret. NRCS)
 }

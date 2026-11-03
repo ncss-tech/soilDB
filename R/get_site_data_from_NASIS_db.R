@@ -26,34 +26,27 @@
 #' database (default: `TRUE`)
 #' @param include_pedon Include pedon and transect data joined to site? (default: `TRUE`)
 #' @param nullFragsAreZero should surface fragment cover percentages of `NULL` be interpreted as `0`? (default: `TRUE`)
-#' @param stringsAsFactors deprecated
 #' @param dsn Optional: path to local SQLite database containing NASIS table structure; default: `NULL`
 #'
 #' @return A data.frame
 #'
-#' @author Jay M. Skovlin and Dylan E. Beaudette
+#' @author Jay M. Skovlin, Dylan E. Beaudette, Andrew G. Brown, Greg Schmidt
 #' @seealso [get_hz_data_from_NASIS_db()], [fetchNASIS()], [fetchVegdata()]
 #' @keywords manip
 #'
 #' @export get_site_data_from_NASIS_db
-get_site_data_from_NASIS_db <- function(SS = TRUE,
-                                        include_pedon = TRUE,
-                                        nullFragsAreZero = TRUE,
-                                        stringsAsFactors = NULL,
-                                        dsn = NULL) {
+get_site_data_from_NASIS_db <- function(SS = TRUE, include_pedon = TRUE, nullFragsAreZero = TRUE,dsn = NULL) {
+  
   .SD <- NULL
   
-  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
-    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
-    NASISDomainsAsFactor(stringsAsFactors)
-  }
-  
-	q <- paste0("SELECT siteiid, siteobsiid, CAST(usiteid AS varchar(60)) as site_id, 
-  	", ifelse(include_pedon, "peiid, CAST(upedonid AS varchar(60)) as pedon_id, ", ""), "
-  	obsdate as obs_date, utmzone, utmeasting, utmnorthing, horizdatnm, 
-    longstddecimaldegrees as x_std, latstddecimaldegrees as y_std, longstddecimaldegrees, latstddecimaldegrees, gpspositionalerror, 
-    ", ifelse(include_pedon, "descname as describer, pedonpurpose, pedontype, pedlabsampnum, labdatadescflag, tsectstopnum, tsectinterval, utransectid, tsectkind, tsectselmeth, erocl,", ""), "
-    elev as elev_field, slope as slope_field, aspect as aspect_field, 
+	q <- paste0("SELECT DISTINCT siteiid, siteobsiid, usiteid, 
+  	", ifelse(include_pedon, "peiid, upedonid, ", ""), "
+  	obsdate, utmzone, utmeasting, utmnorthing, horizdatnm,
+  	longstddecimaldegrees, latstddecimaldegrees, gpspositionalerror, 
+    ", ifelse(include_pedon, "descname, pedonpurpose, pedontype, pedlabsampnum, labdatadescflag, 
+    tsectstopnum, tsectinterval, utransectid, tsectkind, tsectselmeth,
+    erocl,", ""), "
+    elev, slope, aspect, 
     ecostatename, ecostateid, commphasename, commphaseid, plantassocnm, 
     siteobs_View_1.earthcovkind1, siteobs_View_1.earthcovkind2, 
     bedrckdepth, bedrckkind, bedrckhardness, pmgroupname, 
@@ -61,19 +54,20 @@ get_site_data_from_NASIS_db <- function(SS = TRUE,
     geomposhill, geomposmntn, geompostrce, geomposflats, swaterdepth,
     flodfreqcl, floddurcl, flodmonthbeg, pondfreqcl, ponddurcl, pondmonthbeg, 
     climstaid, climstanm, climstatype, ffd, map, reannualprecip, airtempa, soiltempa, airtemps, soiltemps, airtempw, soiltempw
-
-  FROM
-  
-  site_View_1 INNER JOIN siteobs_View_1 ON site_View_1.siteiid = siteobs_View_1.siteiidref
-  ", ifelse(include_pedon, "LEFT OUTER JOIN pedon_View_1 ON siteobs_View_1.siteobsiid = pedon_View_1.siteobsiidref
-  LEFT OUTER JOIN transect_View_1 ON pedon_View_1.tsectiidref = transect_View_1.tsectiid", ""),"
+  FROM site_View_1 
+  INNER JOIN siteobs_View_1 ON site_View_1.siteiid = siteobs_View_1.siteiidref
+  ", ifelse(
+    include_pedon,
+    "LEFT OUTER JOIN pedon_View_1 ON siteobs_View_1.siteobsiid = pedon_View_1.siteobsiidref
+     LEFT OUTER JOIN transect_View_1 ON pedon_View_1.tsectiidref = transect_View_1.tsectiid",
+    ""
+  ), "
   LEFT OUTER JOIN
   (
-        SELECT siteiidref, bedrckdepth, bedrckkind, bedrckhardness, ROW_NUMBER() OVER(PARTITION BY siteiidref ORDER BY bedrckdepth ASC) as rn
-        FROM sitebedrock_View_1
+    SELECT siteiidref, bedrckdepth, bedrckkind, bedrckhardness, ROW_NUMBER() OVER(PARTITION BY siteiidref ORDER BY bedrckdepth ASC) as rn
+    FROM sitebedrock_View_1
   ) as sb ON site_View_1.siteiid = sb.siteiidref
-
-WHERE sb.rn IS NULL OR sb.rn = 1
+  WHERE sb.rn IS NULL OR sb.rn = 1
 
 ORDER BY siteobs_View_1.siteobsiid;")
       
@@ -103,7 +97,7 @@ ORDER BY siteobs_View_1.siteobsiid;")
     return(data.frame())
 
 	# toggle selected set vs. local DB
-	if (SS == FALSE) {
+	if (isFALSE(SS)) {
 	  q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
 	  q2 <- gsub(pattern = '_View_1', replacement = '', x = q2, fixed = TRUE)
 	  q3 <- gsub(pattern = '_View_1', replacement = '', x = q3, fixed = TRUE)
@@ -126,7 +120,7 @@ ORDER BY siteobs_View_1.siteobsiid;")
 	# surface fragments
 	sfr <- dbQueryNASIS(channel, q2, close = FALSE)
 	
-	multi.siteobs <- unique(sfr[, c("siteiid","siteobsiid")])
+	multi.siteobs <- unique(sfr[, c("siteiid", "siteobsiid")])
 	multisite <- table(multi.siteobs$siteiid) 
 	if (any(multisite > 1)) {
 	  assign("multisiteobs.surface", value = multi.siteobs[multi.siteobs$siteiid %in% names(multisite[multisite > 1]),], envir = get_soilDB_env())
@@ -144,15 +138,15 @@ ORDER BY siteobs_View_1.siteobsiid;")
 	colnames(phs)[1] <- "siteobsiid"
 	
 	if (nrow(d) > 0) {
-  	ldx <- !d$siteobsiid %in% phs$siteobsiid
-  	if (!any(ldx)) {
-  	  phs <- phs[1:nrow(d),]
-  	  phs$siteobsiid <- d$siteobsiid
-  	} else {
-  	  phs_null <- phs[0,][1:sum(ldx),]
-  	  phs_null$siteobsiid <- d$siteobsiid[ldx]
-  	  phs <- rbind(phs, phs_null)
-  	}
+	  ldx <- !d$siteobsiid %in% phs$siteobsiid
+	  if (!any(ldx)) {
+	    phs <- phs[seq_len(nrow(d)), ]
+	    phs$siteobsiid <- d$siteobsiid
+	  } else {
+	    phs_null <- phs[0, ][rep(NA_integer_, sum(ldx)), ]
+	    phs_null$siteobsiid <- d$siteobsiid[ldx]
+	    phs <- rbind(phs, phs_null)
+	  }
   	
   	# handle NA for totals
   	if (nullFragsAreZero) {
@@ -160,7 +154,7 @@ ORDER BY siteobs_View_1.siteobsiid;")
   	} 
   	d2 <- merge(d, phs, by = "siteobsiid", all.x = TRUE, sort = FALSE)
 	} else {
-	  d2 <- cbind(d, phs[0,])
+	  d2 <- cbind(d, phs[0, ])
 	}
 	
 	# short-circuit: 0 rows means nothing in the selected set and thus we stop here
@@ -203,13 +197,8 @@ ORDER BY siteobs_View_1.siteobsiid;")
 	  d2 <- merge(d2, mlra, by = "siteiid", all.x = TRUE, sort = FALSE)
 	}
 	
-  # https://github.com/ncss-tech/soilDB/issues/41
-	# warn if mixed datums
-	# if (length(na.omit(unique(d2$horizdatnm))) > 1)
-	# 	message('multiple horizontal datums present, consider using WGS84 coordinates (x_std, y_std)')
-
 	# are there any duplicate pedon IDs?
-	t.pedon_id <- table(d2$pedon_id)
+	t.pedon_id <- table(d2$upedonid)
 	not.unique.pedon_id <- t.pedon_id > 1
 	if (any(not.unique.pedon_id))
 	  assign('dup.pedon.ids', value = names(t.pedon_id[which(not.unique.pedon_id)]), envir = get_soilDB_env())
@@ -217,24 +206,51 @@ ORDER BY siteobs_View_1.siteobsiid;")
 	# warn about sites without a matching pedon (records missing peiid)
 	missing.pedon <- which(is.na(d2$peiid))
 	if (length(missing.pedon) > 0)
-	  assign('sites.missing.pedons', value = unique(d2$site_id[missing.pedon]), envir = get_soilDB_env())
-
-  ## set factor levels, when it makes sense
-	# most of these are done via uncode()
+	  assign('sites.missing.pedons', value = unique(d2$usiteid[missing.pedon]), envir = get_soilDB_env())
 
   # surface shape
 	d2$shapeacross <- factor(d2$shapeacross, levels = c('concave', 'linear', 'convex', 'undulating', 'complex'))
 	d2$shapedown <- factor(d2$shapedown, levels = c('concave', 'linear', 'convex', 'undulating', 'complex'))
 
-  # create 3D surface shape
+  # create non-standard levels for combined 3D slope shape
   d2$slope_shape <- paste0(d2$shapeacross, ' / ', d2$shapedown)
-
-  # make reasonable levels for 3D slope shape
   ss.grid <- expand.grid(na.omit(unique(d2$shapeacross)), na.omit(unique(d2$shapedown)))
   ss.levels <- apply(ss.grid, 1, function(i) { paste(rev(i), collapse = ' / ')})
   d2$slope_shape <- factor(d2$slope_shape, levels = ss.levels)
 
-	# done
 	return(d2)
 }
 
+#' @description `get_site_association_from_NASIS()`: Get Associated User Site IDs for each Site.
+#' @rdname get_site_data_from_NASIS_db
+#' @export 
+get_site_association_from_NASIS <- function(SS = TRUE, dsn = NULL) {
+  
+  q <-  "SELECT sa.usiteassocid, s.usiteid
+         FROM siteassoc_View_1 sa 
+         INNER JOIN siteassocsite sas ON sas.siteassociidref = sa.siteassociid 
+         LEFT OUTER JOIN site_View_1 s ON s.siteiid = sas.siteiidref"
+      
+  # toggle selected set vs. local DB
+  if (isFALSE(SS)) {
+    q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
+  }
+  
+  channel <- dbConnectNASIS(dsn)
+  
+  if (inherits(channel, 'try-error'))
+    return(data.frame())
+  
+  # exec query
+  d.association <- dbQueryNASIS(channel, q)
+  
+  # test is selected set is empty
+  if (nrow(d.association) == 0)
+    message("Your selected set or local database is missing data in the site association table, please load it and try again")
+  
+  # uncode metadata domains
+  d.association <- uncode(d.association, dsn = dsn)
+  
+  # done
+  return(d.association)
+}

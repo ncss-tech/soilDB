@@ -26,7 +26,7 @@ test_that("artifactSieve puts artifacts without huartsize into 'unspecified' cla
                   huartsafety=NA, huartper=NA)
   res <- soilDB:::.artifactSieve(d)
   
-  expect_equal(res$class, 'art_unspecified')
+  expect_equivalent(res$class, 'art_unspecified')
   
 })
 
@@ -39,8 +39,8 @@ test_that("artifactSieve assumptions are applied, results correct", {
   res <- soilDB:::.artifactSieve(d)
   
   # assumptions in the absence of fragment shape / hardness
-  expect_equal(res$huartshp, 'irregular')
-  expect_equal(res$huartco, 'cohesive')
+  expect_equivalent(res$huartshp, 'irregular')
+  expect_equivalent(res$huartco, 'cohesive')
   
 })
 
@@ -53,8 +53,8 @@ test_that("artifactSieve assumptions are applied when all NA", {
   res <- soilDB:::.artifactSieve(d)
   
   # assumptions in the absence of fragment shape / hardness
-  expect_equal(res$huartshp, 'irregular')
-  expect_equal(res$huartco, 'cohesive')
+  expect_equivalent(res$huartshp, 'irregular')
+  expect_equivalent(res$huartco, 'cohesive')
   
   # class should be NA
   expect_true(is.na(res$class))
@@ -71,11 +71,11 @@ test_that("artifactSieve safe fall-back from high to rv fragsize", {
   res <- soilDB:::.artifactSieve(d)
   
   # assumptions in the absence of fragment shape / hardness
-  expect_equal(res$huartshp, 'irregular')
-  expect_equal(res$huartco, 'cohesive')
+  expect_equivalent(res$huartshp, 'irregular')
+  expect_equivalent(res$huartco, 'cohesive')
   
   # correct class in the absence of fragment shape / hardness
-  expect_equal(res$class, 'art_gr')
+  expect_equivalent(res$class, 'art_gr')
   
   # only RV available
   d <- data.frame(huartvol=10, huartsize_l=NA, huartsize_r=50, huartsize_h=NA, 
@@ -84,11 +84,11 @@ test_that("artifactSieve safe fall-back from high to rv fragsize", {
   res <- soilDB:::.artifactSieve(d)
   
   # assumptions in the absence of fragment shape / hardness
-  expect_equal(res$huartshp, 'irregular')
-  expect_equal(res$huartco, 'cohesive')
+  expect_equivalent(res$huartshp, 'irregular')
+  expect_equivalent(res$huartco, 'cohesive')
   
   # correct class in the absence of fragment shape / hardness
-  expect_equal(res$class, 'art_gr')
+  expect_equivalent(res$class, 'art_gr')
   
 })
 
@@ -101,7 +101,7 @@ test_that("artifactSieve complex sample data from NASIS, single horizon", {
   res <- soilDB:::.artifactSieve(d.artifact.hz)
   
   # correct classes
-  expect_equal(res$class, c('art_gr', 'art_cb', 'art_ch'))
+  expect_equivalent(res$class, c('art_gr', 'art_cb', 'art_ch'))
   
 })
 
@@ -112,27 +112,27 @@ test_that("simplifyArtifactData complex sample data from NASIS, single horizon",
   res <- soilDB::simplifyArtifactData(d.artifact.hz, id.var = 'phiid', nullFragsAreZero = TRUE)
   
   # correct class totals
-  expect_equal(res$art_fgr, c(0,0))
-  expect_equal(res$art_gr, c(10,0))
-  expect_equal(res$art_cb, c(5,0))
-  expect_equal(res$art_ch, c(0,95))
-  expect_equal(res$art_fl, c(0,0))
-  expect_equal(res$art_st, c(0,0))
+  expect_equivalent(res$art_fgr, c(0,0))
+  expect_equivalent(res$art_gr, c(10,0))
+  expect_equivalent(res$art_cb, c(5,0))
+  expect_equivalent(res$art_ch, c(0,95))
+  expect_equivalent(res$art_fl, c(0,0))
+  expect_equivalent(res$art_st, c(0,0))
   
   # correct total 
-  expect_equal(res$total_art_pct, c(15,95))
+  expect_equivalent(res$total_art_pct, c(15,95))
   
   # correct subtotal cohesive
-  expect_equal(res$huartvol_cohesive, c(15, 0))  
+  expect_equivalent(res$huartvol_cohesive, c(15, 0))  
   
   # correct subtotal penetrable
-  expect_equal(res$huartvol_penetrable,  c(0,95))  
+  expect_equivalent(res$huartvol_penetrable, c(0,95))  
   
   # correct subtotal noxious
-  expect_equal(res$huartvol_noxious, c(0,0))
+  expect_equivalent(res$huartvol_noxious, c(0,0))
   
   # correct subtotal persistent
-  expect_equal(res$huartvol_persistent, c(15,95))
+  expect_equivalent(res$huartvol_persistent, c(15,95))
   
 })
 
@@ -155,14 +155,14 @@ test_that("simplifyArtifactData when missing fragment sizes, low/rv/high", {
   expect_true(nrow(res) == 2)
   
   # unspecified total should match RF sums
-  expect_equal(res$art_unspecified, res$total_art_pct)
+  expect_equivalent(res$art_unspecified, res$total_art_pct)
   
   # totals lesss than or equal to 100
-  expect_equal(all(res$total_art_pct <= 100), TRUE)
-  expect_equal(all(res$huartvol_cohesive <= 100), TRUE)  
-  expect_equal(all(res$huartvol_penetrable <= 100), TRUE)  
-  expect_equal(all(res$huartvol_noxious <= 100), TRUE)
-  expect_equal(all(res$huartvol_persistent <= 100), TRUE)
+  expect_true(all(res$total_art_pct <= 100))
+  expect_true(all(res$huartvol_cohesive <= 100))  
+  expect_true(all(res$huartvol_penetrable <= 100))  
+  expect_true(all(res$huartvol_noxious <= 100))
+  expect_true(all(res$huartvol_persistent <= 100))
   
 })
 
@@ -186,10 +186,9 @@ test_that("simplifyArtifactData nullFragsAreZero works as expected", {
   d.missing.artvol <- d.artifact.hz
   a <- simplifyArtifactData(d.missing.artvol, id.var = 'phiid', nullFragsAreZero = FALSE)
   b <- simplifyArtifactData(d.missing.artvol, id.var = 'phiid', nullFragsAreZero = TRUE)
-  expect_equal(as.logical(is.na(a)), 
-               c(FALSE, FALSE, TRUE, TRUE, FALSE, FALSE, FALSE, TRUE, TRUE, 
+  expect_equivalent(as.logical(is.na(a)), c(FALSE, FALSE, TRUE, TRUE, FALSE, FALSE, FALSE, TRUE, TRUE, 
                  TRUE, TRUE, TRUE, TRUE, FALSE, TRUE, TRUE, TRUE, TRUE, FALSE, 
                  FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE
                ))
-  expect_true(!all(as.logical(is.na(b))))
+  expect_false(all(as.logical(is.na(b))))
 })

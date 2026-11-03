@@ -33,8 +33,7 @@
 #' 
 #' @keywords manip
 #' @export siblings
-#' @examplesIf curl::has_internet()
-#' @examples
+#' @examplesIf curl::has_internet() && requireNamespace("jsonlite", quietly = TRUE)
 #' \donttest{
 #'     # basic usage
 #'     x <- siblings('zook')
@@ -61,7 +60,7 @@ siblings <- function(s, only.major = FALSE, component.data = FALSE, cousins = FA
       if (inherits(sib, 'data.frame')) {
         
         # convert 'Yes'|'No' -> TRUE|FALSE
-        sib$majcompflag <- ifelse(sib$majcompflag == 'Yes', TRUE, FALSE)
+        sib$majcompflag <- sib$majcompflag == 'Yes'
         
         # note: there may be both major and minor siblings
         # optionally cut-down to just major siblings

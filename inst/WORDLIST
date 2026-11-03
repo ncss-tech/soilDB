@@ -15,12 +15,14 @@ BBOX
 BD
 BLM
 Batjes
+Benitez
 Bioaccumulation
 Biochar
 Biosolids
 Bocinsky
 Bohn
 Bouten
+Brungard
 CEC
 CIE
 CIELAB
@@ -28,8 +30,10 @@ CLR
 CMD
 CMECS
 CODELABEL
+COGs
 CONUS
 CRS
+CSCAN
 CZSS
 CaCO
 CaCl
@@ -61,6 +65,7 @@ DisplayLabel
 DomainID
 DomainName
 DomainRanked
+DuckDB
 ECOSHARE
 EPSG
 ESD
@@ -87,6 +92,7 @@ Genuchten
 GeoJSON
 GeoPackage
 GeoTIFF
+GeoTIFFs
 Geochemical
 Geodatabase
 Geodatabases
@@ -121,24 +127,27 @@ Karner
 Kempen
 Kf
 Ki
+Kienast
 Klamath
 Kosugi
 Krueger
 LAWR
-LDM
 LEP
 LIMS
 LRADT
 LZW
 Leij
 Lier
+MAAT
 METACRAN
 MLRA
 MLRAs
+MSAT
 MSST
 MUKEY
 MUKEYS
 MULTIPOLYGON
+MWAT
 MWST
 MacOS
 Malheur
@@ -161,7 +170,6 @@ Munsell
 Muscadine
 NAD
 NASIS
-NASISWebReport
 NCCPI
 NCDC
 NCSS
@@ -172,6 +180,7 @@ NPS
 NRCS
 NSSH
 NULLs
+Nauman
 Nemecek
 Nemes
 Nonirrigated
@@ -179,7 +188,6 @@ O'Geen
 ODBC
 OGC
 OSD
-OSDquery
 Ochoco
 Okanogan
 Operability
@@ -198,6 +206,8 @@ Pedons
 Pedotransfer
 Pinchot
 Poggio
+PostGIS
+Postgres
 Proc
 Propellor
 Pyranometer
@@ -226,8 +236,10 @@ SLAMM
 SMR
 SMS
 SNOTEL
+SNOWLITE
 SNWD
 SOH
+SOLUS
 SPC
 SPDF
 SPSD
@@ -279,6 +291,7 @@ USFS
 Umatilla
 Umpqua
 Unrubbed
+VARCHAR
 VNIR
 Vadose
 Veh
@@ -302,6 +315,7 @@ WoSIS
 XMLSchema
 XRD
 Yonggen
+Zach
 Zhang
 abruptic
 acr
@@ -353,11 +367,12 @@ colorhue
 colormoistst
 colorspace
 colorvalue
+commphaseid
+commphasename
 comonth
 copedon
 corcon
 corsteel
-cosoilmoist
 cosurfmorphgc
 cosurfmorphhpp
 cosurfmorphss
@@ -382,6 +397,7 @@ doi
 drainagecl
 dschlaep
 dsn
+duplications
 dur
 duri
 duric
@@ -396,6 +412,8 @@ ecec
 ecoclass
 ecoclassid
 ecosite
+ecostateid
+ecostatename
 edu
 endo
 entic
@@ -408,6 +426,8 @@ eutro
 extracid
 extractable
 extral
+featline
+featpoint
 feoxalate
 ferr
 fetchGDB
@@ -418,7 +438,6 @@ fetchOSD
 fetchPedonPC
 fetchRaCA
 fetchSCAN
-fetchSoilGrids
 fiberrubbedpct
 fiberunrubbedpct
 fibr
@@ -448,7 +467,6 @@ gNATGSO
 gNATSGO
 gSSURGO
 gage
-gdb
 geoUnit
 geochem
 geochemical
@@ -469,6 +487,7 @@ glossaquic
 glossic
 glosso
 gopheridge
+gpkg
 grano
 gridExtra
 gridded
@@ -556,6 +575,7 @@ morphometry
 mukey
 munsell
 mutext
+nanoodbc
 nasis
 nationalmusym
 natr
@@ -570,6 +590,7 @@ nrcs
 nullFragsAreZero
 ocd
 ocs
+odbc
 ombroaquic
 osoluble
 oxyaquic
@@ -587,6 +608,7 @@ petroferric
 petrogypsic
 petronodic
 ph
+phcolor
 phh
 phiid
 phoxidized
@@ -642,12 +664,13 @@ sandmed
 sandtotal
 sandvc
 sandvf
+sapolygon
 sapr
 sapric
 sar
 saturationt
 sc
-serializer
+selectable
 seriesExtent
 seriesExtentAsGmap
 shapeacross
@@ -662,6 +685,7 @@ simplifyColorData
 simplifyFragmentData
 sodic
 soilColor
+soilDBdata
 soilVWC
 soilseries
 soilsurvey
@@ -673,13 +697,13 @@ sp
 spatialQuery
 sphagnic
 sphagno
+sqlite
 streamflow
 subtractive
 sulf
 sulfi
 sulfic
 sulfo
-sumamry
 sumbases
 surfaceshape
 taxclname
@@ -700,6 +724,7 @@ timeseries
 timezones
 torri
 torric
+transactional
 turbic
 typ
 typic
@@ -712,6 +737,7 @@ umbri
 umbric
 uncode
 unhandled
+upedonid
 usda
 ust
 usti
@@ -719,9 +745,11 @@ ustic
 util
 vectorization
 vectorized
+vegbasalarea
 vegplot
 vegplotlocation
 vegplotrhi
+vegplots
 vegplotspecies
 vegplottext
 vegsiteindexdet

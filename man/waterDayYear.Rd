@@ -21,10 +21,8 @@ year"} \item{wd}{the "water day"}
 }
 \description{
 Compute "water" day and year, based on the end of the typical or legal dry
-season. This is September 30 in California.
-}
-\details{
-This function doesn't know about leap-years. Probably worth checking.
+season. This is September 30 in California. This function accounts for leap
+years.
 }
 \examples{
 

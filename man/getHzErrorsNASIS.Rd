@@ -18,7 +18,7 @@ table structure; default: NULL}
 }
 \value{
 A data.frame containing problematic records with columns:
-'peiid','pedon_id','hzdept','hzdepb','hzname'
+'peiid','upedonid','hzdept','hzdepb','hzname'
 }
 \description{
 Get Logic Errors in NASIS/PedonPC Pedon Horizon

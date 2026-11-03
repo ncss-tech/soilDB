@@ -5,7 +5,7 @@ library(rvest)
 
 # list all the available /services in the developer documentation
 
-path <- read_html("https://edit.jornada.nmsu.edu/resources/esd/") %>%
+path <- read_html("https://edit.sc.egov.usda.gov/resources/esd/") %>%
   html_nodes("span") %>%
   html_text() %>%
   (function(x) {x[grepl("^/services.*", x)]})()
@@ -154,7 +154,7 @@ make_EDIT_service_URL <- function(src = c("descriptions", "downloads",
                           endpoint = NULL,
                           querystring = NULL) {
   # base URL
-  base_url <- "https://edit.jornada.nmsu.edu"
+  base_url <- "https://edit.sc.egov.usda.gov"
 
   # root services URL
   service_url <- "services"
@@ -204,7 +204,7 @@ make_EDIT_service_URL <- function(src = c("descriptions", "downloads",
 
 #' Get data.frame of all ecoclass for multiple EDIT geoUnit
 #'
-#' Supply a vector of target `geoUnit`. Data are accessed via Ecological Dynamics Interpretive Tool (EDIT) web services: https://edit.jornada.nmsu.edu/resources/esd
+#' Supply a vector of target `geoUnit`. Data are accessed via Ecological Dynamics Interpretive Tool (EDIT) web services: https://edit.sc.egov.usda.gov/resources/esd
 #'
 #' @param geoUnit A character vector of `geoUnit` codes e.g. `c("018X","022A")` for MLRAs 18 and 22A.
 #'

@@ -35,7 +35,7 @@ format_SQL_in_statement <- function(x) {
   # and, plenty safe to perform a second time, in case this was done outside of the function call
   x <- unique(x)
 	i <- paste(x, collapse = "','")
-	i <- paste("('", i, "')", sep = '')
+	i <- paste0("('", i, "')")
 	return(i)
 }
 
@@ -51,14 +51,12 @@ format_SQL_in_statement <- function(x) {
 #'
 #' SSURGO (detailed soil survey) and STATSGO (generalized soil survey) data are stored together within SDA. This means that queries that don't specify an area symbol may result in a mixture of SSURGO and STATSGO records. See the examples below and the \href{http://ncss-tech.github.io/AQP/soilDB/SDA-tutorial.html}{SDA Tutorial} for details.
 #'
-#' @note This function requires the `httr`, `jsonlite`, and `xml2` packages
 #' @return A data.frame result for queries that return a single table. A list of data.frame for queries that return multiple tables. `NULL` if result is empty, and `try-error` on error.
 #' @author D.E. Beaudette, A.G Brown
 #' @seealso [SDA_spatialQuery()]
 #' @keywords manip
 #' @export
-#' @examplesIf curl::has_internet() && requireNamespace("wk", quietly = TRUE)
-#' @examples
+#' @examplesIf curl::has_internet() && requireNamespace("sf", quietly = TRUE)
 #' \donttest{
 #'   ## get SSURGO export date for all soil survey areas in California
 #'   # there is no need to filter STATSGO
@@ -106,6 +104,55 @@ format_SQL_in_statement <- function(x) {
 #'    str(x)
 #' }
 SDA_query <- function(q, dsn = NULL) {
+  
+  # construct header for SDA metrics
+  fn <- NULL
+  fne <- NULL
+  
+  tryCatch({
+    ## prepend info about the caller as query comment header
+    calls <- sys.calls()
+    
+    # prevent iteration over very large call stacks
+    if (length(calls) > 100) {
+      calls <- calls[1:100]
+    }
+    
+    # determine environment name for each call stack
+    envs <- sapply(calls, function(x)
+      try(environmentName(environment(eval(x[[1]]))), silent = TRUE))
+    
+    # keep only soilDB calls
+    calls <- calls[grepl("soilDB", as.character(envs))]
+    
+    # extract the function call and environment name
+    fn <- calls[[1]][[1]]
+    fne <- try(environmentName(environment(eval(fn))), silent = TRUE)
+    
+    # handle namespaced function calls
+    fn <- as.character(fn)[length(fn)]
+  }, error = function(e) {
+    # silently skip to fallback on error
+  }, finally = {
+    if (length(fn) == 0 ||
+        !nzchar(fn) ||
+        !nzchar(fne) ||
+        inherits(fne, 'try-error')) {
+      fn <- "SDA_query"
+      fne <- "soilDB"
+    }
+  })
+  
+  if (nzchar(fne)) {
+    sep <- "::"
+    if (fne == "soilDB" && startsWith(fn, ".")) {
+      sep <- ":::"
+    }
+    fn <- paste0(fne, sep, fn)
+  }
+  
+  q <- paste0(.SDA_comment_header(fn), "\n", q)
+  
   if (is.null(dsn)) {
     res <- .SDA_query(q)
     if (inherits(res, 'try-error')) {
@@ -134,13 +181,6 @@ SDA_query <- function(q, dsn = NULL) {
 
 .SDA_query <- function(q) {
 
-  # check for required packages
-  if (!requireNamespace('httr', quietly = TRUE))
-    stop('please install the `httr` package', call. = FALSE)
-
-  if (!requireNamespace('xml2', quietly = TRUE))
-    stop('please install the `xml2` package', call. = FALSE)
-
   if (!requireNamespace('jsonlite', quietly = TRUE))
     stop('please install the `jsonlite` package', call. = FALSE)
 
@@ -151,87 +191,88 @@ SDA_query <- function(q, dsn = NULL) {
   if (nchar(q, type = "bytes") > 2.5E6) {
     stop('Query string is too long (>2.5 million bytes), consider soilDB::makeChunks() to split inputs into several smaller queries and iterate', call. = FALSE)
   }
-
+  
+  ua <- c(
+    libcurl = curl::curl_version()$version,
+    `r-curl` = as.character(utils::packageVersion("curl")),
+    soilDB = paste(as.character(utils::packageVersion('soilDB')), "(SDA_query)")
+  )
+  
+  # format=json+columnname+metadata
+  post_body <- paste0("query=", curl::curl_escape(q), "&format=json%2Bcolumnname%2Bmetadata")
+  
+  # setup curl handle
+  h <- curl::new_handle()
+  curl::handle_setopt(h, 
+                      copypostfields = post_body,
+                      post = TRUE,
+                      useragent = paste0(names(ua), "/", ua, collapse = " ")
+  )
+  
   # submit request
-  r <- try(httr::POST(
-    url = "https://sdmdataaccess.sc.egov.usda.gov/tabular/post.rest",
-    body = list(query = q,
-                format = "json+columnname+metadata"),
-    encode = "form"
-  ), silent = TRUE)
+  url <- "https://sdmdataaccess.sc.egov.usda.gov/tabular/post.rest"
+  req <- try(curl::curl_fetch_memory(url, handle = h), silent = TRUE)
   
-  if (inherits(r, 'try-error')) {
-    message("Soil Data Access POST request failed, returning try-error.\n\n", r)
-    return(invisible(r))
+  if (inherits(req, 'try-error')) {
+    message("Soil Data Access POST request failed, returning try-error.\n\n", req)
+    return(invisible(req))
   }
   
-  # check response content type
-  h <- r$all_headers
-  if (!is.null(h)) {
-    if (length(h) == 0 || !h[[1]]$headers$`content-type` %in% 
-                            c("application/json; charset=utf-8", # data response
-                              "text/xml; charset=utf-8") # error response
-       )  {
-      r <- try(stop("Soil Data Access POST REST API is not currently available, please try again later.", call. = FALSE), silent = TRUE)
-    }
-  }
-  
-  if (inherits(r, 'try-error')) {
-    message("Soil Data Access POST request failed, returning try-error.\n\n", r)
-    return(invisible(r))
-  }
-
-  # trap errors, likely related to SQL syntax errors
-  request.status <- try(httr::stop_for_status(r), silent = TRUE)
-
-  # error message is encapsulated in XML, use xml2 library functions to extract
-  if (inherits(request.status, 'try-error')) {
+  # check HTTP status code
+  content <- rawToChar(req$content)
+  if (req$status_code >= 400) {
+    err.msg <- paste0("HTTP ", req$status_code)
     
-    # get the request response, this will contain an error message
-    r.content <- try(httr::content(r, as = 'parsed', encoding = 'UTF-8'), silent = TRUE)
-    
-    if (!inherits(r.content, 'try-error')) {
-      
-      # parse the XML to get the error message
-      error.msg <- try(xml2::xml_text(r.content), silent = TRUE)
-      
-      if (inherits(error.msg, 'try-error')) {
-        error.msg <- "Unable to parse error message from XML response"
-      }
-      
-      ## inject specific message into a try-error result
-      request.status <- try(stop(paste0(attr(request.status, 'condition')$message, "\n",
-                                        error.msg), call. = FALSE), silent = TRUE)
+    # try to extract XML error message (ServiceException)
+    if (grepl("<ServiceException>", content, fixed = TRUE)) {
+       extracted <- sub(".*<ServiceException>(.*)</ServiceException>.*", "\\1", content)
+       # simple unescape for common entities
+       extracted <- gsub("&quot;|&#34;", "\"", extracted)
+       extracted <- gsub("&apos;|&#39;", "'", extracted)
+       extracted <- gsub("&lt;|&#60;", "<", extracted)
+       extracted <- gsub("&gt;|&#62;", ">", extracted)
+       extracted <- gsub("&amp;|&#38;", "&", extracted)
+       
+       if (nchar(extracted) > 0) {
+         err.msg <- extracted
+       }
+    } else if (grepl("Site is under daily maintenance", content, fixed = TRUE)) {
+      # Note that "Site is under daily maintenance from 12:30 AM CST to 12:45 AM
+      # CST. Please try after 12:45 AM CST." response is _not_ delivered as a
+      # standard ServiceException (because the service is down).
+      err.msg <- "Soil Data Access POST REST API is not currently available. Please try again in about 15 minutes."
     }
     
-    # return the error object so calling function/user can handle it
-    return(invisible(request.status))
-    
+    err_obj <- try(stop(err.msg, call. = FALSE), silent = TRUE)
+    return(invisible(err_obj))
+  } 
+  
+  # check content type
+  ct <- curl::parse_headers_list(req$headers)$`content-type`
+  if (is.null(ct) || !grepl("application/json", ct, ignore.case = TRUE)) {
+     msg <- "Soil Data Access REST API is not currently available, please try again later."
+     content <- try(rawToChar(req$content), silent = TRUE)
+     if (!inherits(content, 'try-error') && nchar(content) < 500) {
+        msg <- paste0(msg, "\nResponse: ", content)
+     }
+     return(invisible(try(stop(msg, call. = FALSE), silent = TRUE)))
   }
 
-  # the result is JSON:
-  # list of character matrix, one for each "Table" returned
-  # note: the data returned by SDA/JSON are all character class
-  #       we "fix" this later on
-  r.content <- try(httr::content(r, as = 'text', encoding = 'UTF-8'), silent = TRUE)
-
-  if (inherits(r.content,'try-error'))
-      return(invisible(r.content))
-
+  # Parse JSON
+  r.content <- rawToChar(req$content)
   d <- try(jsonlite::fromJSON(r.content), silent = TRUE)
 
-  if (inherits(d, 'try-error'))
+  if (inherits(d, 'try-error')) {
+    message("Failed to parse JSON response.")
     return(invisible(d))
-
-  # number of results
-  n.tables <- length(d)
-
-  # no results, terminate here
-  if (n.tables < 1) {
+  }
+  
+  # empty result set
+  if (is.null(d) || length(d) == 0) {
     message('empty result set')
     return(NULL)
   }
-
+  
   # process list of tables
   d <- try(lapply(d, .post_process_SDA_result_set), silent = TRUE)
 
@@ -240,12 +281,11 @@ SDA_query <- function(q, dsn = NULL) {
 
   # keep track of SDA result set IDs
   SDA.ids <- names(d)
-  for (i in 1:n.tables) {
+  for (i in 1:length(d)) {
     attr(d[[i]], 'SDA_id') <- SDA.ids[i]
   }
 
-
-  if (n.tables > 1) {
+  if (length(d) > 1) {
     message('multi-part result set, returning a list')
     return(d)
   } else {
@@ -253,8 +293,9 @@ SDA_query <- function(q, dsn = NULL) {
     message('single result set, returning a data.frame')
     return(d[[1]])
   }
-
 }
+
+
 
 
 ## See https://github.com/ncss-tech/soilDB/pull/191 for a list of possible data types
@@ -282,50 +323,36 @@ SDA_query <- function(q, dsn = NULL) {
     dt <- strsplit(j, split = ',', fixed = TRUE)[[1]][8]
     # known data types in SDA and appropriate classes in R
     # fall-back to "character" for unknown data types
-    switch(dt,
-           'DataTypeName=char' = 'character',
-           'DataTypeName=nchar' = 'character',
-           'DataTypeName=varchar' = 'character',
-           'DataTypeName=nvarchar' = 'character',
-           'DataTypeName=text' = 'character',
-           'DataTypeName=ntext' = 'character',
-           'DataTypeName=datetime' = 'character',
-           'DataTypeName=datetime2' = 'character',
-           'DataTypeName=timestamp' = 'character',
-           'DataTypeName=bit' = 'integer',
-           'DataTypeName=int' = 'integer',
-           'DataTypeName=bigint' = 'integer',
-           'DataTypeName=smallint' = 'integer',
-           'DataTypeName=tinyint' = 'integer',
-           'DataTypeName=numeric' = 'numeric',
-           'DataTypeName=real' = 'numeric',
-           'DataTypeName=float' = 'numeric',
-           'DataTypeName=decimal' = 'numeric',
-           'character'
-           )
+    switch(
+      dt,
+      'DataTypeName=char' = 'character',
+      'DataTypeName=nchar' = 'character',
+      'DataTypeName=varchar' = 'character',
+      'DataTypeName=nvarchar' = 'character',
+      'DataTypeName=text' = 'character',
+      'DataTypeName=ntext' = 'character',
+      'DataTypeName=datetime' = 'character',
+      'DataTypeName=datetime2' = 'character',
+      'DataTypeName=timestamp' = 'character',
+      'DataTypeName=bit' = 'integer',
+      'DataTypeName=int' = 'integer',
+      'DataTypeName=bigint' = 'integer',
+      'DataTypeName=smallint' = 'integer',
+      'DataTypeName=tinyint' = 'integer',
+      'DataTypeName=numeric' = 'numeric',
+      'DataTypeName=real' = 'numeric',
+      'DataTypeName=float' = 'numeric',
+      'DataTypeName=decimal' = 'numeric',
+      'character'
+    )
   })
 
   # convert each column that isn't character
   idx <- which(cc != 'character')
-  for(f in idx) {
+  for (f in idx) {
     df[, f] <- as(df[, f], cc[f])
   }
-
-
-  ## strings resembling scientific notation are converted into numeric
-  ## ex: type.convert("8E2") -> 800
-  # https://github.com/ncss-tech/soilDB/issues/190
-
-  # # attempt type conversion
-  # # same result as writing to file and reading-in via read.table()
-  # df <- type.convert(df,
-  #                    na.strings = c('', 'NA'),
-  #                    as.is = TRUE,
-  #                    colClasses = cc
-  #                    )
-
-  ## TODO further error checking?
-
+  
   return(df)
 }
 

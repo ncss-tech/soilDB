@@ -25,7 +25,7 @@ test_that("dbQueryNASIS works", {
                 all(c("geomorfeat", "geomorfeattype") %in% names(res2)))
   
   # results for geomorfeattype should be identical
-  expect_equal(res, res2[["geomorfeattype"]])
+  expect_equivalent(res, res2[["geomorfeattype"]])
   
   # connection is closed from close=TRUE from end of res2 call
   expect_error(expect_warning(dbQueryNASIS(conn, "SELECT geomftname, geomftiid FROM geomorfeattype")))

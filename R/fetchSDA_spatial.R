@@ -31,7 +31,7 @@
 #' and the function will be updated accordingly at that time.
 #' 
 #' @author Andrew G. Brown, Dylan E. Beaudette
-#' @examplesIf curl::has_internet()
+#' @examplesIf curl::has_internet() && requireNamespace("httr", quietly = TRUE)
 #' \donttest{
 #'  
 #'     # get spatial data for a single mukey
@@ -84,6 +84,10 @@ fetchSDA_spatial <- function(x,
 
   method <- match.arg(tolower(method), c('feature', 'bbox', 'extent', 'envelope', 'point', 'convexhull', 'union', 'collection'))
 
+  if (missing(x)) {
+    x <- NULL
+  }
+  
   # remove any redundancy in input off the top -- this is important
   # in case x is not ordered and contains duplicates which will possibly
   # be in different chunks
@@ -91,7 +95,9 @@ fetchSDA_spatial <- function(x,
 
   if (geom.src == "mlrapolygon") {
     # mlra polygons are not part of SSURGO or STATSGO
-    by.col <- "MLRARSYM"
+    if (by.col == "mukey") {
+      by.col <- "MLRARSYM"
+    }
   } else if (geom.src == 'sapolygon' && (by.col %in% c("mukey", "nmusym", "nationalmusym"))) {
     # lkey and areasymbol are the option for sapolygon
     if (is.numeric(x)) {
@@ -160,20 +166,29 @@ fetchSDA_spatial <- function(x,
     
     mukey.list <- unique(res$lkey)
     
-  } else if (by.col == "MLRARSYM") {
+  } else if (geom.src == "mlrapolygon") {
     if (!requireNamespace("sf")) {
       stop("package 'sf' is required to read MLRA boundaries from ZIP file source", call. = FALSE)
     }
-    res <- sf::read_sf("/vsizip//vsicurl/https://www.nrcs.usda.gov/sites/default/files/2022-10/MLRA_52_2022.zip/MLRA_52_2022",                      query = sprintf("SELECT * FROM MLRA_52 WHERE MLRARSYM IN %s", format_SQL_in_statement(x)), 
-                       as_tibble = FALSE, 
-                       stringsAsFactors = FALSE)
+    res <- sf::read_sf(
+      "/vsizip//vsicurl/https://s3-fpac-nrcs-dshub-public.s3.us-east-1.amazonaws.com/MLRA/MLRA_52_2022.zip",
+      query = paste0(
+        "SELECT * FROM MLRA_52 ",
+        ifelse(
+          is.null(x),
+          "",
+          sprintf("WHERE %s IN %s", by.col, format_SQL_in_statement(x))
+        )),
+      as_tibble = FALSE,
+      stringsAsFactors = FALSE
+    )
     # use "geom" for consistency with other spatial outputs from SDA; requires sf >= 1.0-6
     sf::st_geometry(res) <- "geom"
     # TODO: could provide custom MLRA aggregation methods here: centroid, bbox, convex hull?
     #       in the future a T-SQL implementation would allow for any of the defined method options
     return(res)
   } else {
-    return(try(stop(paste0("Unknown feature identifier (", by.col, ")"), call. = FALSE)))
+    return(try(stop("Unknown feature identifier (", by.col, ")")))
   }
 
   mukey.chunk <- makeChunks(mukey.list, chunk.size)
@@ -332,10 +347,10 @@ fetchSDA_spatial <- function(x,
   # add any additional fields from mapunit/legend
   if (!is.null(add.fields)) {
     q <- gsub(q, pattern = "FROM ([a-z]+)polygon",
-              replacement = paste0(", ", paste0(ifelse(rep(grepl("Aggregate", geom.type), length(add.fields)),
+              replacement = paste0(", ", toString(ifelse(rep(grepl("Aggregate", geom.type), length(add.fields)),
                sprintf("(SELECT STRING_AGG(value,', ') FROM (SELECT DISTINCT value FROM STRING_SPLIT(STRING_AGG(CONVERT(NVARCHAR(max), %s), ','),',')) t) AS %s",
                        add.fields, gsub(".*\\.([a-z]+)", "\\1", add.fields)),
-              add.fields), collapse = ", "), " FROM \\1polygon"))
+              add.fields)), " FROM \\1polygon"))
   }
   t1 <- Sys.time()
 
@@ -367,7 +382,7 @@ fetchSDA_spatial <- function(x,
 
     if (verbose)
       message("No spatial data found for: ",
-              paste0(mukey.list, collapse = ","))
+              paste(mukey.list, collapse = ","))
   }
   return(list(result = s, time = times))
 }

@@ -4,12 +4,7 @@
 \alias{get_cosoilmoist_from_NASIS}
 \title{Get the Component Soil Moisture Tables}
 \usage{
-get_cosoilmoist_from_NASIS(
-  SS = TRUE,
-  impute = TRUE,
-  stringsAsFactors = NULL,
-  dsn = NULL
-)
+get_cosoilmoist_from_NASIS(SS = TRUE, impute = TRUE, dsn = NULL)
 }
 \arguments{
 \item{SS}{fetch data from the currently loaded selected set in NASIS or from
@@ -18,8 +13,6 @@ the entire local database (default: \code{TRUE})}
 \item{impute}{replace missing (i.e. \code{NULL}) values with \code{"Not_Populated"} for
 categorical data, or the "RV" for numeric data or \code{201} cm if the "RV" is also
 \code{NULL} (default: \code{TRUE})}
-
-\item{stringsAsFactors}{deprecated}
 
 \item{dsn}{Optional: path to local SQLite database containing NASIS
 table structure; default: \code{NULL}}

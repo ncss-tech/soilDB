@@ -26,7 +26,7 @@ get_hz_data_from_pedon_db <- function(dsn) {
   if(!requireNamespace('odbc'))
     stop('please install the `odbc` package', call.=FALSE)
   
-	q <- "SELECT pedon.peiid, phorizon.phiid, pedon.upedonid as pedon_id, phorizon.hzname, phorizon.hzdept, phorizon.hzdepb,
+	q <- "SELECT pedon.peiid, phorizon.phiid, pedon.upedonid AS pedon_id, pedon.upedonid, phorizon.hzname, phorizon.hzdept, phorizon.hzdepb,
   phorizon.claytotest AS clay, IIF(IsNULL(phorizon.silttotest), (100 - (phorizon.sandtotest + phorizon.claytotest)), phorizon.silttotest) AS silt, phorizon.sandtotest AS sand, texture, phfield, phnaf, eff.choice AS effervescence, l.labsampnum, IIF(IsNULL(f.total_frags_pct), 0, f.total_frags_pct) AS total_frags_pct, fragvoltot
 	FROM (
 	(
@@ -50,20 +50,15 @@ get_hz_data_from_pedon_db <- function(dsn) {
 	# test for duplicate horizons: due to bugs in our queries that lead to >1 row/hz
 	hz.tab <- table(d$phiid)
 	dupe.hz <- which(hz.tab > 1)
-	dupe.hz.pedon.ids <- d$pedon_id[d$phiid %in% names(hz.tab[dupe.hz])]
+	dupe.hz.pedon.ids <- d$upedonid[d$phiid %in% names(hz.tab[dupe.hz])]
 	
 	if(length(dupe.hz) > 0) {
-		message(paste('notice: duplicate horizons in query results, matching pedons:\n', paste(unique(dupe.hz.pedon.ids), collapse=','), sep=''))
+		message(paste0('notice: duplicate horizons in query results, matching pedons:\n', paste(unique(dupe.hz.pedon.ids), collapse=',')))
 	}
 	
-	
-	# next, get horizon textures and condence to 1:1 cardinality with results from above
+	# next, get horizon textures and condense to 1:1 cardinality with results from above
 	q.texture <- "SELECT phorizon.phiid, IIF(IsNULL(tx.choice), til.choice, tx.choice) as texture_class
-FROM
-(
-(
-(
-phorizon
+FROM (((phorizon
 LEFT OUTER JOIN (SELECT phtiid, phiidref, texcl, lieutex FROM phtexture) as t ON phorizon.phiid = t.phiidref)
 LEFT OUTER JOIN (SELECT * FROM metadata_domain_detail WHERE metadata_domain_detail.domain_id = 189) AS tx ON t.texcl = tx.choice_id)
 LEFT OUTER JOIN (SELECT * FROM metadata_domain_detail WHERE metadata_domain_detail.domain_id = 192) AS til ON t.lieutex = til.choice_id);"

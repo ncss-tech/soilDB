@@ -19,10 +19,6 @@ A data.frame.
 \description{
 Get lab pedon-level data from a local NASIS database.
 }
-\details{
-This function currently works only on Windows, and requires a 'nasis_local'
-ODBC connection.
-}
 \note{
 This function queries KSSL laboratory site/horizon data from a local
 NASIS database from the lab pedon data table.

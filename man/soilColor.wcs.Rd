@@ -2,36 +2,109 @@
 % Please edit documentation in R/soilColorWCS.R
 \name{soilColor.wcs}
 \alias{soilColor.wcs}
-\title{Get 30m or 270m gridded soil soil color data from SoilWeb Web Coverage Service (WCS)}
+\title{Access gridded soil color data from the SoilWeb Web Coverage Service (WCS)}
 \usage{
-soilColor.wcs(aoi, var, res = 270, quiet = FALSE)
+soilColor.wcs(aoi, var, res = NULL, quiet = FALSE)
 }
 \arguments{
-\item{aoi}{area of interest (AOI) defined using a \code{Spatial*}, \code{RasterLayer}, \code{sf}, \code{sfc} or \code{bbox} object, OR a \code{list}, see details}
+\item{aoi}{area of interest (AOI) defined using a terra pakcage objects (\code{SpatRaster}, \code{SpatVector}, \code{ext}), sf objects (\code{sf}, \code{sfc}), raster package object (\code{RasterLayer}, \code{bbox}), sp package \verb{Spatial*}, or a \code{list}, see details}
 
 \item{var}{soil color grid name (case insensitive), see details}
 
-\item{res}{grid resolution, units of meters, typically '270', or '30', depending on \code{var}. See details.}
+\item{res}{grid resolution, leave as NULL to use native grid resolution, see details}
 
 \item{quiet}{logical, passed to \code{curl::curl_download} to enable / suppress URL and progress bar for download.}
 }
 \value{
-A \code{SpatRaster} (or \code{RasterLayer}) object containing indexed map unit keys and associated raster attribute table or a try-error if request fails. By default, spatial classes from the \code{terra} package are returned. If the input object class is from the \code{raster} or \code{sp} packages a \code{RasterLayer} is returned.
+A \code{SpatRaster} (or \code{RasterLayer}) object containing indexed soil color IDs, associated raster attribute table, and color table. A \code{try-error} is returned if the WCS request fails.
 }
 \description{
-Moist soil colors, 2022.
+Moist soil colors, FY2026.
 }
 \details{
-\code{aoi} should be specified as a \code{SpatRaster}, \code{Spatial*}, \code{RasterLayer}, \code{SpatRaster}/\code{SpatVector}, \code{sf}, \code{sfc}, or \code{bbox} object or a \code{list} containing:
-
-\describe{
-\item{\code{aoi}}{bounding-box specified as (xmin, ymin, xmax, ymax) e.g. c(-114.16, 47.65, -114.08, 47.68)}
-\item{\code{crs}}{coordinate reference system of BBOX, e.g. 'OGC:CRS84' (EPSG:4326, WGS84 Longitude/Latitude)}
+When specified as a \code{list}, \code{aoi} should contain:
+\itemize{
+\item \code{aoi}: bounding-box specified as (xmin, ymin, xmax, ymax) e.g. c(-114.16, 47.65, -114.08, 47.68)
+\item \code{crs}: coordinate reference system of BBOX, e.g. 'OGC:CRS84' (EPSG:4326, WGS84 Longitude/Latitude)
 }
 
-The WCS query is parameterized using a rectangular extent derived from the above AOI specification, after conversion to the native CRS (EPSG:5070) of the soil color grids.
+The WCS query is parameterized using a rectangular extent derived from the above AOI specification, after conversion to the native CRS of the soil color grids.
 
-Variables available from this WCS can be queried using \code{WCS_details(wcs = 'soilColor')}. The full resolution version of the soil color grids use a \code{hr} suffix, e.g. 'sc025cm_hr'.
+Variables available from this WCS can be queried using \code{WCS_details(wcs = 'soilColor')}. The full resolution version of the CONUS soil color grids use a \code{hr} suffix, e.g. 'sc025cm_hr'.\tabular{lll}{
+   var \tab crs \tab description \cr
+   ak_sc005cm \tab EPSG:3338 \tab Alaska, moist soil colors, 5cm (90m resolution) \cr
+   ak_sc010cm \tab EPSG:3338 \tab Alaska, moist soil colors, 10cm (90m resolution) \cr
+   ak_sc015cm \tab EPSG:3338 \tab Alaska, moist soil colors, 15cm (90m resolution) \cr
+   ak_sc025cm \tab EPSG:3338 \tab Alaska, moist soil colors, 25cm (90m resolution) \cr
+   ak_sc050cm \tab EPSG:3338 \tab Alaska, moist soil colors, 50cm (90m resolution) \cr
+   ak_sc075cm \tab EPSG:3338 \tab Alaska, moist soil colors, 75cm (90m resolution) \cr
+   ak_sc100cm \tab EPSG:3338 \tab Alaska, moist soil colors, 100cm (90m resolution) \cr
+   ak_sc125cm \tab EPSG:3338 \tab Alaska, moist soil colors, 125cm (90m resolution) \cr
+   as_sc005cm \tab EPSG:4326 \tab American Samoa, moist soil colors, 5cm (approx. 30m resolution) \cr
+   as_sc010cm \tab EPSG:4326 \tab American Samoa, moist soil colors, 10cm (approx. 30m resolution) \cr
+   as_sc015cm \tab EPSG:4326 \tab American Samoa, moist soil colors, 15cm (approx. 30m resolution) \cr
+   as_sc025cm \tab EPSG:4326 \tab American Samoa, moist soil colors, 25cm (approx. 30m resolution) \cr
+   as_sc050cm \tab EPSG:4326 \tab American Samoa, moist soil colors, 50cm (approx. 30m resolution) \cr
+   as_sc075cm \tab EPSG:4326 \tab American Samoa, moist soil colors, 75cm (approx. 30m resolution) \cr
+   as_sc100cm \tab EPSG:4326 \tab American Samoa, moist soil colors, 100cm (approx. 30m resolution) \cr
+   as_sc125cm \tab EPSG:4326 \tab American Samoa, moist soil colors, 125cm (approx. 30m resolution) \cr
+   gu_sc005cm \tab EPSG:4326 \tab Guam, moist soil colors, 5cm (approx. 30m resolution) \cr
+   gu_sc010cm \tab EPSG:4326 \tab Guam, moist soil colors, 10cm (approx. 30m resolution) \cr
+   gu_sc015cm \tab EPSG:4326 \tab Guam, moist soil colors, 15cm (approx. 30m resolution) \cr
+   gu_sc025cm \tab EPSG:4326 \tab Guam, moist soil colors, 25cm (approx. 30m resolution) \cr
+   gu_sc050cm \tab EPSG:4326 \tab Guam, moist soil colors, 50cm (approx. 30m resolution) \cr
+   gu_sc075cm \tab EPSG:4326 \tab Guam, moist soil colors, 75cm (approx. 30m resolution) \cr
+   gu_sc100cm \tab EPSG:4326 \tab Guam, moist soil colors, 100cm (approx. 30m resolution) \cr
+   gu_sc125cm \tab EPSG:4326 \tab Guam, moist soil colors, 125cm (approx. 30m resolution) \cr
+   hi_sc005cm \tab EPSG:6628 \tab Hawaii, moist soil colors, 5cm (30m resolution) \cr
+   hi_sc010cm \tab EPSG:6628 \tab Hawaii, moist soil colors, 10cm (30m resolution) \cr
+   hi_sc015cm \tab EPSG:6628 \tab Hawaii, moist soil colors, 15cm (30m resolution) \cr
+   hi_sc025cm \tab EPSG:6628 \tab Hawaii, moist soil colors, 25cm (30m resolution) \cr
+   hi_sc050cm \tab EPSG:6628 \tab Hawaii, moist soil colors, 50cm (30m resolution) \cr
+   hi_sc075cm \tab EPSG:6628 \tab Hawaii, moist soil colors, 75cm (30m resolution) \cr
+   hi_sc100cm \tab EPSG:6628 \tab Hawaii, moist soil colors, 100cm (30m resolution) \cr
+   hi_sc125cm \tab EPSG:6628 \tab Hawaii, moist soil colors, 125cm (30m resolution) \cr
+   mp_sc005cm \tab EPSG:4326 \tab Northern Mariana Islands, moist soil colors, 5cm (approx. 30m resolution) \cr
+   mp_sc010cm \tab EPSG:4326 \tab Northern Mariana Islands, moist soil colors, 10cm (approx. 30m resolution) \cr
+   mp_sc015cm \tab EPSG:4326 \tab Northern Mariana Islands, moist soil colors, 15cm (approx. 30m resolution) \cr
+   mp_sc025cm \tab EPSG:4326 \tab Northern Mariana Islands, moist soil colors, 25cm (approx. 30m resolution) \cr
+   mp_sc050cm \tab EPSG:4326 \tab Northern Mariana Islands, moist soil colors, 50cm (approx. 30m resolution) \cr
+   mp_sc075cm \tab EPSG:4326 \tab Northern Mariana Islands, moist soil colors, 75cm (approx. 30m resolution) \cr
+   mp_sc100cm \tab EPSG:4326 \tab Northern Mariana Islands, moist soil colors, 100cm (approx. 30m resolution) \cr
+   mp_sc125cm \tab EPSG:4326 \tab Northern Mariana Islands, moist soil colors, 125cm (approx. 30m resolution) \cr
+   pr_sc005cm \tab EPSG:32161 \tab Puerto Rico, moist soil colors, 5cm (30m resolution) \cr
+   pr_sc010cm \tab EPSG:32161 \tab Puerto Rico, moist soil colors, 10cm (30m resolution) \cr
+   pr_sc015cm \tab EPSG:32161 \tab Puerto Rico, moist soil colors, 15cm (30m resolution) \cr
+   pr_sc025cm \tab EPSG:32161 \tab Puerto Rico, moist soil colors, 25cm (30m resolution) \cr
+   pr_sc050cm \tab EPSG:32161 \tab Puerto Rico, moist soil colors, 50cm (30m resolution) \cr
+   pr_sc075cm \tab EPSG:32161 \tab Puerto Rico, moist soil colors, 75cm (30m resolution) \cr
+   pr_sc100cm \tab EPSG:32161 \tab Puerto Rico, moist soil colors, 100cm (30m resolution) \cr
+   pr_sc125cm \tab EPSG:32161 \tab Puerto Rico, moist soil colors, 125cm (30m resolution) \cr
+   pw_sc005cm \tab EPSG:4326 \tab Palau, moist soil colors, 5cm (approx. 30m resolution) \cr
+   pw_sc010cm \tab EPSG:4326 \tab Palau, moist soil colors, 10cm (approx. 30m resolution) \cr
+   pw_sc015cm \tab EPSG:4326 \tab Palau, moist soil colors, 15cm (approx. 30m resolution) \cr
+   pw_sc025cm \tab EPSG:4326 \tab Palau, moist soil colors, 25cm (approx. 30m resolution) \cr
+   pw_sc050cm \tab EPSG:4326 \tab Palau, moist soil colors, 50cm (approx. 30m resolution) \cr
+   pw_sc075cm \tab EPSG:4326 \tab Palau, moist soil colors, 75cm (approx. 30m resolution) \cr
+   pw_sc100cm \tab EPSG:4326 \tab Palau, moist soil colors, 100cm (approx. 30m resolution) \cr
+   pw_sc125cm \tab EPSG:4326 \tab Palau, moist soil colors, 125cm (approx. 30m resolution) \cr
+   sc005cm \tab EPSG:5070 \tab CONUS, moist soil color, 5cm (270m resolution) \cr
+   sc005cm_hr \tab EPSG:5070 \tab CONUS, moist soil color, 5cm (30m resolution) \cr
+   sc010cm \tab EPSG:5070 \tab CONUS, moist soil color, 10cm (270m resolution) \cr
+   sc010cm_hr \tab EPSG:5070 \tab CONUS, moist soil color, 10cm (30m resolution) \cr
+   sc015cm \tab EPSG:5070 \tab CONUS, moist soil color, 15cm (270m resolution) \cr
+   sc015cm_hr \tab EPSG:5070 \tab CONUS, moist soil color, 15cm (30m resolution) \cr
+   sc025cm \tab EPSG:5070 \tab CONUS, moist soil color, 25cm (270m resolution) \cr
+   sc025cm_hr \tab EPSG:5070 \tab CONUS, moist soil color, 25cm (30m resolution) \cr
+   sc050cm \tab EPSG:5070 \tab CONUS, moist soil color, 50cm (270m resolution) \cr
+   sc050cm_hr \tab EPSG:5070 \tab CONUS, moist soil color, 50cm (30m resolution) \cr
+   sc075cm \tab EPSG:5070 \tab CONUS, moist soil color, 75cm (270m resolution) \cr
+   sc075cm_hr \tab EPSG:5070 \tab CONUS, moist soil color, 75cm (30m resolution) \cr
+   sc100cm \tab EPSG:5070 \tab CONUS, moist soil color, 100cm (270m resolution) \cr
+   sc100cm_hr \tab EPSG:5070 \tab CONUS, moist soil color, 100cm (30m resolution) \cr
+   sc125cm \tab EPSG:5070 \tab CONUS, moist soil color, 125cm (270m resolution) \cr
+   sc125cm_hr \tab EPSG:5070 \tab CONUS, moist soil color, 125cm (30m resolution) \cr
+}
 }
 \examples{
 \dontrun{
@@ -46,7 +119,7 @@ res <- soilColor.wcs(list(aoi = c(-116, 35, -115.5, 35.5), crs = "EPSG:4326"),
 
 # note colors and other metadata are stored
 # in raster attribute table
-plot(res, col = cats(res)[[1]]$col, axes = FALSE, legend = FALSE)
+terra::plot(res, col = cats(res)[[1]]$col, axes = FALSE, legend = FALSE)
 }
 }
 \author{

@@ -1,11 +1,6 @@
 #' @export 
 #' @rdname fetchNASIS
-get_concentrations_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = NULL, dsn = NULL) {
-
-  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
-    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
-    NASISDomainsAsFactor(stringsAsFactors)
-  }
+get_concentrations_from_NASIS_db <- function(SS=TRUE, dsn = NULL) {
   
   # concentrations
   # unique-ness enforced via peiid (pedon-level) and phiid (horizon-level)
@@ -29,7 +24,7 @@ get_concentrations_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = NULL, d
     return(data.frame())
 
   # toggle selected set vs. local DB
-  if (SS == FALSE) {
+  if (isFALSE(SS)) {
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
     q.c <- gsub(pattern = '_View_1', replacement = '', x = q.c, fixed = TRUE)
   }

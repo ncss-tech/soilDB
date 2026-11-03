@@ -1,24 +1,18 @@
-## TODO: better documentation for "fill" argument
-# https://github.com/ncss-tech/soilDB/issues/50
-## TODO: this will not ID horizons with no depths
-## TODO: better error checking / reporting is needed: coiid, dmu id, component name
 .fetchNASIS_components <- function(SS = TRUE,
                                    rmHzErrors = FALSE,
                                    nullFragsAreZero = TRUE,
                                    fill = FALSE,
-                                   stringsAsFactors = NULL,
                                    dsn = NULL,
                                    dropAdditional = TRUE,
                                    dropNotRepresentative = TRUE,
                                    duplicates = FALSE) {
-
-  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
-    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
-    NASISDomainsAsFactor(stringsAsFactors)
-  }
   
   # check if NASIS local DB instance/ODBC data source is available
   .soilDB_test_NASIS_connection(dsn = dsn)
+  
+  if (!requireNamespace("aqp")) {
+    stop("package 'aqp' is required", call. = FALSE)
+  }
   
   # ensure that any old hz errors are cleared
   if (exists('component.hz.problems', envir = get_soilDB_env())) {
@@ -95,11 +89,11 @@
     
     if (duplicates) {
       # use combined coiid (lmapunitiid, muiid, dmuiid, coiid) under name coiidcmb
-      depths(f.chorizon) <- coiidcmb ~ hzdept_r + hzdepb_r
-      site(f.chorizon) <- ~ dmuiid + muiid + lmapunitiid + coiid
+      aqp::depths(f.chorizon) <- coiidcmb ~ hzdept_r + hzdepb_r
+      aqp::site(f.chorizon) <- ~ dmuiid + muiid + lmapunitiid + coiid
     } else {
       # upgrade to SoilProfilecollection
-      depths(f.chorizon) <- coiid ~ hzdept_r + hzdepb_r
+      aqp::depths(f.chorizon) <- coiid ~ hzdept_r + hzdepb_r
     }
     
   } else {
@@ -108,15 +102,15 @@
   }
 
   # add site data to object
-  site(f.chorizon) <- f.comp # left-join via coiid
+  aqp::site(f.chorizon) <- f.comp # left-join via coiid
   
   if (duplicates && !is.null(f.corr) && nrow(f.corr) > 0) {
-    site(f.chorizon) <- f.corr # left-join via dmuiid, muiid, lmapunitiid
+    aqp::site(f.chorizon) <- f.corr # left-join via dmuiid, muiid, lmapunitiid
   }
   
   # add diagnostic features and restrictions to SPC
-  diagnostic_hz(f.chorizon) <- f.diaghz2
-  restrictions(f.chorizon) <- f.restrict2
+  aqp::diagnostic_hz(f.chorizon) <- f.diaghz2
+  aqp::restrictions(f.chorizon) <- f.restrict2
   
   ## 2017-3-13: short-circuits need testing, consider pre-marking mistakes before parsing
   ## 2021-10-28: TODO: harmonize strategies for .formatXXXXString methods and ID variables
@@ -127,41 +121,41 @@
   pm <- data.table::data.table(f.copm)[, .formatParentMaterialString(.SD, uid = .BY$coiid, name.sep = ' & '), by = "coiid"]
   pm$siteiid <- NULL
   if (nrow(pm) > 0) {
-    site(f.chorizon) <- pm
+    aqp::site(f.chorizon) <- pm
   }
   
   # join-in cogeomorph strings
   lf <- data.table::data.table(f.cogeomorph)[, .formatLandformString(.SD, uid = .BY$coiid, name.sep = ' & '), by = "coiid"]
   lf$peiid <- NULL
   if (nrow(lf) > 0) {
-    site(f.chorizon) <- lf
+    aqp::site(f.chorizon) <- lf
   }
+  
   # join-in ecosite string
   es <- data.table::data.table(f.ecosite)[, .formatEcositeString(.SD, name.sep = ' & '), by = "coiid", .SDcols = colnames(f.ecosite)]
   es$coiid <- NULL
-  
   if (nrow(es) > 0) {
-    site(f.chorizon) <- es
+    aqp::site(f.chorizon) <- es
   }
+  
   # join-in othervegclass string
   ov <- data.table::data.table(f.otherveg)[, .formatOtherVegString(.SD, name.sep = ' & '), by = "coiid", .SDcols = colnames(f.otherveg)]
-  ov$coiid <- NULL
+  ov$coiid <- NULL 
   if (nrow(ov) > 0) {
-    site(f.chorizon) <- ov
+    aqp::site(f.chorizon) <- ov
   }
 
   # print any messages on possible data quality problems:
-  if (exists('component.hz.problems', envir = get_soilDB_env())) {
-    if (length(get("component.hz.problems", envir = get_soilDB_env())) > 0) {
-      message(
-        "-> QC: horizon errors detected:\n\tUse `get('component.hz.problems', envir=get_soilDB_env())` for component record IDs (coiid)"
-      )
-    }
+  if (exists('component.hz.problems', envir = get_soilDB_env()) &&
+      length(get("component.hz.problems", envir = get_soilDB_env())) > 0) {
+    message(
+      "-> QC: horizon errors detected:\n\tUse `get('component.hz.problems', envir=get_soilDB_env())` for component record IDs (coiid)"
+    )
   }
   
   # set NASIS component specific horizon identifier
   if (!fill & length(filled.ids) == 0) {
-    res <- try(hzidname(f.chorizon) <- 'chiid')
+    res <- try(aqp::hzidname(f.chorizon) <- 'chiid')
     if (inherits(res, 'try-error')) {
       if (!rmHzErrors) {
         warning("cannot set `chiid` as unique component horizon key -- duplicate horizons present with rmHzErrors=FALSE", call. = FALSE)
@@ -174,14 +168,14 @@
   }
 
   # set metadata
-  m <- metadata(f.chorizon)
+  m <- aqp::metadata(f.chorizon)
   m$origin <- 'NASIS components'
   m$created <- Sys.time()
-  metadata(f.chorizon) <- m
+  aqp::metadata(f.chorizon) <- m
 
   # set optional hz designation and texture slots
-  hzdesgnname(f.chorizon) <- "hzname"
-  hztexclname(f.chorizon) <- "texture"
+  aqp::hzdesgnname(f.chorizon) <- "hzname"
+  aqp::hztexclname(f.chorizon) <- "texture"
 
   if (duplicates && dropNotRepresentative) {
     f.chorizon <- f.chorizon[which(!is.na(f.chorizon$repdmu)), ]

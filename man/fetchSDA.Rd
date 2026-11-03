@@ -17,35 +17,28 @@ get_component_from_SDA(
   duplicates = FALSE,
   childs = TRUE,
   droplevels = TRUE,
-  nullFragsAreZero = TRUE,
-  stringsAsFactors = NULL
+  nullFragsAreZero = TRUE
 )
 
 get_cointerp_from_SDA(
   WHERE = NULL,
   mrulename = NULL,
   duplicates = FALSE,
-  droplevels = TRUE,
-  stringsAsFactors = NULL
+  droplevels = TRUE
 )
 
-get_legend_from_SDA(WHERE = NULL, droplevels = TRUE, stringsAsFactors = NULL)
+get_legend_from_SDA(WHERE = NULL, droplevels = TRUE)
 
-get_lmuaoverlap_from_SDA(
-  WHERE = NULL,
-  droplevels = TRUE,
-  stringsAsFactors = NULL
-)
+get_lmuaoverlap_from_SDA(WHERE = NULL, droplevels = TRUE)
 
-get_mapunit_from_SDA(WHERE = NULL, droplevels = TRUE, stringsAsFactors = NULL)
+get_mapunit_from_SDA(WHERE = NULL, droplevels = TRUE)
 
 get_chorizon_from_SDA(
   WHERE = NULL,
   duplicates = FALSE,
   childs = TRUE,
   nullFragsAreZero = TRUE,
-  droplevels = TRUE,
-  stringsAsFactors = NULL
+  droplevels = TRUE
 )
 
 fetchSDA(
@@ -54,16 +47,10 @@ fetchSDA(
   childs = TRUE,
   nullFragsAreZero = TRUE,
   rmHzErrors = FALSE,
-  droplevels = TRUE,
-  stringsAsFactors = NULL
+  droplevels = TRUE
 )
 
-get_cosoilmoist_from_SDA(
-  WHERE = NULL,
-  duplicates = FALSE,
-  impute = TRUE,
-  stringsAsFactors = NULL
-)
+get_cosoilmoist_from_SDA(WHERE = NULL, duplicates = FALSE, impute = TRUE)
 }
 \arguments{
 \item{WHERE}{text string formatted as an SQL WHERE clause (default: FALSE)}
@@ -80,8 +67,6 @@ classes, which can waste space in tables and figures.}
 
 \item{nullFragsAreZero}{should fragment volumes of NULL be interpreted as 0?
 (default: TRUE), see details}
-
-\item{stringsAsFactors}{deprecated}
 
 \item{mrulename}{character. Interpretation rule names}
 

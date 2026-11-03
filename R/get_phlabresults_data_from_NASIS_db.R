@@ -28,7 +28,7 @@
     return(data.frame())
 
   # toggle selected set vs. local DB
-  if (SS == FALSE) {
+  if (isFALSE(SS)) {
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
   }
 
@@ -50,7 +50,7 @@
   if (length(idx) > 0) {
     message(paste("NOTICE: multiple records per pedon horizon exist in the `phlabresults` table, computing weighted averages and dominant values based on sample thickness"))
     
-    if (any(is.na(d.phlabresults[idx, "sampledepthbottom"]))) {
+    if (anyNA(d.phlabresults[idx, "sampledepthbottom"])) {
       message("NOTICE: some `phlabresults` records are missing `sampledepthbottom`; affected weighted averages will return `NA` and dominant values will be from the first (shallowest top depth) record per horizon")
     }
   
@@ -130,8 +130,7 @@
 
   names(d.phlabresults)[!idx] <- paste0(names(d.phlabresults)[!idx], "_lab")
 
-  # TODO: final cleaning of duplicate rows - dups exist in NASIS for some reason, so should this happen first
-  # to eliminate extra rows with no data? Not sure what is causing this on the NASIS side
+  # final cleaning of duplicate rows
   d.phlabresults <-  d.phlabresults[rowSums(is.na(d.phlabresults)) < (length(d.phlabresults) - 1),]
 
   # done

@@ -1,3 +1,72 @@
+
+###
+
+# https://github.com/ncss-tech/soilDB/issues/450
+
+# trying to do more with WCS metadata,
+# still very limited
+# # ISSR800 getCapabilities still doesn't work, why?
+# https://casoilresource.lawr.ucdavis.edu/cgi-bin/mapserv?map=/data1/website/wcs/issr800.map&SERVICE=WCS&VERSION=2.0.1&REQUEST=GetCapabilities
+
+# stay in holding pattern until resolved
+
+# WCS_capabilities <- function(wcs = c('mukey', 'issr800', 'soilcolor')) {
+#   
+#   if (!requireNamespace('xml2')) {
+#     stop('please install the package: xml2', call. = FALSE)
+#   }
+#   
+#   wcs <- match.arg(wcs)
+#   
+#   .mapfile <- switch(
+#     wcs,
+#     mukey = 'mukey-grids.map',
+#     issr800 = 'issr800.map',
+#     soilcolor = 'soilcolor.map'
+#   )
+#   
+#   .u <- sprintf('https://casoilresource.lawr.ucdavis.edu/cgi-bin/mapserv?map=/data1/website/wcs/%s&SERVICE=WCS&VERSION=2.0.1&REQUEST=GetCapabilities', .mapfile)
+#   
+#   .xml <- xml2::read_xml(.u)
+#   
+#   .layers <- xml2::xml_find_all(.xml, xpath = '//wcs:CoverageId')
+#   
+#   .res <- xml2::xml_text(xml2::xml_contents(.layers))
+#   
+#   return(.res)
+# }
+# 
+# 
+# WCS_describeCoverage <- function(wcs, layer) {
+#   
+#   if (!requireNamespace('xml2')) {
+#     stop('please install the package: xml2', call. = FALSE)
+#   }
+#   
+#   wcs <- match.arg(wcs)
+#   
+#   .mapfile <- switch(
+#     wcs,
+#     mukey = 'mukey-grids.map',
+#     issr800 = 'issr800.map',
+#     soilcolor = 'soilcolor.map'
+#   )
+#   
+#   u <- sprintf(
+#     'https://casoilresource.lawr.ucdavis.edu/cgi-bin/mapserv?map=/data1/website/wcs/%s&SERVICE=WCS&VERSION=2.0.1&REQUEST=DescribeCoverage&COVERAGEID=%s',
+#     .mapfile, layer
+#   )
+#   
+#   # ...
+# }
+# 
+
+###
+
+
+
+
+
 #' @title Web Coverage Services Details
 #' 
 #' @description List variables or databases provided by soilDB web coverage service (WCS) abstraction. These lists will be expanded in future versions.
@@ -31,14 +100,14 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
   v <- lapply(spec, function(i) {
     data.frame(
       var = i[['dsn']],
-      description = i[['desc']],
-      stringsAsFactors = FALSE
+      crs = i[['crs']],
+      description = i[['desc']]
     )
   })
   
   # flatten / re-format
   v <- do.call('rbind', v)
-  row.names(v) <- as.character(1:nrow(v))
+  row.names(v) <- as.character(seq_len(nrow(v)))
   
   # alpha order simpler to use
   v <- v[order(v[['var']]), ]
@@ -55,7 +124,7 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
 # res: grid resolution in native CRS (meters) [ISSR-800: 800, gNATSGO: 30]
 # native_crs: native CRS, usually EPSG:5070
 #             outside of CONUS will be different
-.prepare_AEA_AOI <- function(obj, res, native_crs = 'EPSG:5070') {
+.prepare_AOI <- function(obj, res, native_crs = 'EPSG:5070') {
   
   return_class <- 'terra'
   
@@ -121,15 +190,6 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     }
   }
   
-  
-  # CONUS grids: ISSR800, gNATSGO, gSSURGO, STATSGO, RSS
-  # 
-  # NOTE: EPSG:6350 NAD83 (2011) v.s. EPSG:5070 NAD83
-  # we use EPSG:5070 (https://github.com/ncss-tech/soilDB/issues/205)
-  # NOTE: +init=epsg:XXXX syntax is deprecated in GDAL. It might return a CRS with a non-EPSG compliant axis order.
-  
-  
-  
   # transform bounding polygon to WCS CRS
   # could be either, 
   # st_bbox is commonly converted to 'sfc'
@@ -150,7 +210,7 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     # AOI and image calculations in native CRS
     # create BBOX used for WMS
     # xmin, ymin, xmax, ymax
-    aoi.native <- e.native[c(1,3,2,4)]
+    aoi.native <- e.native[c(1, 3, 2, 4)]
   }
   
   # these are used for calculating xmax/ymax for WCS request
@@ -169,72 +229,651 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
 
 ## moist soil colors
 # these are 16bit (unsigned) integers
-# TODO: consider moving soil color LUT to wcs-files
 # these maps all share the same RAT
-.soilColorRAT <- 'http://casoilresource.lawr.ucdavis.edu/wcs/soilcolor/unique-moist-color-LUT.csv'
+.soilColorRAT <- 'http://casoilresource.lawr.ucdavis.edu/wcs-files/soilcolor/current/unique-moist-color-LUT.csv'
 .soilColor.spec <- list(
+  
+  'pr_sc005cm' = list(
+    dsn = 'pr_sc005cm',
+    type = 'GEOTIFF_16',
+    desc = 'Puerto Rico, moist soil colors, 5cm (30m resolution)',
+    na  = 32767,
+    crs = 'EPSG:32161',
+    res = 30,
+    rat = .soilColorRAT
+  ),
+  
+  'pr_sc010cm' = list(
+    dsn = 'pr_sc010cm',
+    type = 'GEOTIFF_16',
+    desc = 'Puerto Rico, moist soil colors, 10cm (30m resolution)',
+    na  = 32767,
+    crs = 'EPSG:32161',
+    res = 30,
+    rat = .soilColorRAT
+  ),
+  
+  'pr_sc015cm' = list(
+    dsn = 'pr_sc015cm',
+    type = 'GEOTIFF_16',
+    desc = 'Puerto Rico, moist soil colors, 15cm (30m resolution)',
+    na  = 32767,
+    crs = 'EPSG:32161',
+    res = 30,
+    rat = .soilColorRAT
+  ),
+  
+  'pr_sc025cm' = list(
+    dsn = 'pr_sc025cm',
+    type = 'GEOTIFF_16',
+    desc = 'Puerto Rico, moist soil colors, 25cm (30m resolution)',
+    na  = 32767,
+    crs = 'EPSG:32161',
+    res = 30,
+    rat = .soilColorRAT
+  ),
+  
+  'pr_sc050cm' = list(
+    dsn = 'pr_sc050cm',
+    type = 'GEOTIFF_16',
+    desc = 'Puerto Rico, moist soil colors, 50cm (30m resolution)',
+    na  = 32767,
+    crs = 'EPSG:32161',
+    res = 30,
+    rat = .soilColorRAT
+  ),
+  
+  'pr_sc075cm' = list(
+    dsn = 'pr_sc075cm',
+    type = 'GEOTIFF_16',
+    desc = 'Puerto Rico, moist soil colors, 75cm (30m resolution)',
+    na  = 32767,
+    crs = 'EPSG:32161',
+    res = 30,
+    rat = .soilColorRAT
+  ),
+  
+  'pr_sc100cm' = list(
+    dsn = 'pr_sc100cm',
+    type = 'GEOTIFF_16',
+    desc = 'Puerto Rico, moist soil colors, 100cm (30m resolution)',
+    na  = 32767,
+    crs = 'EPSG:32161',
+    res = 30,
+    rat = .soilColorRAT
+  ),
+  
+  'pr_sc125cm' = list(
+    dsn = 'pr_sc125cm',
+    type = 'GEOTIFF_16',
+    desc = 'Puerto Rico, moist soil colors, 125cm (30m resolution)',
+    na  = 32767,
+    crs = 'EPSG:32161',
+    res = 30,
+    rat = .soilColorRAT
+  ),
+  
+  'ak_sc005cm' = list(
+    dsn = 'ak_sc005cm',
+    type = 'GEOTIFF_16',
+    desc = 'Alaska, moist soil colors, 5cm (90m resolution)',
+    na  = 32767,
+    crs = 'EPSG:3338',
+    res = 90,
+    rat = .soilColorRAT
+  ),
+  
+  'ak_sc010cm' = list(
+    dsn = 'ak_sc010cm',
+    type = 'GEOTIFF_16',
+    desc = 'Alaska, moist soil colors, 10cm (90m resolution)',
+    na  = 32767,
+    crs = 'EPSG:3338',
+    res = 90,
+    rat = .soilColorRAT
+  ),
+  
+  'ak_sc015cm' = list(
+    dsn = 'ak_sc015cm',
+    type = 'GEOTIFF_16',
+    desc = 'Alaska, moist soil colors, 15cm (90m resolution)',
+    na  = 32767,
+    crs = 'EPSG:3338',
+    res = 90,
+    rat = .soilColorRAT
+  ),
+  
+  'ak_sc025cm' = list(
+    dsn = 'ak_sc025cm',
+    type = 'GEOTIFF_16',
+    desc = 'Alaska, moist soil colors, 25cm (90m resolution)',
+    na  = 32767,
+    crs = 'EPSG:3338',
+    res = 90,
+    rat = .soilColorRAT
+  ),
+  
+  'ak_sc050cm' = list(
+    dsn = 'ak_sc050cm',
+    type = 'GEOTIFF_16',
+    desc = 'Alaska, moist soil colors, 50cm (90m resolution)',
+    na  = 32767,
+    crs = 'EPSG:3338',
+    res = 90,
+    rat = .soilColorRAT
+  ),
+  
+  'ak_sc075cm' = list(
+    dsn = 'ak_sc075cm',
+    type = 'GEOTIFF_16',
+    desc = 'Alaska, moist soil colors, 75cm (90m resolution)',
+    na  = 32767,
+    crs = 'EPSG:3338',
+    res = 90,
+    rat = .soilColorRAT
+  ),
+  
+  'ak_sc100cm' = list(
+    dsn = 'ak_sc100cm',
+    type = 'GEOTIFF_16',
+    desc = 'Alaska, moist soil colors, 100cm (90m resolution)',
+    na  = 32767,
+    crs = 'EPSG:3338',
+    res = 90,
+    rat = .soilColorRAT
+  ),
+  
+  'ak_sc125cm' = list(
+    dsn = 'ak_sc125cm',
+    type = 'GEOTIFF_16',
+    desc = 'Alaska, moist soil colors, 125cm (90m resolution)',
+    na  = 32767,
+    crs = 'EPSG:3338',
+    res = 90,
+    rat = .soilColorRAT
+  ),
+  
+  # these are geographic coordinates, must specify resolution in DD
+  # approximately 30m
+  'pw_sc005cm' = list(
+    dsn = 'pw_sc005cm',
+    type = 'GEOTIFF_16',
+    desc = 'Palau, moist soil colors, 5cm (approx. 30m resolution)',
+    na  = 32767,
+    crs = 'EPSG:4326',
+    res = 0.000277786077614,
+    rat = .soilColorRAT
+  ),
+  
+  'pw_sc010cm' = list(
+    dsn = 'pw_sc010cm',
+    type = 'GEOTIFF_16',
+    desc = 'Palau, moist soil colors, 10cm (approx. 30m resolution)',
+    na  = 32767,
+    crs = 'EPSG:4326',
+    res = 0.000277786077614,
+    rat = .soilColorRAT
+  ),
+  
+  'pw_sc015cm' = list(
+    dsn = 'pw_sc015cm',
+    type = 'GEOTIFF_16',
+    desc = 'Palau, moist soil colors, 15cm (approx. 30m resolution)',
+    na  = 32767,
+    crs = 'EPSG:4326',
+    res = 0.000277786077614,
+    rat = .soilColorRAT
+  ),
+  
+  'pw_sc025cm' = list(
+    dsn = 'pw_sc025cm',
+    type = 'GEOTIFF_16',
+    desc = 'Palau, moist soil colors, 25cm (approx. 30m resolution)',
+    na  = 32767,
+    crs = 'EPSG:4326',
+    res = 0.000277786077614,
+    rat = .soilColorRAT
+  ),
+  
+  'pw_sc050cm' = list(
+    dsn = 'pw_sc050cm',
+    type = 'GEOTIFF_16',
+    desc = 'Palau, moist soil colors, 50cm (approx. 30m resolution)',
+    na  = 32767,
+    crs = 'EPSG:4326',
+    res = 0.000277786077614,
+    rat = .soilColorRAT
+  ),
+  
+  'pw_sc075cm' = list(
+    dsn = 'pw_sc075cm',
+    type = 'GEOTIFF_16',
+    desc = 'Palau, moist soil colors, 75cm (approx. 30m resolution)',
+    na  = 32767,
+    crs = 'EPSG:4326',
+    res = 0.000277786077614,
+    rat = .soilColorRAT
+  ),
+  
+  'pw_sc100cm' = list(
+    dsn = 'pw_sc100cm',
+    type = 'GEOTIFF_16',
+    desc = 'Palau, moist soil colors, 100cm (approx. 30m resolution)',
+    na  = 32767,
+    crs = 'EPSG:4326',
+    res = 0.000277786077614,
+    rat = .soilColorRAT
+  ),
+  
+  'pw_sc125cm' = list(
+    dsn = 'pw_sc125cm',
+    type = 'GEOTIFF_16',
+    desc = 'Palau, moist soil colors, 125cm (approx. 30m resolution)',
+    na  = 32767,
+    crs = 'EPSG:4326',
+    res = 0.000277786077614,
+    rat = .soilColorRAT
+  ),
+  
+  'hi_sc005cm' = list(
+    dsn = 'hi_sc005cm',
+    type = 'GEOTIFF_16',
+    desc = 'Hawaii, moist soil colors, 5cm (30m resolution)',
+    na  = 32767,
+    crs = 'EPSG:6628',
+    res = 30,
+    rat = .soilColorRAT
+  ),
+  
+  'hi_sc010cm' = list(
+    dsn = 'hi_sc010cm',
+    type = 'GEOTIFF_16',
+    desc = 'Hawaii, moist soil colors, 10cm (30m resolution)',
+    na  = 32767,
+    crs = 'EPSG:6628',
+    res = 30,
+    rat = .soilColorRAT
+  ),
+  
+  'hi_sc015cm' = list(
+    dsn = 'hi_sc015cm',
+    type = 'GEOTIFF_16',
+    desc = 'Hawaii, moist soil colors, 15cm (30m resolution)',
+    na  = 32767,
+    crs = 'EPSG:6628',
+    res = 30,
+    rat = .soilColorRAT
+  ),
+  
+  'hi_sc025cm' = list(
+    dsn = 'hi_sc025cm',
+    type = 'GEOTIFF_16',
+    desc = 'Hawaii, moist soil colors, 25cm (30m resolution)',
+    na  = 32767,
+    crs = 'EPSG:6628',
+    res = 30,
+    rat = .soilColorRAT
+  ),
+  
+  'hi_sc050cm' = list(
+    dsn = 'hi_sc050cm',
+    type = 'GEOTIFF_16',
+    desc = 'Hawaii, moist soil colors, 50cm (30m resolution)',
+    na  = 32767,
+    crs = 'EPSG:6628',
+    res = 30,
+    rat = .soilColorRAT
+  ),
+  
+  'hi_sc075cm' = list(
+    dsn = 'hi_sc075cm',
+    type = 'GEOTIFF_16',
+    desc = 'Hawaii, moist soil colors, 75cm (30m resolution)',
+    na  = 32767,
+    crs = 'EPSG:6628',
+    res = 30,
+    rat = .soilColorRAT
+  ),
+  
+  'hi_sc100cm' = list(
+    dsn = 'hi_sc100cm',
+    type = 'GEOTIFF_16',
+    desc = 'Hawaii, moist soil colors, 100cm (30m resolution)',
+    na  = 32767,
+    crs = 'EPSG:6628',
+    res = 30,
+    rat = .soilColorRAT
+  ),
+  
+  'hi_sc125cm' = list(
+    dsn = 'hi_sc125cm',
+    type = 'GEOTIFF_16',
+    desc = 'Hawaii, moist soil colors, 125cm (30m resolution)',
+    na  = 32767,
+    crs = 'EPSG:6628',
+    res = 30,
+    rat = .soilColorRAT
+  ),
+  
+  'gu_sc005cm' = list(
+    dsn = 'gu_sc005cm',
+    type = 'GEOTIFF_16',
+    desc = 'Guam, moist soil colors, 5cm (approx. 30m resolution)',
+    na  = 32767,
+    crs = 'EPSG:4326',
+    res = 0.000277776150910,
+    rat = .soilColorRAT
+  ),
+  
+  'gu_sc010cm' = list(
+    dsn = 'gu_sc010cm',
+    type = 'GEOTIFF_16',
+    desc = 'Guam, moist soil colors, 10cm (approx. 30m resolution)',
+    na  = 32767,
+    crs = 'EPSG:4326',
+    res = 0.000277776150910,
+    rat = .soilColorRAT
+  ),
+  
+  'gu_sc015cm' = list(
+    dsn = 'gu_sc015cm',
+    type = 'GEOTIFF_16',
+    desc = 'Guam, moist soil colors, 15cm (approx. 30m resolution)',
+    na  = 32767,
+    crs = 'EPSG:4326',
+    res = 0.000277776150910,
+    rat = .soilColorRAT
+  ),
+  
+  'gu_sc025cm' = list(
+    dsn = 'gu_sc025cm',
+    type = 'GEOTIFF_16',
+    desc = 'Guam, moist soil colors, 25cm (approx. 30m resolution)',
+    na  = 32767,
+    crs = 'EPSG:4326',
+    res = 0.000277776150910,
+    rat = .soilColorRAT
+  ),
+  
+  'gu_sc050cm' = list(
+    dsn = 'gu_sc050cm',
+    type = 'GEOTIFF_16',
+    desc = 'Guam, moist soil colors, 50cm (approx. 30m resolution)',
+    na  = 32767,
+    crs = 'EPSG:4326',
+    res = 0.000277776150910,
+    rat = .soilColorRAT
+  ),
+  
+  'gu_sc075cm' = list(
+    dsn = 'gu_sc075cm',
+    type = 'GEOTIFF_16',
+    desc = 'Guam, moist soil colors, 75cm (approx. 30m resolution)',
+    na  = 32767,
+    crs = 'EPSG:4326',
+    res = 0.000277776150910,
+    rat = .soilColorRAT
+  ),
+  
+  'gu_sc100cm' = list(
+    dsn = 'gu_sc100cm',
+    type = 'GEOTIFF_16',
+    desc = 'Guam, moist soil colors, 100cm (approx. 30m resolution)',
+    na  = 32767,
+    crs = 'EPSG:4326',
+    res = 0.000277776150910,
+    rat = .soilColorRAT
+  ),
+  
+  'gu_sc125cm' = list(
+    dsn = 'gu_sc125cm',
+    type = 'GEOTIFF_16',
+    desc = 'Guam, moist soil colors, 125cm (approx. 30m resolution)',
+    na  = 32767,
+    crs = 'EPSG:4326',
+    res = 0.000277776150910,
+    rat = .soilColorRAT
+  ),
+  
+  'as_sc005cm' = list(
+    dsn = 'as_sc005cm',
+    type = 'GEOTIFF_16',
+    desc = 'American Samoa, moist soil colors, 5cm (approx. 30m resolution)',
+    na  = 32767,
+    crs = 'EPSG:4326',
+    res = 0.000277756381372,
+    rat = .soilColorRAT
+  ),
+  
+  'as_sc010cm' = list(
+    dsn = 'as_sc010cm',
+    type = 'GEOTIFF_16',
+    desc = 'American Samoa, moist soil colors, 10cm (approx. 30m resolution)',
+    na  = 32767,
+    crs = 'EPSG:4326',
+    res = 0.000277756381372,
+    rat = .soilColorRAT
+  ),
+  
+  'as_sc015cm' = list(
+    dsn = 'as_sc015cm',
+    type = 'GEOTIFF_16',
+    desc = 'American Samoa, moist soil colors, 15cm (approx. 30m resolution)',
+    na  = 32767,
+    crs = 'EPSG:4326',
+    res = 0.000277756381372,
+    rat = .soilColorRAT
+  ),
+  
+  'as_sc025cm' = list(
+    dsn = 'as_sc025cm',
+    type = 'GEOTIFF_16',
+    desc = 'American Samoa, moist soil colors, 25cm (approx. 30m resolution)',
+    na  = 32767,
+    crs = 'EPSG:4326',
+    res = 0.000277756381372,
+    rat = .soilColorRAT
+  ),
+  
+  'as_sc050cm' = list(
+    dsn = 'as_sc050cm',
+    type = 'GEOTIFF_16',
+    desc = 'American Samoa, moist soil colors, 50cm (approx. 30m resolution)',
+    na  = 32767,
+    crs = 'EPSG:4326',
+    res = 0.000277756381372,
+    rat = .soilColorRAT
+  ),
+  
+  'as_sc075cm' = list(
+    dsn = 'as_sc075cm',
+    type = 'GEOTIFF_16',
+    desc = 'American Samoa, moist soil colors, 75cm (approx. 30m resolution)',
+    na  = 32767,
+    crs = 'EPSG:4326',
+    res = 0.000277756381372,
+    rat = .soilColorRAT
+  ),
+  
+  'as_sc100cm' = list(
+    dsn = 'as_sc100cm',
+    type = 'GEOTIFF_16',
+    desc = 'American Samoa, moist soil colors, 100cm (approx. 30m resolution)',
+    na  = 32767,
+    crs = 'EPSG:4326',
+    res = 0.000277756381372,
+    rat = .soilColorRAT
+  ),
+  
+  'as_sc125cm' = list(
+    dsn = 'as_sc125cm',
+    type = 'GEOTIFF_16',
+    desc = 'American Samoa, moist soil colors, 125cm (approx. 30m resolution)',
+    na  = 32767,
+    crs = 'EPSG:4326',
+    res = 0.000277756381372,
+    rat = .soilColorRAT
+  ),
+  
+  'mp_sc005cm' = list(
+    dsn = 'mp_sc005cm',
+    type = 'GEOTIFF_16',
+    desc = 'Northern Mariana Islands, moist soil colors, 5cm (approx. 30m resolution)',
+    na  = 32767,
+    crs = 'EPSG:4326',
+    res = 0.000277791905324,
+    rat = .soilColorRAT
+  ),
+  
+  'mp_sc010cm' = list(
+    dsn = 'mp_sc010cm',
+    type = 'GEOTIFF_16',
+    desc = 'Northern Mariana Islands, moist soil colors, 10cm (approx. 30m resolution)',
+    na  = 32767,
+    crs = 'EPSG:4326',
+    res = 0.000277791905324,
+    rat = .soilColorRAT
+  ),
+  
+  'mp_sc015cm' = list(
+    dsn = 'mp_sc015cm',
+    type = 'GEOTIFF_16',
+    desc = 'Northern Mariana Islands, moist soil colors, 15cm (approx. 30m resolution)',
+    na  = 32767,
+    crs = 'EPSG:4326',
+    res = 0.000277791905324,
+    rat = .soilColorRAT
+  ),
+  
+  'mp_sc025cm' = list(
+    dsn = 'mp_sc025cm',
+    type = 'GEOTIFF_16',
+    desc = 'Northern Mariana Islands, moist soil colors, 25cm (approx. 30m resolution)',
+    na  = 32767,
+    crs = 'EPSG:4326',
+    res = 0.000277791905324,
+    rat = .soilColorRAT
+  ),
+  
+  'mp_sc050cm' = list(
+    dsn = 'mp_sc050cm',
+    type = 'GEOTIFF_16',
+    desc = 'Northern Mariana Islands, moist soil colors, 50cm (approx. 30m resolution)',
+    na  = 32767,
+    crs = 'EPSG:4326',
+    res = 0.000277791905324,
+    rat = .soilColorRAT
+  ),
+  
+  'mp_sc075cm' = list(
+    dsn = 'mp_sc075cm',
+    type = 'GEOTIFF_16',
+    desc = 'Northern Mariana Islands, moist soil colors, 75cm (approx. 30m resolution)',
+    na  = 32767,
+    crs = 'EPSG:4326',
+    res = 0.000277791905324,
+    rat = .soilColorRAT
+  ),
+  
+  'mp_sc100cm' = list(
+    dsn = 'mp_sc100cm',
+    type = 'GEOTIFF_16',
+    desc = 'Northern Mariana Islands, moist soil colors, 100cm (approx. 30m resolution)',
+    na  = 32767,
+    crs = 'EPSG:4326',
+    res = 0.000277791905324,
+    rat = .soilColorRAT
+  ),
+  
+  'mp_sc125cm' = list(
+    dsn = 'mp_sc125cm',
+    type = 'GEOTIFF_16',
+    desc = 'Northern Mariana Islands, moist soil colors, 125cm (approx. 30m resolution)',
+    na  = 32767,
+    crs = 'EPSG:4326',
+    res = 0.000277791905324,
+    rat = .soilColorRAT
+  ),
+  
+  
   
   'sc005cm' = list(
     dsn = 'sc005cm',
     type = 'GEOTIFF_16',
-    desc = 'Moist soil color, 5cm (270m)',
-    na = 0,
+    desc = 'CONUS, moist soil color, 5cm (270m resolution)',
+    na  = 32767,
+    crs = 'EPSG:5070',
+    res = 270,
     rat = .soilColorRAT
   ),
   
   'sc010cm' = list(
     dsn = 'sc010cm',
     type = 'GEOTIFF_16',
-    desc = 'Moist soil color, 10cm (270m)',
-    na = 0,
+    desc = 'CONUS, moist soil color, 10cm (270m resolution)',
+    na  = 32767,
+    crs = 'EPSG:5070',
+    res = 270,
     rat = .soilColorRAT
   ),
   
   'sc015cm' = list(
     dsn = 'sc015cm',
     type = 'GEOTIFF_16',
-    desc = 'Moist soil color, 15cm (270m)',
-    na = 0,
+    desc = 'CONUS, moist soil color, 15cm (270m resolution)',
+    na  = 32767,
+    crs = 'EPSG:5070',
+    res = 270,
     rat = .soilColorRAT
   ),
   
   'sc025cm' = list(
     dsn = 'sc025cm',
     type = 'GEOTIFF_16',
-    desc = 'Moist soil color, 25cm (270m)',
-    na = 0,
+    desc = 'CONUS, moist soil color, 25cm (270m resolution)',
+    na  = 32767,
+    crs = 'EPSG:5070',
+    res = 270,
     rat = .soilColorRAT
   ),
   
   'sc050cm' = list(
     dsn = 'sc050cm',
     type = 'GEOTIFF_16',
-    desc = 'Moist soil color, 50cm (270m)',
-    na = 0,
+    desc = 'CONUS, moist soil color, 50cm (270m resolution)',
+    na  = 32767,
+    crs = 'EPSG:5070',
+    res = 270,
     rat = .soilColorRAT
   ),
   
   'sc075cm' = list(
     dsn = 'sc075cm',
     type = 'GEOTIFF_16',
-    desc = 'Moist soil color, 75cm (270m)',
-    na = 0,
+    desc = 'CONUS, moist soil color, 75cm (270m resolution)',
+    na  = 32767,
+    crs = 'EPSG:5070',
+    res = 270,
     rat = .soilColorRAT
   ),
   
   'sc100cm' = list(
     dsn = 'sc100cm',
     type = 'GEOTIFF_16',
-    desc = 'Moist soil color, 100cm (270m)',
-    na = 0,
+    desc = 'CONUS, moist soil color, 100cm (270m resolution)',
+    na  = 32767,
+    crs = 'EPSG:5070',
+    res = 270,
     rat = .soilColorRAT
   ),
   
   'sc125cm' = list(
     dsn = 'sc125cm',
     type = 'GEOTIFF_16',
-    desc = 'Moist soil color, 125cm (270m)',
-    na = 0,
+    desc = 'CONUS, moist soil color, 125cm (270m resolution)',
+    na  = 32767,
+    crs = 'EPSG:5070',
+    res = 270,
     rat = .soilColorRAT
   ),
   
@@ -242,64 +881,80 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
   'sc005cm_hr' = list(
     dsn = 'sc005cm_hr',
     type = 'GEOTIFF_16',
-    desc = 'Moist soil color, 5cm (30m)',
-    na = 0,
+    desc = 'CONUS, moist soil color, 5cm (30m resolution)',
+    na  = 32767,
+    crs = 'EPSG:5070',
+    res = 30,
     rat = .soilColorRAT
   ),
   
   'sc010cm_hr' = list(
     dsn = 'sc010cm_hr',
     type = 'GEOTIFF_16',
-    desc = 'Moist soil color, 10cm (30m)',
-    na = 0,
+    desc = 'CONUS, moist soil color, 10cm (30m resolution)',
+    na  = 32767,
+    crs = 'EPSG:5070',
+    res = 30,
     rat = .soilColorRAT
   ),
   
   'sc015cm_hr' = list(
     dsn = 'sc015cm_hr',
     type = 'GEOTIFF_16',
-    desc = 'Moist soil color, 15cm (30m)',
-    na = 0,
+    desc = 'CONUS, moist soil color, 15cm (30m resolution)',
+    na  = 32767,
+    crs = 'EPSG:5070',
+    res = 30,
     rat = .soilColorRAT
   ),
   
   'sc025cm_hr' = list(
     dsn = 'sc025cm_hr',
     type = 'GEOTIFF_16',
-    desc = 'Moist soil color, 25cm (30m)',
-    na = 0,
+    desc = 'CONUS, moist soil color, 25cm (30m resolution)',
+    na  = 32767,
+    crs = 'EPSG:5070',
+    res = 30,
     rat = .soilColorRAT
   ),
   
   'sc050cm_hr' = list(
     dsn = 'sc050cm_hr',
     type = 'GEOTIFF_16',
-    desc = 'Moist soil color, 50cm (30m)',
-    na = 0,
+    desc = 'CONUS, moist soil color, 50cm (30m resolution)',
+    na  = 32767,
+    crs = 'EPSG:5070',
+    res = 30,
     rat = .soilColorRAT
   ),
   
   'sc075cm_hr' = list(
     dsn = 'sc075cm_hr',
     type = 'GEOTIFF_16',
-    desc = 'Moist soil color, 75cm (30m)',
-    na = 0,
+    desc = 'CONUS, moist soil color, 75cm (30m resolution)',
+    na  = 32767,
+    crs = 'EPSG:5070',
+    res = 30,
     rat = .soilColorRAT
   ),
   
   'sc100cm_hr' = list(
     dsn = 'sc100cm_hr',
     type = 'GEOTIFF_16',
-    desc = 'Moist soil color, 100cm (30m)',
-    na = 0,
+    desc = 'CONUS, moist soil color, 100cm (30m resolution)',
+    na  = 32767,
+    crs = 'EPSG:5070',
+    res = 30,
     rat = .soilColorRAT
   ),
   
   'sc125cm_hr' = list(
     dsn = 'sc125cm_hr',
     type = 'GEOTIFF_16',
-    desc = 'Moist soil color, 125cm (30m)',
-    na = 0,
+    desc = 'CONUS, moist soil color, 125cm (30m resolution)',
+    na  = 32767,
+    crs = 'EPSG:5070',
+    res = 30,
     rat = .soilColorRAT
   )
 )
@@ -315,6 +970,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_FLOAT',
     desc = 'STATSGO data available, fraction of 800x800m grid cell',
     na = -9999,
+    crs = 'EPSG:5070',
+    res = 800,
     rat = NULL
   ),
   
@@ -323,6 +980,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_FLOAT',
     desc = 'SSURGO data available, fraction of 800x800m grid cell',
     na = -9999,
+    crs = 'EPSG:5070',
+    res = 800,
     rat = NULL
   ),
   
@@ -331,6 +990,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_FLOAT',
     desc = 'Total Soil Organic Matter (kg/m^2)',
     na = -9999,
+    crs = 'EPSG:5070',
+    res = 800,
     rat = NULL
   ),
   
@@ -339,6 +1000,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_FLOAT',
     desc = 'Total CaCO3 (kg/m^2)',
     na = -9999,
+    crs = 'EPSG:5070',
+    res = 800,
     rat = NULL
   ),
   
@@ -347,6 +1010,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_FLOAT',
     desc = 'EC 0-5cm depth (dS/m)',
     na = -9999,
+    crs = 'EPSG:5070',
+    res = 800,
     rat = NULL
   ),
   
@@ -355,6 +1020,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_FLOAT',
     desc = 'EC 0-25cm depth (dS/m)',
     na = -9999,
+    crs = 'EPSG:5070',
+    res = 800,
     rat = NULL
   ),
   
@@ -363,6 +1030,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_FLOAT',
     desc = 'CEC at pH 7 0-5cm depth (cmol[+]/kg)',
     na = -9999,
+    crs = 'EPSG:5070',
+    res = 800,
     rat = NULL
   ),
   
@@ -371,6 +1040,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_FLOAT',
     desc = 'CEC at pH 7 0-25cm depth (cmol[+]/kg)',
     na = -9999,
+    crs = 'EPSG:5070',
+    res = 800,
     rat = NULL
   ),
   
@@ -379,6 +1050,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_FLOAT',
     desc = 'CEC at pH 7 0-50cm depth (cmol[+]/kg)',
     na = -9999,
+    crs = 'EPSG:5070',
+    res = 800,
     rat = NULL
   ),
   
@@ -387,6 +1060,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_FLOAT',
     desc = 'total plant available water storage (cm water)',
     na = -9999,
+    crs = 'EPSG:5070',
+    res = 800,
     rat = NULL
   ),
   
@@ -395,6 +1070,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_FLOAT',
     desc = 'plant available water storage 0-50cm depth (cm water)',
     na = -9999,
+    crs = 'EPSG:5070',
+    res = 800,
     rat = NULL
   ),
   
@@ -403,6 +1080,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_FLOAT',
     desc = 'plant available water storage 0-25cm depth (cm water)',
     na = -9999,
+    crs = 'EPSG:5070',
+    res = 800,
     rat = NULL
   ),
   
@@ -411,6 +1090,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_FLOAT',
     desc = 'pH 1:1 H2O 0-5cm depth',
     na = -9999,
+    crs = 'EPSG:5070',
+    res = 800,
     rat = NULL
   ),
   
@@ -419,6 +1100,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_FLOAT',
     desc = 'pH 1:1 H2O 0-25cm depth',
     na = -9999,
+    crs = 'EPSG:5070',
+    res = 800,
     rat = NULL
   ),
   
@@ -427,6 +1110,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_FLOAT',
     desc = 'pH 1:1 H2O 25-50cm depth',
     na = -9999,
+    crs = 'EPSG:5070',
+    res = 800,
     rat = NULL
   ),
   
@@ -435,6 +1120,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_FLOAT',
     desc = 'pH 1:1 H2O 30-60cm depth',
     na = -9999,
+    crs = 'EPSG:5070',
+    res = 800,
     rat = NULL
   ),
   
@@ -443,6 +1130,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_FLOAT',
     desc = 'clay percent 0-5cm depth',
     na = -9999,
+    crs = 'EPSG:5070',
+    res = 800,
     rat = NULL
   ),
   
@@ -451,6 +1140,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_FLOAT',
     desc = 'clay percent 0-25cm depth',
     na = -9999,
+    crs = 'EPSG:5070',
+    res = 800,
     rat = NULL
   ),
   
@@ -459,6 +1150,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_FLOAT',
     desc = 'clay percent 25-50cm depth',
     na = -9999,
+    crs = 'EPSG:5070',
+    res = 800,
     rat = NULL
   ),
   
@@ -467,6 +1160,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_FLOAT',
     desc = 'clay percent 30-60cm depth',
     na = -9999,
+    crs = 'EPSG:5070',
+    res = 800,
     rat = NULL
   ),
   
@@ -475,6 +1170,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_FLOAT',
     desc = 'sand percent 0-5cm depth',
     na = -9999,
+    crs = 'EPSG:5070',
+    res = 800,
     rat = NULL
   ),
   
@@ -483,6 +1180,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_FLOAT',
     desc = 'sand percent 0-25cm depth',
     na = -9999,
+    crs = 'EPSG:5070',
+    res = 800,
     rat = NULL
   ),
   
@@ -491,6 +1190,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_FLOAT',
     desc = 'sand percent 25-50cm depth',
     na = -9999,
+    crs = 'EPSG:5070',
+    res = 800,
     rat = NULL
   ),
   
@@ -499,6 +1200,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_FLOAT',
     desc = 'sand percent 30-60cm depth',
     na = -9999,
+    crs = 'EPSG:5070',
+    res = 800,
     rat = NULL
   ),
   
@@ -507,6 +1210,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_FLOAT',
     desc = 'silt percent 0-5cm depth',
     na = -9999,
+    crs = 'EPSG:5070',
+    res = 800,
     rat = NULL
   ),
   
@@ -515,6 +1220,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_FLOAT',
     desc = 'silt percent 0-25cm depth',
     na = -9999,
+    crs = 'EPSG:5070',
+    res = 800,
     rat = NULL
   ),
   
@@ -523,6 +1230,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_FLOAT',
     desc = 'silt percent 25-50cm depth',
     na = -9999,
+    crs = 'EPSG:5070',
+    res = 800,
     rat = NULL
   ),
   
@@ -531,6 +1240,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_FLOAT',
     desc = 'silt percent 30-60cm depth',
     na = -9999,
+    crs = 'EPSG:5070',
+    res = 800,
     rat = NULL
   ),
   
@@ -539,6 +1250,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_FLOAT',
     desc = 'SAR, entire profile',
     na = -9999,
+    crs = 'EPSG:5070',
+    res = 800,
     rat = NULL
   ),
   
@@ -546,7 +1259,9 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     dsn = 'series_name',
     type = 'GEOTIFF_16',
     desc = 'Soil Series Name',
-    na = 0,
+    na  = 32767,
+    crs = 'EPSG:5070',
+    res = 800,
     rat = 'http://casoilresource.lawr.ucdavis.edu/800m_grids/RAT/series_name.csv'
   ),
   
@@ -554,7 +1269,9 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     dsn = 'hydgrp',
     type = 'GEOTIFF_BYTE',
     desc = 'Hydrologic Soil Group',
-    na = 0,
+    na  = 0,
+    crs = 'EPSG:5070',
+    res = 800,
     rat = 'http://casoilresource.lawr.ucdavis.edu/800m_grids/RAT/hydgrp.csv'
   ),
   
@@ -563,7 +1280,9 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     dsn = 'drainage_class',
     type = 'GEOTIFF_BYTE',
     desc = 'Soil Drainage Class',
-    na = 0,
+    na  = 0,
+    crs = 'EPSG:5070',
+    res = 800,
     rat = 'http://casoilresource.lawr.ucdavis.edu/800m_grids/RAT/drainage_class.csv'
   ),
   
@@ -571,14 +1290,18 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     dsn = 'weg',
     type = 'GEOTIFF_BYTE',
     desc = 'Wind Erodibility Group',
-    na = 0,
+    na  = 0,
+    crs = 'EPSG:5070',
+    res = 800,
     rat = 'http://casoilresource.lawr.ucdavis.edu/800m_grids/RAT/weg.csv'
   ),
   
   'wei' = list(
     dsn = 'wei',
-    type = 'GEOTIFF_16',
-    na = 0,
+    type = 'GEOTIFF_FLOAT',
+    na  = -9999,
+    crs = 'EPSG:5070',
+    res = 800,
     desc = 'Wind Erodibility Index',
     rat = NULL
   ),
@@ -587,7 +1310,9 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     dsn = 'str',
     type = 'GEOTIFF_BYTE',
     desc = 'Soil Temperature Regime',
-    na = 0,
+    na  = 0,
+    crs = 'EPSG:5070',
+    res = 800,
     rat = 'http://casoilresource.lawr.ucdavis.edu/800m_grids/RAT/str.csv'
   ),
   
@@ -595,7 +1320,9 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     dsn = 'soilorder',
     type = 'GEOTIFF_BYTE',
     desc = 'Soil Taxonomy: Soil Order',
-    na = 0,
+    na  = 0,
+    crs = 'EPSG:5070',
+    res = 800,
     rat = 'http://casoilresource.lawr.ucdavis.edu/800m_grids/RAT/soilorder.csv'
   ),
   
@@ -603,7 +1330,9 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     dsn = 'suborder',
     type = 'GEOTIFF_BYTE',
     desc = 'Soil Taxonomy: Suborder',
-    na = 0,
+    na  = 0,
+    crs = 'EPSG:5070',
+    res = 800,
     rat = 'http://casoilresource.lawr.ucdavis.edu/800m_grids/RAT/suborder.csv'
   ),
   
@@ -611,7 +1340,9 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     dsn = 'greatgroup',
     type = 'GEOTIFF_BYTE',
     desc = 'Soil Taxonomy: Greatgroup',
-    na = 0,
+    na  = 0,
+    crs = 'EPSG:5070',
+    res = 800,
     rat = 'http://casoilresource.lawr.ucdavis.edu/800m_grids/RAT/greatgroup.csv'
   ),
   
@@ -619,7 +1350,9 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     dsn = 'texture_05cm',
     type = 'GEOTIFF_BYTE',
     desc = 'Soil Texture Class, 0-5cm',
-    na = 0,
+    na  = 255,
+    crs = 'EPSG:5070',
+    res = 800,
     rat = 'http://casoilresource.lawr.ucdavis.edu/800m_grids/RAT/texture_05.csv'
   ),
   
@@ -627,7 +1360,9 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     dsn = 'texture_025cm',
     type = 'GEOTIFF_BYTE',
     desc = 'Soil Texture Class, 0-25cm',
-    na = 0,
+    na  = 255,
+    crs = 'EPSG:5070',
+    res = 800,
     rat = 'http://casoilresource.lawr.ucdavis.edu/800m_grids/RAT/texture_025.csv'
   ),
   
@@ -635,7 +1370,9 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     dsn = 'texture_2550cm',
     type = 'GEOTIFF_BYTE',
     desc = 'Soil Texture Class, 25-50cm',
-    na = 0,
+    na  = 255,
+    crs = 'EPSG:5070',
+    res = 800,
     rat = 'http://casoilresource.lawr.ucdavis.edu/800m_grids/RAT/texture_2550.csv'
   ),
   
@@ -643,7 +1380,9 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     dsn = 'lcc_irrigated',
     type = 'GEOTIFF_BYTE',
     desc = 'Land Capability Class, irrigated',
-    na = 0,
+    na  = 0,
+    crs = 'EPSG:5070',
+    res = 800,
     rat = 'http://casoilresource.lawr.ucdavis.edu/800m_grids/RAT/lcc.csv'
   ),
   
@@ -651,8 +1390,40 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     dsn = 'lcc_nonirrigated',
     type = 'GEOTIFF_BYTE',
     desc = 'Land Capability Class, non-irrigated',
-    na = 0,
+    na  = 0,
+    crs = 'EPSG:5070',
+    res = 800,
     rat = 'http://casoilresource.lawr.ucdavis.edu/800m_grids/RAT/lcc.csv'
+  ),
+  
+  'survey_type' = list(
+    dsn = 'survey_type',
+    type = 'GEOTIFF_BYTE',
+    desc = 'Soil survey data source',
+    na  = 0,
+    crs = 'EPSG:5070',
+    res = 800,
+    rat = 'http://casoilresource.lawr.ucdavis.edu/800m_grids/RAT/survey_type.csv'
+  ),
+  
+  'n_polygons' = list(
+    dsn = 'n_polygons',
+    type = 'GEOTIFF_BYTE',
+    desc = 'Number of polygons per grid cell',
+    na  = 0,
+    crs = 'EPSG:5070',
+    res = 800,
+    rat = NULL
+  ),
+  
+  'n_components' = list(
+    dsn = 'n_components',
+    type = 'GEOTIFF_16',
+    desc = 'Number of components per grid cell',
+    na  = 32767,
+    crs = 'EPSG:5070',
+    res = 800,
+    rat = NULL
   )
   
   
@@ -668,17 +1439,22 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
 ##  * top-level names in specs via JSON are used to determine available products
 ##  * are we just re-inventing a crummy version of STAC?
 ##
+# ext(xmin, xmax, ymin, ymax)
+
 
 .mukey.spec <- list(
   
-  # FY24 data were exported as INT32 instead of UINT32
-  # NODATA is -2147483648
   'gnatsgo' = list(
     dsn = 'gnatsgo',
     type = 'GEOTIFF_FLOAT',
     desc = 'gNATSGO map unit keys',
-    vintage = 'FY2024',
-    na = 2147483647L,
+    vintage = 'FY2026',
+    grid = list(
+      dim = c(nrows = 97053, ncols = 153996),
+      ext = c(-2356125, 2263755, 260985, 3172575)
+    ),
+    na = 0,
+    crs = 'EPSG:5070',
     res = 30,
     rat = NULL
   ),
@@ -687,28 +1463,28 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     dsn = 'gssurgo',
     type = 'GEOTIFF_FLOAT',
     desc = 'gSSURGO map unit keys',
-    vintage = 'FY2024',
-    na = 2147483647L,
+    vintage = 'FY2026',
+    grid = list(
+      dim = c(nrows = 97053, ncols = 153996),
+      ext = c(-2356125, 2263755, 260985, 3172575)
+    ),
+    na = 0,
+    crs = 'EPSG:5070',
     res = 30,
     rat = NULL
   ),
   
-  'hi_ssurgo' = list(
-    dsn = 'hi_ssurgo',
+  'fssurgo' = list(
+    dsn = 'fssurgo',
     type = 'GEOTIFF_FLOAT',
-    desc = 'HI map unit keys',
-    vintage = 'FY2024',
-    na = 4294967295,
-    res = 30,
-    rat = NULL
-  ),
-  
-  'pr_ssurgo' = list(
-    dsn = 'pr_ssurgo',
-    type = 'GEOTIFF_FLOAT',
-    desc = 'PR map unit keys',
-    vintage = 'FY2024',
-    na = 4294967295,
+    desc = 'SSURGO/STATSGO2 map unit keys',
+    vintage = 'FY2026',
+    grid = list(
+      dim = c(nrows = 97053, ncols = 153996),
+      ext = c(-2356125, 2263755, 260985, 3172575)
+    ),
+    na = 4294967296,
+    crs = 'EPSG:5070',
     res = 30,
     rat = NULL
   ),
@@ -717,9 +1493,119 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     dsn = 'statsgo',
     type = 'GEOTIFF_FLOAT',
     desc = 'STATSGO2 map unit keys',
-    vintage = 'FY2023',
-    na = 0L,
-    res = 300,
+    vintage = 'FY2026',
+    grid = list(
+      dim = c(nrows = 97053, ncols = 153996),
+      ext = c(-2356125, 2263755, 260985, 3172575)
+    ),
+    na  = 0,
+    crs = 'EPSG:5070',
+    res = 30,
+    rat = NULL
+  ),
+  
+  'hi_ssurgo' = list(
+    dsn = 'hi_ssurgo',
+    type = 'GEOTIFF_FLOAT',
+    desc = 'HI map unit keys',
+    vintage = 'FY2026',
+    grid = list(
+      dim = c(nrows = 12441, ncols = 17193),
+      ext = c(56992, 572768, 8585, 381800)
+    ),
+    na = 0,
+    crs = 'EPSG:6628',
+    res = 30,
+    rat = NULL
+  ),
+  
+  'pr_ssurgo' = list(
+    dsn = 'pr_ssurgo',
+    type = 'GEOTIFF_FLOAT',
+    desc = 'PR map unit keys',
+    vintage = 'FY2026',
+    grid = list(
+      dim = c(nrows = 3466, ncols = 12311),
+      ext = c(34344, 403687, 177453, 281438)
+    ),
+    na = 0,
+    crs = 'EPSG:32161',
+    res = 30,
+    rat = NULL
+  ),
+  
+  'ak_ssurgo' = list(
+    dsn = 'ak_ssurgo',
+    type = 'GEOTIFF_FLOAT',
+    desc = 'AK map unit keys',
+    vintage = 'FY2026',
+    grid = list(
+      dim = c(nrows = 21945, ncols = 40765),
+      ext = c(-2175732, 1493128, 408838, 2383910)
+    ),
+    na = 0,
+    crs = 'EPSG:3338',
+    res = 30,
+    rat = NULL
+  ),
+  
+  'pw_ssurgo' = list(
+    dsn = 'pw_ssurgo',
+    type = 'GEOTIFF_FLOAT',
+    desc = 'PW map unit keys',
+    vintage = 'FY2026',
+    grid = list(
+      dim = c(nrows = 18440, ncols = 12963),
+      ext = c(131.120121813039, 134.721062737144, 2.97196562862596, 8.09408586748881)
+    ),
+    na = 0,
+    crs = 'EPSG:4326',
+    res = 0.0002777861,
+    rat = NULL
+  ),
+  
+  'gu_ssurgo' = list(
+    dsn = 'gu_ssurgo',
+    type = 'GEOTIFF_FLOAT',
+    desc = 'GU map unit keys',
+    vintage = 'FY2026',
+    grid = list(
+      dim = c(nrows = 1513, ncols = 1220),
+      ext = c(144.618068517806, 144.956955421916, 13.2340187307932, 13.6544204140536)
+    ),
+    na = 0,
+    crs = 'EPSG:4326',
+    res = 0.0002777762,
+    rat = NULL
+  ),
+  
+  'as_ssurgo' = list(
+    dsn = 'as_ssurgo',
+    type = 'GEOTIFF_FLOAT',
+    desc = 'AS map unit keys',
+    vintage = 'FY2026',
+    grid = list(
+      dim = c(nrows = 787, ncols = 5142),
+      ext = c(-170.846799186076, -169.418575873062, -14.3738552052458, -14.1553617420328)
+    ),
+    na = 0,
+    crs = 'EPSG:4326',
+    res = 0.0002777564,
+    rat = NULL
+  ),
+  
+  'mp_ssurgo' = list(
+    dsn = 'mp_ssurgo',
+    type = 'GEOTIFF_FLOAT',
+    desc = 'MP map unit keys',
+    vintage = 'FY2026',
+    grid = list(
+      dim = c(nrows = 16930, ncols = 2632),
+      ext = c(145.121303441146, 145.852451735958, 14.1104128808407, 18.8132500297094)
+    ),
+    na = 0,
+    crs = 'EPSG:4326',
+    res = 0.0002777919,
     rat = NULL
   ),
   
@@ -727,9 +1613,14 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     dsn = 'rss',
     type = 'GEOTIFF_FLOAT',
     desc = 'RSS map unit keys',
-    vintage = 'FY2023',
-    na = 0L,
-    res = 10,
+    vintage = 'FY26',
+    grid = list(
+      dim = c(nrows = 97053, ncols = 153996),
+      ext = c(-2356125, 2263755, 260985, 3172575)
+    ),
+    na  = 0,
+    crs = 'EPSG:5070',
+    res = 30,
     rat = NULL
   )
 )

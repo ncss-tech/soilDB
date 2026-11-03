@@ -4,12 +4,7 @@
 \alias{get_comonth_from_NASIS_db}
 \title{Get component month data from a local NASIS Database}
 \usage{
-get_comonth_from_NASIS_db(
-  SS = TRUE,
-  fill = FALSE,
-  stringsAsFactors = NULL,
-  dsn = NULL
-)
+get_comonth_from_NASIS_db(SS = TRUE, fill = FALSE, dsn = NULL)
 }
 \arguments{
 \item{SS}{get data from the currently loaded Selected Set in NASIS or from
@@ -18,10 +13,9 @@ the entire local database (default: TRUE)}
 \item{fill}{should missing "month" rows in the comonth table be filled with
 NA (FALSE)}
 
-\item{stringsAsFactors}{deprecated}
-
-\item{dsn}{Optional: path to local SQLite database containing NASIS
-table structure; default: \code{NULL}}
+\item{dsn}{Optional: path or \emph{DBIConnection} to
+\link[=NASISLocalDatabase]{local database containing NASIS table
+structure}; default: \code{NULL}}
 }
 \value{
 A list with the results.

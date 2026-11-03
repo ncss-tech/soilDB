@@ -38,7 +38,7 @@ FROM (
 	
 	# convert Munsell to RGB
 	cat('converting Munsell to RGB ...\n')
-	d.rgb <- with(d, munsell2rgb(colorhue, colorvalue, colorchroma, returnLAB = TRUE, return_triplets=TRUE))
+	d.rgb <- with(d, aqp::munsell2rgb(colorhue, colorvalue, colorchroma, returnLAB = TRUE, return_triplets=TRUE))
 	
 	# re-combine
 	d <- cbind(d, d.rgb)

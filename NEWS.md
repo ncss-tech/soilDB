@@ -1,8 +1,127 @@
-# soilDB 2.8.6 (development)
+# soilDB 2.9.3 (2026-09-17) 
+ - `createSSURGO()` fix bug in logical column handling (introduced in 2.9.2) due to metadata column type enforcement (#483)
+ - Fix `structure()` usage of special argument names (.Label, .Names) in test fixtures for R-devel (#484)
+ - `downloadSSURGO()` now uses a persistent soilDB Web Soil Survey ZIP cache when `destdir` is omitted, checks `sacatalog.saverest` for freshness, supports `force = TRUE` to bypass cache reuse, and falls back to cached ZIPs with a warning when the remote freshness check is unavailable. Added `list_WSS_cache()` and `clear_WSS_cache()` for cache inventory and manual cleanup.
+
+# soilDB 2.9.2 (2026-07-10)
+ - EDIT base URL (for `get_EDIT_ecoclass_by_geoUnit()` and `make_EDIT_service_URL()`) updated to new USDA-managed server: <https://edit.sc.egov.usda.gov/>
+ - SoilWeb-based Web Coverage Services (`soilColor.wcs()`, `ISSR800.wcs()`, `mukey.wcs()`) have been updated with FY26 maps, now including most OCONUS soil surveys (AK, HI, PR, PW, GU, AS, MP)
+ - `downloadSSURGO()` gains arguments `include_spatial` and `include_tabular` that are analogous to arguments of the same name from `createSSURGO()`. Also, added `LAPPLY.FUN` to support arbitrary parallel or progress reporting backends. Thanks to feature request from @dylanbeaudette (#470).
+ - `createSSURGO()` improved performance of reading and writing of tabular data and type conversion
+ 
+# soilDB 2.9.1 (2026-04-01)
+ - `ROSETTA()` updates thanks to Todd Skaggs (USDA-ARS):
+   - Now using version 2 of the ROSETTA API (<https://www.handbook60.org/rosetta>)
+   - New argument `est.type` for selecting ensemble summary method and resulting units of measure
+   - $Ko$ and $L$ parameters now included in model output
+ - `fetchGDB()` now supports passing path to SSURGO GeoPackage file via `dsn` argument
+ - Breaking change: sample `SoilProfileCollection` datasets (`loafercreek`, `gopheridge`, `mineralKing`) updated to 2.9.x `fetchNASIS()` schema
+   - Deprecated columns have been removed, following the corresponding changes in 2.9.0
+   
+# soilDB 2.9.0 (2026-01-22)
+
+## Breaking Changes
+ - Deprecated `stringsAsFactors` argument has been removed from many query functions, use `NASISChoiceList()` and/or `NASISDomainsAsFactor()` instead for manual or automatic setting of domain values as factors, respectively
+ - Deprecated NASIS column aliases have been removed, see <https://ncss-tech.github.io/AQP/soilDB/bulletins/2025.01-1-soilDB-NASIS-column-aliases.html> for details
+ - R version >= 4.1.0 is now required
+
+## Documentation
+ - New vignette with details on SoilWeb curated data sources, and related functions in soilDB (#435)
+ - New vignette on Soil Data Access, `SDA_query()` and high-level wrapper functions for SDA queries in soilDB 
+ 
+## Improvements
+ - `fetchOSD(..., extended = TRUE)` gains geomorphon proportions via SoilWeb (#435)
+ - `get_SDA_property(method="weighted average")` resolved efficiency issues and streamlined SQL Common Table Expressions for processing very large sets of map unit keys (#432)
+ - `OSDquery()` gains `remarks` argument for searching the REMARKS section of OSDs
+ 
+# soilDB 2.8.14 (2025-12-04)
+ 
+   - Added family mineralogy class grids 
+   - Added argument `type` for selecting the type of query; replaces deprecated `formativeElement`
+ - `SDA_query()` now includes additional metadata (comment header in SQL) to inform usage metrics of various access points to SDA
+ - `fetchSDA()` and related lower-level child functions now include `nasiscoiid` and `nasischiid` for relating to internal database record IDs
+
+# soilDB 2.8.13 (2025-09-26)
+ - Added `get_SDA_NASIS_key()` for obtaining NASIS record IDs for component and component horizon data from Soil Data Access (#409)
+ - `SDA_spatialQuery()` fixed a bug with new `addFields` argument and `geomIntersection=TRUE` (#414)
+ - `get_OSD()` replace old base URL for `result='html'`
+ - `SDA_query()` include soilDB package version in User-Agent string
+ - Vignette updates
+ 
+# soilDB 2.8.12 (2025-08-29)
+ - **New Vignettes**:
+   - Added vignette for thematic maps of dominant ecological site using Soil Data Access via `SDA_spatialQuery()` and `get_SDA_coecoclass()`
+   - Added vignette for creating and using local SSURGO databases via `downloadSSURGO()` and `createSSURGO()`
+ - `SDA_spatialQuery()` now supports `addFields` argument to add columns to the result from other non-spatial tables.
+   - You can now specify columns from:
+     - `"legend"`, `"mapunit"`, and `"muaggatt"` tables for `what` equal to `"mupolygon"`, `"mupoint"`, `"muline"` or `"mukey"`  
+     - `"legend"` table for `what` equal to  `"areasymbol"` or `"sapolygon"`
+     - `"featdesc"` for `what` equal to `"featpoint"` or `"featline"`
+ - `createSSURGO()`:
+   - Added `append` argument to fix `overwrite` behavior
+   - Fixed bug in creating non-GeoPackage, non-spatial SQLite output
+   - Improved handling of empty export files and `overwrite` logic for non-file-based RDBMS
+ - `fetchNASIS()`: fixed bug when `fill=TRUE` and there are no horizons in the source data for any profile 
+ - `get_component_from_SDA()` fixed bug in join of `"chorizon"` and `"chfrags"` tables, now uses `merge(incomparables=NA)` 
+ - `get_vegplot_tree_si_summary_from_NASIS_db()` updated for new `siteindexcurve` table in data model version 7.4.3
+ 
+# soilDB 2.8.11 (2025-07-11)
+ - Update to NASIS metadata for data model version 7.4.3
+ - `fetchSDA_spatial()` `geom.src="mlrapolygon"` uses a new URL on the DSHub S3 bucket
+ - Added `"projectsubtype"` and `"milestonetype"` to the `"project"` set for `get_NASIS_table_name_by_purpose()`
+ - Initial phase of syntax cleanup affecting many functions
+
+# soilDB 2.8.10 (2025-04-28)
+ - `fetchVegdata()` add `nullFragsAreZero` argument (passed to `get_site_data_from_NASIS_db()`)
+ - Added `soilDB_user_dir()` for caching local copies of data for use in soilDB functions (#377)
+ - Added `fetchHWSD()` and `get_HWSD_path()`  for the FAO Harmonized World Soil Database (#391) 
+ - Added `get_phroots_from_NASIS_db()` for getting pedon horizon root information from NASIS (#393)
+ 
+# soilDB 2.8.9 (2025-04-04)
+ - soilDB now requires aqp >= 2.1.0
+ - Added `get_vegplot_groundsurface_from_NASIS_db()` thanks to Greg Schmidt (@phytoclast; #373)
+ - Added `"transectgroundsurfcover"` table to `"vegetation"` set for `get_NASIS_table_name_by_purpose()`
+ - Added missing `fetchNASIS("components")` deprecation messages for maat_l, maat_r, maat_h, mast_r, ecosite_id, ecosite_name, othervegid, and othervegclass columns
+ - `fetchSDA_spatial(geom.src="mlrapolygon")`: uses an AWS (S3) source and Seek-optimized ZIP file (thanks to @jneme910)
+ - `get_SDA_property()` (`method` `"weighted average"` and `"min/max"`), `get_SDA_hydric()`, and `get_SDA_interpretation()` (`method` `"weighted average"`) now use Common Table Expressions (CTEs) and therefore are compatible with local (SQLite or other) data sources
+
+# soilDB 2.8.8 (2025-02-10)
+ - `fetchSCAN()`: Bug fix when sensor column contains all `NA`
+ - `ROSETTA()`: now uses HTTPS URL for API endpoint
+ - `fetchNASIS()`: Bug fix for (now deprecated) `pedon_id` in horizon slot rather than site
+ - Rebuilt SPC datasets: `loafercreek`, `gopheridge`, `mineralKing`
+ - `fetchNASISLabData()`: use `ncsspedonlabdataiid` as unique pedon ID
+ 
+# soilDB 2.8.7 (2025-01-16)
+ - Several aliases of NASIS physical column names have been deprecated and will be removed in the next minor release (2.9.x). See https://ncss-tech.github.io/AQP/soilDB/bulletins/2025.01-1-soilDB-NASIS-column-aliases.html for details (#369)
+ - `fetchVegdata()`
+   - Added `"ecostateid"`, `"ecostatename"`, `"commphaseid"`, `"commphasename`" to columns from `site` and `siteobs` are now joined into `"vegplot"` result.
+   - Fixed  `"site"` join used for `"vegplot"` table result. Now using LEFT join to add `siteecositehistory` information
+   - Sites without vegetation plots are now excluded from the result
+ - `get_vegplot_trhi_from_NASIS_db()` & `get_vegplot_transect_from_NASIS_db()` no longer join to the `pedon` table. Use the `"siteobsiid"` or vegetation plot `"assocuserpedonid"` to join to pedon records when necessary.
+   - This change avoids issues with unintended duplication of records e.g. lab pedons that have multiple pedons per site observation. Thanks to Nathan Roe for suggestion.
+ - `get_vegplot_*()` functions use INNER join to `vegtransect` table where applicable, so records are only returned for vegplots with an associated transect. Thanks to Zach Van Abbema for suggestion.
+ - `createSSURGO()`: more informative error message when no export files found for import
+ - Improved [soilDBdata](https://github.com/brownag/soilDBdata) data sets used for unit tests of `fetchNASIS()` and `fetchVegdata()` when a local NASIS instance is not available
+ - Updated NASIS SoilProfileCollection data sets (`loafercreek`, `gopheridge`, `mineralKing`)
+ 
+# soilDB 2.8.6 (2024-12-23)
  - `fetchNASIS()` and `get_site_data_from_NASIS_db()` now return Ecological Site State and Community Phase information (ecostatename, ecostateid, commphasename, commphaseid columns) from Site Observation table
- - `createStaticNASIS()` removed workaround for {odbc}/nanoodbc VARCHAR(MAX) columns; now can directly use `DBI::dbReadTable()` for all tables via NASIS ODBC connection
- - `fetchNASIS()` changed default behavior to `mixColors = FALSE` which returns dominant condition for each moisture state rather than mixing LAB color coordinates
+ - `createStaticNASIS()` bug fixes
+   - Removed workaround for {odbc}/nanoodbc VARCHAR(MAX) columns; now can directly use `DBI::dbReadTable()` for all tables via NASIS ODBC connection
+   - Fixed error when `output_path=NULL`
+ - `fetchNASIS()` changed default behavior to `mixColors=FALSE` which returns dominant condition for each moisture state rather than mixing LAB color coordinates
    - `get_colors_from_NASIS_db()` deprecate `mixColors` argument, add `method` argument with options "dominant", "mixed", and "none". New aggregation method `"none"` returns long format representation of color data from phcolor table with no aggregation applied. 
+ - `createSSURGO()` updates:
+   - Added incremental write of tabular data by table and soil survey area, which is much more memory efficient
+   - Added `maxruledepth` argument to allow filtering of `cointerp` table, and set default to `0`.
+     - This reduces number of `cointerp` rows by about 75% for published SSURGO. Generally, Web Soil Survey exports have maximum rule depth of `1`, but custom NASIS exports can be "deeper"
+   - Updated behavior of `filename` argument when `conn` _DBIConnection_ is specified and improved `overwrite` logic
+   - Added `dissolve_field` to facilitate creating aggregate geometries by `"mukey"` or other spatial attribute
+   - Added `include_tabular` argument to support omitting tabular data when building a database
+   - Now `include_spatial` and `include_tabular` are allowed to be a _character_ vectors of table names
+      - `TRUE` is all tables, `FALSE` is no tables. This allows for subsets of the SSURGO data model to be specified with finer user control over database contents.
+   - Now a composite `"soil_metadata"` table is made with `"areasymbol"` column and one row per soil survey area, rather than one table per soil survey area. This is more compact and scales better to larger databases.
 
 # soilDB 2.8.5 (2024-11-04)
  - `fetchLDM()` add support for `area_type` argument with local database connections (`dsn` argument)
@@ -316,8 +435,6 @@ and in concatenation of reason string when `wide_reason=TRUE`
    * All  `get_SDA_*()` methods (except `get_SDA_metrics()`) now support input of custom `WHERE` clause in lieu of `mukeys`/`areasymbols` arguments and gain a `dsn` argument for specifying a local SQLite database or DBIConnection.
    * Added `downloadSSURGO()` for downloading/extraction of the SSURGO data by survey area from Web Soil Survey. 
    * Added `createSSURGO()` for building of local databases as SQLite/Geopackage from one or more SSURGO exports.
-      * Exports can be obtained via `downloadSSURGO()`, from NASIS or downloaded from other sources such as  <https://datagateway.nrcs.usda.gov/GDGHome_DirectDownLoad.aspx>. 
- 
 
 # soilDB 2.6.15 (2022-04-13) 
  * `fetchNASIS()`

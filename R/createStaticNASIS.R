@@ -50,29 +50,43 @@
 
 #' Create a memory or file-based instance of NASIS database
 #'
-#' Create a memory or file-based instance of NASIS database for selected
-#' tables.
+#' Create a memory or file-based instance of NASIS database for selected tables.
 #'
-#' @param tables Character vector of target tables. Default: \code{NULL} is whatever tables are listed by `DBI::dbListTables` for the connection typ being used.
-#' @param SS Logical. Include "selected set" tables (ending with suffix \code{"_View_1"}). Default: \code{TRUE}
-#' @param dsn Optional: path to SQLite database containing NASIS table structure; or a `DBIConnection`. Default: \code{NULL}
-#' @param output_path Optional: path to new/existing SQLite database to write tables to. Default: \code{NULL} returns table results as named list.
-#' @param new_names Optional: new table names (should match length of vector of matching `tables` in `dsn`)
-#' @param verbose Show error messages from attempts to dump individual tables? Default `FALSE`
+#' @param tables Character vector of target tables. Default: \code{NULL} is
+#'   whatever tables are listed by `DBI::dbListTables` for the connection typ
+#'   being used.
+#' @param SS Logical. Include "selected set" tables (ending with suffix
+#'   \code{"_View_1"}). Default: \code{TRUE}
+#' @param dsn Optional: path to SQLite database containing NASIS table
+#'   structure; or a `DBIConnection`. Default: \code{NULL}
+#' @param output_path Optional: path to new/existing SQLite database to write
+#'   tables to. Default: \code{NULL} returns table results as named list.
+#' @param new_names Optional: new table names (should match length of vector of
+#'   matching `tables` in `dsn`)
+#' @param verbose Show error messages from attempts to dump individual tables?
+#'   Default `FALSE`
 #'
 #' @return A named list of results from calling \code{dbQueryNASIS} for all
-#' columns in each NASIS table.
-#'
+#'   columns in each NASIS table.
+#' 
 #' @export createStaticNASIS
 createStaticNASIS <- function(tables = NULL,
                               new_names = NULL,
                               SS = TRUE,
-                              dsn = NULL, output_path = NULL,
+                              dsn = NULL,
+                              output_path = NULL,
                               verbose = FALSE)  {
-
+  
   # can make static DB from another static DB, or default is local NASIS install (dsn=NULL)
   con <- dbConnectNASIS(dsn = dsn)
-
+  
+  # close input connection if not defined by user
+  on.exit({
+    if (isFALSE(attr(con, 'isUserDefined'))) {
+      DBI::dbDisconnect(con)
+    }
+  })
+  
   nasis_table_names <- NULL
 
   # explicit handling of the connection types currently allowed
@@ -130,10 +144,9 @@ createStaticNASIS <- function(tables = NULL,
 
     return(res)
 
-  # otherwise, we are writing SQLite to output_path
   } else {
-
-
+    # otherwise, we are writing SQLite to output_path
+    
     # assuming that default connection uses ODBC
     if (!requireNamespace("RSQLite"))
       stop("package `RSQLite` is required ", call. = FALSE)
@@ -146,7 +159,7 @@ createStaticNASIS <- function(tables = NULL,
     else outcon <- output_path
 
     # returns TRUE, invisibly, or try-error (one per table)
-    return(lapply(seq_along(nasis_table_names), function(i) {
+    res <- lapply(seq_along(nasis_table_names), function(i) {
         return(try({
           n <- nasis_table_names[i]
 
@@ -163,12 +176,11 @@ createStaticNASIS <- function(tables = NULL,
                             value = newdata,
                             overwrite = TRUE)
         }))
-    }))
+    })
 
     # close output connection
     DBI::dbDisconnect(outcon)
+    
+    return(res)
   }
-
-  # close input connection
-  DBI::dbDisconnect(con)
 }

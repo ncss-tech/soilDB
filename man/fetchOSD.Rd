@@ -14,7 +14,7 @@ fetchOSD(soils, colorState = "moist", extended = FALSE)
 \item{extended}{if \code{TRUE} additional soil series summary data are returned, see details}
 }
 \value{
-a \code{SoilProfileCollection} object containing basic soil morphology and taxonomic information.
+a \code{SoilProfileCollection} object containing basic soil morphology and taxonomic information, a \code{list} when \code{extended = TRUE}.
 }
 \description{
 This function fetches a variety of data associated with named soil series, extracted from the USDA-NRCS Official Series Description text files and detailed soil survey (SSURGO). These data are updated quarterly and made available via SoilWeb. Set \code{extended = TRUE} and see the \code{soilweb.metadata} list element for information on when the source data were last updated.
@@ -46,6 +46,7 @@ The standard set of "site" and "horizon" data are returned as a \code{SoilProfil
 
 \item{pmkind}{empirical probabilities for parent material kind, derived from the current SSURGO snapshot}
 \item{pmorigin}{empirical probabilities for parent material origin, derived from the current SSURGO snapshot}
+\item{geomorphons}{geomorphons landform classification (CONUS only), derived from the current gSSURGO snapshot and a 30m CONUS geomoprhons grid, details pending}
 \item{mlra}{empirical MLRA membership values, derived from the current SSURGO snapshot}
 \item{ecoclassid}{area cross-tabulation of ecoclassid by soil series name, derived from the current SSURGO snapshot, major components only}
 \item{climate}{climate summaries from PRISM stack (CONUS only)}
@@ -59,7 +60,7 @@ When using \code{extended = TRUE}, there are a couple of scenarios in which seri
 
 \describe{
 
-\item{1. A query for soil series that exist entirely outside of CONUS (e.g. PALAU).}{ - Climate summaries are empty \code{data.frames} because these summaries are currently generated from PRISM. We are working on a solution that uses DAYMET.}
+\item{1. A query for soil series that exist entirely outside of CONUS (e.g. PALAU).}{ - Climate summaries are empty \code{data.frame} because these summaries are currently generated from PRISM. We are working on a solution that uses DAYMET.}
 
 \item{2. A query for data within CONUS, but OSD morphology missing due to parsing error (e.g. formatting, typos).}{ - Extended summaries are present but morphology missing from \code{SPC}. A warning is issued.}
 
@@ -73,8 +74,7 @@ These last two cases are problematic for analysis that makes use of morphology a
 Requests to the SoilWeb API are split into batches of 100 series names from \code{soils} via \code{\link[=makeChunks]{makeChunks()}}.
 }
 \examples{
-\dontshow{if (curl::has_internet()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-\dontshow{\}) # examplesIf}
+\dontshow{if (curl::has_internet() && requireNamespace("httr", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 \donttest{
   library(aqp)
   # soils of interest
@@ -88,22 +88,35 @@ Requests to the SoilWeb API are split into batches of 100 series names from \cod
   # plot profiles
   # moist soil colors
   par(mar=c(0,0,0,0), mfrow=c(2,1))
-  plot(s.moist, name='hzname',
-       cex.names=0.85, depth.axis = list(line = -4))
-  plot(s.dry, name='hzname',
-       cex.names=0.85, depth.axis = list(line = -4))
+  aqp::plotSPC(
+    s.moist,
+    name = 'hzname',
+    cex.names = 0.85,
+    depth.axis = list(line = -4)
+  )
+  aqp::plotSPC(
+    s.dry,
+    name = 'hzname',
+    cex.names = 0.85,
+    depth.axis = list(line = -4)
+  )
 
   # extended mode: return a list with SPC + summary tables
   x <- fetchOSD(s.list, extended = TRUE, colorState = 'dry')
 
   par(mar=c(0,0,1,1))
-  plot(x$SPC)
+  if (!is.null(x$SPC) && inherits(x$SPC, "SoilProfileCollection")){
+    aqp::plotSPC(x$SPC)
+  }
   str(x, 1)
 
 }
+\dontshow{\}) # examplesIf}
 }
 \references{
 USDA-NRCS OSD search tools: \url{https://soilseries.sc.egov.usda.gov/}
+
+Jasiewicz, J., Stepinski, T., 2013, Geomorphons - a pattern recognition approach to classification and mapping of landforms, Geomorphology, vol. 182, 147-156. (\doi{doi:10.1016/j.geomorph.2012.11.005})
 }
 \seealso{
 \code{\link[=OSDquery]{OSDquery()}}, \code{\link[=siblings]{siblings()}}

@@ -20,7 +20,7 @@
 #' }
 
 fetchSRI <- function(gdb, ...) {
-
+  stop("US Forest Service 'Ecoshare' Region 6 Soil Resource Inventory datasets have moved to <https://www.fs.usda.gov/main/ecoshare/datasets/soils>. Please use the alternative data sources available there. `fetchSRI()` and related functions will be removed in the next minor release.", call. = FALSE)
   gdb <- .get_SRI_gdb_names(gdb)
 
   sapply(gdb, function(x) {
@@ -87,7 +87,8 @@ fetchSRI <- function(gdb, ...) {
 #'
 #'
 get_SRI <- function(gdb, layers = 'MapUnits', quiet = FALSE, simplify = TRUE) {
-
+  stop("US Forest Service 'Ecoshare' Region 6 Soil Resource Inventory datasets have moved to <https://www.fs.usda.gov/main/ecoshare/datasets/soils>. Please use the alternative data sources available there. `fetchSRI()` and related functions will be removed in the next minor release.", call. = FALSE)
+  
   if (!requireNamespace("sf"))
     stop("package `sf` is required", call. = FALSE)
 
@@ -127,7 +128,9 @@ get_SRI <- function(gdb, layers = 'MapUnits', quiet = FALSE, simplify = TRUE) {
 #' }
 #'
 get_SRI_layers <- function(gdb) {
-
+  
+  stop("US Forest Service 'Ecoshare' Region 6 Soil Resource Inventory datasets have moved to <https://www.fs.usda.gov/main/ecoshare/datasets/soils>. Please use the alternative data sources available there. `fetchSRI()` and related functions will be removed in the next minor release.", call. = FALSE)
+  
   if (!requireNamespace("sf"))
     stop("package `sf` is required", call. = FALSE)
 

@@ -7,13 +7,14 @@
 
 #' Get component data from a local NASIS Database
 #'
+#' Functions for getting component and related child table data from local NASIS database.
+#'
 #' @param SS fetch data from the currently loaded selected set in NASIS or from
 #' the entire local database (default: `TRUE`)
 #' @param nullFragsAreZero should surface fragment cover percentages of NULL be interpreted as 0? (default: TRUE)
-#' @param stringsAsFactors deprecated
-#'
-#' @param dsn Optional: path to local SQLite database containing NASIS
-#' table structure; default: `NULL`
+#' @param dsn Optional: path or _DBIConnection_ to
+#'   \link[=NASISLocalDatabase]{local database containing NASIS table
+#'   structure}; default: `NULL`
 #'
 #' @return a `data.frame`
 #' @author Dylan E. Beaudette, Stephen Roecker, and Jay M. Skovlin
@@ -23,30 +24,21 @@
 #'
 #' \donttest{
 #' if(local_NASIS_defined()) {
-#'  # query text note data
 #'  fc <- try(get_component_data_from_NASIS_db())
-#'
-#'  # show structure of component data returned
 #'  str(fc)
 #' }
 #' }
 #'
-#' @export get_component_data_from_NASIS_db
+#' @export 
 get_component_data_from_NASIS_db <- function(SS = TRUE,
                                              nullFragsAreZero = TRUE,
-                                             stringsAsFactors = NULL,
                                              dsn = NULL) {
-  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
-    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
-    NASISDomainsAsFactor(stringsAsFactors)
-  }
   
   q1 <- "SELECT dmudesc, compname, comppct_r, compkind, majcompflag, 
                 localphase, drainagecl, hydricrating, hydgrp, tfact, wei, weg, frostact, corcon, corsteel, 
                 elev_l, elev_r, elev_h, slope_l, slope_r, slope_h, 
                 aspectccwise, aspectrep, aspectcwise, map_l, map_r, map_h, 
                 airtempa_l, airtempa_r, airtempa_h, soiltempa_l, soiltempa_r, soiltempa_h,
-                airtempa_l as maat_l, airtempa_r as maat_r, airtempa_h as maat_h, soiltempa_r as mast_r, 
                 reannualprecip_r, ffd_l, ffd_r, ffd_h,
                 nirrcapcl,  nirrcapscl, nirrcapunit, irrcapcl, irrcapscl, irrcapunit, 
                 taxclname, taxorder, taxsuborder, taxgrtgroup, taxsubgrp, 
@@ -65,7 +57,7 @@ get_component_data_from_NASIS_db <- function(SS = TRUE,
     return(data.frame())
 
   # toggle selected set vs. local DB
-  if (SS == FALSE) {
+  if (isFALSE(SS)) {
     q1 <- gsub(pattern = '_View_1', replacement = '', x = q1, fixed = TRUE)
     q2 <- gsub(pattern = '_View_1', replacement = '', x = q2, fixed = TRUE)
   }
@@ -97,7 +89,7 @@ get_component_data_from_NASIS_db <- function(SS = TRUE,
     
     ldx <- !d$coiid %in% chs$coiidref
     if (!any(ldx)) {
-      chs <- chs[1:nrow(d),]
+      chs <- chs[seq_len(nrow(d)),]
       chs$coiidref <- d$coiid
     } else {
       chs_null <- chs[0, ][1:sum(ldx), ]
@@ -134,7 +126,7 @@ get_component_diaghz_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
   q <- "SELECT coiidref as coiid, featkind, featdept_l, featdept_r, featdept_h, featdepb_l, featdepb_r, featdepb_h, featthick_l, featthick_r, featthick_h FROM codiagfeatures_View_1 AS cdf ORDER BY cdf.coiidref, cdf.featdept_r;"
 
   # toggle selected set vs. local DB
-  if (SS == FALSE) {
+  if (isFALSE(SS)) {
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
   }
 
@@ -160,7 +152,7 @@ get_component_restrictions_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
   q <- "SELECT coiidref as coiid, reskind, resdept_l, resdept_r, resdept_h, resdepb_l, resdepb_r, resdepb_h, resthk_l, resthk_r, resthk_h, reskind, reshard FROM corestrictions_View_1 AS cr ORDER BY cr.coiidref, cr.resdept_r;"
 
   # toggle selected set vs. local DB
-  if(SS == FALSE) {
+  if (isFALSE(SS)) {
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
   }
 
@@ -180,14 +172,8 @@ get_component_restrictions_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
 get_component_correlation_data_from_NASIS_db <- function(SS = TRUE,
                                                          dropAdditional = TRUE,
                                                          dropNotRepresentative = TRUE,
-                                                         stringsAsFactors = NULL,
                                                          dsn = NULL) {
 
-  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
-    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
-    NASISDomainsAsFactor(stringsAsFactors)
-  }
-  
   q <- "SELECT lmapunitiid, lmapunitiid AS mukey, mu.muiid, musym, nationalmusym, mu.muname, mukind, mutype, mustatus, muacres, farmlndcl, repdmu, dmuiid, areasymbol, areaname, ssastatus, cordate
 
   FROM  mapunit_View_1 AS mu
@@ -206,17 +192,16 @@ get_component_correlation_data_from_NASIS_db <- function(SS = TRUE,
     return(data.frame())
 
   # toggle selected set vs. local DB
-  if (SS == FALSE) {
+  if (isFALSE(SS)) {
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
   }
 
   d <- dbQueryNASIS(channel, q)
 
-  ## TODO: is this a good idea?
   # test for no data
-  if(nrow(d) == 0)
+  if (nrow(d) == 0)
     warning('there are no records in your selected set!', call. = FALSE)
-
+  
   # recode metadata domains
   d <- uncode(d, dsn = dsn)
 
@@ -276,7 +261,7 @@ get_component_cogeomorph_data_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
     return(data.frame())
 
   # toggle selected set vs. local DB
-  if (SS == FALSE) {
+  if (isFALSE(SS)) {
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
   }
 
@@ -310,7 +295,7 @@ get_component_cogeomorph_data_from_NASIS_db2 <- function(SS = TRUE, dsn = NULL) 
     return(data.frame())
 
   # toggle selected set vs. local DB
-  if (SS == FALSE) {
+  if (isFALSE(SS)) {
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
   }
 
@@ -323,14 +308,7 @@ get_component_cogeomorph_data_from_NASIS_db2 <- function(SS = TRUE, dsn = NULL) 
 # get copm for each component
 #' @export
 #' @rdname get_component_data_from_NASIS_db
-get_component_copm_data_from_NASIS_db <- function(SS = TRUE,
-                                                  stringsAsFactors = NULL,
-                                                  dsn = NULL) {
-
-  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
-    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
-    NASISDomainsAsFactor(stringsAsFactors)
-  }
+get_component_copm_data_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
   
   q <- "SELECT co.coiid as coiid, cpm.seqnum as seqnum, pmorder, pmdept_r, pmdepb_r, pmmodifier, pmgenmod, pmkind, pmorigin
 
@@ -347,7 +325,7 @@ get_component_copm_data_from_NASIS_db <- function(SS = TRUE,
     return(data.frame())
 
   # toggle selected set vs. local DB
-  if (SS == FALSE) {
+  if (isFALSE(SS)) {
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
   }
 
@@ -363,14 +341,7 @@ get_component_copm_data_from_NASIS_db <- function(SS = TRUE,
 # get ESD information for each component
 #' @export
 #' @rdname get_component_data_from_NASIS_db
-get_component_esd_data_from_NASIS_db <- function(SS = TRUE,
-                                                 stringsAsFactors = NULL,
-                                                 dsn = NULL) {
-
-  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
-    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
-    NASISDomainsAsFactor(stringsAsFactors)
-  }
+get_component_esd_data_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
   
   q <- "SELECT coiidref as coiid, ecositeid, ecositenm,
   ecositetype, ecositemlra, ecositelru, ecositenumber, ecositestate, repecosite, ecositepnm, ecositesnm, ecositetnm, ecositeidnew, ecositelrrnew,
@@ -388,7 +359,7 @@ get_component_esd_data_from_NASIS_db <- function(SS = TRUE,
     return(data.frame())
 
   # toggle selected set vs. local DB
-  if (SS == FALSE) {
+  if (isFALSE(SS)) {
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
   }
 
@@ -409,7 +380,6 @@ get_component_esd_data_from_NASIS_db <- function(SS = TRUE,
   return(d)
 }
 
-## TODO: convert any multiple entries into a comma delimited string
 # get OtherVeg information for each component
 #' @export
 #' @rdname get_component_data_from_NASIS_db
@@ -428,7 +398,7 @@ get_component_otherveg_data_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
     return(data.frame())
 
   # toggle selected set vs. local DB
-  if (SS == FALSE) {
+  if (isFALSE(SS)) {
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
   }
 
@@ -459,9 +429,9 @@ get_component_otherveg_data_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
 #' the entire local database (default: TRUE)
 #' @param fill should missing "month" rows in the comonth table be filled with
 #' NA (FALSE)
-#' @param dsn Optional: path to local SQLite database containing NASIS
-#' table structure; default: `NULL`
-#' @param stringsAsFactors deprecated
+#' @param dsn Optional: path or _DBIConnection_ to
+#'   \link[=NASISLocalDatabase]{local database containing NASIS table
+#'   structure}; default: `NULL`
 #' @return A list with the results.
 #' @author Stephen Roecker
 #' @seealso \code{\link{fetchNASIS}}
@@ -481,13 +451,10 @@ get_component_otherveg_data_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
 #' @export get_comonth_from_NASIS_db
 get_comonth_from_NASIS_db <- function(SS = TRUE,
                                       fill = FALSE,
-                                      stringsAsFactors = NULL,
                                       dsn = NULL) {
-  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
-    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
-    NASISDomainsAsFactor(stringsAsFactors)
-  }
 
+  # TODO: clean up custom factors to utilize domains
+  
   q <- "SELECT coiidref AS coiid, month, flodfreqcl, floddurcl, pondfreqcl, ponddurcl, ponddep_l, ponddep_r, ponddep_h, dlyavgprecip_l, dlyavgprecip_r, dlyavgprecip_h, comonthiid
   FROM comonth_View_1 AS comonth;"
 
@@ -497,7 +464,7 @@ get_comonth_from_NASIS_db <- function(SS = TRUE,
     return(data.frame())
 
   # toggle selected set vs. local DB
-  if (SS == FALSE) {
+  if (isFALSE(SS)) {
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
   }
 
@@ -519,7 +486,7 @@ get_comonth_from_NASIS_db <- function(SS = TRUE,
       return(data.frame())
 
     # toggle selected set vs. local DB
-    if (SS == FALSE) {
+    if (isFALSE(SS)) {
       q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
     }
 
@@ -589,7 +556,7 @@ get_comonth_from_NASIS_db <- function(SS = TRUE,
 #' @rdname get_component_data_from_NASIS_db
 get_copedon_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
 
-  q <- "SELECT coiidref as coiid, peiidref as peiid, upedonid as pedon_id, rvindicator as representative
+  q <- "SELECT coiidref as coiid, peiidref as peiid, upedonid, rvindicator
 
   FROM copedon_View_1 copedon
 
@@ -602,7 +569,7 @@ get_copedon_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
     return(data.frame())
 
   # toggle selected set vs. local DB
-  if (SS == FALSE) {
+  if (isFALSE(SS)) {
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
   }
 
@@ -610,7 +577,7 @@ get_copedon_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
   d <- dbQueryNASIS(channel, q)
 
   # missing pedon ID suggests records not in the selected set or local database
-  if(nrow(d) > 0 & any(is.na(d$pedon_id))) {
+  if (nrow(d) > 0 && anyNA(d$upedonid)) {
     message('some linked pedons not in selected set or local database')
   }
 
@@ -648,7 +615,7 @@ get_component_horizon_data_from_NASIS_db <- function(SS = TRUE,
     return(data.frame())
 
   # toggle selected set vs. local DB
-  if (SS == FALSE) {
+  if (isFALSE(SS)) {
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
     q2 <- gsub(pattern = '_View_1', replacement = '', x = q2, fixed = TRUE)
     q3 <- gsub(pattern = '_View_1', replacement = '', x = q3, fixed = TRUE)
@@ -658,7 +625,7 @@ get_component_horizon_data_from_NASIS_db <- function(SS = TRUE,
   d <- dbQueryNASIS(channel, q, close = FALSE)
 
   # remove records what are missing horizon data
-  if (fill == FALSE) {
+  if (isFALSE(fill)) {
     d <- d[!is.na(d$chiid), ]
   }
 
@@ -673,7 +640,7 @@ get_component_horizon_data_from_NASIS_db <- function(SS = TRUE,
       nullFragsAreZero = nullFragsAreZero
     )
     if (sum(complete.cases(chf)) == 0) {
-      chf <- chf[1:nrow(d),]
+      chf <- chf[seq_len(nrow(d)),]
       chf$chiidref <- d$chiid
     } else {
       ldx <- !d$chiid %in% chf$chiidref
@@ -700,7 +667,7 @@ get_component_horizon_data_from_NASIS_db <- function(SS = TRUE,
     
     # handle NULL result
     if (sum(complete.cases(cha)) == 0) {
-      cha <- cha[1:nrow(d),]
+      cha <- cha[seq_len(nrow(d)),]
       cha$chiidref <- d$chiid
     } else {
       ldx <- !d$chiid %in% cha$chiidref

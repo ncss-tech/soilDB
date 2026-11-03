@@ -4,12 +4,7 @@
 \alias{get_extended_data_from_NASIS_db}
 \title{Get accessory tables and summaries from a local NASIS Database}
 \usage{
-get_extended_data_from_NASIS_db(
-  SS = TRUE,
-  nullFragsAreZero = TRUE,
-  stringsAsFactors = NULL,
-  dsn = NULL
-)
+get_extended_data_from_NASIS_db(SS = TRUE, nullFragsAreZero = TRUE, dsn = NULL)
 }
 \arguments{
 \item{SS}{get data from the currently loaded Selected Set in NASIS or from
@@ -17,8 +12,6 @@ the entire local database (default: \code{TRUE})}
 
 \item{nullFragsAreZero}{should fragment volumes of NULL be interpreted as 0?
 (default: TRUE), see details}
-
-\item{stringsAsFactors}{deprecated}
 
 \item{dsn}{Optional: path to local SQLite database containing NASIS
 table structure; default: \code{NULL}}

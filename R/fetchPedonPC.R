@@ -23,9 +23,13 @@
 #' @export fetchPedonPC
 fetchPedonPC <- function(dsn) {
 
-  # not in parity with NASIS functions
+  # warn about parity with NASIS functions
   warning("Loading data from PedonPC will return slightly different data structures than fetchNASIS().", call. = FALSE)
-
+  
+  if (!requireNamespace("aqp")) {
+    stop("package 'aqp' is required", call. = FALSE)
+  }
+  
 	# load data in pieces
 	site_data <- get_site_data_from_pedon_db(dsn)
 	hz_data <- get_hz_data_from_pedon_db(dsn)
@@ -66,22 +70,22 @@ fetchPedonPC <- function(dsn) {
     stop("no horizon data in PedonPC database", call. = FALSE)
 	
 	# upgrade to SoilProfilecollection
-	depths(h) <- peiid ~ hzdept + hzdepb
+	aqp::depths(h) <- peiid ~ hzdept + hzdepb
 
 	## TODO: this is slow
 	# move pedon_id into @site, this will be used to join full table of site data
-	site(h) <- ~ pedon_id
+	aqp::site(h) <- ~ pedon_id
 
 	## TODO: this will fail in the presence of duplicates
 	# add site data to object
 	site_data$pedon_id <- NULL # remove 'pedon_id' column from site_data
-	site(h) <- site_data # left-join via peiid
+	aqp::site(h) <- site_data # left-join via peiid
 
 	# load diagnostic horizons into @diagnostic
-	diagnostic_hz(h) <- extended_data$diagnostic
+	aqp::diagnostic_hz(h) <- extended_data$diagnostic
 
 	# add diagnostic boolean data into @site
-	site(h) <- extended_data$diagHzBoolean
+	aqp::site(h) <- extended_data$diagHzBoolean
 
 	### TODO: consider moving this into the extended data function ###
 	# load best-guess optimal records from taxhistory
@@ -94,7 +98,7 @@ fetchPedonPC <- function(dsn) {
 	ed.tax <- data.table::as.data.table(extended_data$taxhistory)
 	best.tax.data <- ed.tax[, .pickBestTaxHistory(.SD),
 	                        by = list(peiid = ed.tax$peiid)]
-	site(h) <- as.data.frame(best.tax.data)
+	aqp::site(h) <- as.data.frame(best.tax.data)
 
   # join-in landform string
 	ed.lf <- data.table::as.data.table(extended_data$geomorph)
@@ -102,10 +106,10 @@ fetchPedonPC <- function(dsn) {
 	            by = list(peiid = ed.lf$peiid)]
 
 	if (ncol(lf) > 1)
-	  site(h) <- as.data.frame(lf[,c("peiid","landform_string")])
+	  aqp::site(h) <- as.data.frame(lf[,c("peiid","landform_string")])
 
   # set PedonPC/NASIS-specific horizon identifier
-  hzidname(h) <- 'phiid'
+  aqp::hzidname(h) <- 'phiid'
 
 	# 7. save and mention bad pedons
 	assign('bad.pedon.ids', value=bad.pedon.ids, envir=get_soilDB_env())

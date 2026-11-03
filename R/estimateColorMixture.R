@@ -13,16 +13,19 @@
 #'
 #' @param x data.frame, typically from NASIS containing at least CIE LAB ('L', 'A', 'B') and some kind of weight
 #' 
-#' @param wt  fractional weights, usually area of hz face
+#' @param wt numeric. fractional weights, usually area of horizon face
 #' 
 #' @param backTransform logical, should the mixed sRGB representation of soil color be transformed to closest Munsell chips? This is performed by [aqp::col2Munsell()] default: `FALSE`
 #'
 #' @return A data.frame containing estimated color mixture
 #' @export estimateColorMixture
-#' 
-#' @importFrom aqp col2Munsell
-#' 
 estimateColorMixture <- function(x, wt = 'pct', backTransform = FALSE) {
+  
+  # .Deprecated(msg = paste0("estimateColorMixture() is deprecated, please use aqp::mixMunsell() instead."))
+
+  if (!requireNamespace("aqp")) {
+    stop("package 'aqp' is required", call. = FALSE)
+  }
   
   ## TODO: account for `backTransform == TRUE`, different return structure
   
@@ -43,7 +46,6 @@ estimateColorMixture <- function(x, wt = 'pct', backTransform = FALSE) {
     x[[wt]][which(missing.wts)] <- est.wt
   }
   
-  
   ## consider weighted geometric mean:
   ## https://arxiv.org/ftp/arxiv/papers/1710/1710.06364.pdf
   ## http://en.wikipedia.org/wiki/Weighted_geometric_mean
@@ -57,22 +59,22 @@ estimateColorMixture <- function(x, wt = 'pct', backTransform = FALSE) {
   
   # back to sRGB
   mixed.color <- data.frame(
-    convertColor(
-      cbind(L, A, B), 
-      from = 'Lab', 
-      to = 'sRGB', 
-      from.ref.white = 'D65', 
-      to.ref.white = 'D65')
+    grDevices::convertColor(
+      cbind(L, A, B),
+      from = 'Lab',
+      to = 'sRGB',
+      from.ref.white = 'D65',
+      to.ref.white = 'D65'
+    )
   )
   names(mixed.color) <- c('r', 'g', 'b')
   
   # optionally back-transform mixture to Munsell
   # performance penalty due to color distance eval against entire Munsell library
-  if(backTransform) {
-    
+  if (backTransform) {
     # convert sRGB -> Munsell
     # requires >= aqp 2.0.2
-    m <- col2Munsell(mixed.color[, c('r', 'g', 'b')])
+    m <- aqp::col2Munsell(mixed.color[, c('r', 'g', 'b')])
     
     # adjust names to match NASIS
     names(m) <- c("colorhue", "colorvalue", "colorchroma", "sigma")
@@ -81,8 +83,5 @@ estimateColorMixture <- function(x, wt = 'pct', backTransform = FALSE) {
     mixed.color <- cbind(mixed.color, m)
   }
   
-  
-  # done
   return(mixed.color)
-  
 }

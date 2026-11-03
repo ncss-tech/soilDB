@@ -2,13 +2,9 @@
 .fetchNASIS_report <- function(url = NULL,
                                rmHzErrors       = FALSE,
                                nullFragsAreZero = TRUE,
-                               soilColorState   = "moist",
-                               stringsAsFactors = NULL
-) {
-  
-  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
-    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
-    NASISDomainsAsFactor(stringsAsFactors)
+                               soilColorState   = "moist") {
+  if (!requireNamespace("aqp")) {
+    stop("package 'aqp' is required", call. = FALSE)
   }
   
   tf <- "C:/ProgramData/USDA/NASIS/Temp/fetchNASIS.txt"
@@ -37,8 +33,8 @@
   if(all(be$diff == 1))
     stop("empty result set -- check parameters used to run `fetchNASIS` export report.", call.=FALSE)
   
-  split(be, be$table) ->.;
-  lapply(., function(x) {
+  .<- split(be, be$table);
+  .<- lapply(., function(x) {
     if (x$diff > 1) {
       x2 <- temp[seq(x$begin + 1, x$end - 1)]
       # remove "\" from lines and blank lines e.g. ||
@@ -54,7 +50,7 @@
       x2[idx] <- lapply(x2[idx], function(x) ifelse(x == "", NA, x))
       return(x2)
     } else return(NULL)
-  }) -> .;
+  });
   names(.) <- c("pediagfeatures", "phcolor", "phorizon", "site")
   
   
@@ -62,7 +58,6 @@
   if (!is.null(.$phcolor)) {
     .$phcolor <- .color(.$phcolor, soilColorState = soilColorState)
   }
-  
   
   # fix problems
   .$site = .fix_site_problems(.$site, nullFragsAreZero = nullFragsAreZero)
@@ -82,30 +77,41 @@
     
     # upgrade to SoilProfilecollection
     h <- .$phorizon
-    depths(h) <- peiid ~ hzdept + hzdepb
+    aqp::depths(h) <- peiid ~ hzdept + hzdepb
     
     # set optional hz designation and texture slots
-    hzdesgnname(h) <- "hzname"
-    hztexclname(h) <- "texture"
+    aqp::hzdesgnname(h) <- "hzname"
+    aqp::hztexclname(h) <- "texture"
     
-    site(h) <- .$site
+    aqp::site(h) <- .$site
     
-    if (!is.null(.$phcolor)) horizons(h) <- .$phcolor
+    if (!is.null(.$phcolor)) {
+      aqp::horizons(h) <- .$phcolor
+    }
     
   } else {
     h <- aqp::SoilProfileCollection(
-      site = .$site
+      idcol = "peiid",
+      site = .$site,
+      horizons = data.frame(
+        peiid = .$site$peiid,
+        hzdept = NA_integer_,
+        hzdepb = NA_integer_,
+        hzID = seq_len(nrow(.$site))
+      ),
+      depthcols = c("hzdept", "hzdepb"), 
+      hzidcol = "hzID"
     )
   }
-  
   
   # tidy .$pediagfeatures
   pediagfeatures <- .$pediagfeatures
   pediagfeatures[-1] <- lapply(pediagfeatures[-1], function(x) {
-    ifelse(!is.na(x), TRUE, FALSE)
+    !is.na(x)
   })
+  
   # pediagfeatures[!is.na(.$pediagfeatures)] <- TRUE
-  site(h) <- pediagfeatures
+  aqp::site(h) <- pediagfeatures
   
   if (!is.null(.$pediagfeatures)) {
     vars <- names(.$pediagfeatures)[-1]
@@ -124,19 +130,17 @@
     pediagfeatures <- cbind(pediagfeatures[c("peiid", "featkind")], featdep)
     pediagfeatures$featkind <- gsub("\\.", " ", pediagfeatures$featkind)
     
-    diagnostic_hz(h) <- pediagfeatures
+    aqp::diagnostic_hz(h) <- pediagfeatures
   }
   
-  
-  
   # set metadata
-  m <- metadata(h)
+  m <- aqp::metadata(h)
   m$origin <- "NASIS pedons (export)"
   m$created <- Sys.time()
-  metadata(h) <- m
+  aqp::metadata(h) <- m
   
   # set NASIS-specific horizon identifier
-  tryCatch(hzidname(h) <- 'phiid', error = function(e) {
+  tryCatch(aqp::hzidname(h) <- 'phiid', error = function(e) {
     if(grepl(e$message, pattern="not unique$")) {
       if(!rmHzErrors) {
         # if rmHzErrors = FALSE, keep unique integer assigned ID to all records automatically
@@ -155,30 +159,23 @@
 
 # temp <- .fetchNASISTemp()
 
-.get_site_from_NASISReport <- function(url = NULL, nullFragsAreZero = TRUE, stringsAsFactors = NULL
-) {
+.get_site_from_NASISReport <- function(url = NULL, nullFragsAreZero = TRUE) {
   
-  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
-    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
-    NASISDomainsAsFactor(stringsAsFactors)
-  }
-  
-  tf = "C:/ProgramData/USDA/NASIS/Temp/get_site_from_NASIS.txt"
-  if (!is.null(url)) tf = url
+  tf <- "C:/ProgramData/USDA/NASIS/Temp/get_site_from_NASIS.txt"
+  if (!is.null(url)) tf <- url
   
   # check if temp file exists
   if (!file.exists(tf) & is.null(url)) {
     stop("the temp file ", tf, "\n doesn't exist, please run the fetchNASIS report from NASIS")
   }
   
-  
   # check to see if data is coming from fetchNASIS or get_site
   temp <- readLines(tf)
-  begin = grep("@begin get_site_from_NASIS", temp)
+  begin <- grep("@begin get_site_from_NASIS", temp)
   
   if (length(begin) > 0) {
     
-    end = grep("@end get_site_from_NASIS", temp)
+    end <- grep("@end get_site_from_NASIS", temp)
     # check to see if there is any data
     diff.idx <- end - begin
     
@@ -192,17 +189,17 @@
   # aggregate NASIS returns empty rows
   # NASIS text reports return empty columns
   # remove
-  temp = temp[!is.na(temp$siteiid), - ncol(temp)]
-  idx  = names(temp) %in% c("pmkind", "pmorigin")
+  temp <- temp[!is.na(temp$siteiid), - ncol(temp)]
+  idx <- names(temp) %in% c("pmkind", "pmorigin")
   temp[!idx] = uncode(temp[!idx])
-  idx  = sapply(temp, is.character)
+  idx <- sapply(temp, is.character)
   temp[idx] = lapply(temp[idx], function(x) ifelse(x == "", NA, x))
   # temp = within(temp, {
   #   obsdate   = as.Date(as.character(obsdate))
   #   classdate = as.Date(as.character(classdate))
   # })
   
-  temp = .fix_site_problems(temp, nullFragsAreZero = nullFragsAreZero)
+  temp <- .fix_site_problems(temp, nullFragsAreZero = nullFragsAreZero)
   
   # impute missing x_std & y_std if utm are present
   # idx <- with(temp, ! complete.cases(x_std, y_std) & complete.cases(utmzone, utmeasting, utmnorthing, horizdatnm))
@@ -212,12 +209,7 @@
 
 
 
-.get_pediagfeatures_from_NASISTemp <- function(stringsAsFactors = NULL) {
-  
-  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
-    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
-    NASISDomainsAsFactor(stringsAsFactors)
-  }
+.get_pediagfeatures_from_NASISTemp <- function() {
   
   tf <- "C:/ProgramData/USDA/NASIS/Temp/get_pediagfeatures_from_NASIS.txt"
   
@@ -226,7 +218,7 @@
     stop("the temp file ", tf, "\n doesn't exist, please run the get_pediagfeatures_from_NASIS report from NASIS")
   }
   
-  temp = read.csv(
+  temp <- read.csv(
     textConnection(
       readLines(tf)
     ),
@@ -236,8 +228,8 @@
   # aggregate NASIS returns empty rows
   # NASIS text reports return empty columns
   # remove
-  temp = temp[!is.na(temp$peiid), - ncol(temp)]
-  temp = uncode(temp)
+  temp <- temp[!is.na(temp$peiid), - ncol(temp)]
+  temp <- uncode(temp)
   # temp = within(temp, {
   #   obsdate   = as.Date(as.character(obsdate))
   #   classdate = as.Date(as.character(classdate))
@@ -315,7 +307,7 @@
   )
   
   if (length(missing.lower.depth.idx) > 0) {
-    message(paste('replacing missing lower horizon depths with top depth + 1cm ... [', length(missing.lower.depth.idx), ' horizons]', sep=''))
+    message(paste0('replacing missing lower horizon depths with top depth + 1cm ... [', length(missing.lower.depth.idx), ' horizons]'))
     
     # make edit
     hz_data[[hzdepb]][missing.lower.depth.idx] <- hz_data[[hzdept]][missing.lower.depth.idx] + 1
@@ -332,7 +324,7 @@
   )
   # make the edit
   if (length(top.eq.bottom.idx) > 0) {
-    message(paste('top/bottom depths equal, adding 1cm to bottom depth ... [', length(top.eq.bottom.idx), ' horizons]', sep = '')
+    message(paste0('top/bottom depths equal, adding 1cm to bottom depth ... [', length(top.eq.bottom.idx), ' horizons]')
     )
     hz_data[[hzdepb]][top.eq.bottom.idx] <- hz_data[[hzdepb]][top.eq.bottom.idx] + 1
   }
@@ -340,9 +332,9 @@
   h.test <- aqp::checkHzDepthLogic(hz_data, c('hzdept', 'hzdepb'), idname = pedon_id, fast = TRUE)
   
   # which are the good (valid) ones?
-  good.ids      <- as.character(h.test[[pedon_id]][which(h.test$valid)])
-  bad.ids       <- as.character(h.test[[pedon_id]][which(!h.test$valid)])
-  bad.horizons  <- hz_data[which(!h.test$valid), c(1:4,6,7)]
+  good.ids <- as.character(h.test[[pedon_id]][which(h.test$valid)])
+  bad.ids <- as.character(h.test[[pedon_id]][which(!h.test$valid)])
+  bad.horizons <- hz_data[which(!h.test$valid), c(1:4, 6, 7)]
   bad.pedon.ids <- site_data[[pedon_id]][which(site_data[[pedon_id]] %in% bad.ids)]
   
   # optionally filter pedons WITH NO horizonation inconsistencies
@@ -362,10 +354,12 @@
   
   #4 - optionally convert NA fragvol to 0
   if (nullFragsAreZero) {
-    
-    idx <- grep("fragvol|frags_|gravel|cobbles|stones|boulders|channers|unspecified", names(hz_data))
+    idx <- grep(
+      "fragvol|frags_|gravel|cobbles|stones|boulders|channers|unspecified",
+      names(hz_data)
+    )
     vars <- names(hz_data)[idx]
-    hz_data[idx] <-lapply(hz_data[idx], function(x) {
+    hz_data[idx] <- lapply(hz_data[idx], function(x) {
       ifelse(is.na(x), 0, x)
     })
   }
@@ -378,7 +372,7 @@
 
 .fix_site_problems <- function(site_data, nullFragsAreZero = nullFragsAreZero) {
   
-  if (nullFragsAreZero == TRUE) {
+  if (isTRUE(nullFragsAreZero)) {
     idx <- grep("fragvol|frags_|gravel|cobbles|stones|boulders|channers|unspecified", names(site_data))
     vars <- names(site_data)[idx]
     site_data[idx] <-lapply(site_data[idx], function(x) {

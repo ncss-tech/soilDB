@@ -13,17 +13,19 @@
 #' @export
 get_ecosite_history_from_NASIS_db <- function(best = TRUE, SS = TRUE, es_classifier = NULL, dsn = NULL) {
   
+  # TODO: review conflicts with petaxhistory.classifier
+   
   .SD <- NULL
   
   # ecological site
   q.ecosite <- "SELECT siteiidref AS siteiid, ecositeid, ecositenm, ecositecorrdate, seh.recwlupdated,
-                       classifier As es_classifier, classifier AS [siteecositehistory.classifier]
+                       classifier AS [siteecositehistory.classifier]
   FROM siteecositehistory_View_1 AS seh
   LEFT OUTER JOIN ecologicalsite AS es ON es.ecositeiid=seh.ecositeiidref
   ORDER BY siteiid;"
   
   # toggle selected set vs. local DB
-  if (SS == FALSE) {
+  if (isFALSE(SS)) {
     q.ecosite <- gsub(pattern = '_View_1', replacement = '', x = q.ecosite, fixed = TRUE)
   }
   

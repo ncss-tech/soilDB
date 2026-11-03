@@ -2,41 +2,89 @@
 % Please edit documentation in R/ISSR800.R
 \name{ISSR800.wcs}
 \alias{ISSR800.wcs}
-\title{Get 800m gridded soil properties from SoilWeb ISSR-800 Web Coverage Service (WCS)}
+\title{Get 800m gridded soil properties from SoilWeb ISSR800 Web Coverage Service (WCS)}
 \usage{
 ISSR800.wcs(aoi, var, res = 800, quiet = FALSE)
 }
 \arguments{
-\item{aoi}{area of interest (AOI) defined using a \code{Spatial*}, \code{RasterLayer}, \code{sf}, \code{sfc} or \code{bbox} object, OR a \code{list}, see details}
+\item{aoi}{area of interest (AOI) defined using a terra pakcage objects (\code{SpatRaster}, \code{SpatVector}, \code{ext}), sf objects (\code{sf}, \code{sfc}), raster package object (\code{RasterLayer}, \code{bbox}), sp package \verb{Spatial*}, or a \code{list}, see details}
 
 \item{var}{ISSR-800 grid name (case insensitive), see details}
 
-\item{res}{grid resolution, units of meters. The native resolution of ISSR-800 grids (this WCS) is 800m.}
+\item{res}{grid resolution, units of meters. The native resolution of ISSR800 grids (this WCS) is 800m.}
 
 \item{quiet}{logical, passed to \code{curl::curl_download} to enable / suppress URL and progress bar for download.}
 }
 \value{
-A SpatRaster (or RasterLayer) object containing indexed map unit keys and associated raster attribute table or a try-error if request fails. By default, spatial classes from the \code{terra} package are returned. If the input object class is from the \code{raster} or \code{sp} packages a RasterLayer is returned.
+\code{SpatRaster} (or \code{RasterLayer}) object, or \code{try-error} if the WCS request fails.
 }
 \description{
 Intermediate-scale gridded (800m) soil property and interpretation maps from aggregated SSURGO and STATSGO data. These maps were developed by USDA-NRCS-SPSD staff in collaboration with UCD-LAWR. Originally for educational use and \href{https://casoilresource.lawr.ucdavis.edu/soil-properties/}{interactive thematic maps}, these data are a suitable alternative to gridded STATSGO-derived thematic soil maps. The full size grids can be \href{https://casoilresource.lawr.ucdavis.edu/soil-properties/download.php}{downloaded here}.
 }
 \details{
-\code{aoi} should be specified as a \code{SpatRaster}, \code{Spatial*}, \code{RasterLayer}, \code{SpatRaster}/\code{SpatVector}, \code{sf}, \code{sfc}, or \code{bbox} object or a \code{list} containing:
-
-\describe{
-\item{\code{aoi}}{bounding-box specified as (xmin, ymin, xmax, ymax) e.g. c(-114.16, 47.65, -114.08, 47.68)}
-\item{\code{crs}}{coordinate reference system of BBOX, e.g. 'OGC:CRS84' (EPSG:4326, WGS84 Longitude/Latitude)}
+When specified as a \code{list}, \code{aoi} should contain:
+\itemize{
+\item \code{aoi}: bounding-box specified as (xmin, ymin, xmax, ymax) e.g. c(-114.16, 47.65, -114.08, 47.68)
+\item \code{crs}: coordinate reference system of BBOX, e.g. 'OGC:CRS84' (EPSG:4326, WGS84 Longitude/Latitude)
 }
 
-The WCS query is parameterized using a rectangular extent derived from the above AOI specification, after conversion to the native CRS (EPSG:5070) of the ISSR-800 grids.
+The WCS query is parameterized using a rectangular extent derived from the above AOI specification, after conversion to the native CRS (EPSG:5070) of the ISSR800 grids.
 
-Variables available from this WCS can be queried using \code{WCS_details(wcs = 'ISSR800')}.
+Variables available from this WCS can be queried using \code{WCS_details(wcs = 'ISSR800')}.\tabular{lll}{
+   var \tab crs \tab description \cr
+   caco3_kg_sq_m \tab EPSG:5070 \tab Total CaCO3 (kg/m^2) \cr
+   cec_025cm \tab EPSG:5070 \tab CEC at pH 7 0-25cm depth (cmol\link{+}/kg) \cr
+   cec_050cm \tab EPSG:5070 \tab CEC at pH 7 0-50cm depth (cmol\link{+}/kg) \cr
+   cec_05cm \tab EPSG:5070 \tab CEC at pH 7 0-5cm depth (cmol\link{+}/kg) \cr
+   clay_025cm \tab EPSG:5070 \tab clay percent 0-25cm depth \cr
+   clay_05cm \tab EPSG:5070 \tab clay percent 0-5cm depth \cr
+   clay_2550cm \tab EPSG:5070 \tab clay percent 25-50cm depth \cr
+   clay_3060cm \tab EPSG:5070 \tab clay percent 30-60cm depth \cr
+   drainage_class \tab EPSG:5070 \tab Soil Drainage Class \cr
+   ec_025cm \tab EPSG:5070 \tab EC 0-25cm depth (dS/m) \cr
+   ec_05cm \tab EPSG:5070 \tab EC 0-5cm depth (dS/m) \cr
+   greatgroup \tab EPSG:5070 \tab Soil Taxonomy: Greatgroup \cr
+   hydgrp \tab EPSG:5070 \tab Hydrologic Soil Group \cr
+   lcc_irrigated \tab EPSG:5070 \tab Land Capability Class, irrigated \cr
+   lcc_nonirrigated \tab EPSG:5070 \tab Land Capability Class, non-irrigated \cr
+   n_components \tab EPSG:5070 \tab Number of components per grid cell \cr
+   n_polygons \tab EPSG:5070 \tab Number of polygons per grid cell \cr
+   om_kg_sq_m \tab EPSG:5070 \tab Total Soil Organic Matter (kg/m^2) \cr
+   paws \tab EPSG:5070 \tab total plant available water storage (cm water) \cr
+   paws_025cm \tab EPSG:5070 \tab plant available water storage 0-25cm depth (cm water) \cr
+   paws_050cm \tab EPSG:5070 \tab plant available water storage 0-50cm depth (cm water) \cr
+   ph_025cm \tab EPSG:5070 \tab pH 1:1 H2O 0-25cm depth \cr
+   ph_05cm \tab EPSG:5070 \tab pH 1:1 H2O 0-5cm depth \cr
+   ph_2550cm \tab EPSG:5070 \tab pH 1:1 H2O 25-50cm depth \cr
+   ph_3060cm \tab EPSG:5070 \tab pH 1:1 H2O 30-60cm depth \cr
+   sand_025cm \tab EPSG:5070 \tab sand percent 0-25cm depth \cr
+   sand_05cm \tab EPSG:5070 \tab sand percent 0-5cm depth \cr
+   sand_2550cm \tab EPSG:5070 \tab sand percent 25-50cm depth \cr
+   sand_3060cm \tab EPSG:5070 \tab sand percent 30-60cm depth \cr
+   sar \tab EPSG:5070 \tab SAR, entire profile \cr
+   series_name \tab EPSG:5070 \tab Soil Series Name \cr
+   silt_025cm \tab EPSG:5070 \tab silt percent 0-25cm depth \cr
+   silt_05cm \tab EPSG:5070 \tab silt percent 0-5cm depth \cr
+   silt_2550cm \tab EPSG:5070 \tab silt percent 25-50cm depth \cr
+   silt_3060cm \tab EPSG:5070 \tab silt percent 30-60cm depth \cr
+   soilorder \tab EPSG:5070 \tab Soil Taxonomy: Soil Order \cr
+   ssurgo_pct \tab EPSG:5070 \tab SSURGO data available, fraction of 800x800m grid cell \cr
+   statsgo_pct \tab EPSG:5070 \tab STATSGO data available, fraction of 800x800m grid cell \cr
+   str \tab EPSG:5070 \tab Soil Temperature Regime \cr
+   suborder \tab EPSG:5070 \tab Soil Taxonomy: Suborder \cr
+   survey_type \tab EPSG:5070 \tab Soil survey data source \cr
+   texture_025cm \tab EPSG:5070 \tab Soil Texture Class, 0-25cm \cr
+   texture_05cm \tab EPSG:5070 \tab Soil Texture Class, 0-5cm \cr
+   texture_2550cm \tab EPSG:5070 \tab Soil Texture Class, 25-50cm \cr
+   weg \tab EPSG:5070 \tab Wind Erodibility Group \cr
+   wei \tab EPSG:5070 \tab Wind Erodibility Index \cr
+}
 }
 \note{
 There are still some issues to be resolved related to the encoding of NA Variables with a natural zero (e.g. SAR) have 0 set to NA.
 }
 \examples{
+
 \dontrun{
 library(terra)
 

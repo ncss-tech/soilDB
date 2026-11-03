@@ -5,6 +5,8 @@
 #             * annual.climate is now a data.frame padded with NA when series is outside of CONUS
 #             * eff_class added to horizon data
 
+# 2026-01-10: API change, geomorphon proportions added to 'extended' request
+
 
 ## tabulate the number of records within each geomorphic table
 ## there could be some cases where there are no records, resulting in FALSE
@@ -48,10 +50,6 @@
 }
 
 
-
-## TODO: consider adding an argument for "growing" very thin bottom R|Cr|Cd horizons
-# https://github.com/ncss-tech/aqp/issues/173
-
 #' @title Get Official Series Descriptions and summaries from SoilWeb API
 #'
 #' @description This function fetches a variety of data associated with named soil series, extracted from the USDA-NRCS Official Series Description text files and detailed soil survey (SSURGO). These data are updated quarterly and made available via SoilWeb. Set `extended = TRUE` and see the `soilweb.metadata` list element for information on when the source data were last updated. 
@@ -88,6 +86,7 @@
 #'
 #'   \item{pmkind}{empirical probabilities for parent material kind, derived from the current SSURGO snapshot}
 #'   \item{pmorigin}{empirical probabilities for parent material origin, derived from the current SSURGO snapshot}
+#'   \item{geomorphons}{geomorphons landform classification (CONUS only), derived from the current gSSURGO snapshot and a 30m CONUS geomoprhons grid, details pending}
 #'   \item{mlra}{empirical MLRA membership values, derived from the current SSURGO snapshot}
 #'   \item{ecoclassid}{area cross-tabulation of ecoclassid by soil series name, derived from the current SSURGO snapshot, major components only}
 #'   \item{climate}{climate summaries from PRISM stack (CONUS only)}
@@ -103,7 +102,7 @@
 #'
 #' \describe{
 #'
-#'   \item{1. A query for soil series that exist entirely outside of CONUS (e.g. PALAU).}{ - Climate summaries are empty \code{data.frames} because these summaries are currently generated from PRISM. We are working on a solution that uses DAYMET.}
+#'   \item{1. A query for soil series that exist entirely outside of CONUS (e.g. PALAU).}{ - Climate summaries are empty `data.frame` because these summaries are currently generated from PRISM. We are working on a solution that uses DAYMET.}
 #'
 #'   \item{2. A query for data within CONUS, but OSD morphology missing due to parsing error (e.g. formatting, typos).}{ - Extended summaries are present but morphology missing from `SPC`. A warning is issued.}
 #'
@@ -113,15 +112,18 @@
 #'
 #'}
 #'
-#' @return a `SoilProfileCollection` object containing basic soil morphology and taxonomic information.
+#' @return a `SoilProfileCollection` object containing basic soil morphology and taxonomic information, a `list` when `extended = TRUE`.
 #'
-#' @references USDA-NRCS OSD search tools: \url{https://soilseries.sc.egov.usda.gov/}
+#' @references
+#' 
+#' USDA-NRCS OSD search tools: \url{https://soilseries.sc.egov.usda.gov/}
+#' 
+#' Jasiewicz, J., Stepinski, T., 2013, Geomorphons - a pattern recognition approach to classification and mapping of landforms, Geomorphology, vol. 182, 147-156. (\doi{doi:10.1016/j.geomorph.2012.11.005})
 #'
 #' @author D.E. Beaudette, A.G. Brown
 #' @seealso [OSDquery()], [siblings()]
 #' @export
-#' @examplesIf curl::has_internet()
-#' @examples
+#' @examplesIf curl::has_internet() && requireNamespace("httr", quietly = TRUE)
 #' \donttest{
 #'   library(aqp)
 #'   # soils of interest
@@ -135,25 +137,37 @@
 #'   # plot profiles
 #'   # moist soil colors
 #'   par(mar=c(0,0,0,0), mfrow=c(2,1))
-#'   plot(s.moist, name='hzname',
-#'        cex.names=0.85, depth.axis = list(line = -4))
-#'   plot(s.dry, name='hzname',
-#'        cex.names=0.85, depth.axis = list(line = -4))
+#'   aqp::plotSPC(
+#'     s.moist,
+#'     name = 'hzname',
+#'     cex.names = 0.85,
+#'     depth.axis = list(line = -4)
+#'   )
+#'   aqp::plotSPC(
+#'     s.dry,
+#'     name = 'hzname',
+#'     cex.names = 0.85,
+#'     depth.axis = list(line = -4)
+#'   )
 #'
 #'   # extended mode: return a list with SPC + summary tables
 #'   x <- fetchOSD(s.list, extended = TRUE, colorState = 'dry')
 #'
 #'   par(mar=c(0,0,1,1))
-#'   plot(x$SPC)
+#'   if (!is.null(x$SPC) && inherits(x$SPC, "SoilProfileCollection")){
+#'     aqp::plotSPC(x$SPC)
+#'   }
 #'   str(x, 1)
 #'
 #' }
 #' @keywords manip
 #'
-#' @importFrom aqp hzDistinctnessCodeToOffset
-#'
 fetchOSD <- function(soils, colorState = 'moist', extended = FALSE) {
-
+  
+  if (!requireNamespace("aqp")) {
+    stop("package 'aqp' is required", call. = FALSE)
+  }
+  
   .SoilWebOSD <- function(i, e) {
     # compose base URL
     if (e) {
@@ -163,7 +177,7 @@ fetchOSD <- function(soils, colorState = 'moist', extended = FALSE) {
     }
     
     # format series list and append to URL
-    final.url <- paste(x, URLencode(paste(i, collapse = ',')), sep = '')
+    final.url <- paste0(x, URLencode(paste(i, collapse = ',')))
     
     # using HTTP GET is convenient but comes with limits on the number of chars in the URL
     if (nchar(final.url) > 2048) {
@@ -185,9 +199,9 @@ fetchOSD <- function(soils, colorState = 'moist', extended = FALSE) {
   soils <- unique(tolower(soils))
   
   # sanity check
-  if (!requireNamespace('jsonlite', quietly = TRUE))
+  if (!requireNamespace('jsonlite', quietly = TRUE)) {
     stop('please install the `jsonlite` package', call. = FALSE)
-
+  }
   
   ## get data by chunk (https://github.com/ncss-tech/soilDB/issues/239)
   # this creates some additional overhead + copying
@@ -226,17 +240,18 @@ fetchOSD <- function(soils, colorState = 'moist', extended = FALSE) {
   h <- res$hz
 
 	# report missing data
-  # no data condition: s == FALSE | h == FALSE
-  # otherwise both will be a data.frame
-  if ((is.logical(s) && length(s) == 1) ||
-      (is.logical(h) & length(h) == 1)) {
+  # no data condition 4-1/4-2: s and h => structure(list(), dim = 1:0, dimnames = list(NULL, NULL))
+  
+  # 4-1/4-2 updated php-pgsql
+  # no data condition: either `s` OR `h` are NOT `data.frame`
+  if ( (!inherits(s, 'data.frame') || !inherits(h, 'data.frame')) ) {
     message('query returned no data')
     return(NULL)
   }
 
 	# reformatting and color conversion
 	if (colorState == 'moist') {
-	  h$soil_color <- with(h, munsell2rgb(matrix_wet_color_hue, matrix_wet_color_value, matrix_wet_color_chroma))
+	  h$soil_color <- with(h, aqp::munsell2rgb(matrix_wet_color_hue, matrix_wet_color_value, matrix_wet_color_chroma))
 
 	  h <- with(h, data.frame(
 	    id = series,
@@ -265,7 +280,7 @@ fetchOSD <- function(soils, colorState = 'moist', extended = FALSE) {
 	}
 
 	if (colorState == 'dry') {
-	  h$soil_color <- with(h, munsell2rgb(matrix_dry_color_hue, matrix_dry_color_value, matrix_dry_color_chroma))
+  h$soil_color <- with(h, aqp::munsell2rgb(matrix_dry_color_hue, matrix_dry_color_value, matrix_dry_color_chroma))
 
 	  h <- with(h, data.frame(
 	    id = series,
@@ -294,33 +309,29 @@ fetchOSD <- function(soils, colorState = 'moist', extended = FALSE) {
 
 
 	# upgrade to SoilProfileCollection
-	depths(h) <- id ~ top + bottom
+  aqp::depths(h) <- id ~ top + bottom
 
-	# texture clases, in order
-	textures <- SoilTextureLevels(which = 'names')
-
-	# TODO: use aqp::ReactionClassLevels()
-	pH_classes <- c('ultra acid', 'extremely acid', 'very strongly acid', 'strongly acid', 'moderately acid', 'slightly acid', 'neutral', 'slightly alkaline', 'mildly alkaline', 'moderately alkaline', 'strongly alkaline', 'very strongly alkaline')
-
-	# convert some columns into factors
+	# texture and pH classes are ordered factors
+	textures <- aqp::SoilTextureLevels(which = 'names')
+	pH_classes <- aqp::ReactionClassLevels()
 	h$texture_class <- factor(h$texture_class, levels = textures, ordered = TRUE)
 	h$pH_class <- factor(h$pH_class, levels = pH_classes, ordered = TRUE)
 
-	# safely LEFT JOIN to @site
+	# join additonal site data to SPC object
 	s$id <- s$seriesname
 	s$seriesname <- NULL
-	site(h) <- s
+	aqp::site(h) <- s
 
-	## safely set SPC metadata
-	metadata(h)$origin <- 'OSD via Soilweb / fetchOSD'
-	metadata(h)$created <- Sys.time()
+	# set metadata
+	aqp::metadata(h)$origin <- 'OSD via Soilweb / fetchOSD'
+	aqp::metadata(h)$created <- Sys.time()
 	
 	# set optional hz designation and texture slots
-	hzdesgnname(h) <- "hzname"
-	hztexclname(h) <- "texture_class"
+	aqp::hzdesgnname(h) <- "hzname"
+	aqp::hztexclname(h) <- "texture_class"
 
 	# encode horizon distinctness
-	h$hzd <- hzDistinctnessCodeToOffset(
+	h$hzd <- aqp::hzDistinctnessCodeToOffset(
 	  h$distinctness,
 	  codes = c('very abrupt', 'abrubt', 'clear', 'gradual', 'diffuse')
 	)
@@ -329,9 +340,9 @@ fetchOSD <- function(soils, colorState = 'moist', extended = FALSE) {
 	if(extended) {
 	  
 	  # unravel nested lists
-	  .tables <- c('competing', 'geog_assoc_soils', 'geomcomp', 'hillpos', 'mtnpos', 'terrace', 'flats', 'shape_across', 'shape_down', 'pmkind', 'pmorigin', 'mlra', 'ecoclassid', 'climate', 'nccpi')
+	  .tables <- c('competing', 'geog_assoc_soils', 'geomcomp', 'hillpos', 'mtnpos', 'terrace', 'flats', 'shape_across', 'shape_down', 'pmkind', 'pmorigin', 'geomorphons', 'mlra', 'ecoclassid', 'climate', 'nccpi')
 	  
-	  # chunk-wise missing tabular data is reported as FALSE
+	  # chunk-wise missing tabular data are reported as FALSE
 	  # cannot rbind(FALSE) or rbind(FALSE, data.frame) -> corruption of data
 	  for(.tab in .tables) {
 	    .tabdata <- lapply(r, '[[', .tab)
@@ -347,22 +358,6 @@ fetchOSD <- function(soils, colorState = 'moist', extended = FALSE) {
 	    
 	  }
 	  
-	  # res$competing <- do.call('rbind', lapply(r, '[[', 'competing'))
-	  # res$geog_assoc_soils <- do.call('rbind', lapply(r, '[[', 'geog_assoc_soils'))
-	  # res$geomcomp <- do.call('rbind', lapply(r, '[[', 'geomcomp'))
-	  # res$hillpos <- do.call('rbind', lapply(r, '[[', 'hillpos'))
-	  # res$mtnpos <- do.call('rbind', lapply(r, '[[', 'mtnpos'))
-	  # res$terrace <- do.call('rbind', lapply(r, '[[', 'terrace'))
-	  # res$flats <- do.call('rbind', lapply(r, '[[', 'flats'))
-	  # res$shape_across <- do.call('rbind', lapply(r, '[[', 'shape_across'))
-	  # res$shape_down <- do.call('rbind', lapply(r, '[[', 'shape_down'))
-	  # res$pmkind <- do.call('rbind', lapply(r, '[[', 'pmkind'))
-	  # res$pmorigin <- do.call('rbind', lapply(r, '[[', 'pmorigin'))
-	  # res$mlra <- do.call('rbind', lapply(r, '[[', 'mlra'))
-	  # res$ecoclassid <- do.call('rbind', lapply(r, '[[', 'ecoclassid'))
-	  # res$climate <- do.call('rbind', lapply(r, '[[', 'climate'))
-	  # res$nccpi <- do.call('rbind', lapply(r, '[[', 'nccpi'))
-	  
 	  # metadata are identical across chunks
 	  res$metadata <- unique(do.call('rbind', lapply(r, '[[', 'metadata')))
 	  
@@ -375,7 +370,7 @@ fetchOSD <- function(soils, colorState = 'moist', extended = FALSE) {
 	  })
 	  
 	  # profile IDs for reference, done outside of loop for efficiency
-	  pIDs <- profile_id(h)
+	  pIDs <- aqp::profile_id(h)
 	  # iterate over extended tables
 	  # finding all cases where a series is missing from SPC
 	  missing.series <- unique(
@@ -446,6 +441,7 @@ fetchOSD <- function(soils, colorState = 'moist', extended = FALSE) {
 	    shape_down = res$shape_down,
 	    pmkind = res$pmkind,
 	    pmorigin = res$pmorigin,
+	    geomorphons = res$geomorphons,
 	    mlra = res$mlra,
 	    ecoclassid = res$ecoclassid,
 	    climate.annual = annual.data,

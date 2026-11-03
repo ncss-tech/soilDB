@@ -90,8 +90,7 @@ snapshot was developed using methods described here:
 the link below for the live data.
 }
 \examples{
-\dontshow{if (curl::has_internet()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-\dontshow{\}) # examplesIf}
+\dontshow{if (curl::has_internet() && requireNamespace("httr", quietly = TRUE) && requireNamespace("aqp", quietly = TRUE) && as.logical(Sys.getenv("R_SOILDB_SKIP_LONG_EXAMPLES", unset = TRUE))) withAutoprint(\{ # examplesIf}
 \donttest{
     library(aqp)
 
@@ -103,10 +102,11 @@ the link below for the live data.
 
     # how many pedons
     length(s)
-
-    # plot
-    plotSPC(s, name='hzn_desgn', max.depth=150)
-
+    if (inherits(s, "SoilProfileCollection")) {
+      # plot
+      aqp::plotSPC(s, name='hzn_desgn', max.depth=150)
+    }
+    
     ##
     ## morphologic data
     ##
@@ -116,19 +116,11 @@ the link below for the live data.
 
     # extract SPC
     pedons <- s$SPC
-
-   # if (requireNamespace("farver")) {
-   #   ## automatically simplify color data (requires farver)
-   #   s <- fetchKSSL(series='auburn', returnMorphologicData = TRUE, simplifyColors=TRUE)
-   #   # check
-   #   par(mar=c(0,0,0,0))
-   #   plot(pedons, color='moist_soil_color', print.id=FALSE)
-   # }
 }
-
+\dontshow{\}) # examplesIf}
 }
 \references{
-\url{http://ncsslabdatamart.sc.egov.usda.gov/}
+National Cooperative Soil Survey Soil Characterization Database: \url{https://ncsslabdatamart.sc.egov.usda.gov/}.
 }
 \seealso{
 \code{\link{fetchOSD}}

@@ -2,7 +2,6 @@
 # helper functions for using the NOAA API
 
 # fetchNOAA
-# TODO: will provide a variety of aggregation and batch application options
 #  -- given Spatial* object, SoilProfileCollection, Coordinates
 
 #' Get NOAA station data near a given latitude and longitude
@@ -72,7 +71,7 @@ get_NOAA_stations_nearXY <- function(lat, lng, apitoken, bbox = 1, crs = "EPSG:4
 
   # build multi-datatype URL
   datatypeids <- sprintf("&datatypeid=%s", datatypeid)
-  datatypeid.url <- paste0(datatypeids, collapse="&")
+  datatypeid.url <- paste(datatypeids, collapse = "&")
 
   # construct GET request
   r <- httr::GET(url = paste0(sprintf(

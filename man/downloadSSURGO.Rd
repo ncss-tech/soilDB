@@ -7,52 +7,111 @@
 downloadSSURGO(
   WHERE = NULL,
   areasymbols = NULL,
-  destdir = tempdir(),
-  exdir = destdir,
+  destdir = NULL,
+  exdir = NULL,
   include_template = FALSE,
+  include_spatial = TRUE,
+  include_tabular = TRUE,
   db = c("SSURGO", "STATSGO"),
   extract = TRUE,
+  LAPPLY.FUN = lapply,
+  LAPPLY.FUN.ARGS = NULL,
   remove_zip = FALSE,
   overwrite = FALSE,
-  quiet = FALSE
+  quiet = FALSE,
+  force = FALSE
 )
 }
 \arguments{
-\item{WHERE}{A SQL \code{WHERE} clause expression used to filter records in \code{sacatalog} table. Alternately \code{WHERE} can be any spatial object supported by \code{SDA_spatialQuery()} for defining the target extent.}
+\item{WHERE}{\emph{character}. A SQL \code{WHERE} clause expression used to filter records in \code{sacatalog}
+table. Alternately \code{WHERE} can be any spatial object supported by \code{SDA_spatialQuery()} for
+defining the target extent.}
 
-\item{areasymbols}{Character vector of soil survey area symbols e.g. \code{c("CA067", "CA077")}. Used in lieu of \code{WHERE} argument.}
+\item{areasymbols}{\emph{character}. Character vector of soil survey area symbols e.g. \code{c("CA067", "CA077")}. Used in lieu of \code{WHERE} argument.}
 
-\item{destdir}{Directory to download ZIP files into. Default \code{tempdir()}.}
+\item{destdir}{\emph{character}. Directory to download ZIP files into. Default \code{NULL} uses the
+persistent soilDB Web Soil Survey cache.}
 
-\item{exdir}{Directory to extract ZIP archives into. May be a directory that does not yet exist. Each ZIP file will extract to a folder labeled with \code{areasymbol} in this directory. Default: \code{destdir}}
+\item{exdir}{\emph{character}. Directory to extract ZIP archives into. May be a directory that does
+not yet exist. Each ZIP file will extract to a folder labeled with \code{areasymbol} in this
+directory. Default: \code{destdir}, or when \code{destdir} is \code{NULL}, the fiscal-year directory containing
+the cached ZIP files. When extraction is enabled (\code{extract = TRUE}) and the target ZIP files
+span multiple fiscal-year cache directories, an explicit \code{exdir} must be provided.}
 
-\item{include_template}{Include the (possibly state-specific) MS Access template database? Default: \code{FALSE}}
+\item{include_template}{\emph{logical}. Include the (possibly state-specific) MS Access template
+database? Default: \code{FALSE}}
 
-\item{db}{Either \code{"SSURGO"} (default; detailed soil map) or \code{"STATSGO"} (general soil map).}
+\item{include_spatial}{\emph{logical} or \emph{character}. Extract spatial data layers from ZIP file?
+Default: \code{TRUE} inserts all spatial tables. If \code{include_spatial} is a \emph{character} vector
+containing table names, only that set is extracted from the downloaded ZIP files. e.g.
+\code{include_spatial=c("mupolygon", "featpoint")} extracts only the shapefiles (with side car
+files) for mapunit polygons and special feature points.}
 
-\item{extract}{Logical. Extract ZIP files to \code{exdir}? Default: \code{TRUE}}
+\item{include_tabular}{\emph{logical} or \emph{character}. Extract tabular data from ZIP file? Default:
+\code{TRUE} inserts all tabular tables. If \code{include_tabular} is a \emph{character} vector containing
+table names, only that set is extracted from the downloaded ZIP files. e.g.
+\code{include_tabular=c("mapunit", "muaggatt")} writes only the \code{mapunit} and \code{muaggatt} tables.
+Note that special feature descriptions are stored in table \code{"featdesc"} and metadata for each
+soil survey area are stored in \code{"soil_metadata"} tables.}
 
-\item{remove_zip}{Logical. Remove ZIP files after extracting? Default: \code{FALSE}}
+\item{db}{\emph{character}. Either \code{"SSURGO"} (default; detailed soil map) or \code{"STATSGO"} (general
+soil map).}
 
-\item{overwrite}{Logical. Overwrite by re-extracting if directory already exists? Default: \code{FALSE}}
+\item{extract}{\emph{logical}. Extract ZIP files to \code{exdir}? Default: \code{TRUE}}
 
-\item{quiet}{Logical. Passed to \code{curl::curl_download()}.}
+\item{LAPPLY.FUN}{\emph{function}. \code{lapply()}-like function to use for iteration during \code{extract}
+phase. Only used if \code{extract=TRUE}. This allows for the \code{utils::unzip()} operations to be run
+in parallel instead of sequential, custom progress reporting, or similar.}
+
+\item{LAPPLY.FUN.ARGS}{\emph{list}. Optional list of additional arguments to pass to \code{LAPPLY.FUN}.}
+
+\item{remove_zip}{\emph{logical}. Remove ZIP files after extracting? Default: \code{FALSE}}
+
+\item{overwrite}{\emph{logical}. Overwrite by re-extracting if directory already exists? Default:
+\code{FALSE}}
+
+\item{quiet}{\emph{logical}. Passed to \code{curl::curl_download()}.}
+
+\item{force}{\emph{logical}. Force re-download of ZIP files even when a cached copy exists. Default:
+\code{FALSE}}
 }
 \value{
-Character. Paths to downloaded ZIP files (invisibly). May not exist if \code{remove_zip = TRUE}.
+\emph{character}. Paths to downloaded ZIP files (invisibly). May not exist if \code{remove_zip = TRUE}.
 }
 \description{
-Download ZIP files containing spatial (ESRI shapefile) and tabular (TXT) files with standard SSURGO format; optionally including the corresponding SSURGO Template Database with \code{include_template=TRUE}.
+Download ZIP files containing spatial (ESRI shapefile) and tabular (TXT) files in standard SSURGO
+format. To specify the Soil Survey Areas you would like to download, use a \code{WHERE} clause for
+query of \code{sacatalog} table, for example: \code{areasymbol = 'CA067'}, \code{"areasymbol IN ('CA628', 'CA067')"}, or \verb{areasymbol LIKE 'CT\%'}.
 }
 \details{
-To specify the Soil Survey Areas you would like to obtain data you use a \code{WHERE} clause for query of \code{sacatalog} table such as \code{areasymbol = 'CA067'}, \code{"areasymbol IN ('CA628', 'CA067')"} or  \verb{areasymbol LIKE 'CT\%'}.
+Pipe-delimited TXT files are found in \emph{/tabular/} folder extracted from a SSURGO ZIP.
+The files are named for tables in the SSURGO schema. There is no header and the files do not
+have column names. See the \emph{Soil Data Access Tables and Columns Report}:
+\url{https://sdmdataaccess.nrcs.usda.gov/documents/TablesAndColumnsReport.pdf} for details on
+tables, column names and metadata including the default sequence of columns used in TXT files.
+The function returns a \code{try-error} if the \code{WHERE}/\code{areasymbols} arguments result in
 
-When \code{db="STATSGO"} the \code{WHERE} argument is not supported. Allowed \code{areasymbols} include \code{"US"} and two-letter state codes e.g. \code{"WY"} for the Wyoming general soils map.
+Several ESRI shapefiles are found in the \emph{/spatial/} folder extracted from a SSURGO ZIP. These
+have prefix \code{soilmu_} (mapunit), \code{soilsa_} (survey area), \code{soilsf_} (special features). There
+will also be a TXT file with prefix \code{soilsf_} describing any special features. Shapefile names
+then have an \code{a_} (polygon), \code{l_} (line), \code{p_} (point) followed by the soil survey area symbol.
+When \code{db="STATSGO"} the \code{WHERE} argument is not supported. Allowed \code{areasymbols} include \code{"US"}
+and two-letter state codes e.g. \code{"WY"} for the Wyoming general soils map.
 
-Pipe-delimited TXT files are found in \emph{/tabular/} folder extracted from a SSURGO ZIP. The files are named for tables in the SSURGO schema. There is no header / the files do not have column names. See the \emph{Soil Data Access Tables and Columns Report}: \url{https://sdmdataaccess.nrcs.usda.gov/documents/TablesAndColumnsReport.pdf} for details on tables, column names and metadata including the default sequence of columns used in TXT files. The function returns a \code{try-error} if the \code{WHERE}/\code{areasymbols} arguments result in
+As in \code{createSSURGO()}, the \code{include_spatial} and \code{include_tabular} arguments either take a
+logical value (default \code{TRUE}) or a character vector of the specific table names to include.
+Note that when used in \code{downloadSSURGO()} the required metadata files are \emph{always} extracted to
+facilitate mapping to user-facing table names. These arguments allow for customizing the files
+that get extracted from ZIP files, not just filtering on file names (as is implemented with
+pre-existing \code{pattern} argument). This can dramatically improve efficiency of extraction and
+the overall size of the data in \code{exdir}. These arguments can be used in conjunction with the
+\code{pattern} argument to fine-tune the files included in the generated snapshot database.
 
-Several ESRI shapefiles are found in the \emph{/spatial/} folder extracted from a SSURGO ZIP. These have prefix \code{soilmu_} (mapunit), \code{soilsa_} (survey area), \code{soilsf_} (special features). There will also be a TXT file with prefix \code{soilsf_} describing any special features. Shapefile names then have an \code{a_} (polygon), \code{l_} (line), \code{p_} (point) followed by the soil survey area symbol.
+When \code{destdir} is omitted, ZIP files are stored in the persistent soilDB Web Soil Survey cache.
+Cache paths are organized by fiscal year, and the cache policy also distinguishes template and
+non-template archives when choosing the ZIP to reuse. Use \code{list_WSS_cache()} or \code{clear_WSS_cache()} to inspect or
+clean the cache.
 }
 \seealso{
-\code{\link[=createSSURGO]{createSSURGO()}}
+\code{\link[=createSSURGO]{createSSURGO()}}, \code{\link[=list_WSS_cache]{list_WSS_cache()}}, \code{\link[=clear_WSS_cache]{clear_WSS_cache()}}
 }

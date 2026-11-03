@@ -20,10 +20,6 @@ a SoilProfileCollection object
 Fetch KSSL laboratory pedon/horizon layer data from a local NASIS database,
 return as a SoilProfileCollection object.
 }
-\details{
-This function currently works only on Windows, and requires a 'nasis_local'
-ODBC connection.
-}
 \seealso{
 \code{\link{get_labpedon_data_from_NASIS_db}}
 }

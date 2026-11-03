@@ -22,7 +22,6 @@
 #' @details 
 #' You can download SQLite or GeoPackage snapshots here: \url{https://ncsslabdatamart.sc.egov.usda.gov/database_download.aspx}. Specify the `dsn` argument to use a local copy of the lab data rather than Soil Data Access web service.
 #'
-#' Lab Data Mart model diagram: \url{https://jneme910.github.io/Lab_Data_Mart_Documentation/Documents/SDA_KSSL_Data_model.html}
 #' If the `chunk.size` parameter is set too large and the Soil Data Access request fails, the algorithm will re-try the query with a smaller (halved) `chunk.size` argument. This will be attempted up to 3 times before returning `NULL`
 #'
 #' The default behavior joins the `lab_area` tables only for the "Soil Survey Area" related records. You can specify alternative area records for use in `x`, `what` or `WHERE` arguments by setting `area_type` to a different value.
@@ -31,7 +30,7 @@
 #'
 #' @return a `SoilProfileCollection` for a successful query, a `try-error` if no site/pedon locations can be found or `NULL` for an empty `lab_layer` (within sites/pedons) result
 #' @export
-#' @examplesIf curl::has_internet()
+#' @examplesIf curl::has_internet() && requireNamespace("httr", quietly = TRUE) && requireNamespace("aqp", quietly = TRUE)
 #' \dontrun{
 #'   
 #'   # fetch by Soil Survey Area area symbol (area_code using default "ssa" area_type)
@@ -75,7 +74,11 @@ fetchLDM <- function(x = NULL,
            prep_code = c("S", ""), # , `"F"`, `"HM"`, `"HM_SK"` `"GP"`, `"M"`, `"N"`, or `"S"`
            analyzed_size_frac = c("<2 mm", ""),#  optional: "<0.002 mm", "0.02-0.05 mm", "0.05-0.1 mm", "0.1-0.25 mm", "0.25-0.5 mm", "0.5-1 mm", "1-2 mm", "0.02-2 mm", "0.05-2 mm"
            dsn = NULL) {
-
+  
+  if (!requireNamespace("aqp")) {
+    stop("package 'aqp' is required", call. = FALSE)
+  }
+  
   # set up data source connection if needed
 
   if (inherits(dsn, 'DBIConnection')) {
@@ -224,24 +227,15 @@ fetchLDM <- function(x = NULL,
 
     if (!is.null(hz) && nrow(hz) > 0) {
 
-      # local SQLite: sometimes prep_code differs for bulk density with no difference in value
-      #               e.g. pedon_key 10010
-      # prep_code is also repeated across multiple tables
-
-      # hz$prep_code <- NULL
-
       # site_key used in multiple tables
       hz$site_key <- NULL
       
-      # hacks to deal with problems in the various databases
-      # hz <- unique(hz[,unique(colnames(hz))]) 
-      
       # build SoilProfileCollection
-      depths(hz) <- pedon_key ~ hzn_top + hzn_bot
+      aqp::depths(hz) <- pedon_key ~ hzn_top + hzn_bot
       hzn <- aqp::horizonNames(hz)
-      hzn <- hzn[hzn != idname(hz)]
-      site(hz) <- sites[, !colnames(sites) %in% hzn]
-      hzdesgnname(hz) <- 'hzn_desgn'
+      hzn <- hzn[hzn != aqp::idname(hz)]
+      aqp::site(hz) <- sites[, !colnames(sites) %in% hzn]
+      aqp::hzdesgnname(hz) <- 'hzn_desgn'
 
       return(hz)
     } else {
@@ -326,7 +320,7 @@ fetchLDM <- function(x = NULL,
     nt <- flattables[flattables %in% tables[!tables %in% c("lab_rosetta_Key", "lab_mir")]]
     layer_query <-  sprintf(
       "SELECT * FROM lab_layer %s WHERE lab_layer.layer_type IN %s %s %s",
-      paste0(sapply(flattables[flattables %in% tables], function(a) tablejoincriteria[[a]]), collapse = "\n"),
+      paste(sapply(flattables[flattables %in% tables], function(a) tablejoincriteria[[a]]), collapse = "\n"),
       format_SQL_in_statement(layer_type),
       ifelse(is.null(x), "", paste0(" AND ", bycol, " IN ", format_SQL_in_statement(x))),
       ifelse(length(nt) == 0, "", paste0(" AND ", paste0(sapply(nt, function(b) paste0("IsNull(",b,".prep_code, '')")), 
@@ -341,14 +335,14 @@ fetchLDM <- function(x = NULL,
   if (any(tables %in% fractables)) {
     layer_fraction_query <-  sprintf(
       "SELECT * FROM lab_layer %s WHERE lab_layer.layer_type IN %s AND %s IN %s AND %s AND %s",
-      paste0(sapply(fractables[fractables %in% tables], function(a) fractablejoincriteria[[a]]), collapse = "\n"),
+      paste(sapply(fractables[fractables %in% tables], function(a) fractablejoincriteria[[a]]), collapse = "\n"),
       format_SQL_in_statement(layer_type),
       bycol,
       format_SQL_in_statement(x),
-      paste0(paste0(sapply(fractables[fractables %in% tables], 
+      paste(paste0(sapply(fractables[fractables %in% tables], 
                            function(b) paste0("IsNull(",b,".prep_code, '')")), 
                     " IN ", format_SQL_in_statement(prep_code)), collapse = " AND "),
-      paste0(paste0(sapply(fractables[fractables %in% tables], 
+      paste(paste0(sapply(fractables[fractables %in% tables], 
                          function(b) paste0("IsNull(",b,".analyzed_size_frac, '')")), 
                   " IN ", format_SQL_in_statement(analyzed_size_frac)), collapse = " AND "))
   } else {
@@ -367,7 +361,7 @@ fetchLDM <- function(x = NULL,
   }
   
   # TODO: this shouldn't be needed
-  layerdata <- layerdata[,unique(colnames(layerdata))]
+  layerdata <- layerdata[, unique(colnames(layerdata))]
 
   if (!is.null(layer_fraction_query)) {
     layerfracdata <- suppressWarnings(SDA_query(layer_fraction_query))
@@ -376,7 +370,7 @@ fetchLDM <- function(x = NULL,
 
       if (nrow(layerfracdata) == 0)
         message(sprintf('no fractionated samples found for selected prep_code (%s) and analyzed_size_frac (%s)',
-                paste0(prep_code, collapse = ", "), paste0(analyzed_size_frac, collapse = ", ")))
+                toString(prep_code), toString(analyzed_size_frac)))
 
       layerdata <- merge(layerdata, layerfracdata[,c("labsampnum", colnames(layerfracdata)[!colnames(layerfracdata) %in% colnames(layerdata)])], by = "labsampnum", all.x = TRUE, incomparables = NA)
     }

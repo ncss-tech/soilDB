@@ -1,11 +1,6 @@
-# TODO: sitebedrock _may_ contain more than 1 row / site... this will result in duplicate rows returned by this function.
-
 ## Notes:
 # source of the plantassocnm column changed - now resides in the siteobs table
 # siteiidref key removed from pedon table - use the pedon.siteobsiidref through the siteobs table (siteobs.siteobsiid) as the new linkage	
-
-
-
 
 #' Get Site Data from a PedonPC Database
 #' 
@@ -75,8 +70,9 @@ get_site_data_from_pedon_db <- function(dsn) {
   
   # warn if mixed datums
   unique.datums <- unique(na.omit(d$horizdatnm))
-  if(length(unique.datums) > 1)
-    message(paste('multiple datums present:', paste(unique.datums, collapse=', ')))
+  if (length(unique.datums) > 1) {
+    message(paste('multiple datums present:', toString(unique.datums)))
+  }
   
   # are there any dupes?
   t.pedon_id <- table(d$pedon_id)

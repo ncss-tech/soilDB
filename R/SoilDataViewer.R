@@ -5,7 +5,7 @@
 #' @param notratedcolor Used to add 'Not rated' color entries where applicable. Default: `"#FFFFFF00"` (transparent white).
 #' @param simplify Return a data.frame when `WHERE` is length 1? Return a list with 1 element per legend when `WHERE` is length > `1`? Default: `TRUE`
 #'
-#' @return A list with a data.frame element for each element of `WHERE` containing `"attributekey"`, `"attributename"`, `"attributetype"`, `"attributetablename"`, `"attributecolumnname"`, `"attributedescription"`, `"nasisrulename"`, `"label"`, `"order"`, `"value"`, `"lower_value"`, `"upper_value"`,`"red"`, `"green"`, `"blue"` and `"hex"` columns.
+#' @return A list with a data.frame element for each element of `WHERE` containing `"attributekey"`, `"attributename"`, `"attributetype"`, `"attributetablename"`, `"attributecolumnname"`, `"attributedescription"`, `"nasisrulename"`, `"label"`, `"order"`, `"value"`, `"lower_value"`, `"upper_value"`,`"red"`, `"green"`, `"blue"` and `"hex"` columns. A `try-error` is returned invisibly, with a message, on error.
 #' @export
 #'
 #' @importFrom grDevices rgb
@@ -26,10 +26,11 @@ get_SDV_legend_elements <- function(WHERE,
                                      nasisrulename, notratedphrase
                                    FROM sdvattribute WHERE ", ak))
     
-    if (inherits(x, 'try-error'))
-      stop(paste0("Invalid WHERE clause: ", ak), call. = FALSE)
+    if (inherits(x, 'try-error')) {
+      return(invisible(x))
+    }
     
-    lapply(1:nrow(x), function(i) {
+    lapply(seq_len(nrow(x)), function(i) {
       res <- .process_SDV_legend_elements(x[i,],
                                           alpha = alpha,
                                           notratedcolor = notratedcolor)
@@ -40,6 +41,12 @@ get_SDV_legend_elements <- function(WHERE,
     })
   })
 
+  # check for try-error
+  err <- sapply(y, inherits, "try-error")
+  if (any(err)) {
+    return(y[[which(err)[1]]])
+  }
+  
   if ((length(y) == 1) && length(y[[1]]) == 1 && simplify) {
     return(y[[1]][[1]])
   } else if (simplify) return(do.call('c', y))

@@ -2,7 +2,7 @@ context("SDA_query() -- requires internet connection")
 
 
 test_that("SDA_query() works", {
-
+  
   skip_if_offline()
 
   skip_on_cran()
@@ -38,7 +38,7 @@ test_that("SDA_query() works", {
 })
 
 test_that("SDA_query() returns expected result", {
-
+  
   skip_if_offline()
 
   skip_on_cran()
@@ -48,13 +48,13 @@ test_that("SDA_query() returns expected result", {
   skip_if(inherits(x.2, 'try-error'))
   
   # table dimensions
-  expect_equal(nrow(x.1), 1)
-  expect_equal(ncol(x.1), 2)
+  expect_equivalent(nrow(x.1), 1)
+  expect_equivalent(ncol(x.1), 2)
 
   # expected results
   x.12 <- do.call('rbind', x.2)
-  expect_equal(x.1$areasymbol, 'CA630')
-  expect_equal(x.12$areasymbol, c('CA630', 'CA664'))
+  expect_equivalent(x.1$areasymbol, 'CA630')
+  expect_equivalent(x.12$areasymbol, c('CA630', 'CA664'))
 
 })
 
@@ -64,7 +64,7 @@ test_that("SDA_query() query too long", {
 })
 
 test_that("SDA_query() SQL error / no results -> NULL", {
-
+  
   skip_if_offline()
 
   skip_on_cran()
@@ -84,7 +84,7 @@ test_that("SDA_query() SQL error / no results -> NULL", {
 
 
 test_that("SDA_spatialQuery() simple spatial query, tabular results", {
-
+  
   skip_if_offline()
 
   skip_on_cran()
@@ -99,7 +99,7 @@ test_that("SDA_spatialQuery() simple spatial query, tabular results", {
     
     # testing known values
     expect_true(inherits(res, 'data.frame'))
-    expect_equal(nrow(res), 1)
+    expect_equivalent(nrow(res), 1)
     expect_match(res$muname, 'Diablo')
   }
   
@@ -109,16 +109,17 @@ test_that("SDA_spatialQuery() simple spatial query, tabular results", {
   skip_if(inherits(res, 'try-error'))
   
   expect_true(inherits(res, 'data.frame'))
-  expect_equal(nrow(res), 1)
+  expect_equivalent(nrow(res), 1)
   expect_match(res$areasymbol, 'CA641')
   
 })
 
 
 test_that("SDA_spatialQuery() simple spatial query, spatial results", {
-
+  
+  
   skip_if_offline()
-
+  
   skip_on_cran()
   
   skip_if_not_installed("sf")
@@ -130,27 +131,92 @@ test_that("SDA_spatialQuery() simple spatial query, spatial results", {
   
   # testing known values
   expect_true(inherits(res, 'sf'))
-  expect_equal(nrow(res), 1)
-
-
+  expect_equivalent(nrow(res), 1)
+  
   # test with db = "STATSGO"
-  res <- suppressWarnings(SDA_spatialQuery(p, what = 'geom', db = "STATSGO"))
+  res <- suppressWarnings(SDA_spatialQuery(
+    p,
+    what = 'geom',
+    addFields = "mapunit.muname",
+    db = "STATSGO"
+  ))
   
   skip_if(inherits(res, 'try-error'))
   
   # testing known values
   expect_true(inherits(res, 'sf'))
-  expect_equal(nrow(res), 1)
+  expect_equivalent(nrow(res), 1)
   
-  # test with what = "sapolygon" 
-  res <- suppressWarnings(SDA_spatialQuery(p, what = "sapolygon"))
+  # test with what = "sapolygon"
+  res <- suppressWarnings(SDA_spatialQuery(p, what = "sapolygon", addFields = "legend.areaname"))
   
   skip_if(inherits(res, 'try-error'))
   
   # testing known values
   expect_true(inherits(res, 'sf'))
-  expect_equal(nrow(res), 1)
+  expect_equivalent(nrow(res), 1)
+  
+})
 
+test_that("SDA_spatialQuery(geomIntersection=TRUE) simple spatial query, spatial results", {
+  
+  
+  skip_if_offline()
+  
+  skip_on_cran()
+  
+  skip_if_not_installed("sf")
+  
+  # test with default db = "SSURGO"
+  res <- suppressWarnings(
+    SDA_spatialQuery(
+      p,
+      what = 'geom',
+      addFields = "mapunit.muname",
+      geomIntersection = TRUE
+    )
+  )
+  
+  skip_if(inherits(res, 'try-error'))
+  
+  # testing known values
+  expect_true(inherits(res, 'sf'))
+  expect_equivalent(nrow(res), 1)
+  
+  
+  # test with db = "STATSGO"
+  res <- suppressWarnings(
+    SDA_spatialQuery(
+      p,
+      what = 'geom',
+      addFields = "mapunit.muname",
+      geomIntersection = TRUE,
+      db = "STATSGO"
+    )
+  )
+  
+  skip_if(inherits(res, 'try-error'))
+  
+  # testing known values
+  expect_true(inherits(res, 'sf'))
+  expect_equivalent(nrow(res), 1)
+  
+  # test with what = "sapolygon"
+  res <- suppressWarnings(
+    SDA_spatialQuery(
+      p,
+      what = "sapolygon",
+      addFields = "legend.areaname",
+      geomIntersection = TRUE
+    )
+  )
+  
+  skip_if(inherits(res, 'try-error'))
+  
+  # testing known values
+  expect_true(inherits(res, 'sf'))
+  expect_equivalent(nrow(res), 1)
+  
 })
 
 test_that("SDA_spatialQuery() spatial query of MUKEY with multiple features", {
@@ -169,14 +235,14 @@ test_that("SDA_spatialQuery() spatial query of MUKEY with multiple features", {
   # if the result set is empty rather than an error, SDA_query() result can be NULL
   skip_if(is.null(res) || inherits(res, 'try-error'))
   
-  expect_equal(nrow(res), 2)
+  expect_equivalent(nrow(res), 2)
   
   res2 <- SDA_spatialQuery(x, db = "STATSGO")
-  expect_equal(nrow(res), 2)
+  expect_equivalent(nrow(res), 2)
 })
 
 test_that("SDA_query() interprets column names", {
-
+  
   skip_if_offline()
 
   skip_on_cran()
@@ -184,17 +250,14 @@ test_that("SDA_query() interprets column names", {
   skip_if(inherits(x.3, 'try-error'))
   
   # x.3 is from the component table
-  expect_equal(
-    names(x.3),
-    c("mukey", "cokey", "compkind", "comppct_r", "majcompflag", "elev_r", "slope_r", "wei", "weg")
-  )
+  expect_named(x.3, c("mukey", "cokey", "compkind", "comppct_r", "majcompflag", "elev_r", "slope_r", "wei", "weg"))
 
 })
 
 
 
 test_that("SDA_query() interprets data type correctly", {
-
+  
   skip_if_offline()
 
   skip_on_cran()
@@ -215,7 +278,7 @@ test_that("SDA_query() interprets data type correctly", {
 })
 
 test_that("SDA_query() works with multi-line records", {
-
+  
   skip_if_offline()
 
   skip_on_cran()
@@ -224,10 +287,23 @@ test_that("SDA_query() works with multi-line records", {
   
   # https://github.com/ncss-tech/soilDB/issues/28
   expect_true(inherits(x.4, 'data.frame'))
-  expect_true(nrow(x.4) == 7)
+  expect_equal(nrow(x.4), 7)
 
 })
 
-
+test_that("SDA_spatialQuery() validates what and as_Spatial inputs correctly", {
+    
+  skip_if_offline()
+  
+  skip_on_cran()
+  
+  # test combinations of what and as_Spatial
+  err_msg <- "Spatial output requested for non-spatial return type (from `what` param)"
+  expect_error(SDA_spatialQuery(p, as_Spatial=TRUE), err_msg, fixed=TRUE)
+  expect_error(SDA_spatialQuery(p, what = 'areasymbol', as_Spatial=TRUE), err_msg, fixed=TRUE)
+  expect_no_error(SDA_spatialQuery(p, what = 'areasymbol', as_Spatial=FALSE))
+  
+})
+  
 
 

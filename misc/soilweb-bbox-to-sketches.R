@@ -11,6 +11,24 @@ library(soilDB)
 ## click somewhere on the map
 ## press 'b', BBOX is copied to the clipboard
 
+
+## OK051
+# https://casoilresource.lawr.ucdavis.edu/gmap/?loc=34.80891,-98.02792,z15
+bb <- '-98.0683 34.7920,-98.0683 34.8250,-98.0032 34.8250,-98.0032 34.7920,-98.0683 34.7920'
+
+
+## TX Edwards Plateau
+bb <- '-101.1297 30.9521,-101.1297 31.0276,-101.0067 31.0276,-101.0067 30.9521,-101.1297 30.9521'
+
+
+## TX155: https://casoilresource.lawr.ucdavis.edu/gmap/?loc=34.05629,-99.57999,z14
+bb <- '-99.6431 34.0224,-99.6431 34.0902,-99.5268 34.0902,-99.5268 34.0224,-99.6431 34.0224'
+
+
+##
+bb <- '-80.9121 35.9244,-80.9121 35.9410,-80.8829 35.9410,-80.8829 35.9244,-80.9121 35.9244'
+
+
 ## PA055
 bb <- '-77.5878 39.9331,-77.5878 39.9645,-77.5191 39.9645,-77.5191 39.9331,-77.5878 39.9331'
 
@@ -137,7 +155,7 @@ SoilTaxonomyDendrogram(
   width = 0.3, 
   name.style = 'center-center', 
   depth.axis = list(line = -4),
-  hz.distinctness.offset = 'hzd',
+  # hz.distinctness.offset = 'hzd',
   max.depth = 200
 )
 
@@ -169,22 +187,43 @@ SoilTaxonomyDendrogram(
 ## notes:
 # * the following functions will nearly always require tinkering with `scaling.factor`
 
+
 options(.aqp.plotSPC.args = NULL)
-options(.aqp.plotSPC.args = list(width = 0.35, scaling.factor = 0.013, max.depth = 150, cex.id = 0.7, cex.names = 0.85))
+options(.aqp.plotSPC.args = list(width = 0.35, scaling.factor = 0.015, max.depth = 150, cex.id = 0.7, cex.names = 0.85))
 
 par(mar = c(0.5, 0, 0, 2), bg = 'black', fg = 'white')
 plotGeomorphCrossSection(osd, type = 'line')
 plotGeomorphCrossSection(osd, type = 'bar')
+
+plotGeomorphCrossSection(osd, type = 'line', g = 'terrace')
+# plotGeomorphCrossSection(osd, type = 'line', g = 'flats')
+plotGeomorphCrossSection(osd, type = 'line', g = 'shape_across')
+plotGeomorphCrossSection(osd, type = 'line', g = 'shape_down')
+
+plotGeomorphCrossSection(osd, type = 'bar', g = 'geomorphons')
+
+
+
 
 options(.aqp.plotSPC.args = list(width = 0.35, max.depth = 150, cex.id = 0.7, cex.names = 0.8))
 plotGeomorphCrossSection(osd, type = 'line', clust = FALSE)
 plotGeomorphCrossSection(osd, type = 'bar', clust = FALSE)
 
 
+plotGeomorphCrossSection(osd, type = 'line', g = 'terrace', clust = FALSE)
+plotGeomorphCrossSection(osd, type = 'line', g = 'shape_across', clust = FALSE)
+plotGeomorphCrossSection(osd, type = 'line', g = 'shape_down', clust = FALSE)
 
-## TODO: combine 2D hillsope + flats
+
+
+# hmm..
+plotGeomorphCrossSection(osd, type = 'bar', g = 'geomorphons', clust = FALSE)
+
+
+
+## TODO: combine multiple geomorphic descriptions
 o1 <- reconcileOSDGeomorph(osd, selection = 'geomcomp')
-o2 <- reconcileOSDGeomorph(osd, selection = 'flats')
+o2 <- reconcileOSDGeomorph(osd, selection = 'terrace')
 # http://127.0.0.1:27837/graphics/8f1172c7-7e9e-49dd-9f4f-df3118a383b8.png
 # safely combine SPCs, recognizing that there will be duplication
 o1 <- o1$geom
@@ -236,6 +275,7 @@ g <- cbind(series = g[, 1], g2)
 # check:
 nrow(g) == length(o)
 
+options(.aqp.plotSPC.args = NULL)
 plotSPC(o)
 
 knitr::kable(g, row.names = FALSE, digits = 2)

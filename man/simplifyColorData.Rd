@@ -27,7 +27,7 @@ data which may or may not contain multiple colors per horizon/moisture
 status combination. \code{simplifyColorData} will "mix" multiple colors
 associated with horizons in \code{d}, according to IDs specified by
 \code{id.var}, using "weights" (area percentages) specified by the \code{wt}
-argument to \code{mix_and_clean_colors}.
+argument.
 
 Note that this function doesn't actually simulate the mixture of pigments on
 a surface, rather, "mixing" is approximated via weighted average in the
@@ -38,11 +38,6 @@ than NASIS by careful use of the \code{id.var} and \code{wt} arguments.
 However, \code{d} must contain Munsell colors split into columns named
 "colorhue", "colorvalue", and "colorchroma". In addition, the moisture state
 ("Dry" or "Moist") must be specified in a column named "colormoistst".
-
-The \code{mix_and_clean_colors} function can be applied to arbitrary data
-sources as long as \code{x} contains sRGB coordinates in columns named "r",
-"g", and "b". This function should be applied to chunks of rows within which
-color mixtures make sense.
 
 Examples:
 \itemize{
