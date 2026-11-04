@@ -125,8 +125,7 @@ createSSURGO(
 - quiet:
 
   *logical*. Suppress messages and other output from database read/write
-  operations? When `FALSE`, a progress message is shown while scanning
-  `exdir`.
+  operations?
 
 - areasymbols:
 

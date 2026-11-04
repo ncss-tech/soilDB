@@ -83,7 +83,7 @@ The `fSSURGO` database is an unofficial hybrid of gSSURGO, back-filled
 with STATSGO2 data where SSURGO data are missing (e.b. denied access,
 NOTCOM, large misc. areas other than water).
 
-The RSS mukey grid is 10m resolution. CONUS, AK, HI, and PR mukey grids
+The RSS mukey grid is 30m resolution. CONUS, AK, HI, and PR mukey grids
 are 30m resolution. AS, GU, MP, and PW use a geographic coordinate
 system with a grid size of approximately 30m.
 
