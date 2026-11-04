@@ -2,7 +2,7 @@ library(aqp)
 library(soilDB)
 library(venn)
 
-s <- 'marshall'
+s <- 'kingile'
 o <- fetchOSD(s, extended = TRUE)
 
 # if missing, `geog_assoc_soils` is FALSE --> should probably be an empty DF
@@ -74,7 +74,7 @@ title(toupper(s))
 # search for series with no specified GAS
 
 o <- OSDquery(geog_assoc_soils = 'none')
-
+nrow(o)
 
 x <- fetchOSD('KIEV', extended = TRUE)
 x$geog_assoc_soils

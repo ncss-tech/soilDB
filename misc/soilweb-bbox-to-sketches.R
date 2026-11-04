@@ -12,6 +12,19 @@ library(soilDB)
 ## press 'b', BBOX is copied to the clipboard
 
 
+## OH077
+# https://casoilresource.lawr.ucdavis.edu/gmap/?loc=41.06479,-82.56483,z14\
+.minorComponents <- FALSE
+bb <- '-82.6138 41.0359,-82.6138 41.0940,-82.5119 41.0940,-82.5119 41.0359,-82.6138 41.0359'
+
+
+## OH077 zoom-in
+# https://casoilresource.lawr.ucdavis.edu/gmap/?loc=41.06450,-82.56983,z16
+# include minor components
+.minorComponents <- TRUE
+bb <- '-82.5908 41.0568,-82.5908 41.0723,-82.5496 41.0723,-82.5496 41.0568,-82.5908 41.0568'
+
+
 ## OK051
 # https://casoilresource.lawr.ucdavis.edu/gmap/?loc=34.80891,-98.02792,z15
 bb <- '-98.0683 34.7920,-98.0683 34.8250,-98.0032 34.8250,-98.0032 34.7920,-98.0683 34.7920'
@@ -116,6 +129,13 @@ x <- st_as_sfc(wkt, crs = 4326)
 # could also use SDA_query() with more elaborate SQL
 m <- SDA_spatialQuery(x, what = 'mukey')
 
+# optional filtering of major components
+.majorcompflag <- ifelse(
+  .minorComponents, 
+  yes = "--", 
+  no = "AND majcompflag = 'Yes'"
+)
+
 ## compose SQL to return component details for these map unit keys
 # return only:
 # * map units overlapping with BBOX
@@ -125,9 +145,11 @@ sql <- sprintf(
   "SELECT mukey, cokey, compname, compkind, comppct_r 
   FROM component 
   WHERE mukey IN %s 
-  AND majcompflag = 'Yes'
+  %s
   AND compkind != 'Miscellaneous area'
-  ", format_SQL_in_statement(as.integer(m$mukey))
+  ", 
+  format_SQL_in_statement(as.integer(m$mukey)),
+  .majorcompflag
 )
 
 ## send to SDA, result is a data.frame
@@ -189,7 +211,7 @@ SoilTaxonomyDendrogram(
 
 
 options(.aqp.plotSPC.args = NULL)
-options(.aqp.plotSPC.args = list(width = 0.35, scaling.factor = 0.015, max.depth = 150, cex.id = 0.7, cex.names = 0.85))
+options(.aqp.plotSPC.args = list(width = 0.35, scaling.factor = 0.014, max.depth = 150, cex.id = 0.7, cex.names = 0.85))
 
 par(mar = c(0.5, 0, 0, 2), bg = 'black', fg = 'white')
 plotGeomorphCrossSection(osd, type = 'line')
@@ -198,22 +220,22 @@ plotGeomorphCrossSection(osd, type = 'bar')
 plotGeomorphCrossSection(osd, type = 'line', g = 'terrace')
 # plotGeomorphCrossSection(osd, type = 'line', g = 'flats')
 plotGeomorphCrossSection(osd, type = 'line', g = 'shape_across')
+
 plotGeomorphCrossSection(osd, type = 'line', g = 'shape_down')
+plotGeomorphCrossSection(osd, type = 'bar', g = 'shape_down')
+
+
 
 plotGeomorphCrossSection(osd, type = 'bar', g = 'geomorphons')
-
-
-
 
 options(.aqp.plotSPC.args = list(width = 0.35, max.depth = 150, cex.id = 0.7, cex.names = 0.8))
 plotGeomorphCrossSection(osd, type = 'line', clust = FALSE)
 plotGeomorphCrossSection(osd, type = 'bar', clust = FALSE)
 
-
 plotGeomorphCrossSection(osd, type = 'line', g = 'terrace', clust = FALSE)
 plotGeomorphCrossSection(osd, type = 'line', g = 'shape_across', clust = FALSE)
 plotGeomorphCrossSection(osd, type = 'line', g = 'shape_down', clust = FALSE)
-
+plotGeomorphCrossSection(osd, type = 'bar', g = 'shape_down', clust = FALSE)
 
 
 # hmm..

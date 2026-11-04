@@ -93,7 +93,7 @@
 ISSR800.wcs <- function(aoi, var, res = 800, quiet = FALSE) {
   
   # vintage of source data
-  .vintage <- 'FY2026'
+  .vintage <- 'FY2027'
   
   if (!requireNamespace("terra")) {
     stop("package 'terra' is required", call. = FALSE)

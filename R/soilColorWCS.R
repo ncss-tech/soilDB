@@ -120,7 +120,7 @@
 soilColor.wcs <- function(aoi, var, res = NULL, quiet = FALSE) {
   
   # vintage of source data
-  .vintage <- 'FY2026'
+  .vintage <- 'FY2027'
   
   # sanity check: AOI specification
   if (!inherits(aoi, c('list', 'Spatial', 'sf', 'sfc', 'bbox', 'RasterLayer', 'SpatRaster', 'SpatVector'))) { 
@@ -150,7 +150,6 @@ soilColor.wcs <- function(aoi, var, res = NULL, quiet = FALSE) {
   # compute BBOX / IMG geometry in native CRS
   wcs.geom <- .prepare_AOI(aoi, res = res, native_crs = var.spec$crs)
   
-  ## TODO: investigate why this is so
   # sanity check: a 1x1 pixel request to WCS results in a corrupt GeoTiff 
   if (wcs.geom$width == 1 && wcs.geom$height == 1) {
     stop('WCS requests for a 1x1 pixel image are not supported, try a smaller resolution', call. = FALSE)

@@ -6,60 +6,63 @@
 # trying to do more with WCS metadata,
 # still very limited
 # # ISSR800 getCapabilities still doesn't work, why?
-# https://casoilresource.lawr.ucdavis.edu/cgi-bin/mapserv?map=/data1/website/wcs/issr800.map&SERVICE=WCS&VERSION=2.0.1&REQUEST=GetCapabilities
+# https://casoilresource.lawr.ucdavis.edu/cgi-bin/mapserv?map=isr800-wcs&SERVICE=WCS&VERSION=2.0.1&REQUEST=GetCapabilities
 
 # stay in holding pattern until resolved
 
-# WCS_capabilities <- function(wcs = c('mukey', 'issr800', 'soilcolor')) {
-#   
-#   if (!requireNamespace('xml2')) {
-#     stop('please install the package: xml2', call. = FALSE)
-#   }
-#   
-#   wcs <- match.arg(wcs)
-#   
-#   .mapfile <- switch(
-#     wcs,
-#     mukey = 'mukey-grids.map',
-#     issr800 = 'issr800.map',
-#     soilcolor = 'soilcolor.map'
-#   )
-#   
-#   .u <- sprintf('https://casoilresource.lawr.ucdavis.edu/cgi-bin/mapserv?map=/data1/website/wcs/%s&SERVICE=WCS&VERSION=2.0.1&REQUEST=GetCapabilities', .mapfile)
-#   
-#   .xml <- xml2::read_xml(.u)
-#   
-#   .layers <- xml2::xml_find_all(.xml, xpath = '//wcs:CoverageId')
-#   
-#   .res <- xml2::xml_text(xml2::xml_contents(.layers))
-#   
-#   return(.res)
-# }
-# 
-# 
-# WCS_describeCoverage <- function(wcs, layer) {
-#   
-#   if (!requireNamespace('xml2')) {
-#     stop('please install the package: xml2', call. = FALSE)
-#   }
-#   
-#   wcs <- match.arg(wcs)
-#   
-#   .mapfile <- switch(
-#     wcs,
-#     mukey = 'mukey-grids.map',
-#     issr800 = 'issr800.map',
-#     soilcolor = 'soilcolor.map'
-#   )
-#   
-#   u <- sprintf(
-#     'https://casoilresource.lawr.ucdavis.edu/cgi-bin/mapserv?map=/data1/website/wcs/%s&SERVICE=WCS&VERSION=2.0.1&REQUEST=DescribeCoverage&COVERAGEID=%s',
-#     .mapfile, layer
-#   )
-#   
-#   # ...
-# }
-# 
+WCS_capabilities <- function(wcs = c('mukey', 'issr800', 'soilcolor')) {
+
+  if (!requireNamespace('xml2')) {
+    stop('please install the package: xml2', call. = FALSE)
+  }
+
+  wcs <- match.arg(wcs)
+
+  .mapfile <- switch(
+    wcs,
+    mukey = 'mukey-wcs',
+    issr800 = 'issr800-wcs',
+    soilcolor = 'soilcolor-wcs'
+  )
+
+  .u <- sprintf('https://casoilresource.lawr.ucdavis.edu/cgi-bin/mapserv?map=%s&SERVICE=WCS&VERSION=2.0.1&REQUEST=GetCapabilities', .mapfile)
+
+  .xml <- xml2::read_xml(.u)
+
+  .layers <- xml2::xml_find_all(.xml, xpath = '//wcs:CoverageId')
+
+  .res <- xml2::xml_text(xml2::xml_contents(.layers))
+
+  return(.res)
+}
+
+
+WCS_describeCoverage <- function(wcs = c('mukey', 'issr800', 'soilcolor'), layer) {
+
+  if (!requireNamespace('xml2')) {
+    stop('please install the package: xml2', call. = FALSE)
+  }
+
+  wcs <- match.arg(wcs)
+
+  .mapfile <- switch(
+    wcs,
+    mukey = 'mukey-wcs',
+    issr800 = 'issr800-wcs',
+    soilcolor = 'soilcolor-wcs'
+  )
+
+  u <- sprintf(
+    'https://casoilresource.lawr.ucdavis.edu/cgi-bin/mapserv?map=%s&SERVICE=WCS&VERSION=2.0.1&REQUEST=DescribeCoverage&COVERAGEID=%s',
+    .mapfile, layer
+  )
+
+  .xml <- xml2::read_xml(u)
+  
+  browser()
+  
+}
+
 
 ###
 
@@ -1448,7 +1451,7 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     dsn = 'gnatsgo',
     type = 'GEOTIFF_FLOAT',
     desc = 'gNATSGO map unit keys',
-    vintage = 'FY2026',
+    vintage = 'FY2027',
     grid = list(
       dim = c(nrows = 97053, ncols = 153996),
       ext = c(-2356125, 2263755, 260985, 3172575)
@@ -1463,7 +1466,7 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     dsn = 'gssurgo',
     type = 'GEOTIFF_FLOAT',
     desc = 'gSSURGO map unit keys',
-    vintage = 'FY2026',
+    vintage = 'FY2027',
     grid = list(
       dim = c(nrows = 97053, ncols = 153996),
       ext = c(-2356125, 2263755, 260985, 3172575)
@@ -1478,12 +1481,12 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     dsn = 'fssurgo',
     type = 'GEOTIFF_FLOAT',
     desc = 'SSURGO/STATSGO2 map unit keys',
-    vintage = 'FY2026',
+    vintage = 'FY2027',
     grid = list(
       dim = c(nrows = 97053, ncols = 153996),
       ext = c(-2356125, 2263755, 260985, 3172575)
     ),
-    na = 4294967296,
+    na = 0,
     crs = 'EPSG:5070',
     res = 30,
     rat = NULL
@@ -1493,12 +1496,12 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     dsn = 'statsgo',
     type = 'GEOTIFF_FLOAT',
     desc = 'STATSGO2 map unit keys',
-    vintage = 'FY2026',
+    vintage = 'FY2027',
     grid = list(
       dim = c(nrows = 97053, ncols = 153996),
       ext = c(-2356125, 2263755, 260985, 3172575)
     ),
-    na  = 0,
+    na  = 4294967295,
     crs = 'EPSG:5070',
     res = 30,
     rat = NULL
@@ -1613,7 +1616,7 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     dsn = 'rss',
     type = 'GEOTIFF_FLOAT',
     desc = 'RSS map unit keys',
-    vintage = 'FY26',
+    vintage = 'FY2026',
     grid = list(
       dim = c(nrows = 97053, ncols = 153996),
       ext = c(-2356125, 2263755, 260985, 3172575)
