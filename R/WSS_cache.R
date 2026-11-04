@@ -303,7 +303,7 @@ clear_WSS_cache <- function(areasymbols = NULL,
 }
 
 .wss_fiscal_year <- function(x, offset = -2) {
-  # calculates fiscal year based on october 1 start date
+  # calculates fiscal year based on October 1 start date
   # using -2 month offset for saverest dates before start next FY
   # ASR begins in August, and new FY starts in October
   x <- as.Date(x)

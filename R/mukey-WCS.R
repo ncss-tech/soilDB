@@ -41,7 +41,7 @@
 #' 
 #' The `fSSURGO` database is an unofficial hybrid of gSSURGO, back-filled with STATSGO2 data where SSURGO data are missing (e.b. denied access, NOTCOM, large misc. areas other than water). 
 #' 
-#' The RSS mukey grid is 10m resolution. CONUS, AK, HI, and PR mukey grids are 30m resolution. AS, GU, MP, and PW use a geographic coordinate system with a grid size of approximately 30m.
+#' The RSS mukey grid is 30m resolution. CONUS, AK, HI, and PR mukey grids are 30m resolution. AS, GU, MP, and PW use a geographic coordinate system with a grid size of approximately 30m.
 #' 
 #' 
 #' @return A `SpatRaster` (or `RasterLayer`) object containing indexed map unit keys and associated raster attribute table, or a `try-error` if the WCS request fails. Basic metadata are encoded into the resulting `SpatRaster`, accessible via `terra::metags()`.
@@ -95,26 +95,6 @@ mukey.wcs <- function(
     stop("package 'terra' is required", call. = FALSE)
   }
   
-  # 
-  # 
-  # # lookup native CRS
-  # if (db %in% .conusGrids) {
-  #   # CONUS
-  #   .crs <- 'EPSG:5070'
-  #   .grid <- terra::rast(nrows = 97053, ncols = 153996, crs = .crs, 
-  #                        extent = terra::ext(-2356125, 2263755, 260985, 3172575))
-  # } else if (db == 'pr_ssurgo') {
-  #   # PR
-  #   .crs <- 'EPSG:32161'
-  #   .grid <- terra::rast(nrows = 2229, ncols = 9608, crs = .crs, 
-  #                        extent = terra::ext(39905, 328145, 208815, 275685))
-  # } else if (db == 'hi_ssurgo') {
-  #   # HI
-  #   .crs <- 'EPSG:6628'
-  #   .grid <- terra::rast(nrows = 12441, ncols = 17193, crs = .crs, 
-  #                        extent = terra::ext(56992, 572782, 8585, 381815))
-  # }
-  
   # sanity check: aoi specification
   if (!inherits(aoi, c('list', 'Spatial', 'sf', 'sfc', 'bbox', 'RasterLayer', 'SpatRaster', 'SpatVector'))) { 
     stop('invalid `aoi` specification', call. = FALSE)
@@ -143,7 +123,6 @@ mukey.wcs <- function(
   # prepare AOI in native CRS
   wcs.geom <- .prepare_AOI(obj = aoi, res = res, native_crs = var.spec$crs)
   
-  ## TODO: investigate why
   # sanity check: a 1x1 pixel request to WCS results in a corrupt GeoTiff 
   if (wcs.geom$width == 1 && wcs.geom$height == 1) {
     stop('WCS requests for a 1x1 pixel image are not supported, try a smaller resolution', call. = FALSE)

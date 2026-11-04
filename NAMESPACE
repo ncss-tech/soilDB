@@ -173,51 +173,67 @@ export(summarizeSoilTemperature)
 export(taxaExtent)
 export(uncode)
 export(waterDayYear)
-importFrom(DBI,dbConnect)
-importFrom(DBI,dbExistsTable)
-importFrom(DBI,dbFetch)
-importFrom(DBI,dbGetQuery)
-importFrom(DBI,dbSendQuery)
-importFrom(curl,curl_download)
-importFrom(curl,has_internet)
-importFrom(curl,new_handle)
-importFrom(data.table,as.data.table)
-importFrom(data.table,data.table)
-importFrom(data.table,merge.data.table)
-importFrom(data.table,rbindlist)
-importFrom(grDevices,col2rgb)
-importFrom(grDevices,convertColor)
-importFrom(grDevices,rgb)
-importFrom(graphics,axis)
-importFrom(graphics,legend)
-importFrom(graphics,mtext)
-importFrom(graphics,plot)
-importFrom(graphics,rect)
-importFrom(graphics,segments)
-importFrom(graphics,text)
+importFrom(DBI,
+  dbConnect,
+  dbExistsTable,
+  dbFetch,
+  dbGetQuery,
+  dbSendQuery
+)
+importFrom(curl,
+  curl_download,
+  has_internet,
+  new_handle
+)
+importFrom(data.table,
+  as.data.table,
+  data.table,
+  merge.data.table,
+  rbindlist
+)
+importFrom(grDevices,
+  col2rgb,
+  convertColor,
+  rgb
+)
+importFrom(graphics,
+  axis,
+  legend,
+  mtext,
+  plot,
+  rect,
+  segments,
+  text
+)
 importFrom(jsonlite,fromJSON)
-importFrom(methods,"slot<-")
-importFrom(methods,as)
-importFrom(methods,is)
-importFrom(methods,slot)
-importFrom(stats,aggregate)
-importFrom(stats,approxfun)
-importFrom(stats,as.formula)
-importFrom(stats,complete.cases)
-importFrom(stats,na.omit)
-importFrom(stats,sd)
-importFrom(stats,splinefun)
-importFrom(stats,weighted.mean)
-importFrom(utils,URLencode)
-importFrom(utils,flush.console)
-importFrom(utils,head)
-importFrom(utils,object.size)
-importFrom(utils,packageVersion)
-importFrom(utils,read.csv)
-importFrom(utils,read.delim)
-importFrom(utils,read.table)
-importFrom(utils,setTxtProgressBar)
-importFrom(utils,txtProgressBar)
-importFrom(utils,type.convert)
-importFrom(utils,unzip)
-importFrom(utils,write.table)
+importFrom(methods,
+  "slot<-",
+  as,
+  is,
+  slot
+)
+importFrom(stats,
+  aggregate,
+  approxfun,
+  as.formula,
+  complete.cases,
+  na.omit,
+  sd,
+  splinefun,
+  weighted.mean
+)
+importFrom(utils,
+  URLencode,
+  flush.console,
+  head,
+  object.size,
+  packageVersion,
+  read.csv,
+  read.delim,
+  read.table,
+  setTxtProgressBar,
+  txtProgressBar,
+  type.convert,
+  unzip,
+  write.table
+)
