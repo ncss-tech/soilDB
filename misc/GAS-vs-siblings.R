@@ -21,6 +21,19 @@ cousins <- toupper(unique(cous$cousins$sibling[cous$cousins$majcompflag]))
 # d.maj <- data.frame(series = sib.mag)
 # d.gas <- data.frame(series = gas)
 
+
+l <- list(
+  `Geog.\nAssoc. Soils\n` = gas,
+  `Siblings\n(All)` = sib.all,
+  `Competing\nSeries` = o$competing$competing
+)
+
+par(mar = c(0, 0, 2, 0))
+venn(l, ellipse = TRUE, ilcs = 1, sncs = 0.85, par = FALSE, zcolor = 'style', box = FALSE, ilabels = 'counts')
+title(toupper(s))
+
+
+
 l <- list(
   `Geog.\nAssoc. Soils\n` = gas,
   `Siblings\n(All)` = sib.all,
@@ -57,15 +70,6 @@ venn(l, ellipse = TRUE, ilcs = 1, sncs = 0.66, par = FALSE, zcolor = 'style', bo
 title(toupper(s))
 
 
-l <- list(
-  `Geog.\nAssoc. Soils\n` = gas,
-  `Siblings\n(All)` = sib.all,
-  `Competing\nSeries` = o$competing$competing
-)
-
-par(mar = c(0, 0, 2, 0))
-venn(l, ellipse = TRUE, ilcs = 1, sncs = 0.66, par = FALSE, zcolor = 'style', box = FALSE, ilabels = 'counts')
-title(toupper(s))
 
 
 ## TODO: how to quantify overlap across conceptual classification systems?
