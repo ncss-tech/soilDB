@@ -35,20 +35,20 @@ When specified as a \code{list}, \code{aoi} should contain:
 
 The WCS query is parameterized using a rectangular extent derived from the above AOI specification, after conversion to the native CRS (EPSG:5070) of the WCS grids.
 
-Databases available from this WCS can be queried using \code{WCS_details(wcs = 'mukey')}.\tabular{lll}{
-   db \tab crs \tab description \cr
-   ak_ssurgo \tab EPSG:3338 \tab AK map unit keys \cr
-   as_ssurgo \tab EPSG:4326 \tab AS map unit keys \cr
-   fssurgo \tab EPSG:5070 \tab SSURGO/STATSGO2 map unit keys \cr
-   gnatsgo \tab EPSG:5070 \tab gNATSGO map unit keys \cr
-   gssurgo \tab EPSG:5070 \tab gSSURGO map unit keys \cr
-   gu_ssurgo \tab EPSG:4326 \tab GU map unit keys \cr
-   hi_ssurgo \tab EPSG:6628 \tab HI map unit keys \cr
-   mp_ssurgo \tab EPSG:4326 \tab MP map unit keys \cr
-   pr_ssurgo \tab EPSG:32161 \tab PR map unit keys \cr
-   pw_ssurgo \tab EPSG:4326 \tab PW map unit keys \cr
-   rss \tab EPSG:5070 \tab RSS map unit keys \cr
-   statsgo \tab EPSG:5070 \tab STATSGO2 map unit keys \cr
+Databases available from this WCS can be queried using \code{WCS_details(wcs = 'mukey')}.\tabular{llll}{
+   db \tab vintage \tab crs \tab description \cr
+   ak_ssurgo \tab FY2027 \tab EPSG:3338 \tab AK map unit keys \cr
+   as_ssurgo \tab FY2027 \tab EPSG:4326 \tab AS map unit keys \cr
+   fssurgo \tab FY2027 \tab EPSG:5070 \tab SSURGO/STATSGO2 map unit keys \cr
+   gnatsgo \tab FY2027 \tab EPSG:5070 \tab gNATSGO map unit keys \cr
+   gssurgo \tab FY2027 \tab EPSG:5070 \tab gSSURGO map unit keys \cr
+   gu_ssurgo \tab FY2027 \tab EPSG:4326 \tab GU map unit keys \cr
+   hi_ssurgo \tab FY2027 \tab EPSG:6628 \tab HI map unit keys \cr
+   mp_ssurgo \tab FY2027 \tab EPSG:4326 \tab MP map unit keys \cr
+   pr_ssurgo \tab FY2027 \tab EPSG:32161 \tab PR map unit keys \cr
+   pw_ssurgo \tab FY2027 \tab EPSG:4326 \tab PW map unit keys \cr
+   rss \tab FY2026 \tab EPSG:5070 \tab RSS map unit keys \cr
+   statsgo \tab FY2027 \tab EPSG:5070 \tab STATSGO2 map unit keys \cr
 }
 
 
