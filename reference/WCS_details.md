@@ -24,53 +24,53 @@ a `data.frame`
 ``` r
 
 WCS_details(wcs = 'ISSR800')
-#>                 var       crs
-#> 4     caco3_kg_sq_m EPSG:5070
-#> 8         cec_025cm EPSG:5070
-#> 9         cec_050cm EPSG:5070
-#> 7          cec_05cm EPSG:5070
-#> 18       clay_025cm EPSG:5070
-#> 17        clay_05cm EPSG:5070
-#> 19      clay_2550cm EPSG:5070
-#> 20      clay_3060cm EPSG:5070
-#> 32   drainage_class EPSG:5070
-#> 6          ec_025cm EPSG:5070
-#> 5           ec_05cm EPSG:5070
-#> 38       greatgroup EPSG:5070
-#> 31           hydgrp EPSG:5070
-#> 42    lcc_irrigated EPSG:5070
-#> 43 lcc_nonirrigated EPSG:5070
-#> 46     n_components EPSG:5070
-#> 45       n_polygons EPSG:5070
-#> 3        om_kg_sq_m EPSG:5070
-#> 10             paws EPSG:5070
-#> 12       paws_025cm EPSG:5070
-#> 11       paws_050cm EPSG:5070
-#> 14         ph_025cm EPSG:5070
-#> 13          ph_05cm EPSG:5070
-#> 15        ph_2550cm EPSG:5070
-#> 16        ph_3060cm EPSG:5070
-#> 22       sand_025cm EPSG:5070
-#> 21        sand_05cm EPSG:5070
-#> 23      sand_2550cm EPSG:5070
-#> 24      sand_3060cm EPSG:5070
-#> 29              sar EPSG:5070
-#> 30      series_name EPSG:5070
-#> 26       silt_025cm EPSG:5070
-#> 25        silt_05cm EPSG:5070
-#> 27      silt_2550cm EPSG:5070
-#> 28      silt_3060cm EPSG:5070
-#> 36        soilorder EPSG:5070
-#> 2        ssurgo_pct EPSG:5070
-#> 1       statsgo_pct EPSG:5070
-#> 35              str EPSG:5070
-#> 37         suborder EPSG:5070
-#> 44      survey_type EPSG:5070
-#> 40    texture_025cm EPSG:5070
-#> 39     texture_05cm EPSG:5070
-#> 41   texture_2550cm EPSG:5070
-#> 33              weg EPSG:5070
-#> 34              wei EPSG:5070
+#>                 var vintage       crs
+#> 4     caco3_kg_sq_m  FY2027 EPSG:5070
+#> 8         cec_025cm  FY2027 EPSG:5070
+#> 9         cec_050cm  FY2027 EPSG:5070
+#> 7          cec_05cm  FY2027 EPSG:5070
+#> 18       clay_025cm  FY2027 EPSG:5070
+#> 17        clay_05cm  FY2027 EPSG:5070
+#> 19      clay_2550cm  FY2027 EPSG:5070
+#> 20      clay_3060cm  FY2027 EPSG:5070
+#> 32   drainage_class  FY2027 EPSG:5070
+#> 6          ec_025cm  FY2027 EPSG:5070
+#> 5           ec_05cm  FY2027 EPSG:5070
+#> 38       greatgroup  FY2027 EPSG:5070
+#> 31           hydgrp  FY2027 EPSG:5070
+#> 42    lcc_irrigated  FY2027 EPSG:5070
+#> 43 lcc_nonirrigated  FY2027 EPSG:5070
+#> 46     n_components  FY2027 EPSG:5070
+#> 45       n_polygons  FY2027 EPSG:5070
+#> 3        om_kg_sq_m  FY2027 EPSG:5070
+#> 10             paws  FY2027 EPSG:5070
+#> 12       paws_025cm  FY2027 EPSG:5070
+#> 11       paws_050cm  FY2027 EPSG:5070
+#> 14         ph_025cm  FY2027 EPSG:5070
+#> 13          ph_05cm  FY2027 EPSG:5070
+#> 15        ph_2550cm  FY2027 EPSG:5070
+#> 16        ph_3060cm  FY2027 EPSG:5070
+#> 22       sand_025cm  FY2027 EPSG:5070
+#> 21        sand_05cm  FY2027 EPSG:5070
+#> 23      sand_2550cm  FY2027 EPSG:5070
+#> 24      sand_3060cm  FY2027 EPSG:5070
+#> 29              sar  FY2027 EPSG:5070
+#> 30      series_name  FY2027 EPSG:5070
+#> 26       silt_025cm  FY2027 EPSG:5070
+#> 25        silt_05cm  FY2027 EPSG:5070
+#> 27      silt_2550cm  FY2027 EPSG:5070
+#> 28      silt_3060cm  FY2027 EPSG:5070
+#> 36        soilorder  FY2027 EPSG:5070
+#> 2        ssurgo_pct  FY2027 EPSG:5070
+#> 1       statsgo_pct  FY2027 EPSG:5070
+#> 35              str  FY2027 EPSG:5070
+#> 37         suborder  FY2027 EPSG:5070
+#> 44      survey_type  FY2027 EPSG:5070
+#> 40    texture_025cm  FY2027 EPSG:5070
+#> 39     texture_05cm  FY2027 EPSG:5070
+#> 41   texture_2550cm  FY2027 EPSG:5070
+#> 33              weg  FY2027 EPSG:5070
+#> 34              wei  FY2027 EPSG:5070
 #>                                               description
 #> 4                                    Total CaCO3 (kg/m^2)
 #> 8                   CEC at pH 7 0-25cm depth (cmol[+]/kg)

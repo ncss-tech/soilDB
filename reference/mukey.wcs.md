@@ -63,21 +63,21 @@ the above AOI specification, after conversion to the native CRS
 Databases available from this WCS can be queried using
 `WCS_details(wcs = 'mukey')`.
 
-|           |            |                               |
-|-----------|------------|-------------------------------|
-| db        | crs        | description                   |
-| ak_ssurgo | EPSG:3338  | AK map unit keys              |
-| as_ssurgo | EPSG:4326  | AS map unit keys              |
-| fssurgo   | EPSG:5070  | SSURGO/STATSGO2 map unit keys |
-| gnatsgo   | EPSG:5070  | gNATSGO map unit keys         |
-| gssurgo   | EPSG:5070  | gSSURGO map unit keys         |
-| gu_ssurgo | EPSG:4326  | GU map unit keys              |
-| hi_ssurgo | EPSG:6628  | HI map unit keys              |
-| mp_ssurgo | EPSG:4326  | MP map unit keys              |
-| pr_ssurgo | EPSG:32161 | PR map unit keys              |
-| pw_ssurgo | EPSG:4326  | PW map unit keys              |
-| rss       | EPSG:5070  | RSS map unit keys             |
-| statsgo   | EPSG:5070  | STATSGO2 map unit keys        |
+|           |         |            |                               |
+|-----------|---------|------------|-------------------------------|
+| db        | vintage | crs        | description                   |
+| ak_ssurgo | FY2027  | EPSG:3338  | AK map unit keys              |
+| as_ssurgo | FY2027  | EPSG:4326  | AS map unit keys              |
+| fssurgo   | FY2027  | EPSG:5070  | SSURGO/STATSGO2 map unit keys |
+| gnatsgo   | FY2027  | EPSG:5070  | gNATSGO map unit keys         |
+| gssurgo   | FY2027  | EPSG:5070  | gSSURGO map unit keys         |
+| gu_ssurgo | FY2027  | EPSG:4326  | GU map unit keys              |
+| hi_ssurgo | FY2027  | EPSG:6628  | HI map unit keys              |
+| mp_ssurgo | FY2027  | EPSG:4326  | MP map unit keys              |
+| pr_ssurgo | FY2027  | EPSG:32161 | PR map unit keys              |
+| pw_ssurgo | FY2027  | EPSG:4326  | PW map unit keys              |
+| rss       | FY2026  | EPSG:5070  | RSS map unit keys             |
+| statsgo   | FY2027  | EPSG:5070  | STATSGO2 map unit keys        |
 
 The `fSSURGO` database is an unofficial hybrid of gSSURGO, back-filled
 with STATSGO2 data where SSURGO data are missing (e.b. denied access,
