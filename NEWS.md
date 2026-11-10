@@ -1,3 +1,6 @@
+# soilDB (development)
+ - WCS specifications now managed server-side via SoilWeb
+
 # soilDB 2.9.3 (2026-09-17) 
  - `createSSURGO()` fix bug in logical column handling (introduced in 2.9.2) due to metadata column type enforcement (#483)
  - Fix `structure()` usage of special argument names (.Label, .Names) in test fixtures for R-devel (#484)
