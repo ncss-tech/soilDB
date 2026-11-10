@@ -30,80 +30,80 @@ When specified as a \code{list}, \code{aoi} should contain:
 
 The WCS query is parameterized using a rectangular extent derived from the above AOI specification, after conversion to the native CRS of the soil color grids.
 
-Variables available from this WCS can be queried using \code{WCS_details(wcs = 'soilColor')}. The full resolution version of the CONUS soil color grids use a \code{hr} suffix, e.g. 'sc025cm_hr'.\tabular{lll}{
-   var \tab crs \tab description \cr
-   ak_sc005cm \tab EPSG:3338 \tab Alaska, moist soil colors, 5cm (90m resolution) \cr
-   ak_sc010cm \tab EPSG:3338 \tab Alaska, moist soil colors, 10cm (90m resolution) \cr
-   ak_sc015cm \tab EPSG:3338 \tab Alaska, moist soil colors, 15cm (90m resolution) \cr
-   ak_sc025cm \tab EPSG:3338 \tab Alaska, moist soil colors, 25cm (90m resolution) \cr
-   ak_sc050cm \tab EPSG:3338 \tab Alaska, moist soil colors, 50cm (90m resolution) \cr
-   ak_sc075cm \tab EPSG:3338 \tab Alaska, moist soil colors, 75cm (90m resolution) \cr
-   ak_sc100cm \tab EPSG:3338 \tab Alaska, moist soil colors, 100cm (90m resolution) \cr
-   ak_sc125cm \tab EPSG:3338 \tab Alaska, moist soil colors, 125cm (90m resolution) \cr
-   as_sc005cm \tab EPSG:4326 \tab American Samoa, moist soil colors, 5cm (approx. 30m resolution) \cr
-   as_sc010cm \tab EPSG:4326 \tab American Samoa, moist soil colors, 10cm (approx. 30m resolution) \cr
-   as_sc015cm \tab EPSG:4326 \tab American Samoa, moist soil colors, 15cm (approx. 30m resolution) \cr
-   as_sc025cm \tab EPSG:4326 \tab American Samoa, moist soil colors, 25cm (approx. 30m resolution) \cr
-   as_sc050cm \tab EPSG:4326 \tab American Samoa, moist soil colors, 50cm (approx. 30m resolution) \cr
-   as_sc075cm \tab EPSG:4326 \tab American Samoa, moist soil colors, 75cm (approx. 30m resolution) \cr
-   as_sc100cm \tab EPSG:4326 \tab American Samoa, moist soil colors, 100cm (approx. 30m resolution) \cr
-   as_sc125cm \tab EPSG:4326 \tab American Samoa, moist soil colors, 125cm (approx. 30m resolution) \cr
-   gu_sc005cm \tab EPSG:4326 \tab Guam, moist soil colors, 5cm (approx. 30m resolution) \cr
-   gu_sc010cm \tab EPSG:4326 \tab Guam, moist soil colors, 10cm (approx. 30m resolution) \cr
-   gu_sc015cm \tab EPSG:4326 \tab Guam, moist soil colors, 15cm (approx. 30m resolution) \cr
-   gu_sc025cm \tab EPSG:4326 \tab Guam, moist soil colors, 25cm (approx. 30m resolution) \cr
-   gu_sc050cm \tab EPSG:4326 \tab Guam, moist soil colors, 50cm (approx. 30m resolution) \cr
-   gu_sc075cm \tab EPSG:4326 \tab Guam, moist soil colors, 75cm (approx. 30m resolution) \cr
-   gu_sc100cm \tab EPSG:4326 \tab Guam, moist soil colors, 100cm (approx. 30m resolution) \cr
-   gu_sc125cm \tab EPSG:4326 \tab Guam, moist soil colors, 125cm (approx. 30m resolution) \cr
-   hi_sc005cm \tab EPSG:6628 \tab Hawaii, moist soil colors, 5cm (30m resolution) \cr
-   hi_sc010cm \tab EPSG:6628 \tab Hawaii, moist soil colors, 10cm (30m resolution) \cr
-   hi_sc015cm \tab EPSG:6628 \tab Hawaii, moist soil colors, 15cm (30m resolution) \cr
-   hi_sc025cm \tab EPSG:6628 \tab Hawaii, moist soil colors, 25cm (30m resolution) \cr
-   hi_sc050cm \tab EPSG:6628 \tab Hawaii, moist soil colors, 50cm (30m resolution) \cr
-   hi_sc075cm \tab EPSG:6628 \tab Hawaii, moist soil colors, 75cm (30m resolution) \cr
-   hi_sc100cm \tab EPSG:6628 \tab Hawaii, moist soil colors, 100cm (30m resolution) \cr
-   hi_sc125cm \tab EPSG:6628 \tab Hawaii, moist soil colors, 125cm (30m resolution) \cr
-   mp_sc005cm \tab EPSG:4326 \tab Northern Mariana Islands, moist soil colors, 5cm (approx. 30m resolution) \cr
-   mp_sc010cm \tab EPSG:4326 \tab Northern Mariana Islands, moist soil colors, 10cm (approx. 30m resolution) \cr
-   mp_sc015cm \tab EPSG:4326 \tab Northern Mariana Islands, moist soil colors, 15cm (approx. 30m resolution) \cr
-   mp_sc025cm \tab EPSG:4326 \tab Northern Mariana Islands, moist soil colors, 25cm (approx. 30m resolution) \cr
-   mp_sc050cm \tab EPSG:4326 \tab Northern Mariana Islands, moist soil colors, 50cm (approx. 30m resolution) \cr
-   mp_sc075cm \tab EPSG:4326 \tab Northern Mariana Islands, moist soil colors, 75cm (approx. 30m resolution) \cr
-   mp_sc100cm \tab EPSG:4326 \tab Northern Mariana Islands, moist soil colors, 100cm (approx. 30m resolution) \cr
-   mp_sc125cm \tab EPSG:4326 \tab Northern Mariana Islands, moist soil colors, 125cm (approx. 30m resolution) \cr
-   pr_sc005cm \tab EPSG:32161 \tab Puerto Rico, moist soil colors, 5cm (30m resolution) \cr
-   pr_sc010cm \tab EPSG:32161 \tab Puerto Rico, moist soil colors, 10cm (30m resolution) \cr
-   pr_sc015cm \tab EPSG:32161 \tab Puerto Rico, moist soil colors, 15cm (30m resolution) \cr
-   pr_sc025cm \tab EPSG:32161 \tab Puerto Rico, moist soil colors, 25cm (30m resolution) \cr
-   pr_sc050cm \tab EPSG:32161 \tab Puerto Rico, moist soil colors, 50cm (30m resolution) \cr
-   pr_sc075cm \tab EPSG:32161 \tab Puerto Rico, moist soil colors, 75cm (30m resolution) \cr
-   pr_sc100cm \tab EPSG:32161 \tab Puerto Rico, moist soil colors, 100cm (30m resolution) \cr
-   pr_sc125cm \tab EPSG:32161 \tab Puerto Rico, moist soil colors, 125cm (30m resolution) \cr
-   pw_sc005cm \tab EPSG:4326 \tab Palau, moist soil colors, 5cm (approx. 30m resolution) \cr
-   pw_sc010cm \tab EPSG:4326 \tab Palau, moist soil colors, 10cm (approx. 30m resolution) \cr
-   pw_sc015cm \tab EPSG:4326 \tab Palau, moist soil colors, 15cm (approx. 30m resolution) \cr
-   pw_sc025cm \tab EPSG:4326 \tab Palau, moist soil colors, 25cm (approx. 30m resolution) \cr
-   pw_sc050cm \tab EPSG:4326 \tab Palau, moist soil colors, 50cm (approx. 30m resolution) \cr
-   pw_sc075cm \tab EPSG:4326 \tab Palau, moist soil colors, 75cm (approx. 30m resolution) \cr
-   pw_sc100cm \tab EPSG:4326 \tab Palau, moist soil colors, 100cm (approx. 30m resolution) \cr
-   pw_sc125cm \tab EPSG:4326 \tab Palau, moist soil colors, 125cm (approx. 30m resolution) \cr
-   sc005cm \tab EPSG:5070 \tab CONUS, moist soil color, 5cm (270m resolution) \cr
-   sc005cm_hr \tab EPSG:5070 \tab CONUS, moist soil color, 5cm (30m resolution) \cr
-   sc010cm \tab EPSG:5070 \tab CONUS, moist soil color, 10cm (270m resolution) \cr
-   sc010cm_hr \tab EPSG:5070 \tab CONUS, moist soil color, 10cm (30m resolution) \cr
-   sc015cm \tab EPSG:5070 \tab CONUS, moist soil color, 15cm (270m resolution) \cr
-   sc015cm_hr \tab EPSG:5070 \tab CONUS, moist soil color, 15cm (30m resolution) \cr
-   sc025cm \tab EPSG:5070 \tab CONUS, moist soil color, 25cm (270m resolution) \cr
-   sc025cm_hr \tab EPSG:5070 \tab CONUS, moist soil color, 25cm (30m resolution) \cr
-   sc050cm \tab EPSG:5070 \tab CONUS, moist soil color, 50cm (270m resolution) \cr
-   sc050cm_hr \tab EPSG:5070 \tab CONUS, moist soil color, 50cm (30m resolution) \cr
-   sc075cm \tab EPSG:5070 \tab CONUS, moist soil color, 75cm (270m resolution) \cr
-   sc075cm_hr \tab EPSG:5070 \tab CONUS, moist soil color, 75cm (30m resolution) \cr
-   sc100cm \tab EPSG:5070 \tab CONUS, moist soil color, 100cm (270m resolution) \cr
-   sc100cm_hr \tab EPSG:5070 \tab CONUS, moist soil color, 100cm (30m resolution) \cr
-   sc125cm \tab EPSG:5070 \tab CONUS, moist soil color, 125cm (270m resolution) \cr
-   sc125cm_hr \tab EPSG:5070 \tab CONUS, moist soil color, 125cm (30m resolution) \cr
+Variables available from this WCS can be queried using \code{WCS_details(wcs = 'soilColor')}. The full resolution version of the CONUS soil color grids use a \code{hr} suffix, e.g. 'sc025cm_hr'.\tabular{llll}{
+   var \tab vintage \tab crs \tab description \cr
+   ak_sc005cm \tab FY2027 \tab EPSG:3338 \tab Alaska, moist soil colors, 5cm (90m resolution) \cr
+   ak_sc010cm \tab FY2027 \tab EPSG:3338 \tab Alaska, moist soil colors, 10cm (90m resolution) \cr
+   ak_sc015cm \tab FY2027 \tab EPSG:3338 \tab Alaska, moist soil colors, 15cm (90m resolution) \cr
+   ak_sc025cm \tab FY2027 \tab EPSG:3338 \tab Alaska, moist soil colors, 25cm (90m resolution) \cr
+   ak_sc050cm \tab FY2027 \tab EPSG:3338 \tab Alaska, moist soil colors, 50cm (90m resolution) \cr
+   ak_sc075cm \tab FY2027 \tab EPSG:3338 \tab Alaska, moist soil colors, 75cm (90m resolution) \cr
+   ak_sc100cm \tab FY2027 \tab EPSG:3338 \tab Alaska, moist soil colors, 100cm (90m resolution) \cr
+   ak_sc125cm \tab FY2027 \tab EPSG:3338 \tab Alaska, moist soil colors, 125cm (90m resolution) \cr
+   as_sc005cm \tab FY2027 \tab EPSG:4326 \tab American Samoa, moist soil colors, 5cm (approx. 30m resolution) \cr
+   as_sc010cm \tab FY2027 \tab EPSG:4326 \tab American Samoa, moist soil colors, 10cm (approx. 30m resolution) \cr
+   as_sc015cm \tab FY2027 \tab EPSG:4326 \tab American Samoa, moist soil colors, 15cm (approx. 30m resolution) \cr
+   as_sc025cm \tab FY2027 \tab EPSG:4326 \tab American Samoa, moist soil colors, 25cm (approx. 30m resolution) \cr
+   as_sc050cm \tab FY2027 \tab EPSG:4326 \tab American Samoa, moist soil colors, 50cm (approx. 30m resolution) \cr
+   as_sc075cm \tab FY2027 \tab EPSG:4326 \tab American Samoa, moist soil colors, 75cm (approx. 30m resolution) \cr
+   as_sc100cm \tab FY2027 \tab EPSG:4326 \tab American Samoa, moist soil colors, 100cm (approx. 30m resolution) \cr
+   as_sc125cm \tab FY2027 \tab EPSG:4326 \tab American Samoa, moist soil colors, 125cm (approx. 30m resolution) \cr
+   gu_sc005cm \tab FY2027 \tab EPSG:4326 \tab Guam, moist soil colors, 5cm (approx. 30m resolution) \cr
+   gu_sc010cm \tab FY2027 \tab EPSG:4326 \tab Guam, moist soil colors, 10cm (approx. 30m resolution) \cr
+   gu_sc015cm \tab FY2027 \tab EPSG:4326 \tab Guam, moist soil colors, 15cm (approx. 30m resolution) \cr
+   gu_sc025cm \tab FY2027 \tab EPSG:4326 \tab Guam, moist soil colors, 25cm (approx. 30m resolution) \cr
+   gu_sc050cm \tab FY2027 \tab EPSG:4326 \tab Guam, moist soil colors, 50cm (approx. 30m resolution) \cr
+   gu_sc075cm \tab FY2027 \tab EPSG:4326 \tab Guam, moist soil colors, 75cm (approx. 30m resolution) \cr
+   gu_sc100cm \tab FY2027 \tab EPSG:4326 \tab Guam, moist soil colors, 100cm (approx. 30m resolution) \cr
+   gu_sc125cm \tab FY2027 \tab EPSG:4326 \tab Guam, moist soil colors, 125cm (approx. 30m resolution) \cr
+   hi_sc005cm \tab FY2027 \tab EPSG:6628 \tab Hawaii, moist soil colors, 5cm (30m resolution) \cr
+   hi_sc010cm \tab FY2027 \tab EPSG:6628 \tab Hawaii, moist soil colors, 10cm (30m resolution) \cr
+   hi_sc015cm \tab FY2027 \tab EPSG:6628 \tab Hawaii, moist soil colors, 15cm (30m resolution) \cr
+   hi_sc025cm \tab FY2027 \tab EPSG:6628 \tab Hawaii, moist soil colors, 25cm (30m resolution) \cr
+   hi_sc050cm \tab FY2027 \tab EPSG:6628 \tab Hawaii, moist soil colors, 50cm (30m resolution) \cr
+   hi_sc075cm \tab FY2027 \tab EPSG:6628 \tab Hawaii, moist soil colors, 75cm (30m resolution) \cr
+   hi_sc100cm \tab FY2027 \tab EPSG:6628 \tab Hawaii, moist soil colors, 100cm (30m resolution) \cr
+   hi_sc125cm \tab FY2027 \tab EPSG:6628 \tab Hawaii, moist soil colors, 125cm (30m resolution) \cr
+   mp_sc005cm \tab FY2027 \tab EPSG:4326 \tab Northern Mariana Islands, moist soil colors, 5cm (approx. 30m resolution) \cr
+   mp_sc010cm \tab FY2027 \tab EPSG:4326 \tab Northern Mariana Islands, moist soil colors, 10cm (approx. 30m resolution) \cr
+   mp_sc015cm \tab FY2027 \tab EPSG:4326 \tab Northern Mariana Islands, moist soil colors, 15cm (approx. 30m resolution) \cr
+   mp_sc025cm \tab FY2027 \tab EPSG:4326 \tab Northern Mariana Islands, moist soil colors, 25cm (approx. 30m resolution) \cr
+   mp_sc050cm \tab FY2027 \tab EPSG:4326 \tab Northern Mariana Islands, moist soil colors, 50cm (approx. 30m resolution) \cr
+   mp_sc075cm \tab FY2027 \tab EPSG:4326 \tab Northern Mariana Islands, moist soil colors, 75cm (approx. 30m resolution) \cr
+   mp_sc100cm \tab FY2027 \tab EPSG:4326 \tab Northern Mariana Islands, moist soil colors, 100cm (approx. 30m resolution) \cr
+   mp_sc125cm \tab FY2027 \tab EPSG:4326 \tab Northern Mariana Islands, moist soil colors, 125cm (approx. 30m resolution) \cr
+   pr_sc005cm \tab FY2027 \tab EPSG:32161 \tab Puerto Rico, moist soil colors, 5cm (30m resolution) \cr
+   pr_sc010cm \tab FY2027 \tab EPSG:32161 \tab Puerto Rico, moist soil colors, 10cm (30m resolution) \cr
+   pr_sc015cm \tab FY2027 \tab EPSG:32161 \tab Puerto Rico, moist soil colors, 15cm (30m resolution) \cr
+   pr_sc025cm \tab FY2027 \tab EPSG:32161 \tab Puerto Rico, moist soil colors, 25cm (30m resolution) \cr
+   pr_sc050cm \tab FY2027 \tab EPSG:32161 \tab Puerto Rico, moist soil colors, 50cm (30m resolution) \cr
+   pr_sc075cm \tab FY2027 \tab EPSG:32161 \tab Puerto Rico, moist soil colors, 75cm (30m resolution) \cr
+   pr_sc100cm \tab FY2027 \tab EPSG:32161 \tab Puerto Rico, moist soil colors, 100cm (30m resolution) \cr
+   pr_sc125cm \tab FY2027 \tab EPSG:32161 \tab Puerto Rico, moist soil colors, 125cm (30m resolution) \cr
+   pw_sc005cm \tab FY2027 \tab EPSG:4326 \tab Palau, moist soil colors, 5cm (approx. 30m resolution) \cr
+   pw_sc010cm \tab FY2027 \tab EPSG:4326 \tab Palau, moist soil colors, 10cm (approx. 30m resolution) \cr
+   pw_sc015cm \tab FY2027 \tab EPSG:4326 \tab Palau, moist soil colors, 15cm (approx. 30m resolution) \cr
+   pw_sc025cm \tab FY2027 \tab EPSG:4326 \tab Palau, moist soil colors, 25cm (approx. 30m resolution) \cr
+   pw_sc050cm \tab FY2027 \tab EPSG:4326 \tab Palau, moist soil colors, 50cm (approx. 30m resolution) \cr
+   pw_sc075cm \tab FY2027 \tab EPSG:4326 \tab Palau, moist soil colors, 75cm (approx. 30m resolution) \cr
+   pw_sc100cm \tab FY2027 \tab EPSG:4326 \tab Palau, moist soil colors, 100cm (approx. 30m resolution) \cr
+   pw_sc125cm \tab FY2027 \tab EPSG:4326 \tab Palau, moist soil colors, 125cm (approx. 30m resolution) \cr
+   sc005cm \tab FY2027 \tab EPSG:5070 \tab CONUS, moist soil color, 5cm (270m resolution) \cr
+   sc005cm_hr \tab FY2027 \tab EPSG:5070 \tab CONUS, moist soil color, 5cm (30m resolution) \cr
+   sc010cm \tab FY2027 \tab EPSG:5070 \tab CONUS, moist soil color, 10cm (270m resolution) \cr
+   sc010cm_hr \tab FY2027 \tab EPSG:5070 \tab CONUS, moist soil color, 10cm (30m resolution) \cr
+   sc015cm \tab FY2027 \tab EPSG:5070 \tab CONUS, moist soil color, 15cm (270m resolution) \cr
+   sc015cm_hr \tab FY2027 \tab EPSG:5070 \tab CONUS, moist soil color, 15cm (30m resolution) \cr
+   sc025cm \tab FY2027 \tab EPSG:5070 \tab CONUS, moist soil color, 25cm (270m resolution) \cr
+   sc025cm_hr \tab FY2027 \tab EPSG:5070 \tab CONUS, moist soil color, 25cm (30m resolution) \cr
+   sc050cm \tab FY2027 \tab EPSG:5070 \tab CONUS, moist soil color, 50cm (270m resolution) \cr
+   sc050cm_hr \tab FY2027 \tab EPSG:5070 \tab CONUS, moist soil color, 50cm (30m resolution) \cr
+   sc075cm \tab FY2027 \tab EPSG:5070 \tab CONUS, moist soil color, 75cm (270m resolution) \cr
+   sc075cm_hr \tab FY2027 \tab EPSG:5070 \tab CONUS, moist soil color, 75cm (30m resolution) \cr
+   sc100cm \tab FY2027 \tab EPSG:5070 \tab CONUS, moist soil color, 100cm (270m resolution) \cr
+   sc100cm_hr \tab FY2027 \tab EPSG:5070 \tab CONUS, moist soil color, 100cm (30m resolution) \cr
+   sc125cm \tab FY2027 \tab EPSG:5070 \tab CONUS, moist soil color, 125cm (270m resolution) \cr
+   sc125cm_hr \tab FY2027 \tab EPSG:5070 \tab CONUS, moist soil color, 125cm (30m resolution) \cr
 }
 }
 \examples{

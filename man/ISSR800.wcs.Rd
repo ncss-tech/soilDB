@@ -30,54 +30,54 @@ When specified as a \code{list}, \code{aoi} should contain:
 
 The WCS query is parameterized using a rectangular extent derived from the above AOI specification, after conversion to the native CRS (EPSG:5070) of the ISSR800 grids.
 
-Variables available from this WCS can be queried using \code{WCS_details(wcs = 'ISSR800')}.\tabular{lll}{
-   var \tab crs \tab description \cr
-   caco3_kg_sq_m \tab EPSG:5070 \tab Total CaCO3 (kg/m^2) \cr
-   cec_025cm \tab EPSG:5070 \tab CEC at pH 7 0-25cm depth (cmol\link{+}/kg) \cr
-   cec_050cm \tab EPSG:5070 \tab CEC at pH 7 0-50cm depth (cmol\link{+}/kg) \cr
-   cec_05cm \tab EPSG:5070 \tab CEC at pH 7 0-5cm depth (cmol\link{+}/kg) \cr
-   clay_025cm \tab EPSG:5070 \tab clay percent 0-25cm depth \cr
-   clay_05cm \tab EPSG:5070 \tab clay percent 0-5cm depth \cr
-   clay_2550cm \tab EPSG:5070 \tab clay percent 25-50cm depth \cr
-   clay_3060cm \tab EPSG:5070 \tab clay percent 30-60cm depth \cr
-   drainage_class \tab EPSG:5070 \tab Soil Drainage Class \cr
-   ec_025cm \tab EPSG:5070 \tab EC 0-25cm depth (dS/m) \cr
-   ec_05cm \tab EPSG:5070 \tab EC 0-5cm depth (dS/m) \cr
-   greatgroup \tab EPSG:5070 \tab Soil Taxonomy: Greatgroup \cr
-   hydgrp \tab EPSG:5070 \tab Hydrologic Soil Group \cr
-   lcc_irrigated \tab EPSG:5070 \tab Land Capability Class, irrigated \cr
-   lcc_nonirrigated \tab EPSG:5070 \tab Land Capability Class, non-irrigated \cr
-   n_components \tab EPSG:5070 \tab Number of components per grid cell \cr
-   n_polygons \tab EPSG:5070 \tab Number of polygons per grid cell \cr
-   om_kg_sq_m \tab EPSG:5070 \tab Total Soil Organic Matter (kg/m^2) \cr
-   paws \tab EPSG:5070 \tab total plant available water storage (cm water) \cr
-   paws_025cm \tab EPSG:5070 \tab plant available water storage 0-25cm depth (cm water) \cr
-   paws_050cm \tab EPSG:5070 \tab plant available water storage 0-50cm depth (cm water) \cr
-   ph_025cm \tab EPSG:5070 \tab pH 1:1 H2O 0-25cm depth \cr
-   ph_05cm \tab EPSG:5070 \tab pH 1:1 H2O 0-5cm depth \cr
-   ph_2550cm \tab EPSG:5070 \tab pH 1:1 H2O 25-50cm depth \cr
-   ph_3060cm \tab EPSG:5070 \tab pH 1:1 H2O 30-60cm depth \cr
-   sand_025cm \tab EPSG:5070 \tab sand percent 0-25cm depth \cr
-   sand_05cm \tab EPSG:5070 \tab sand percent 0-5cm depth \cr
-   sand_2550cm \tab EPSG:5070 \tab sand percent 25-50cm depth \cr
-   sand_3060cm \tab EPSG:5070 \tab sand percent 30-60cm depth \cr
-   sar \tab EPSG:5070 \tab SAR, entire profile \cr
-   series_name \tab EPSG:5070 \tab Soil Series Name \cr
-   silt_025cm \tab EPSG:5070 \tab silt percent 0-25cm depth \cr
-   silt_05cm \tab EPSG:5070 \tab silt percent 0-5cm depth \cr
-   silt_2550cm \tab EPSG:5070 \tab silt percent 25-50cm depth \cr
-   silt_3060cm \tab EPSG:5070 \tab silt percent 30-60cm depth \cr
-   soilorder \tab EPSG:5070 \tab Soil Taxonomy: Soil Order \cr
-   ssurgo_pct \tab EPSG:5070 \tab SSURGO data available, fraction of 800x800m grid cell \cr
-   statsgo_pct \tab EPSG:5070 \tab STATSGO data available, fraction of 800x800m grid cell \cr
-   str \tab EPSG:5070 \tab Soil Temperature Regime \cr
-   suborder \tab EPSG:5070 \tab Soil Taxonomy: Suborder \cr
-   survey_type \tab EPSG:5070 \tab Soil survey data source \cr
-   texture_025cm \tab EPSG:5070 \tab Soil Texture Class, 0-25cm \cr
-   texture_05cm \tab EPSG:5070 \tab Soil Texture Class, 0-5cm \cr
-   texture_2550cm \tab EPSG:5070 \tab Soil Texture Class, 25-50cm \cr
-   weg \tab EPSG:5070 \tab Wind Erodibility Group \cr
-   wei \tab EPSG:5070 \tab Wind Erodibility Index \cr
+Variables available from this WCS can be queried using \code{WCS_details(wcs = 'ISSR800')}.\tabular{llll}{
+   var \tab vintage \tab crs \tab description \cr
+   caco3_kg_sq_m \tab FY2027 \tab EPSG:5070 \tab Total CaCO3 (kg/m^2) \cr
+   cec_025cm \tab FY2027 \tab EPSG:5070 \tab CEC at pH 7 0-25cm depth (cmol\link{+}/kg) \cr
+   cec_050cm \tab FY2027 \tab EPSG:5070 \tab CEC at pH 7 0-50cm depth (cmol\link{+}/kg) \cr
+   cec_05cm \tab FY2027 \tab EPSG:5070 \tab CEC at pH 7 0-5cm depth (cmol\link{+}/kg) \cr
+   clay_025cm \tab FY2027 \tab EPSG:5070 \tab clay percent 0-25cm depth \cr
+   clay_05cm \tab FY2027 \tab EPSG:5070 \tab clay percent 0-5cm depth \cr
+   clay_2550cm \tab FY2027 \tab EPSG:5070 \tab clay percent 25-50cm depth \cr
+   clay_3060cm \tab FY2027 \tab EPSG:5070 \tab clay percent 30-60cm depth \cr
+   drainage_class \tab FY2027 \tab EPSG:5070 \tab Soil Drainage Class \cr
+   ec_025cm \tab FY2027 \tab EPSG:5070 \tab EC 0-25cm depth (dS/m) \cr
+   ec_05cm \tab FY2027 \tab EPSG:5070 \tab EC 0-5cm depth (dS/m) \cr
+   greatgroup \tab FY2027 \tab EPSG:5070 \tab Soil Taxonomy: Greatgroup \cr
+   hydgrp \tab FY2027 \tab EPSG:5070 \tab Hydrologic Soil Group \cr
+   lcc_irrigated \tab FY2027 \tab EPSG:5070 \tab Land Capability Class, irrigated \cr
+   lcc_nonirrigated \tab FY2027 \tab EPSG:5070 \tab Land Capability Class, non-irrigated \cr
+   n_components \tab FY2027 \tab EPSG:5070 \tab Number of components per grid cell \cr
+   n_polygons \tab FY2027 \tab EPSG:5070 \tab Number of polygons per grid cell \cr
+   om_kg_sq_m \tab FY2027 \tab EPSG:5070 \tab Total Soil Organic Matter (kg/m^2) \cr
+   paws \tab FY2027 \tab EPSG:5070 \tab total plant available water storage (cm water) \cr
+   paws_025cm \tab FY2027 \tab EPSG:5070 \tab plant available water storage 0-25cm depth (cm water) \cr
+   paws_050cm \tab FY2027 \tab EPSG:5070 \tab plant available water storage 0-50cm depth (cm water) \cr
+   ph_025cm \tab FY2027 \tab EPSG:5070 \tab pH 1:1 H2O 0-25cm depth \cr
+   ph_05cm \tab FY2027 \tab EPSG:5070 \tab pH 1:1 H2O 0-5cm depth \cr
+   ph_2550cm \tab FY2027 \tab EPSG:5070 \tab pH 1:1 H2O 25-50cm depth \cr
+   ph_3060cm \tab FY2027 \tab EPSG:5070 \tab pH 1:1 H2O 30-60cm depth \cr
+   sand_025cm \tab FY2027 \tab EPSG:5070 \tab sand percent 0-25cm depth \cr
+   sand_05cm \tab FY2027 \tab EPSG:5070 \tab sand percent 0-5cm depth \cr
+   sand_2550cm \tab FY2027 \tab EPSG:5070 \tab sand percent 25-50cm depth \cr
+   sand_3060cm \tab FY2027 \tab EPSG:5070 \tab sand percent 30-60cm depth \cr
+   sar \tab FY2027 \tab EPSG:5070 \tab SAR, entire profile \cr
+   series_name \tab FY2027 \tab EPSG:5070 \tab Soil Series Name \cr
+   silt_025cm \tab FY2027 \tab EPSG:5070 \tab silt percent 0-25cm depth \cr
+   silt_05cm \tab FY2027 \tab EPSG:5070 \tab silt percent 0-5cm depth \cr
+   silt_2550cm \tab FY2027 \tab EPSG:5070 \tab silt percent 25-50cm depth \cr
+   silt_3060cm \tab FY2027 \tab EPSG:5070 \tab silt percent 30-60cm depth \cr
+   soilorder \tab FY2027 \tab EPSG:5070 \tab Soil Taxonomy: Soil Order \cr
+   ssurgo_pct \tab FY2027 \tab EPSG:5070 \tab SSURGO data available, fraction of 800x800m grid cell \cr
+   statsgo_pct \tab FY2027 \tab EPSG:5070 \tab STATSGO data available, fraction of 800x800m grid cell \cr
+   str \tab FY2027 \tab EPSG:5070 \tab Soil Temperature Regime \cr
+   suborder \tab FY2027 \tab EPSG:5070 \tab Soil Taxonomy: Suborder \cr
+   survey_type \tab FY2027 \tab EPSG:5070 \tab Soil survey data source \cr
+   texture_025cm \tab FY2027 \tab EPSG:5070 \tab Soil Texture Class, 0-25cm \cr
+   texture_05cm \tab FY2027 \tab EPSG:5070 \tab Soil Texture Class, 0-5cm \cr
+   texture_2550cm \tab FY2027 \tab EPSG:5070 \tab Soil Texture Class, 25-50cm \cr
+   weg \tab FY2027 \tab EPSG:5070 \tab Wind Erodibility Group \cr
+   wei \tab FY2027 \tab EPSG:5070 \tab Wind Erodibility Index \cr
 }
 }
 \note{
