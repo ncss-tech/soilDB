@@ -1,10 +1,10 @@
-# soilDB (development)
- - WCS specifications now managed server-side via SoilWeb
-
+# soilDB 2.9.4 (2026-11-12)
+ - SoilWeb Web Coverage Service specifications for `mukey.wcs()`, `issr800.wcs()`, and `soilColor.wcs()` now are available as JSON rather than hard-coded
+ 
 # soilDB 2.9.3 (2026-09-17) 
  - `createSSURGO()` fix bug in logical column handling (introduced in 2.9.2) due to metadata column type enforcement (#483)
  - Fix `structure()` usage of special argument names (.Label, .Names) in test fixtures for R-devel (#484)
- - `downloadSSURGO()` now uses a persistent soilDB Web Soil Survey ZIP cache when `destdir` is omitted, checks `sacatalog.saverest` for freshness, supports `force = TRUE` to bypass cache reuse, and falls back to cached ZIPs with a warning when the remote freshness check is unavailable. Added `list_WSS_cache()` and `clear_WSS_cache()` for cache inventory and manual cleanup.
+ - `downloadSSURGO()` now uses a persistent soilDB Web Soil Survey ZIP cache when `destdir` is omitted, checks `sacatalog.saverest` for freshness, supports `force = TRUE` to bypass cache reuse, and falls back to cached ZIPs with a warning when the remote freshness check is unavailable. Added `list_WSS_cache()` and `clear_WSS_cache()` for cache inventory and manual cleanup. (#487)
 
 # soilDB 2.9.2 (2026-07-10)
  - EDIT base URL (for `get_EDIT_ecoclass_by_geoUnit()` and `make_EDIT_service_URL()`) updated to new USDA-managed server: <https://edit.sc.egov.usda.gov/>
