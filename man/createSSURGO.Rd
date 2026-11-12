@@ -91,8 +91,10 @@ only shallowest ratings for smaller database size.}
 \code{'FY26'}). If \code{NULL}, auto-detect from sacatalog saverest date. Allows organizing rasters by official
 release year or custom labels. Only used if \code{include_raster=TRUE}.}
 
-\item{template}{Optional \code{SpatRaster} template to align with. If \code{NULL} (default), creates a standard
-grid at \code{resolution_m} in the regional standard CRS (EPSG:5070 for CONUS, EPSG:3338 for AK, EPSG:6628 for HI,
+\item{template}{Optional \code{SpatRaster} template defining a common target CRS and grid, including
+cell size, for all selected SSAs. Use a template when the selection spans regional CRSs or
+when a geographic CRS is needed. If \code{NULL} (default), creates a standard grid at \code{resolution_m}
+in the regional standard CRS (EPSG:5070 for CONUS, EPSG:3338 for AK, EPSG:6628 for HI,
 EPSG:32161 for PR/VI, EPSG:4326 for Pacific Islands) with bounds snapped according to \code{grid_alignment}.}
 
 \item{touches}{\emph{logical}. If \code{TRUE}, all cells touched by polygon boundaries are rasterized. Default
@@ -105,7 +107,8 @@ target-aligned uses a zero origin; and NLCD uses the canonical WGS84 Albers
 origin anchor \verb{(-2415585, 3314805)}. A supplied \code{template} takes precedence.}
 
 \item{resolution_m}{\emph{numeric}. Finite positive raster cell size in meters when \code{template = NULL}
-(default: \code{10}).}
+and the regional CRS is projected (default: \code{10}). Meter-based rasterization with a geographic
+regional CRS requires an explicit \code{template}.}
 
 \item{quiet}{\emph{logical}. Suppress messages and other output from database read/write operations?}
 
@@ -135,7 +138,10 @@ The alignment modes are
 intentional: \code{gssurgo} matches official USDA-NRCS products, \code{target_aligned} follows
 zero-origin GDAL-style alignment, and \code{nlcd} uses the canonical WGS84 Albers origin. These
 choices support interoperability with federal raster products including NLCD, CDL, USGS 3DEP,
-and gNATSGO. Raster output uses \code{NAflag = 0}; MUKEY zero is reserved as NoData.
+and gNATSGO. A supplied template defines a common CRS and grid for all selected SSAs. Without
+a template, selected SSAs must share a regional CRS. The Pacific Island default CRS (EPSG:4326)
+is geographic, so meter-based rasterization there requires an explicit template. Raster output
+uses \code{NAflag = 0}; MUKEY zero is reserved as NoData.
 
 A single SSURGO MUKEY per cell may be misleading at resolutions greater than 90 meters.
 A warning is issued for recognized SSURGO area symbols when the output grid exceeds this resolution.

@@ -258,7 +258,10 @@ downloadSSURGO <- function(WHERE = NULL,
 #' intentional: `gssurgo` matches official USDA-NRCS products, `target_aligned` follows
 #' zero-origin GDAL-style alignment, and `nlcd` uses the canonical WGS84 Albers origin. These
 #' choices support interoperability with federal raster products including NLCD, CDL, USGS 3DEP,
-#' and gNATSGO. Raster output uses `NAflag = 0`; MUKEY zero is reserved as NoData.
+#' and gNATSGO. A supplied template defines a common CRS and grid for all selected SSAs. Without
+#' a template, selected SSAs must share a regional CRS. The Pacific Island default CRS (EPSG:4326)
+#' is geographic, so meter-based rasterization there requires an explicit template. Raster output
+#' uses `NAflag = 0`; MUKEY zero is reserved as NoData.
 #'
 #' A single SSURGO MUKEY per cell may be misleading at resolutions greater than 90 meters.
 #' A warning is issued for recognized SSURGO area symbols when the output grid exceeds this resolution.
@@ -305,8 +308,10 @@ downloadSSURGO <- function(WHERE = NULL,
 #' @param sep _character_. Passed to `data.table::fread()`. Default: `"|"`
 #' @param na.strings _character_. Passed to `data.table::fread()`. Default: `c("", "NA")`
 #' @param quote _character_. Passed to `data.table::fread()`. Default: `""`
-#' @param template Optional `SpatRaster` template to align with. If `NULL` (default), creates a standard
-#'   grid at `resolution_m` in the regional standard CRS (EPSG:5070 for CONUS, EPSG:3338 for AK, EPSG:6628 for HI,
+#' @param template Optional `SpatRaster` template defining a common target CRS and grid, including
+#'   cell size, for all selected SSAs. Use a template when the selection spans regional CRSs or
+#'   when a geographic CRS is needed. If `NULL` (default), creates a standard grid at `resolution_m`
+#'   in the regional standard CRS (EPSG:5070 for CONUS, EPSG:3338 for AK, EPSG:6628 for HI,
 #'   EPSG:32161 for PR/VI, EPSG:4326 for Pacific Islands) with bounds snapped according to `grid_alignment`.
 #' @param touches _logical_. If `TRUE`, all cells touched by polygon boundaries are rasterized. Default
 #'   `FALSE` rasterizes only cells whose centroids fall within polygons.
@@ -316,7 +321,8 @@ downloadSSURGO <- function(WHERE = NULL,
 #'   target-aligned uses a zero origin; and NLCD uses the canonical WGS84 Albers
 #'   origin anchor `(-2415585, 3314805)`. A supplied `template` takes precedence.
 #' @param resolution_m _numeric_. Finite positive raster cell size in meters when `template = NULL`
-#'   (default: `10`).
+#'   and the regional CRS is projected (default: `10`). Meter-based rasterization with a geographic
+#'   regional CRS requires an explicit `template`.
 #' @param quiet _logical_. Suppress messages and other output from database read/write operations?
 #' @param areasymbols _character_. Optional character vector of soil survey area symbols (e.g. `c("CA067", "CA077")`) used to subset the folders/files within `exdir` to process. Default `NULL` processes all SSURGO exports found in `exdir`.
 #' @param ... Additional arguments passed to `sf::write_sf()` for writing spatial layers.
@@ -654,110 +660,106 @@ createSSURGO <- function(filename = NULL,
   }
 
   # Rasterize mupolygon to MUKEY raster (parallelized by SSA if include_raster=TRUE)
-  if (isTRUE(include_raster) && !is.null(inv$shp.grp) && nrow(inv$shp.grp) >= 1) {
+  if (isTRUE(include_raster) && length(inv$f.mupolygon) > 0) {
+    # Get mupolygon shapefiles directly from the unfiltered raster inventory
+    mu_files <- inv$f.mupolygon
 
-    # Extract unique SSA directories from mupolygon shapefiles
-    mu_idx <- which(inv$shp.grp[, 1] == "mu" & inv$shp.grp[, 2] == "a")
+    # Extract unique SSA directories and areasymbols
+    ssa_dirs <- unique(dirname(mu_files))
+    ssa_list <- lapply(ssa_dirs, function(d) {
+      # Extract areasymbol from directory or filename
+      mu_file <- mu_files[dirname(mu_files) == d][1]
+      areasymbol <- .areasymbol_from_mupolygon_file(mu_file)
+      list(ssa_dir = d, areasymbol = areasymbol, fiscal_year = derived_fiscal_year)
+    })
 
-    if (length(mu_idx) > 0) {
-      # Get mupolygon shapefiles (feature "mu", geometry "a") directly from inventory
-      mu_files <- inv$f.shp[mu_idx]
+    .validate_ssa_raster_crs(ssa_list, template, grid_alignment)
 
-      # Extract unique SSA directories and areasymbols
-      ssa_dirs <- unique(dirname(mu_files))
-      ssa_list <- lapply(ssa_dirs, function(d) {
-        # Extract areasymbol from directory or filename
-        mu_file <- mu_files[dirname(mu_files) == d][1]
-        areasymbol <- .areasymbol_from_mupolygon_file(mu_file)
-        list(ssa_dir = d, areasymbol = areasymbol, fiscal_year = derived_fiscal_year)
-      })
+    warning_resolution_m <- .ssurgo_raster_resolution_m(template, resolution_m)
+    .warn_if_coarse_ssurgo_raster(
+      vapply(ssa_list, `[[`, character(1), "areasymbol"),
+      warning_resolution_m
+    )
 
-      warning_resolution_m <- .ssurgo_raster_resolution_m(template, resolution_m)
-      .warn_if_coarse_ssurgo_raster(
-        vapply(ssa_list, `[[`, character(1), "areasymbol"),
-        warning_resolution_m
-      )
-
-      # Define rasterization worker function for namespace isolation
-      # Captures ssa_list and quiet from enclosing scope
-      .RASTERIZE.FUN <- function(ssa_index) {
-        if (ssa_index > length(ssa_list)) {
-          return(list())
-        }
-
-        ssa_info <- ssa_list[[ssa_index]]
-        ssa_dir <- ssa_info$ssa_dir
-        areasymbol <- ssa_info$areasymbol
-        fiscal_year_arg <- ssa_info$fiscal_year
-
-        # Explicitly fetch internal functions from namespace for worker isolation
-        .rasterize_fn <- get(".rasterize_ssurgo_ssa", envir = asNamespace("soilDB"))
-        .write_raster_fn <- get(".write_raster_with_cache", envir = asNamespace("soilDB"))
-
-        # Call rasterization helper
-        mukey_raster <- .rasterize_fn(
-          ssa_dir = ssa_dir,
-          areasymbol = areasymbol,
-          template = template,
-          touches = touches,
-          grid_alignment = grid_alignment,
-          quiet = quiet,
-          resolution_m = resolution_m
-        )
-
-        # Write raster to cache if rasterization succeeded
-        if (!is.null(mukey_raster)) {
-          raster_path <- .write_raster_fn(
-            raster_obj = mukey_raster,
-            areasymbol = areasymbol,
-            fiscal_year = fiscal_year_arg,
-            cache_root = NULL,
-            resolution_m = resolution_m,
-            quiet = quiet
-          )
-
-          if (!is.na(raster_path)) {
-            return(list(list(
-              areasymbol = areasymbol,
-              path = raster_path
-            )))
-          }
-        }
-        list()
+    # Define rasterization worker function for namespace isolation
+    # Captures ssa_list and quiet from enclosing scope
+    .RASTERIZE.FUN <- function(ssa_index) {
+      if (ssa_index > length(ssa_list)) {
+        return(list())
       }
 
-      # Compute the unified vector extent before rasterization so final output
-      # is cropped to the same snapped geometry bounds as the SSA templates.
-      target_bbox <- .compute_ssa_vector_bbox(
-        mu_files = mu_files,
-        ssa_list = ssa_list,
+      ssa_info <- ssa_list[[ssa_index]]
+      ssa_dir <- ssa_info$ssa_dir
+      areasymbol <- ssa_info$areasymbol
+      fiscal_year_arg <- ssa_info$fiscal_year
+
+      # Explicitly fetch internal functions from namespace for worker isolation
+      .rasterize_fn <- get(".rasterize_ssurgo_ssa", envir = asNamespace("soilDB"))
+      .write_raster_fn <- get(".write_raster_with_cache", envir = asNamespace("soilDB"))
+
+      # Call rasterization helper
+      mukey_raster <- .rasterize_fn(
+        ssa_dir = ssa_dir,
+        areasymbol = areasymbol,
         template = template,
+        touches = touches,
         grid_alignment = grid_alignment,
+        quiet = quiet,
         resolution_m = resolution_m
       )
 
-      # Execute rasterization in parallel or sequential mode
-      raster_results <- do.call(LAPPLY.FUN, c(list(seq_along(ssa_list), .RASTERIZE.FUN), LAPPLY.FUN.ARGS))
+      # Write raster to cache if rasterization succeeded
+      if (!is.null(mukey_raster)) {
+        raster_path <- .write_raster_fn(
+          raster_obj = mukey_raster,
+          areasymbol = areasymbol,
+          fiscal_year = fiscal_year_arg,
+          cache_root = NULL,
+          resolution_m = resolution_m,
+          quiet = quiet
+        )
 
-      # Accumulate results into raster_paths (vectorized: filter empty lists and unlist one level)
-      raster_paths <- c(raster_paths, unlist(Filter(length, raster_results), recursive = FALSE))
-
-      # If filename or conn was provided, write/merge final output raster
-      final_raster_path <- .create_final_raster_output(
-        raster_paths = raster_paths,
-        filename = filename,
-        conn = conn,
-        exdir = exdir,
-        target_bbox = target_bbox,
-        template = template,
-        grid_alignment = grid_alignment,
-        resolution_m = resolution_m,
-        overwrite = overwrite,
-        quiet = quiet
-      )
-      if (!is.null(final_raster_path) && !is.na(final_raster_path)) {
-        attr(raster_paths, "output_raster") <- final_raster_path
+        if (!is.na(raster_path)) {
+          return(list(list(
+            areasymbol = areasymbol,
+            path = raster_path
+          )))
+        }
       }
+      list()
+    }
+
+    # Compute the unified vector extent before rasterization so final output
+    # is cropped to the same snapped geometry bounds as the SSA templates.
+    target_bbox <- .compute_ssa_vector_bbox(
+      mu_files = mu_files,
+      ssa_list = ssa_list,
+      template = template,
+      grid_alignment = grid_alignment,
+      resolution_m = resolution_m
+    )
+
+    # Execute rasterization in parallel or sequential mode
+    raster_results <- do.call(LAPPLY.FUN, c(list(seq_along(ssa_list), .RASTERIZE.FUN), LAPPLY.FUN.ARGS))
+
+    # Accumulate results into raster_paths (vectorized: filter empty lists and unlist one level)
+    raster_paths <- c(raster_paths, unlist(Filter(length, raster_results), recursive = FALSE))
+
+    # If filename or conn was provided, write/merge final output raster
+    final_raster_path <- .create_final_raster_output(
+      raster_paths = raster_paths,
+      filename = filename,
+      conn = conn,
+      exdir = exdir,
+      target_bbox = target_bbox,
+      template = template,
+      grid_alignment = grid_alignment,
+      resolution_m = resolution_m,
+      overwrite = overwrite,
+      quiet = quiet
+    )
+    if (!is.null(final_raster_path) && !is.na(final_raster_path)) {
+      attr(raster_paths, "output_raster") <- final_raster_path
     }
   }
 
@@ -1014,6 +1016,11 @@ createSSURGO <- function(filename = NULL,
     ";",
     fixed = TRUE
   ))
+  f.mupolygon <- if (!is.null(shp.grp) && nrow(shp.grp) > 0) {
+    f.shp[shp.grp[, 1] == "mu" & shp.grp[, 2] == "a"]
+  } else {
+    character(0)
+  }
 
   f.shp.sc <- character(0)
   if (is.character(include_spatial)) {
@@ -1073,6 +1080,7 @@ createSSURGO <- function(filename = NULL,
   list(
     f.shp = f.shp,
     shp.grp = shp.grp,
+    f.mupolygon = f.mupolygon,
     f.shp.sc = f.shp.sc,
     include_spatial = include_spatial,
     f.txt.grp = f.txt.grp,
@@ -1533,6 +1541,38 @@ createSSURGO <- function(filename = NULL,
     }
   }
   "EPSG:5070"
+}
+
+.validate_ssa_raster_crs <- function(ssa_list, template = NULL,
+                                    grid_alignment = "gssurgo") {
+  if (inherits(template, "SpatRaster") || length(ssa_list) == 0L) {
+    return(invisible(NULL))
+  }
+
+  grid_alignment <- .normalize_grid_alignment(grid_alignment)
+  crs <- vapply(
+    ssa_list,
+    function(ssa) .resolve_ssa_crs(ssa$areasymbol, grid_alignment = grid_alignment),
+    character(1)
+  )
+
+  if (length(unique(crs)) > 1L) {
+    stop(
+      "Selected SSAs use different regional CRSs; supply a common `template` to rasterize them together.",
+      call. = FALSE
+    )
+  }
+
+  units_gdal <- sf::st_crs(crs[1])$units_gdal
+  if (length(units_gdal) != 1L || is.na(units_gdal) ||
+      !tolower(units_gdal) %in% c("metre", "meter")) {
+    stop(
+      "The default CRS for the selected SSA is geographic, but `resolution_m` is in meters; supply a `template` defining the target grid.",
+      call. = FALSE
+    )
+  }
+
+  invisible(NULL)
 }
 
 #' @noRd

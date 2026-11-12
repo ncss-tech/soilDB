@@ -300,6 +300,39 @@ test_that("grid alignment names are independent of raster resolution", {
   )
 })
 
+test_that("rasterization rejects mixed or geographic default CRSs", {
+  mixed_ssas <- list(
+    list(areasymbol = "CA067"),
+    list(areasymbol = "AK650")
+  )
+
+  expect_error(
+    .validate_ssa_raster_crs(mixed_ssas),
+    "different regional CRSs.*template"
+  )
+  expect_error(
+    .validate_ssa_raster_crs(list(list(areasymbol = "GU600"))),
+    "geographic.*resolution_m.*template"
+  )
+})
+
+test_that("a raster template allows mixed regional CRSs to share one grid", {
+  skip_if_not_installed("terra")
+
+  template <- terra::rast(
+    xmin = 0, xmax = 300,
+    ymin = 0, ymax = 300,
+    resolution = 30,
+    crs = "EPSG:5070"
+  )
+  expect_no_error(
+    .validate_ssa_raster_crs(
+      list(list(areasymbol = "CA067"), list(areasymbol = "AK650")),
+      template = template
+    )
+  )
+})
+
 test_that("fiscal-year detection accepts both catalog filenames and date columns", {
   temp_root <- tempfile("soilDB-test-sacatalog-")
   dir.create(temp_root, recursive = TRUE)
@@ -758,6 +791,11 @@ test_that("createSSURGO handles include_spatial = FALSE and include_raster = TRU
     geometry = sf::st_sfc(poly1, crs = 4269)
   )
   sf::st_write(mock_sf, file.path(ssa_dir, "soilmu_a_ca067.shp"), quiet = TRUE)
+  sf::st_write(
+    sf::st_sf(areasymbol = "CA067", geometry = sf::st_sfc(poly1, crs = 4269)),
+    file.path(ssa_dir, "soilsa_a_ca067.shp"),
+    quiet = TRUE
+  )
 
   db_file <- file.path(temp_root, "test.sqlite")
   res <- expect_no_error(
@@ -778,6 +816,25 @@ test_that("createSSURGO handles include_spatial = FALSE and include_raster = TRU
   rp <- attr(res, "raster_paths")
   expect_true(!is.null(rp))
   expect_equal(attr(rp, "output_raster"), normalizePath(expected_tif, winslash = "/"))
+
+  selected_db <- file.path(temp_root, "selected.gpkg")
+  selected_res <- expect_no_error(
+    createSSURGO(
+      filename = selected_db,
+      exdir = temp_root,
+      include_spatial = "sapolygon",
+      include_tabular = FALSE,
+      include_raster = TRUE,
+      fiscal_year = "FY2026",
+      quiet = TRUE
+    )
+  )
+  selected_tif <- file.path(temp_root, "selected.tif")
+  expect_true(file.exists(selected_tif))
+  expect_equal(
+    attr(attr(selected_res, "raster_paths"), "output_raster"),
+    normalizePath(selected_tif, winslash = "/")
+  )
 })
 
 test_that("createSSURGO warns for coarse Mexico SSURGO grids", {
