@@ -473,12 +473,12 @@ head(x$ecoclassid)
 
 | series | ecoclassid  | n_components | area_ac | proportion |
 |:-------|:------------|-------------:|--------:|-----------:|
-| LUCY   | F153AY030NC |           15 |   25899 |       0.51 |
-| LUCY   | F133BY006TX |           11 |   20631 |       0.41 |
-| LUCY   | F137XY040SC |            1 |    2279 |       0.05 |
-| LUCY   | F137XY050GA |            2 |    1587 |       0.03 |
-| MIAMI  | F098XA015MI |           82 |   41416 |       0.04 |
-| MIAMI  | F098XA022MI |           59 |   33897 |       0.03 |
+| LUCY   | F133AY610NC |            2 |    2325 |       0.00 |
+| LUCY   | F137XY040SC |            1 |    2279 |       0.00 |
+| LUCY   | F138XY200AL |            6 |    2072 |       0.00 |
+| LUCY   | F137XY050GA |            2 |    1587 |       0.00 |
+| LUCY   | F133AY430NC |          146 |  447443 |       0.64 |
+| LUCY   | F133AY530NC |          113 |  197105 |       0.28 |
 
 #### Parent Material Summaries
 

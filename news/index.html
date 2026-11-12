@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">soilDB</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.9.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.9.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -42,12 +42,16 @@
     </div>
 
     <div class="section level2">
+<h2 class="pkg-version" data-toc-text="2.9.4" id="soildb-294-2026-11-12">soilDB 2.9.4 (2026-11-12)<a class="anchor" aria-label="anchor" href="#soildb-294-2026-11-12"></a></h2>
+<ul><li>SoilWeb Web Coverage Service specifications for <code><a href="../reference/mukey.wcs.html">mukey.wcs()</a></code>, <code>issr800.wcs()</code>, and <code><a href="../reference/soilColor.wcs.html">soilColor.wcs()</a></code> now are available as JSON rather than hard-coded</li>
+</ul></div>
+    <div class="section level2">
 <h2 class="pkg-version" data-toc-text="2.9.3" id="soildb-293-2026-09-17">soilDB 2.9.3 (2026-09-17)<a class="anchor" aria-label="anchor" href="#soildb-293-2026-09-17"></a></h2>
 <ul><li>
 <code><a href="../reference/createSSURGO.html">createSSURGO()</a></code> fix bug in logical column handling (introduced in 2.9.2) due to metadata column type enforcement (<a href="https://github.com/ncss-tech/soilDB/issues/483" class="external-link">#483</a>)</li>
 <li>Fix <code><a href="https://rdrr.io/r/base/structure.html" class="external-link">structure()</a></code> usage of special argument names (.Label, .Names) in test fixtures for R-devel (<a href="https://github.com/ncss-tech/soilDB/issues/484" class="external-link">#484</a>)</li>
 <li>
-<code><a href="../reference/downloadSSURGO.html">downloadSSURGO()</a></code> now uses a persistent soilDB Web Soil Survey ZIP cache when <code>destdir</code> is omitted, checks <code>sacatalog.saverest</code> for freshness, supports <code>force = TRUE</code> to bypass cache reuse, and falls back to cached ZIPs with a warning when the remote freshness check is unavailable. Added <code><a href="../reference/list_WSS_cache.html">list_WSS_cache()</a></code> and <code><a href="../reference/clear_WSS_cache.html">clear_WSS_cache()</a></code> for cache inventory and manual cleanup.</li>
+<code><a href="../reference/downloadSSURGO.html">downloadSSURGO()</a></code> now uses a persistent soilDB Web Soil Survey ZIP cache when <code>destdir</code> is omitted, checks <code>sacatalog.saverest</code> for freshness, supports <code>force = TRUE</code> to bypass cache reuse, and falls back to cached ZIPs with a warning when the remote freshness check is unavailable. Added <code><a href="../reference/list_WSS_cache.html">list_WSS_cache()</a></code> and <code><a href="../reference/clear_WSS_cache.html">clear_WSS_cache()</a></code> for cache inventory and manual cleanup. (<a href="https://github.com/ncss-tech/soilDB/issues/487" class="external-link">#487</a>)</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="2.9.2" id="soildb-292-2026-07-10">soilDB 2.9.2 (2026-07-10)<a class="anchor" aria-label="anchor" href="#soildb-292-2026-07-10"></a></h2><p class="text-muted">CRAN release: 2026-07-11</p>

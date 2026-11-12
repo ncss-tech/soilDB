@@ -1,5 +1,13 @@
 # Changelog
 
+## soilDB 2.9.4 (2026-11-12)
+
+- SoilWeb Web Coverage Service specifications for
+  [`mukey.wcs()`](http://ncss-tech.github.io/soilDB/reference/mukey.wcs.md),
+  `issr800.wcs()`, and
+  [`soilColor.wcs()`](http://ncss-tech.github.io/soilDB/reference/soilColor.wcs.md)
+  now are available as JSON rather than hard-coded
+
 ## soilDB 2.9.3 (2026-09-17)
 
 - [`createSSURGO()`](http://ncss-tech.github.io/soilDB/reference/createSSURGO.md)
@@ -18,6 +26,7 @@
   and
   [`clear_WSS_cache()`](http://ncss-tech.github.io/soilDB/reference/clear_WSS_cache.md)
   for cache inventory and manual cleanup.
+  ([\#487](https://github.com/ncss-tech/soilDB/issues/487))
 
 ## soilDB 2.9.2 (2026-07-10)
 

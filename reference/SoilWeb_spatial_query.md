@@ -211,6 +211,6 @@ D.E. Beaudette
     # query by coordinate pair
     SoilWeb_spatial_query(coords=c(-121, 38))
 #>   ogc_fid areasymbol musym  mukey soilweb_last_update dist_meters
-#> 1 1531762      ca077   220 462112          2026-09-15 92.17456302
+#> 1 1537842      ca077   220 462112          2026-09-15 92.17456302
 # }
 ```
