@@ -1031,3 +1031,37 @@ test_that(".create_final_raster_output crops output raster to snapped target_bbo
   expect_true(any(grepl("COMPRESSION=DEFLATE", desc)))
   expect_true(any(grepl("NoData Value=0", desc)))
 })
+
+test_that(".create_final_raster_output merges categorical values using the first source", {
+  skip_on_cran()
+  skip_if_not_installed("terra")
+
+  temp_root <- tempfile("soilDB-test-modal-mosaic-")
+  dir.create(temp_root, recursive = TRUE)
+  on.exit(try(unlink(temp_root, recursive = TRUE), silent = TRUE), add = TRUE)
+
+  source_values <- c(1001, 1003, 1003, 1003)
+  raster_paths <- lapply(seq_along(source_values), function(i) {
+    r <- terra::rast(
+      nrows = 2, ncols = 2,
+      xmin = 0, xmax = 20, ymin = 0, ymax = 20,
+      crs = "EPSG:5070"
+    )
+    terra::values(r) <- source_values[i]
+    path <- file.path(temp_root, paste0("ssa", i, ".tif"))
+    terra::writeRaster(r, path, overwrite = TRUE)
+    list(areasymbol = paste0("CA00", i), path = path)
+  })
+
+  output_path <- .create_final_raster_output(
+    raster_paths = raster_paths,
+    filename = file.path(temp_root, "mosaic.tif"),
+    overwrite = TRUE,
+    quiet = TRUE
+  )
+
+  expect_true(file.exists(output_path))
+  output_values <- terra::values(terra::rast(output_path))
+  expect_equal(unique(as.vector(output_values)), 1001)
+  expect_true(all(as.vector(output_values) %in% source_values))
+})

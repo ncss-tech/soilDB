@@ -2124,7 +2124,7 @@ createSSURGO <- function(filename = NULL,
       out_r <- terra::rast(paths[1])
     } else {
       sprc <- terra::sprc(paths)
-      out_r <- terra::mosaic(sprc)
+      out_r <- terra::merge(sprc)
     }
 
     # If target_bbox is provided, crop output raster to exact snapped bounds
