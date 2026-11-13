@@ -1617,11 +1617,16 @@ createSSURGO <- function(filename = NULL,
   } else {
     .grid_origin(grid_alignment, resolution_m)
   }
+  resolution <- if (inherits(template, "SpatRaster")) {
+    terra::res(template)
+  } else {
+    c(resolution_m, resolution_m)
+  }
 
   .snap_extent_to_grid(
     xmin, xmax, ymin, ymax,
     origin = origin,
-    resolution = c(resolution_m, resolution_m)
+    resolution = resolution
   )
 }
 
@@ -1958,7 +1963,8 @@ createSSURGO <- function(filename = NULL,
 #'
 #' @param raster_obj _SpatRaster_. In-memory raster object to persist.
 #' @param areasymbol _character_. Soil survey area symbol (e.g., "CA067") for filename.
-#' @param resolution_m _numeric_. Grid resolution in meters, used in the cache filename.
+#' @param resolution_m _numeric_. Fallback grid resolution for the cache filename when the
+#'   raster's resolution is unavailable.
 #' @param cache_root _character_. Cache root directory. If NULL, defaults to
 #'   soilDB_user_dir("cache", "raster", create=TRUE).
 #' @param fiscal_year _character_. Optional fiscal year label for cache path organization
@@ -1985,8 +1991,18 @@ createSSURGO <- function(filename = NULL,
   }
   dir.create(cache_root, recursive = TRUE, showWarnings = FALSE)
 
-  # Construct filename
-  filename <- paste0("MUKEY_", resolution_m, "m_", toupper(areasymbol), ".tif")
+  raster_resolution <- if (inherits(raster_obj, "SpatRaster")) {
+    terra::res(raster_obj)
+  } else {
+    resolution_m
+  }
+  resolution_label <- if (length(raster_resolution) > 1L &&
+                          raster_resolution[1] != raster_resolution[2]) {
+    paste(format(raster_resolution, trim = TRUE, scientific = FALSE), collapse = "x")
+  } else {
+    format(raster_resolution[1], trim = TRUE, scientific = FALSE)
+  }
+  filename <- paste0("MUKEY_", resolution_label, "m_", toupper(areasymbol), ".tif")
   cache_path <- file.path(cache_root, filename)
 
   tryCatch({

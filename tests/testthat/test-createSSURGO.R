@@ -634,11 +634,11 @@ test_that(".create_ssa_raster_template with custom template preserves resolution
 })
 
 # .write_raster_with_cache COG format and datatype
-test_that(".write_raster_with_cache writes INT4U datatype and COG format", {
+test_that(".write_raster_with_cache names output from actual resolution", {
   skip_on_cran()
   skip_if_not_installed("terra")
 
-  r <- terra::rast(nrows = 10, ncols = 10, xmin = 0, xmax = 100, ymin = 0, ymax = 100, crs = "EPSG:5070")
+  r <- terra::rast(nrows = 10, ncols = 10, xmin = 0, xmax = 300, ymin = 0, ymax = 300, crs = "EPSG:5070")
   terra::values(r) <- c(rep(1001:1050, each = 1), rep(NA, 50))
 
   temp_dir <- tempfile("soilDB-test-cog-")
@@ -648,7 +648,7 @@ test_that(".write_raster_with_cache writes INT4U datatype and COG format", {
     raster_obj = r,
     areasymbol = "CA067",
     cache_root = temp_dir,
-    resolution_m = 30,
+    resolution_m = 10,
     quiet = TRUE
   )
 
@@ -956,9 +956,9 @@ test_that("createSSURGO uses the snapped union extent for multiple SSAs", {
     )
 
     custom_template <- terra::rast(
-      xmin = -2000005, xmax = -1990005,
-      ymin = 2000007, ymax = 2010007,
-      resolution = 10, crs = "EPSG:5070"
+      xmin = -2000005, xmax = -1990015,
+      ymin = 2000007, ymax = 2009997,
+      resolution = 30, crs = "EPSG:5070"
     )
     template_origin <- terra::origin(custom_template)
     template_bbox <- .compute_ssa_vector_bbox(
@@ -972,11 +972,11 @@ test_that("createSSURGO uses the snapped union extent for multiple SSAs", {
       resolution_m = 10
     )
     expect_equal(
-      as.numeric((template_bbox[c("xmin", "xmax")] - template_origin[1]) %% 10),
+      as.numeric((template_bbox[c("xmin", "xmax")] - template_origin[1]) %% 30),
       c(0, 0)
     )
     expect_equal(
-      as.numeric((template_bbox[c("ymin", "ymax")] - template_origin[2]) %% 10),
+      as.numeric((template_bbox[c("ymin", "ymax")] - template_origin[2]) %% 30),
       c(0, 0)
     )
   }
