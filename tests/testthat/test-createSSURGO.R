@@ -202,12 +202,14 @@ test_that(".write_raster_with_cache constructs correct cache path with fiscal_ye
   }, add = TRUE)
 
   # Test with fiscal_year specified
-  result <- .write_raster_with_cache(
-    raster_obj = r,
-    areasymbol = "CA067",
-    fiscal_year = "FY2024",
-    cache_root = file.path(temp_cache_base, "WSS", "FY2024", "raster"),
-    quiet = TRUE
+  result <- expect_no_warning(
+    .write_raster_with_cache(
+      raster_obj = r,
+      areasymbol = "CA067",
+      fiscal_year = "FY2024",
+      cache_root = file.path(temp_cache_base, "WSS", "FY2024", "raster"),
+      quiet = TRUE
+    )
   )
 
   # Result should contain the fiscal year in path

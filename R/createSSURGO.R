@@ -1513,7 +1513,7 @@ createSSURGO <- function(filename = NULL,
     datatype = "INT4U",
     NAflag = 0,
     filetype = "COG",
-    gdal = c("COMPRESS=DEFLATE", "TILED=YES", "BIGTIFF=IF_SAFER")
+    gdal = c("COMPRESS=DEFLATE", "BIGTIFF=IF_SAFER")
   )
 }
 #' Resolve Standard CRS for Soil Survey Area
