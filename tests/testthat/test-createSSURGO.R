@@ -206,7 +206,7 @@ test_that(".write_raster_with_cache constructs correct cache path with fiscal_ye
     raster_obj = r,
     areasymbol = "CA067",
     fiscal_year = "FY2024",
-    cache_root = NULL,
+    cache_root = file.path(temp_cache_base, "WSS", "FY2024", "raster"),
     quiet = TRUE
   )
 
@@ -377,6 +377,8 @@ test_that("SSURGO area symbols are distinguished from STATSGO symbols", {
 })
 
 test_that("coarse-grid warning applies only to SSURGO grids larger than 90m", {
+  skip_if_not_installed("terra")
+
   expect_warning(
     .warn_if_coarse_ssurgo_raster(c("CA067"), 300),
     "greater than 90"
