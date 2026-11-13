@@ -247,6 +247,42 @@ test_that(".write_raster_with_cache creates nested WSS cache structure", {
   expect_true(grepl("FY2024.*raster", raster_path))
 })
 
+test_that(".write_raster_with_cache falls back to terra's configured tempdir", {
+  skip_on_cran()
+  skip_if_not_installed("terra")
+
+  temp_root <- tempfile("soilDB-test-raster-fallback-")
+  dir.create(temp_root, recursive = TRUE)
+  on.exit(try(unlink(temp_root, recursive = TRUE), silent = TRUE), add = TRUE)
+
+  old_tempdir <- terra::terraOptions(print = FALSE)$tempdir
+  on.exit(terra::terraOptions(tempdir = old_tempdir, print = FALSE), add = TRUE)
+  fallback_dir <- file.path(temp_root, "terra-temp")
+  dir.create(fallback_dir)
+  terra::terraOptions(tempdir = fallback_dir, print = FALSE)
+
+  r <- terra::rast(nrows = 2, ncols = 2, xmin = 0, xmax = 20, ymin = 0, ymax = 20)
+  terra::values(r) <- 1001
+  blocked_cache <- file.path(temp_root, "cache-file")
+  writeLines("", blocked_cache)
+
+  fallback_path <- expect_warning(
+    .write_raster_with_cache(
+      raster_obj = r,
+      areasymbol = "CA067",
+      cache_root = blocked_cache,
+      quiet = TRUE
+    ),
+    "Cache directory unavailable"
+  )
+
+  expect_true(file.exists(fallback_path))
+  expect_equal(
+    normalizePath(dirname(fallback_path)),
+    normalizePath(fallback_dir)
+  )
+})
+
 # .resolve_ssa_crs resolves standard CRS correctly for various SSA regions
 test_that(".resolve_ssa_crs resolves CRS correctly by region prefix and grid_alignment", {
   # CONUS

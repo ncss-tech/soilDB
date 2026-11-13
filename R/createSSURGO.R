@@ -1958,8 +1958,8 @@ createSSURGO <- function(filename = NULL,
 #' Write SpatRaster to Cache with terra Fallback
 #'
 #' @description `.write_raster_with_cache()`: Write in-memory SpatRaster to disk cache
-#'   using soilDB user directory pattern. Falls back to terra::tmpdir() if primary
-#'   cache write fails.
+#'   using soilDB user directory pattern. Falls back to the directory configured by
+#'   `terra::terraOptions()` if the primary cache write fails.
 #'
 #' @param raster_obj _SpatRaster_. In-memory raster object to persist.
 #' @param areasymbol _character_. Soil survey area symbol (e.g., "CA067") for filename.
@@ -2023,7 +2023,8 @@ createSSURGO <- function(filename = NULL,
 
   }, error = function(e) {
     # Fallback: write to temporary directory
-    tmpdir <- terra::tmpdir()
+    tmpdir <- terra::terraOptions(print = FALSE)$tempdir
+    dir.create(tmpdir, recursive = TRUE, showWarnings = FALSE)
     tmppath <- file.path(tmpdir, filename)
 
     tryCatch({
