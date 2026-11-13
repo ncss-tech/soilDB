@@ -252,6 +252,20 @@ downloadSSURGO <- function(WHERE = NULL,
 #' you encounter issues using specific DBI connection types, please report in the soilDB issue
 #' tracker.
 #'
+#' When `include_raster=TRUE`, common resolutions include 10m, 30m, 300m, and 900m; any positive
+#' resolution can be requested. Custom `SpatRaster` templates can be supplied for arbitrary grids.
+#' The alignment modes are
+#' intentional: `gssurgo` matches official USDA-NRCS products, `target_aligned` follows
+#' zero-origin GDAL-style alignment, and `nlcd` uses the canonical WGS84 Albers origin. These
+#' choices support interoperability with federal raster products including NLCD, CDL, USGS 3DEP,
+#' and gNATSGO. A supplied template defines a common CRS and grid for all selected SSAs. Without
+#' a template, selected SSAs must share a regional CRS. The Pacific Island default CRS (EPSG:4326)
+#' is geographic, so meter-based rasterization there requires an explicit template. Raster output
+#' uses `NAflag = 0`; MUKEY zero is reserved as NoData.
+#'
+#' A single SSURGO MUKEY per cell may be misleading at resolutions greater than 90 meters.
+#' A warning is issued for recognized SSURGO area symbols when the output grid exceeds this resolution.
+#'
 #' @param filename _character_. Output file name (e.g. `'db.sqlite'` or `'db.gpkg'`). Only used when
 #'   `con` is not specified by the user.
 #' @param exdir  _character_. Path containing input SSURGO spatial (.shp) and tabular
@@ -271,6 +285,17 @@ downloadSSURGO <- function(WHERE = NULL,
 #'   "muaggatt")` writes only the `mapunit` and `muaggatt` tables. Note that special feature
 #'   descriptions are stored in table `"featdesc"` and metadata for each soil survey area are stored
 #'   in `"soil_metadata"` tables.
+#' @param include_raster _logical_. Generate MUKEY GeoTIFF rasters for each SSA?
+#'   Default: `FALSE` does not create raster outputs. Set to `TRUE` to create georeferenced rasters cached in
+#'   `soilDB_user_dir("cache", "WSS", ...)` and output a combined/copied raster matching `filename`.
+#'   Requires `terra` package.
+#' @param LAPPLY.FUN _function_. `lapply()`-like function to use for iteration during rasterization
+#'   phase. Only used if `include_raster=TRUE`. This allows for the rasterization operations to be run
+#'   in parallel instead of sequential, custom progress reporting, or similar.
+#' @param LAPPLY.FUN.ARGS _list_. Optional list of additional arguments to pass to `LAPPLY.FUN`.
+#' @param fiscal_year _character_. Optional fiscal year label for cache organization (e.g., `'FY2024'`,
+#'   `'FY26'`). If `NULL`, auto-detect from sacatalog saverest date. Allows organizing rasters by official
+#'   release year or custom labels. Only used if `include_raster=TRUE`.
 #' @param dissolve_field _character_. Dissolve geometries to create MULTIPOLYGON features? Column
 #'   name specified is the grouping variable. Default: `NULL` does no aggregation, giving 1
 #'   `POLYGON` feature per delineation. `"mukey"` aggregates all related delineations within a soil
@@ -283,6 +308,21 @@ downloadSSURGO <- function(WHERE = NULL,
 #' @param sep _character_. Passed to `data.table::fread()`. Default: `"|"`
 #' @param na.strings _character_. Passed to `data.table::fread()`. Default: `c("", "NA")`
 #' @param quote _character_. Passed to `data.table::fread()`. Default: `""`
+#' @param template Optional `SpatRaster` template defining a common target CRS and grid, including
+#'   cell size, for all selected SSAs. Use a template when the selection spans regional CRSs or
+#'   when a geographic CRS is needed. If `NULL` (default), creates a standard grid at `resolution_m`
+#'   in the regional standard CRS (EPSG:5070 for CONUS, EPSG:3338 for AK, EPSG:6628 for HI,
+#'   EPSG:32161 for PR/VI, EPSG:4326 for Pacific Islands) with bounds snapped according to `grid_alignment`.
+#' @param touches _logical_. If `TRUE`, all cells touched by polygon boundaries are rasterized. Default
+#'   `FALSE` rasterizes only cells whose centroids fall within polygons.
+#' @param grid_alignment _character_. Grid alignment mode when `template = NULL`. Use
+#'   `"gssurgo"` (default), `"target_aligned"`, or `"nlcd"`. The GSSURGO mode uses a
+#'   half-cell origin matching official USDA-NRCS products;
+#'   target-aligned uses a zero origin; and NLCD uses the canonical WGS84 Albers
+#'   origin anchor `(-2415585, 3314805)`. A supplied `template` takes precedence.
+#' @param resolution_m _numeric_. Finite positive raster cell size in meters when `template = NULL`
+#'   and the regional CRS is projected (default: `10`). Meter-based rasterization with a geographic
+#'   regional CRS requires an explicit `template`.
 #' @param quiet _logical_. Suppress messages and other output from database read/write operations?
 #' @param areasymbols _character_. Optional character vector of soil survey area symbols (e.g. `c("CA067", "CA077")`) used to subset the folders/files within `exdir` to process. Default `NULL` processes all SSURGO exports found in `exdir`.
 #' @param ... Additional arguments passed to `sf::write_sf()` for writing spatial layers.
@@ -303,6 +343,9 @@ createSSURGO <- function(filename = NULL,
                          pattern = NULL,
                          include_spatial = TRUE,
                          include_tabular = TRUE,
+                         include_raster = FALSE,
+                         LAPPLY.FUN = lapply,
+                         LAPPLY.FUN.ARGS = NULL,
                          dissolve_field = NULL,
                          maxruledepth = 0,
                          overwrite = FALSE,
@@ -311,9 +354,21 @@ createSSURGO <- function(filename = NULL,
                          sep = "|",
                          na.strings = c("", "NA"),
                          quote = "",
+                         fiscal_year = NULL,
+                         template = NULL,
+                         touches = FALSE,
+                         grid_alignment = c("gssurgo", "target_aligned", "nlcd"),
+                         resolution_m = 10,
                          quiet = TRUE,
                          areasymbols = NULL,
                          ...) {
+
+  grid_alignment <- .normalize_grid_alignment(grid_alignment)
+  if (!is.numeric(resolution_m) || is.complex(resolution_m) ||
+      length(resolution_m) != 1L || is.na(resolution_m) ||
+      !is.finite(resolution_m) || resolution_m <= 0) {
+    stop("`resolution_m` must be a single finite positive number.", call. = FALSE)
+  }
 
   if ((missing(filename) || length(filename) == 0) && missing(conn)) {
     stop("`filename` should be a path to a .gpkg or .sqlite file to create or append to, or a DBIConnection should be provided via `conn`.")
@@ -367,6 +422,14 @@ createSSURGO <- function(filename = NULL,
     )
   }
 
+  # Validate terra package availability for rasterization
+  if (isTRUE(include_raster)) {
+    if (!requireNamespace("terra", quietly = TRUE)) {
+      stop("package 'terra' is required for include_raster=TRUE. ",
+           "Install it with: install.packages('terra')",
+           call. = FALSE)
+    }
+  }
   if (missing(conn) || is.null(conn)) {
     # delete existing file if overwrite=TRUE; does _not_ apply to DBIConnection
     if (file.exists(filename)) {
@@ -384,7 +447,7 @@ createSSURGO <- function(filename = NULL,
   if (inherits(conn, 'DBIConnection')) {
     filename <- DBI::dbGetInfo(conn)$dbname
   }
-  
+
   # DuckDB has special spatial format, so it gets custom handling for
   IS_DUCKDB <- inherits(conn, "duckdb_connection")
 
@@ -395,8 +458,11 @@ createSSURGO <- function(filename = NULL,
     }
   }
 
-  if (!IS_DUCKDB && !requireNamespace("sf")) {
-    stop("package `sf` is required to write spatial datasets to DBI data sources", call. = FALSE)
+  if ((!IS_DUCKDB && isTRUE(include_spatial)) ||
+      isTRUE(include_raster)) {
+    if (!requireNamespace("sf", quietly = TRUE)) {
+      stop("package `sf` is required for spatial output or rasterization", call. = FALSE)
+    }
   }
 
   layer_names <- .get_spatial_layer_names()
@@ -431,13 +497,14 @@ createSSURGO <- function(filename = NULL,
       "  Tabular: ", paste0(include_tabular, collapse = ", ")
     )
   }
-  
+
   f_inventory <- f[fdx]
 
   # initialize timing records for this run (collected locally and attached to result)
   write_timings <- list()
+  raster_paths <- list()
   zero_time <- Sys.time()
-  
+
   inv <- .inventory_ssurgo_files(
     files = f_inventory,
     layer_names = layer_names,
@@ -575,6 +642,124 @@ createSSURGO <- function(filename = NULL,
           }
         }
       }
+    }
+  }
+
+  # Derive fiscal year from sacatalog if not provided by user
+  derived_fiscal_year <- fiscal_year
+  if (isTRUE(include_raster) && is.null(fiscal_year)) {
+    # Try to extract fiscal year from sacatalog table in extracted SSURGO files
+    derived_fiscal_year <- .derive_fiscal_year_from_sacatalog(inv$f.txt.grp, exdir, sep, quote, na.strings, header)
+
+    # If derivation failed, error and inform user
+    if (is.na(derived_fiscal_year)) {
+      stop("Could not auto-detect fiscal_year from sacatalog. ",
+           "Please specify fiscal_year explicitly (e.g., fiscal_year='FY2024')",
+           call. = FALSE)
+    }
+  }
+
+  # Rasterize mupolygon to MUKEY raster (parallelized by SSA if include_raster=TRUE)
+  if (isTRUE(include_raster) && length(inv$f.mupolygon) > 0) {
+    # Get mupolygon shapefiles directly from the unfiltered raster inventory
+    mu_files <- inv$f.mupolygon
+
+    # Extract unique SSA directories and areasymbols
+    ssa_dirs <- unique(dirname(mu_files))
+    ssa_list <- lapply(ssa_dirs, function(d) {
+      # Extract areasymbol from directory or filename
+      mu_file <- mu_files[dirname(mu_files) == d][1]
+      areasymbol <- .areasymbol_from_mupolygon_file(mu_file)
+      list(ssa_dir = d, areasymbol = areasymbol, fiscal_year = derived_fiscal_year)
+    })
+
+    .validate_ssa_raster_crs(ssa_list, template, grid_alignment)
+
+    warning_resolution_m <- .ssurgo_raster_resolution_m(template, resolution_m)
+    .warn_if_coarse_ssurgo_raster(
+      vapply(ssa_list, `[[`, character(1), "areasymbol"),
+      warning_resolution_m
+    )
+
+    # Define rasterization worker function for namespace isolation
+    # Captures ssa_list and quiet from enclosing scope
+    .RASTERIZE.FUN <- function(ssa_index) {
+      if (ssa_index > length(ssa_list)) {
+        return(list())
+      }
+
+      ssa_info <- ssa_list[[ssa_index]]
+      ssa_dir <- ssa_info$ssa_dir
+      areasymbol <- ssa_info$areasymbol
+      fiscal_year_arg <- ssa_info$fiscal_year
+
+      # Explicitly fetch internal functions from namespace for worker isolation
+      .rasterize_fn <- get(".rasterize_ssurgo_ssa", envir = asNamespace("soilDB"))
+      .write_raster_fn <- get(".write_raster_with_cache", envir = asNamespace("soilDB"))
+
+      # Call rasterization helper
+      mukey_raster <- .rasterize_fn(
+        ssa_dir = ssa_dir,
+        areasymbol = areasymbol,
+        template = template,
+        touches = touches,
+        grid_alignment = grid_alignment,
+        quiet = quiet,
+        resolution_m = resolution_m
+      )
+
+      # Write raster to cache if rasterization succeeded
+      if (!is.null(mukey_raster)) {
+        raster_path <- .write_raster_fn(
+          raster_obj = mukey_raster,
+          areasymbol = areasymbol,
+          fiscal_year = fiscal_year_arg,
+          cache_root = NULL,
+          resolution_m = resolution_m,
+          quiet = quiet
+        )
+
+        if (!is.na(raster_path)) {
+          return(list(list(
+            areasymbol = areasymbol,
+            path = raster_path
+          )))
+        }
+      }
+      list()
+    }
+
+    # Compute the unified vector extent before rasterization so final output
+    # is cropped to the same snapped geometry bounds as the SSA templates.
+    target_bbox <- .compute_ssa_vector_bbox(
+      mu_files = mu_files,
+      ssa_list = ssa_list,
+      template = template,
+      grid_alignment = grid_alignment,
+      resolution_m = resolution_m
+    )
+
+    # Execute rasterization in parallel or sequential mode
+    raster_results <- do.call(LAPPLY.FUN, c(list(seq_along(ssa_list), .RASTERIZE.FUN), LAPPLY.FUN.ARGS))
+
+    # Accumulate results into raster_paths (vectorized: filter empty lists and unlist one level)
+    raster_paths <- c(raster_paths, unlist(Filter(length, raster_results), recursive = FALSE))
+
+    # If filename or conn was provided, write/merge final output raster
+    final_raster_path <- .create_final_raster_output(
+      raster_paths = raster_paths,
+      filename = filename,
+      conn = conn,
+      exdir = exdir,
+      target_bbox = target_bbox,
+      template = template,
+      grid_alignment = grid_alignment,
+      resolution_m = resolution_m,
+      overwrite = overwrite,
+      quiet = quiet
+    )
+    if (!is.null(final_raster_path) && !is.na(final_raster_path)) {
+      attr(raster_paths, "output_raster") <- final_raster_path
     }
   }
 
@@ -791,6 +976,20 @@ createSSURGO <- function(filename = NULL,
     attr(res, 'write_timings') <- timings_df
   }
 
+  # attach raster cache paths as attribute for programmatic access
+  if (length(raster_paths) > 0) {
+    raster_paths_df <- do.call(rbind, lapply(raster_paths, function(r)
+      data.frame(
+        areasymbol = r$areasymbol,
+        path = r$path,
+        stringsAsFactors = FALSE
+      )))
+    if (!is.null(attr(raster_paths, "output_raster"))) {
+      attr(raster_paths_df, "output_raster") <- attr(raster_paths, "output_raster")
+    }
+    attr(res, 'raster_paths') <- raster_paths_df
+  }
+
   invisible(res)
 }
 
@@ -810,13 +1009,18 @@ createSSURGO <- function(filename = NULL,
   f.shp <- files[grepl(".*\\.shp$", files)]
   shp.grp <- do.call('rbind', strsplit(
     gsub(
-      ".*soil([musfa]{2})_([apl])_([a-z]{2}\\d{3}|[a-z]{2})\\.shp",
+      ".*soil([musfa]{2})_([apl])_([a-z]{2}\\d{3}|mxnl\\d{3}|[a-z]{2})\\.shp",
       "\\1;\\2;\\3",
       f.shp
     ),
     ";",
     fixed = TRUE
   ))
+  f.mupolygon <- if (!is.null(shp.grp) && nrow(shp.grp) > 0) {
+    f.shp[shp.grp[, 1] == "mu" & shp.grp[, 2] == "a"]
+  } else {
+    character(0)
+  }
 
   f.shp.sc <- character(0)
   if (is.character(include_spatial)) {
@@ -876,6 +1080,7 @@ createSSURGO <- function(filename = NULL,
   list(
     f.shp = f.shp,
     shp.grp = shp.grp,
+    f.mupolygon = f.mupolygon,
     f.shp.sc = f.shp.sc,
     include_spatial = include_spatial,
     f.txt.grp = f.txt.grp,
@@ -1278,4 +1483,692 @@ createSSURGO <- function(filename = NULL,
     if (!.gpkg_has_contents(con)) {
       RSQLite::dbExecute(con, q)
     } else return(1)
+}
+
+#' @noRd
+#' @keywords internal
+.grid_alignment_choices <- function() {
+  c("gssurgo", "target_aligned", "nlcd")
+}
+
+.normalize_grid_alignment <- function(grid_alignment) {
+  match.arg(grid_alignment[1], .grid_alignment_choices())
+}
+
+.grid_origin <- function(grid_alignment, resolution_m) {
+  if (grid_alignment == "nlcd") {
+    c(-2415585, 3314805)
+  } else if (grid_alignment == "gssurgo") {
+    c(resolution_m / 2, resolution_m / 2)
+  } else {
+    c(0, 0)
+  }
+}
+
+.write_cog_raster <- function(raster_obj, filename) {
+  terra::writeRaster(
+    raster_obj,
+    filename,
+    overwrite = TRUE,
+    datatype = "INT4U",
+    NAflag = 0,
+    filetype = "COG",
+    gdal = c("COMPRESS=DEFLATE", "BIGTIFF=IF_SAFER"),
+    # Avoid passing COG creation options to Terra's in-memory MEM staging driver.
+    todisk = TRUE
+  )
+}
+#' Resolve Standard CRS for Soil Survey Area
+#'
+#' @param areasymbol Soil survey area symbol or state code (e.g. "CA067", "AK650", "HI")
+#' @param grid_alignment Grid alignment mode (e.g. "gssurgo", "nlcd")
+#' @return Character CRS identifier (e.g. "EPSG:5070", "EPSG:3338", or PROJ string)
+#' @noRd
+#' @keywords internal
+.resolve_ssa_crs <- function(areasymbol = NULL, grid_alignment = "gssurgo") {
+  if (identical(grid_alignment, "nlcd")) {
+    return("+proj=aea +lat_0=23 +lon_0=-96 +lat_1=29.5 +lat_2=45.5 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs")
+  }
+
+  if (!is.null(areasymbol) && length(areasymbol) > 0 && nchar(areasymbol[1]) >= 2) {
+    prefix <- toupper(substr(areasymbol[1], 1, 2))
+    if (prefix == "AK") {
+      return("EPSG:3338")
+    } else if (prefix == "HI") {
+      return("EPSG:6628")
+    } else if (prefix %in% c("PR", "VI")) {
+      return("EPSG:32161")
+    } else if (prefix %in% c("AS", "GU", "MP", "PW", "FM", "MH")) {
+      return("EPSG:4326")
+    }
+  }
+  "EPSG:5070"
+}
+
+.validate_ssa_raster_crs <- function(ssa_list, template = NULL,
+                                    grid_alignment = "gssurgo") {
+  if (inherits(template, "SpatRaster") || length(ssa_list) == 0L) {
+    return(invisible(NULL))
+  }
+
+  grid_alignment <- .normalize_grid_alignment(grid_alignment)
+  crs <- vapply(
+    ssa_list,
+    function(ssa) .resolve_ssa_crs(ssa$areasymbol, grid_alignment = grid_alignment),
+    character(1)
+  )
+
+  if (length(unique(crs)) > 1L) {
+    stop(
+      "Selected SSAs use different regional CRSs; supply a common `template` to rasterize them together.",
+      call. = FALSE
+    )
+  }
+
+  units_gdal <- sf::st_crs(crs[1])$units_gdal
+  if (length(units_gdal) != 1L || is.na(units_gdal) ||
+      !tolower(units_gdal) %in% c("metre", "meter")) {
+    stop(
+      "The default CRS for the selected SSA is geographic, but `resolution_m` is in meters; supply a `template` defining the target grid.",
+      call. = FALSE
+    )
+  }
+
+  invisible(NULL)
+}
+
+#' @noRd
+#' @keywords internal
+.compute_ssa_vector_bbox <- function(mu_files, ssa_list,
+                                     template = NULL,
+                                     grid_alignment = c("gssurgo", "target_aligned", "nlcd"),
+                                     resolution_m = 10) {
+  stopifnot(requireNamespace("sf", quietly = TRUE))
+
+  grid_alignment <- .normalize_grid_alignment(grid_alignment)
+
+  if (length(mu_files) == 0 || length(ssa_list) == 0) {
+    return(NULL)
+  }
+
+  first_crs <- if (inherits(template, "SpatRaster")) {
+    terra::crs(template)
+  } else {
+    .resolve_ssa_crs(ssa_list[[1]]$areasymbol, grid_alignment = grid_alignment)
+  }
+  bounds <- lapply(seq_along(mu_files), function(i) {
+    mu <- sf::read_sf(mu_files[[i]], quiet = TRUE)
+    if (nrow(mu) == 0) {
+      return(NULL)
+    }
+    mu <- sf::st_transform(mu, first_crs)
+    sf::st_bbox(mu)
+  })
+  bounds <- Filter(Negate(is.null), bounds)
+  if (length(bounds) == 0) {
+    return(NULL)
+  }
+
+  xmin <- min(vapply(bounds, function(x) x[["xmin"]], numeric(1)))
+  xmax <- max(vapply(bounds, function(x) x[["xmax"]], numeric(1)))
+  ymin <- min(vapply(bounds, function(x) x[["ymin"]], numeric(1)))
+  ymax <- max(vapply(bounds, function(x) x[["ymax"]], numeric(1)))
+
+  origin <- if (inherits(template, "SpatRaster")) {
+    terra::origin(template)
+  } else {
+    .grid_origin(grid_alignment, resolution_m)
+  }
+  resolution <- if (inherits(template, "SpatRaster")) {
+    terra::res(template)
+  } else {
+    c(resolution_m, resolution_m)
+  }
+
+  .snap_extent_to_grid(
+    xmin, xmax, ymin, ymax,
+    origin = origin,
+    resolution = resolution
+  )
+}
+
+#' @noRd
+#' @keywords internal
+.snap_extent_to_grid <- function(xmin, xmax, ymin, ymax,
+                                  origin = c(0, 0),
+                                  resolution = c(1, 1)) {
+  c(
+    xmin = as.numeric(origin[1] + floor((xmin - origin[1]) / resolution[1]) * resolution[1]),
+    xmax = as.numeric(origin[1] + ceiling((xmax - origin[1]) / resolution[1]) * resolution[1]),
+    ymin = as.numeric(origin[2] + floor((ymin - origin[2]) / resolution[2]) * resolution[2]),
+    ymax = as.numeric(origin[2] + ceiling((ymax - origin[2]) / resolution[2]) * resolution[2])
+  )
+}
+
+#' Create SpatRaster Template for Soil Survey Area
+#'
+#' @param mu_shp sf object containing map unit polygons
+#' @param template Optional SpatRaster template to align with
+#' @param areasymbol Soil survey area symbol (e.g. "CA067")
+#' @param resolution_m Resolution in meters (default: 10)
+#' @param buffer_m Buffer in meters added around bbox before snapping (default: 0)
+#' @param grid_alignment Grid alignment mode: `"gssurgo"` (default), `"target_aligned"`, or `"nlcd"`
+#' @return SpatRaster template covering the SSA extent snapped to grid
+#' @noRd
+#' @keywords internal
+.create_ssa_raster_template <- function(mu_shp, template = NULL, areasymbol = NULL,
+                                        resolution_m = 10, buffer_m = 0,
+                                        grid_alignment = c("gssurgo", "target_aligned", "nlcd")) {
+  stopifnot(requireNamespace("sf", quietly = TRUE))
+  stopifnot(requireNamespace("terra", quietly = TRUE))
+
+  grid_alignment <- .normalize_grid_alignment(grid_alignment)
+
+  if (inherits(template, "SpatRaster")) {
+    target_crs <- terra::crs(template)
+    mu_proj <- sf::st_transform(mu_shp, target_crs)
+    extent_bbox <- sf::st_bbox(mu_proj)
+
+    xmin <- extent_bbox[["xmin"]] - buffer_m
+    xmax <- extent_bbox[["xmax"]] + buffer_m
+    ymin <- extent_bbox[["ymin"]] - buffer_m
+    ymax <- extent_bbox[["ymax"]] + buffer_m
+
+    t_res <- terra::res(template)
+    t_origin <- terra::origin(template)
+
+    snapped <- .snap_extent_to_grid(xmin, xmax, ymin, ymax, origin = t_origin, resolution = t_res)
+    xmin_snap <- snapped[["xmin"]]
+    xmax_snap <- snapped[["xmax"]]
+    ymin_snap <- snapped[["ymin"]]
+    ymax_snap <- snapped[["ymax"]]
+
+    terra::rast(
+      xmin = xmin_snap,
+      xmax = xmax_snap,
+      ymin = ymin_snap,
+      ymax = ymax_snap,
+      resolution = t_res,
+      crs = target_crs
+    )
+  } else {
+    target_crs <- .resolve_ssa_crs(areasymbol, grid_alignment = grid_alignment)
+    mu_proj <- sf::st_transform(mu_shp, target_crs)
+    extent_bbox <- sf::st_bbox(mu_proj)
+
+    xmin <- extent_bbox[["xmin"]] - buffer_m
+    xmax <- extent_bbox[["xmax"]] + buffer_m
+    ymin <- extent_bbox[["ymin"]] - buffer_m
+    ymax <- extent_bbox[["ymax"]] + buffer_m
+
+    origin <- .grid_origin(grid_alignment, resolution_m)
+
+    snapped <- .snap_extent_to_grid(
+      xmin, xmax, ymin, ymax,
+      origin = origin,
+      resolution = c(resolution_m, resolution_m)
+    )
+    xmin_snap <- snapped[["xmin"]]
+    xmax_snap <- snapped[["xmax"]]
+    ymin_snap <- snapped[["ymin"]]
+    ymax_snap <- snapped[["ymax"]]
+
+    terra::rast(
+      xmin = xmin_snap,
+      xmax = xmax_snap,
+      ymin = ymin_snap,
+      ymax = ymax_snap,
+      resolution = resolution_m,
+      crs = target_crs
+    )
+  }
+}
+
+
+#' Rasterize SSURGO MUKEY to Standard Grid
+#'
+#' @description `.rasterize_ssurgo_ssa()`: Generate in-memory SpatRaster from MUKEY polygons
+#'   for a single soil survey area (SSA).
+#'
+#' @details
+#' Workflow:
+#' 1. Extract MUKEY from SSURGO mapunit polygon shapefile from SSA directory
+#' 2. Create standard or custom grid template via `.create_ssa_raster_template()`
+#' 3. Project polygon features to template target CRS and convert MUKEY to numeric
+#' 4. Rasterize polygon features to grid using MUKEY as cell values
+#' 5. Return in-memory SpatRaster object for caller to handle writing
+#'
+#' @param ssa_dir _character_. Path to SSA extraction directory
+#'   containing SSURGO spatial (.shp) files.
+#' @param areasymbol _character_. Soil survey area symbol (e.g., "CA067") for logging.
+#' @param template Optional SpatRaster template to align with.
+#' @param touches _logical_. If TRUE, all cells touched by polygons are rasterized. Default FALSE.
+#' @param grid_alignment Grid alignment mode: `"gssurgo"` (default), `"target_aligned"`, or `"nlcd"`.
+#' @param quiet _logical_. Suppress rasterization messages if TRUE.
+#'
+#' @return SpatRaster object (in-memory), or NULL if rasterization fails or mupolygon not found.
+#' @noRd
+#' @keywords internal
+.rasterize_ssurgo_ssa <- function(ssa_dir, areasymbol, template = NULL, touches = FALSE,
+                                  grid_alignment = c("gssurgo", "target_aligned", "nlcd"),
+                                  resolution_m = 10,
+                                  quiet = FALSE) {
+
+  grid_alignment <- .normalize_grid_alignment(grid_alignment)
+
+  # Locate mupolygon shapefile in ssa_dir
+  mu_shp_pattern <- list.files(ssa_dir, pattern = "^soilmu_a_.*\\.shp$", full.names = TRUE)
+
+  if (length(mu_shp_pattern) == 0) {
+    if (!isTRUE(quiet)) {
+      warning("No mupolygon shapefile found for ", areasymbol, "; skipping rasterization",
+              call. = FALSE)
+    }
+    return(NULL)
+  }
+
+  mu_shp_file <- mu_shp_pattern[1]
+
+  tryCatch({
+    # Read mupolygon shapefile
+    mu_shp <- sf::read_sf(mu_shp_file)
+
+    # Validate shapefile has data
+    if (nrow(mu_shp) == 0) {
+      if (!isTRUE(quiet)) {
+        warning("Mupolygon shapefile for ", areasymbol, " has no features; skipping rasterization",
+                call. = FALSE)
+      }
+      return(NULL)
+    }
+
+    # Lowercase column names for consistency
+    colnames(mu_shp) <- tolower(colnames(mu_shp))
+
+    # Check for MUKEY field
+    if (!("mukey" %in% colnames(mu_shp))) {
+      if (!isTRUE(quiet)) {
+        warning("MUKEY field not found in mupolygon shapefile for ", areasymbol,
+                "; skipping rasterization", call. = FALSE)
+      }
+      return(NULL)
+    }
+
+    # Create SpatRaster template snapped to grid
+    rast_template <- .create_ssa_raster_template(
+      mu_shp,
+      template = template,
+      areasymbol = areasymbol,
+      resolution_m = resolution_m,
+      grid_alignment = grid_alignment
+    )
+
+    # Project polygons into template target CRS
+    target_crs <- terra::crs(rast_template)
+    mu_proj <- sf::st_transform(mu_shp, target_crs)
+
+    # Convert mukey values to numeric for clean integer cell values
+    mu_proj$mukey <- as.numeric(mu_proj$mukey)
+
+    # Convert sf object to SpatVector for terra::rasterize
+    mu_vec <- terra::vect(mu_proj)
+
+    # Rasterize MUKEY field to template grid
+    mukey_raster <- terra::rasterize(
+      mu_vec,
+      rast_template,
+      field = "mukey",
+      touches = touches
+    )
+
+    if (!isTRUE(quiet)) {
+      message("Rasterizing MUKEY for ", areasymbol, "...")
+    }
+
+    return(mukey_raster)
+
+  }, error = function(e) {
+    if (!isTRUE(quiet)) {
+      warning("Rasterization failed for ", areasymbol, ": ", conditionMessage(e),
+              call. = FALSE)
+    }
+    return(NULL)
+  })
+}
+
+.areasymbol_from_mupolygon_file <- function(mu_file) {
+  gsub(
+    ".*soil[musfa]{2}_[apl]_([a-z]{2}\\d{3}|mxnl\\d{3}|[a-z]{2})\\.shp.*",
+    "\\1",
+    mu_file,
+    ignore.case = TRUE
+  )
+}
+
+.is_ssurgo_areasymbol <- function(areasymbol) {
+  grepl("^([A-Z]{2}[0-9]{3}|MXNL[0-9]{3})$", toupper(areasymbol))
+}
+
+.ssurgo_raster_resolution_m <- function(template, resolution_m) {
+  if (!inherits(template, "SpatRaster")) {
+    return(resolution_m)
+  }
+
+  units_gdal <- sf::st_crs(terra::crs(template))$units_gdal
+  if (length(units_gdal) != 1L || is.na(units_gdal) ||
+      !tolower(units_gdal) %in% c("metre", "meter")) {
+    return(NA_real_)
+  }
+
+  max(terra::res(template))
+}
+
+.warn_if_coarse_ssurgo_raster <- function(areasymbols, resolution_m) {
+  if (isTRUE(length(resolution_m) == 1L && is.finite(resolution_m) &&
+             resolution_m > 90) &&
+      any(.is_ssurgo_areasymbol(areasymbols), na.rm = TRUE)) {
+    warning(
+      "A single SSURGO MUKEY per cell may be misleading at resolutions greater than 90 meters.",
+      call. = FALSE
+    )
+  }
+}
+
+#' Derive Fiscal Year from SSURGO Metadata
+#'
+#' @description Extract saverest date from sacatalog table in extracted SSURGO files
+#'   and derive fiscal year (Oct-Sep) as "FY{YY}" format.
+#'
+#' @param f.txt.grp _list_. Named list of tabular text file groups from inventory.
+#' @param exdir _character_. Extraction directory containing SSURGO files.
+#' @param sep _character_. Field separator for reading delimited files.
+#' @param quote _character_. Quote character for reading delimited files.
+#' @param na.strings _character_. NA string representation.
+#' @param header _logical_. Whether files have headers.
+#'
+#' @return _character_. Fiscal year in "FY{YY}" format (e.g., "FY24"), or NA if not found.
+#' @noRd
+#' @keywords internal
+.derive_fiscal_year_from_sacatalog <- function(f.txt.grp, exdir, sep = "|", quote = "", na.strings = c("", "NA"), header = FALSE) {
+
+  # WSS exports have also been observed with the filename typo "sacatlog.txt".
+  sacatalog_files <- c(f.txt.grp[["sacatalog"]], f.txt.grp[["sacatlog"]])
+  if (length(sacatalog_files) > 0L) {
+    sacatalog_files <- sacatalog_files[file.exists(sacatalog_files)]
+  }
+  if (length(sacatalog_files) == 0L) {
+    return(NA_character_)
+  }
+  sacatalog_file <- sacatalog_files[1]
+
+  tryCatch({
+    # Read sacatalog table
+    sacatalog <- suppressWarnings(data.table::fread(
+      sacatalog_file,
+      sep = sep,
+      header = header,
+      na.strings = na.strings,
+      showProgress = FALSE,
+      data.table = FALSE
+    ))
+
+    if (is.null(sacatalog) || nrow(sacatalog) == 0) {
+      return(NA_character_)
+    }
+
+    saverest <- as.Date(NA_character_)
+    for (col_name in intersect(c("saverest", "V3", "V4"), colnames(sacatalog))) {
+      saverest_str <- as.character(sacatalog[[col_name]][1])
+      if (is.na(saverest_str) ||
+          !grepl(
+            "^([0-9]{1,2}/[0-9]{1,2}/[0-9]{4}([[:space:]]+[0-9]{1,2}:[0-9]{2}(:[0-9]{2})?)?|[0-9]{4}-[0-9]{2}-[0-9]{2})$",
+            saverest_str
+          )) {
+        next
+      }
+
+      # Some exports have a non-date in V3 and the saverest date in V4.
+      parsed_date <- suppressWarnings(as.Date(saverest_str, format = "%m/%d/%Y %H:%M:%S"))
+      if (is.na(parsed_date)) {
+        parsed_date <- suppressWarnings(as.Date(saverest_str, format = "%m/%d/%Y %H:%M"))
+      }
+      if (is.na(parsed_date)) {
+        parsed_date <- suppressWarnings(as.Date(saverest_str, format = "%m/%d/%Y"))
+      }
+      if (is.na(parsed_date)) {
+        parsed_date <- suppressWarnings(as.Date(saverest_str, format = "%Y-%m-%d"))
+      }
+      if (!is.na(parsed_date)) {
+        saverest <- parsed_date
+        break
+      }
+    }
+
+    if (is.na(saverest)) {
+      return(NA_character_)
+    }
+
+    # Derive fiscal year using existing WSS function
+    fiscal_year <- .wss_fiscal_year(saverest)
+    return(fiscal_year)
+
+  }, error = function(e) {
+    return(NA_character_)
+  })
+}
+
+#' Write SpatRaster to Cache with terra Fallback
+#'
+#' @description `.write_raster_with_cache()`: Write in-memory SpatRaster to disk cache
+#'   using soilDB user directory pattern. Falls back to the directory configured by
+#'   `terra::terraOptions()` if the primary cache write fails.
+#'
+#' @param raster_obj _SpatRaster_. In-memory raster object to persist.
+#' @param areasymbol _character_. Soil survey area symbol (e.g., "CA067") for filename.
+#' @param resolution_m _numeric_. Fallback grid resolution for the cache filename when the
+#'   raster's resolution is unavailable.
+#' @param cache_root _character_. Cache root directory. If NULL, defaults to
+#'   soilDB_user_dir("cache", "raster", create=TRUE).
+#' @param fiscal_year _character_. Optional fiscal year label for cache path organization
+#'   (e.g., `"FY2024"`, `"FY26"`). If provided, raster is written to
+#'   `soilDB_user_dir("cache", "WSS", {fiscal_year}, "raster")`. If `NULL`, uses legacy cache path.
+#' @param quiet _logical_. Suppress write messages if TRUE.
+#'
+#' @return _character_. Normalized path to written GeoTIFF, or NA_character_ if write failed.
+#' @noRd
+#' @keywords internal
+.write_raster_with_cache <- function(raster_obj, areasymbol, fiscal_year = NULL, cache_root = NULL,
+                                     resolution_m = 10, quiet = FALSE) {
+
+  # Determine cache root directory
+  if (is.null(cache_root)) {
+    if (!is.null(fiscal_year)) {
+      # Nested cache structure: soilDB_user_dir("cache", "WSS", fiscal_year, "raster")
+      wss_cache_root <- .wss_cache_root(create = TRUE)
+      cache_root <- file.path(wss_cache_root, fiscal_year, "raster")
+    } else {
+      # Legacy flat cache structure: soilDB_user_dir("cache", "raster")
+      cache_root <- soilDB_user_dir("cache", "raster", create = TRUE)
+    }
+  }
+  dir.create(cache_root, recursive = TRUE, showWarnings = FALSE)
+
+  raster_resolution <- if (inherits(raster_obj, "SpatRaster")) {
+    terra::res(raster_obj)
+  } else {
+    resolution_m
+  }
+  resolution_label <- if (length(raster_resolution) > 1L &&
+                          raster_resolution[1] != raster_resolution[2]) {
+    paste(format(raster_resolution, trim = TRUE, scientific = FALSE), collapse = "x")
+  } else {
+    format(raster_resolution[1], trim = TRUE, scientific = FALSE)
+  }
+  filename <- paste0("MUKEY_", resolution_label, "m_", toupper(areasymbol), ".tif")
+  cache_path <- file.path(cache_root, filename)
+
+  tryCatch({
+    # Ensure raster values are compatible with unsigned integer representation
+    if (inherits(raster_obj, "SpatRaster")) {
+      raster_obj <- terra::as.int(raster_obj)
+    }
+
+    # Write raster to primary cache location
+    .write_cog_raster(raster_obj, cache_path)
+
+    if (!isTRUE(quiet)) {
+      message("Wrote raster to cache: ", cache_path)
+    }
+
+    # Return normalized path
+    normalizePath(cache_path, winslash = .Platform$file.sep, mustWork = FALSE)
+
+  }, error = function(e) {
+    # Fallback: write to temporary directory
+    tmpdir <- terra::terraOptions(print = FALSE)$tempdir
+    dir.create(tmpdir, recursive = TRUE, showWarnings = FALSE)
+    tmppath <- file.path(tmpdir, filename)
+
+    tryCatch({
+      .write_cog_raster(raster_obj, tmppath)
+
+      warning("Cache directory unavailable; raster written to temporary directory: ",
+              tmppath, call. = FALSE)
+
+      normalizePath(tmppath, winslash = .Platform$file.sep, mustWork = FALSE)
+
+    }, error = function(e2) {
+      warning("Failed to write raster for ", areasymbol, ": ", conditionMessage(e2),
+              call. = FALSE)
+      return(NA_character_)
+    })
+  })
+}
+
+#' Create Final Output Raster from SSA Rasters
+#'
+#' Copies single SSA raster or merges/mosaics multiple SSA rasters into a final output GeoTIFF.
+#' If vector bounding box / shapefile extents are available, trims/crops to the exact snapped vector extent.
+#'
+#' @param raster_paths List of list(areasymbol, path) objects.
+#' @param filename Database filename (e.g. "path/to/test.gpkg").
+#' @param conn DBIConnection (used to infer dbname if filename is NULL).
+#' @param exdir Directory containing SSURGO files.
+#' @param target_bbox Optional numeric bounding box or SpatExtent to crop the final output to.
+#' @param template Optional SpatRaster template defining the target grid.
+#' @param grid_alignment Grid alignment mode: `"gssurgo"` (default), `"target_aligned"`, or `"nlcd"`.
+#' @param resolution_m Target raster resolution in meters (default: 10).
+#' @param overwrite Overwrite existing output raster?
+#' @param quiet Suppress messages if TRUE.
+#'
+#' @return Normalized path to final output raster, or NULL.
+#' @noRd
+#' @keywords internal
+.create_final_raster_output <- function(raster_paths,
+                                       filename = NULL,
+                                       conn = NULL,
+                                       exdir = NULL,
+                                       target_bbox = NULL,
+                                       template = NULL,
+                                       grid_alignment = c("gssurgo", "target_aligned", "nlcd"),
+                                       resolution_m = 10,
+                                       overwrite = FALSE,
+                                       quiet = FALSE) {
+  if (is.null(raster_paths) || length(raster_paths) == 0) {
+    return(NULL)
+  }
+
+  grid_alignment <- .normalize_grid_alignment(grid_alignment)
+
+  paths <- unlist(lapply(raster_paths, function(x) x$path), use.names = FALSE)
+  paths <- paths[!is.na(paths) & file.exists(paths)]
+
+  if (length(paths) == 0) {
+    return(NULL)
+  }
+
+  # Determine target output raster directory and base name
+  target_file <- NULL
+  if (!is.null(filename) && is.character(filename) && length(filename) > 0 && nzchar(filename[1])) {
+    target_file <- sub("\\.[^.]+$", ".tif", filename[1])
+    if (!grepl("\\.tif$", target_file, ignore.case = TRUE)) {
+      target_file <- paste0(target_file, ".tif")
+    }
+  } else if (!is.null(conn) && inherits(conn, "DBIConnection")) {
+    dbname <- tryCatch(conn@dbname, error = function(e) NULL)
+    if (!is.null(dbname) && is.character(dbname) && length(dbname) > 0 && nzchar(dbname[1])) {
+      target_file <- sub("\\.[^.]+$", ".tif", dbname[1])
+      if (!grepl("\\.tif$", target_file, ignore.case = TRUE)) {
+        target_file <- paste0(target_file, ".tif")
+      }
+    }
+  }
+
+  if (is.null(target_file) && !is.null(exdir)) {
+    target_file <- file.path(exdir, "mukey.tif")
+  }
+
+  if (is.null(target_file)) {
+    return(NULL)
+  }
+
+  dir.create(dirname(target_file), recursive = TRUE, showWarnings = FALSE)
+
+  if (file.exists(target_file) && !isTRUE(overwrite)) {
+    if (!isTRUE(quiet)) {
+      message("Output raster already exists; skipping overwrite: ", target_file)
+    }
+    return(normalizePath(target_file, winslash = .Platform$file.sep, mustWork = FALSE))
+  }
+
+  tryCatch({
+    # Determine target SpatRaster (single source or mosaic)
+    if (length(paths) == 1) {
+      out_r <- terra::rast(paths[1])
+    } else {
+      sprc <- terra::sprc(paths)
+      out_r <- terra::merge(sprc)
+    }
+
+    # If target_bbox is provided, crop output raster to exact snapped bounds
+    if (!is.null(target_bbox)) {
+      if (inherits(target_bbox, c("bbox", "numeric", "integer")) && length(target_bbox) >= 4) {
+        tb_names <- names(target_bbox)
+        xmin_val <- if ("xmin" %in% tb_names) target_bbox[["xmin"]] else target_bbox[1]
+        ymin_val <- if ("ymin" %in% tb_names) target_bbox[["ymin"]] else target_bbox[2]
+        xmax_val <- if ("xmax" %in% tb_names) target_bbox[["xmax"]] else target_bbox[3]
+        ymax_val <- if ("ymax" %in% tb_names) target_bbox[["ymax"]] else target_bbox[4]
+
+        if (inherits(template, "SpatRaster")) {
+          snapped <- c(xmin = xmin_val, xmax = xmax_val, ymin = ymin_val, ymax = ymax_val)
+        } else {
+          origin <- .grid_origin(grid_alignment, resolution_m)
+
+          snapped <- .snap_extent_to_grid(
+            xmin_val, xmax_val, ymin_val, ymax_val,
+            origin = origin,
+            resolution = c(resolution_m, resolution_m)
+          )
+        }
+        crop_ext <- terra::ext(snapped[["xmin"]], snapped[["xmax"]], snapped[["ymin"]], snapped[["ymax"]])
+        out_r <- terra::crop(out_r, crop_ext)
+      } else if (inherits(target_bbox, "SpatExtent")) {
+        out_r <- terra::crop(out_r, target_bbox)
+      }
+    }
+
+    # Write final raster output as COG GeoTIFF
+    .write_cog_raster(out_r, target_file)
+
+    if (!isTRUE(quiet)) {
+      message("Created final raster output: ", target_file)
+    }
+
+    normalizePath(target_file, winslash = .Platform$file.sep, mustWork = FALSE)
+  }, error = function(e) {
+    if (!isTRUE(quiet)) {
+      warning("Failed to create final output raster: ", conditionMessage(e), call. = FALSE)
+    }
+    NULL
+  })
 }
