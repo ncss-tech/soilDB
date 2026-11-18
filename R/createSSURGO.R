@@ -870,18 +870,14 @@ createSSURGO <- function(filename = NULL,
                 append_arg <- FALSE
                 overwrite_arg <- overwrite
 
-                if (!table_exists || !isTRUE(table_initialized)) {
+                if (table_exists && (isTRUE(append) || isTRUE(table_initialized))) {
+                  # append to existing data, including tables already written for an earlier SSA in this run
+                  append_arg <- TRUE
+                  overwrite_arg <- FALSE
+                } else {
+                  # first write of this table in this run: create (replacing if overwrite is set)
                   append_arg <- FALSE
                   overwrite_arg <- table_exists || overwrite
-                } else if (isTRUE(append)) {
-                  append_arg <- TRUE
-                  overwrite_arg <- FALSE
-                } else if (isTRUE(overwrite)) {
-                  append_arg <- FALSE
-                  overwrite_arg <- TRUE
-                } else {
-                  append_arg <- TRUE
-                  overwrite_arg <- FALSE
                 }
 
                 rec <- .write_table_with_log(
