@@ -1,6 +1,9 @@
 # soilDB 2.9.4 (2026-11-12)
  - SoilWeb Web Coverage Service specifications for `mukey.wcs()`, `issr800.wcs()`, and `soilColor.wcs()` now are available as JSON rather than hard-coded
- 
+ - `createSSURGO()` can optionally create MUKEY GeoTIFF rasters with `include_raster = TRUE`. `resolution_m` accepts any cell size (10 m by default); `template` can supply a custom `SpatRaster` grid; and `grid_alignment` accepts `"gssurgo"` (default), `"target_aligned"`, or `"nlcd"` when no template is supplied. 
+   - `touches` controls whether rasterization includes every cell touched by polygon boundaries or only cells whose centers fall within polygons.
+   - `fiscal_year` labels the raster cache (otherwise inferred from the SSURGO catalog), `areasymbols` limits processing to selected survey areas, and `LAPPLY.FUN`/`LAPPLY.FUN.ARGS` customize iteration for rasterization.
+   
 # soilDB 2.9.3 (2026-09-17) 
  - `createSSURGO()` fix bug in logical column handling (introduced in 2.9.2) due to metadata column type enforcement (#483)
  - Fix `structure()` usage of special argument names (.Label, .Names) in test fixtures for R-devel (#484)
