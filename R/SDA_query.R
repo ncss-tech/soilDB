@@ -49,6 +49,8 @@ format_SQL_in_statement <- function(x) {
 #'
 #' @details The SDA website can be found at \url{https://sdmdataaccess.nrcs.usda.gov} and query examples can be found at \url{https://sdmdataaccess.nrcs.usda.gov/QueryHelp.aspx}. A library of query examples can be found at \url{https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=SDA-SQL_Library_Home}.
 #'
+#' The tabular POST endpoint can be overridden with the `soilDB.sda.tabular.post.rest.url` option. Use `soilDB.sda.headers` for a named character vector, named list of header values, or a zero-argument function returning either. A bearer token may be supplied with the `soilDB.sda.token` option or the `SOILDB_SDA_TOKEN` environment variable; an option takes precedence. Custom headers and tokens are never sent to the official SDA host and are refused over non-loopback plain HTTP. Avoid placing secrets directly in scripts; use an environment variable or a function that retrieves the token from a secure store.
+#'
 #' SSURGO (detailed soil survey) and STATSGO (generalized soil survey) data are stored together within SDA. This means that queries that don't specify an area symbol may result in a mixture of SSURGO and STATSGO records. See the examples below and the \href{http://ncss-tech.github.io/AQP/soilDB/SDA-tutorial.html}{SDA Tutorial} for details.
 #'
 #' @return A data.frame result for queries that return a single table. A list of data.frame for queries that return multiple tables. `NULL` if result is empty, and `try-error` on error.
@@ -201,17 +203,24 @@ SDA_query <- function(q, dsn = NULL) {
   # format=json+columnname+metadata
   post_body <- paste0("query=", curl::curl_escape(q), "&format=json%2Bcolumnname%2Bmetadata")
   
+  config <- .sda_request_config(
+    default_ua = paste0(names(ua), "/", ua, collapse = " ")
+  )
+
   # setup curl handle
   h <- curl::new_handle()
-  curl::handle_setopt(h, 
-                      copypostfields = post_body,
-                      post = TRUE,
-                      useragent = paste0(names(ua), "/", ua, collapse = " ")
+  handle_options <- list(
+    copypostfields = post_body,
+    post = TRUE,
+    useragent = config$useragent
   )
+  if (length(config$headers) > 0L) {
+    handle_options$httpheader <- paste(names(config$headers), config$headers, sep = ": ")
+  }
+  do.call(curl::handle_setopt, c(list(handle = h), handle_options))
   
   # submit request
-  url <- "https://sdmdataaccess.sc.egov.usda.gov/tabular/post.rest"
-  req <- try(curl::curl_fetch_memory(url, handle = h), silent = TRUE)
+  req <- try(curl::curl_fetch_memory(config$url, handle = h), silent = TRUE)
   
   if (inherits(req, 'try-error')) {
     message("Soil Data Access POST request failed, returning try-error.\n\n", req)

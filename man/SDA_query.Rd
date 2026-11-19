@@ -20,6 +20,8 @@ Submit a query to the Soil Data Access (SDA) REST/JSON web-service and return th
 \details{
 The SDA website can be found at \url{https://sdmdataaccess.nrcs.usda.gov} and query examples can be found at \url{https://sdmdataaccess.nrcs.usda.gov/QueryHelp.aspx}. A library of query examples can be found at \url{https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=SDA-SQL_Library_Home}.
 
+The tabular POST endpoint can be overridden with the \code{soilDB.sda.tabular.post.rest.url} option. Use \code{soilDB.sda.headers} for a named character vector, named list of header values, or a zero-argument function returning either. A bearer token may be supplied with the \code{soilDB.sda.token} option or the \code{SOILDB_SDA_TOKEN} environment variable; an option takes precedence. Custom headers and tokens are never sent to the official SDA host and are refused over non-loopback plain HTTP. Avoid placing secrets directly in scripts; use an environment variable or a function that retrieves the token from a secure store.
+
 SSURGO (detailed soil survey) and STATSGO (generalized soil survey) data are stored together within SDA. This means that queries that don't specify an area symbol may result in a mixture of SSURGO and STATSGO records. See the examples below and the \href{http://ncss-tech.github.io/AQP/soilDB/SDA-tutorial.html}{SDA Tutorial} for details.
 }
 \examples{
