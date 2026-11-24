@@ -35,7 +35,7 @@ mukey.wcs(
 - quiet:
 
   logical, passed to
-  [`curl::curl_download()`](https://jeroen.r-universe.dev/curl/reference/curl_download.html)
+  [`curl::curl_download()`](https://rdrr.io/pkg/curl/man/curl_download.html)
   to enable / suppress URL and progress bar for download.
 
 ## Value

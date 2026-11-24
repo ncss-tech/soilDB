@@ -7,6 +7,19 @@
   `issr800.wcs()`, and
   [`soilColor.wcs()`](http://ncss-tech.github.io/soilDB/reference/soilColor.wcs.md)
   now are available as JSON rather than hard-coded
+- [`createSSURGO()`](http://ncss-tech.github.io/soilDB/reference/createSSURGO.md)
+  can optionally create MUKEY GeoTIFF rasters with
+  `include_raster = TRUE`. `resolution_m` accepts any cell size (10 m by
+  default); `template` can supply a custom `SpatRaster` grid; and
+  `grid_alignment` accepts `"gssurgo"` (default), `"target_aligned"`, or
+  `"nlcd"` when no template is supplied.
+  - `touches` controls whether rasterization includes every cell touched
+    by polygon boundaries or only cells whose centers fall within
+    polygons.
+  - `fiscal_year` labels the raster cache (otherwise inferred from the
+    SSURGO catalog), `areasymbols` limits processing to selected survey
+    areas, and `LAPPLY.FUN`/`LAPPLY.FUN.ARGS` customize iteration for
+    rasterization.
 
 ## soilDB 2.9.3 (2026-09-17)
 
@@ -954,7 +967,7 @@ CRAN release: 2022-08-19
   (<https://github.com/ncss-tech/soilDB/discussions/260>).
 
 - {curl} moved from Suggests to Imports;
-  [`curl::curl_download()`](https://jeroen.r-universe.dev/curl/reference/curl_download.html)
+  [`curl::curl_download()`](https://rdrr.io/pkg/curl/man/curl_download.html)
   is now used instead of
   [`utils::download.file()`](https://rdrr.io/r/utils/download.file.html)
   because it seems to handle SSL certificates better on some networks.

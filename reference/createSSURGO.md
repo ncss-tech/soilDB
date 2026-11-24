@@ -18,6 +18,9 @@ createSSURGO(
   pattern = NULL,
   include_spatial = TRUE,
   include_tabular = TRUE,
+  include_raster = FALSE,
+  LAPPLY.FUN = lapply,
+  LAPPLY.FUN.ARGS = NULL,
   dissolve_field = NULL,
   maxruledepth = 0,
   overwrite = FALSE,
@@ -26,6 +29,11 @@ createSSURGO(
   sep = "|",
   na.strings = c("", "NA"),
   quote = "",
+  fiscal_year = NULL,
+  template = NULL,
+  touches = FALSE,
+  grid_alignment = c("gssurgo", "target_aligned", "nlcd"),
+  resolution_m = 10,
   quiet = TRUE,
   areasymbols = NULL,
   ...
@@ -78,6 +86,26 @@ createSSURGO(
   descriptions are stored in table `"featdesc"` and metadata for each
   soil survey area are stored in `"soil_metadata"` tables.
 
+- include_raster:
+
+  *logical*. Generate MUKEY GeoTIFF rasters for each SSA? Default:
+  `FALSE` does not create raster outputs. Set to `TRUE` to create
+  georeferenced rasters cached in `soilDB_user_dir("cache", "WSS", ...)`
+  and output a combined/copied raster matching `filename`. Requires
+  `terra` package.
+
+- LAPPLY.FUN:
+
+  *function*. [`lapply()`](https://rdrr.io/r/base/lapply.html)-like
+  function to use for iteration during rasterization phase. Only used if
+  `include_raster=TRUE`. This allows for the rasterization operations to
+  be run in parallel instead of sequential, custom progress reporting,
+  or similar.
+
+- LAPPLY.FUN.ARGS:
+
+  *list*. Optional list of additional arguments to pass to `LAPPLY.FUN`.
+
 - dissolve_field:
 
   *character*. Dissolve geometries to create MULTIPOLYGON features?
@@ -122,6 +150,45 @@ createSSURGO(
   [`data.table::fread()`](https://rdrr.io/pkg/data.table/man/fread.html).
   Default: `""`
 
+- fiscal_year:
+
+  *character*. Optional fiscal year label for cache organization (e.g.,
+  `'FY2024'`, `'FY26'`). If `NULL`, auto-detect from sacatalog saverest
+  date. Allows organizing rasters by official release year or custom
+  labels. Only used if `include_raster=TRUE`.
+
+- template:
+
+  Optional `SpatRaster` template defining a common target CRS and grid,
+  including cell size, for all selected SSAs. Use a template when the
+  selection spans regional CRSs or when a geographic CRS is needed. If
+  `NULL` (default), creates a standard grid at `resolution_m` in the
+  regional standard CRS (EPSG:5070 for CONUS, EPSG:3338 for AK,
+  EPSG:6628 for HI, EPSG:32161 for PR/VI, EPSG:4326 for Pacific Islands)
+  with bounds snapped according to `grid_alignment`.
+
+- touches:
+
+  *logical*. If `TRUE`, all cells touched by polygon boundaries are
+  rasterized. Default `FALSE` rasterizes only cells whose centroids fall
+  within polygons.
+
+- grid_alignment:
+
+  *character*. Grid alignment mode when `template = NULL`. Use
+  `"gssurgo"` (default), `"target_aligned"`, or `"nlcd"`. The GSSURGO
+  mode uses a half-cell origin matching official USDA-NRCS products;
+  target-aligned uses a zero origin; and NLCD uses the canonical WGS84
+  Albers origin anchor `(-2415585, 3314805)`. A supplied `template`
+  takes precedence.
+
+- resolution_m:
+
+  *numeric*. Finite positive raster cell size in meters when
+  `template = NULL` and the regional CRS is projected (default: `10`).
+  Meter-based rasterization with a geographic regional CRS requires an
+  explicit `template`.
+
 - quiet:
 
   *logical*. Suppress messages and other output from database read/write
@@ -149,6 +216,23 @@ createSSURGO(
 In theory any other DBI-compatible data source can be used for output.
 See `conn` argument. If you encounter issues using specific DBI
 connection types, please report in the soilDB issue tracker.
+
+When `include_raster=TRUE`, common resolutions include 10m, 30m, 300m,
+and 900m; any positive resolution can be requested. Custom `SpatRaster`
+templates can be supplied for arbitrary grids. The alignment modes are
+intentional: `gssurgo` matches official USDA-NRCS products,
+`target_aligned` follows zero-origin GDAL-style alignment, and `nlcd`
+uses the canonical WGS84 Albers origin. These choices support
+interoperability with federal raster products including NLCD, CDL, USGS
+3DEP, and gNATSGO. A supplied template defines a common CRS and grid for
+all selected SSAs. Without a template, selected SSAs must share a
+regional CRS. The Pacific Island default CRS (EPSG:4326) is geographic,
+so meter-based rasterization there requires an explicit template. Raster
+output uses `NAflag = 0`; MUKEY zero is reserved as NoData.
+
+A single SSURGO MUKEY per cell may be misleading at resolutions greater
+than 90 meters. A warning is issued for recognized SSURGO area symbols
+when the output grid exceeds this resolution.
 
 ## See also
 
