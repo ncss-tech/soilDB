@@ -1,33 +1,83 @@
-# new tools for querying lab data from SDA Lab Data Mart
-#
-
-#' Query data from Kellogg Soil Survey Laboratory Data Mart via Soil Data Access or local SQLite snapshot
+#' Query Kellogg Soil Survey Laboratory Data Mart
 #'
-#' This function provides access to the Kellogg Soil Survey Laboratory Data Mart via Soil Data Access or a local SQLite snapshot. See details and examples for additional usage instructions.
+#' This function provides access to the Kellogg Soil Survey Laboratory Data Mart
+#' (KSSL LDM) via Soil Data Access (SDA) or a local SQLite snapshot. See details
+#' and examples for additional usage instructions.
 #' 
-#'
-#' @param x A vector of values to find in column specified by `what`, default `NULL` uses no constraints on `what`
-#' @param what A single column name from tables: `lab_combine_nasis_ncss`, `lab_webmap`, `lab_site`, `lab_pedon` or `lab_area`. Common choices include `pedlabsampnum` (Laboratory Pedon ID), `upedonid` (User Pedon ID), `corr_name` ('Correlated' Taxon Name), `samp_name` ('Sampled As' Taxon Name), or `area_code` (area symbol for specified `lab_area` records, see `area_type`).
-#' @param bycol A single column name from `lab_layer` used for processing chunks; default: `"pedon_key"`
-#' @param tables A vector of table names; Default is `"lab_physical_properties"`, `"lab_chemical_properties"`, `"lab_calculations_including_estimates_and_default_values"`, and `"lab_rosetta_Key"`. May also include one or more of: `"lab_mir"`, `"lab_mineralogy_glass_count"`, `"lab_major_and_trace_elements_and_oxides"`, `"lab_xray_and_thermal"` but it will be necessary to select appropriate `prep_code` and `analyzed_size_frac` for your analysis (see _Details_).
-#' @param WHERE character. A custom SQL WHERE clause, which overrides `x`, `what`, and `bycol`, such as `CASE WHEN corr_name IS NOT NULL THEN LOWER(corr_name) ELSE LOWER(samp_name) END = 'musick'`
-#' @param chunk.size Number of pedons per chunk (for queries that may exceed `maxJsonLength`)
-#' @param ntries Number of tries (times to halve `chunk.size`) before returning `NULL`; default `3`
+#' @param x A vector of values to find in column specified by `what`, default
+#'   `NULL` uses no constraints on `what`
+#' @param what A single column name from tables: `lab_combine_nasis_ncss`,
+#'   `lab_webmap`, `lab_site`, `lab_pedon` or `lab_area`. Common choices include
+#'   `pedlabsampnum` (Laboratory Pedon ID), `upedonid` (User Pedon ID),
+#'   `corr_name` ('Correlated' Taxon Name), `samp_name` ('Sampled As' Taxon
+#'   Name), or `area_code` (area symbol for specified `lab_area` records, see
+#'   `area_type`).
+#' @param bycol A single column name from `lab_layer` used for processing
+#'   chunks; default: `"pedon_key"`
+#' @param tables A vector of table names; Default is
+#'   `"lab_physical_properties"`, `"lab_chemical_properties"`,
+#'   `"lab_calculations_including_estimates_and_default_values"`, and
+#'   `"lab_rosetta_Key"`. May also include one or more of: `"lab_mir"`,
+#'   `"lab_mineralogy_glass_count"`,
+#'   `"lab_major_and_trace_elements_and_oxides"`, `"lab_xray_and_thermal"` but
+#'   it will be necessary to select appropriate `prep_code` and
+#'   `analyzed_size_frac` for your analysis (see _Details_).
+#' @param WHERE character. A custom SQL WHERE clause, which overrides `x`,
+#'   `what`, and `bycol`, such as `CASE WHEN corr_name IS NOT NULL THEN
+#'   LOWER(corr_name) ELSE LOWER(samp_name) END = 'musick'`
+#' @param chunk.size Number of pedons per chunk (for queries that may exceed
+#'   `maxJsonLength`)
+#' @param ntries Number of tries (times to halve `chunk.size`) before returning
+#'   `NULL`; default `3`
 #' @param layer_type Default: `"horizon"`, `"layer"`, and `"reporting layer"`
-#' @param area_type Default: `"ssa"` (Soil Survey Area). Other options include (choose one): `"country"`, `"state"`, `"county"`, `"mlra"` (Major Land Resource Area), `"nforest"` (National Forest), `"npark"` (National Park)
-#' @param prep_code Default: `"S"` and `""`. May also include one or more of: `"F"`, `"HM"`, `"HM_SK"` `"GP"`, `"M"`, `"N"`, or `"S"`
-#' @param analyzed_size_frac Default: `"<2 mm"` and `""`. May also include one or more of: `"<0.002 mm"`, `"0.02-0.05 mm"`, `"0.05-0.1 mm"`, `"0.1-0.25 mm"`, `"0.25-0.5 mm"`, `"0.5-1 mm"`, `"1-2 mm"`, `"0.02-2 mm"`, `"0.05-2 mm"`
-#' @param dsn Data source name; either a path to a SQLite database, an open DBIConnection or (default) `NULL` (to use `soilDB::SDA_query`)
-#'
+#' @param area_type Default: `"ssa"` (Soil Survey Area). Other options include
+#'   (choose one): `"country"`, `"state"`, `"county"`, `"mlra"` (Major Land
+#'   Resource Area), `"nforest"` (National Forest), `"npark"` (National Park)
+#' @param prep_code Character vector of laboratory preparation codes accepted
+#'   when querying tables with preparation-specific results. Default: `c("S",
+#'   "", "HM", "M", "N")`. See details below or the SDA `lab_preparation` table
+#'   for more information on available options.
+#' @param analyzed_size_frac Default: `"<2 mm"` and `""`. May also include one
+#'   or more of: `"<0.002 mm"`, `"0.02-0.05 mm"`, `"0.05-0.1 mm"`, 
+#'   `"0.1-0.25 mm"`, `"0.25-0.5 mm"`, `"0.5-1 mm"`, `"1-2 mm"`,
+#'   `"0.02-2 mm"`, `"0.05-2 mm"`
+#' @param dsn Data source name; either a path to a SQLite database, an open
+#'   DBIConnection or (default) `NULL` (to use `soilDB::SDA_query`)
+#' 
 #' @details 
-#' You can download SQLite or GeoPackage snapshots here: `https://ncsslabdatamart.sc.egov.usda.gov/database_download.aspx`. Specify the `dsn` argument to use a local copy of the lab data rather than Soil Data Access web service.
+#' You can download SQLite or GeoPackage snapshots here:
+#' `https://ncsslabdatamart.sc.egov.usda.gov/database_download.aspx`. Specify
+#' the `dsn` argument to use a local copy of the lab data rather than Soil Data
+#' Access web service.
 #'
-#' If the `chunk.size` parameter is set too large and the Soil Data Access request fails, the algorithm will re-try the query with a smaller (halved) `chunk.size` argument. This will be attempted up to 3 times before returning `NULL`
+#' If the `chunk.size` parameter is set too large and the Soil Data Access
+#' request fails, the algorithm will re-try the query with a smaller (halved)
+#' `chunk.size` argument. This will be attempted up to 3 times before returning
+#' `NULL`
 #'
-#' The default behavior joins the `lab_area` tables only for the "Soil Survey Area" related records. You can specify alternative area records for use in `x`, `what` or `WHERE` arguments by setting `area_type` to a different value.
+#' `prep_code` `"S"` selects sieved, air-dried preparations; `""` includes
+#' records with no recorded preparation code; `"HM"` selects preparations for
+#' heavy-metals analyses, generally intended to limit metal contamination; `"M"`
+#' selects moist samples kept moist; and `"N"` selects air-dried preparations
+#' where coarse-fragment content is unknown or unrecorded. A code can include
+#' multiple preparation or size variants; use `analyzed_size_frac` to select
+#' size fractions. Other preparation codes (for example, `"F"`, `"GP"`, and
+#' `"HM_SK"`) are excluded unless explicitly requested.
 #'
-#' When requesting data from `"lab_major_and_trace_elements_and_oxides"`, `"lab_mineralogy_glass_count"`, or `"lab_xray_and_thermal"` multiple preparation codes (`prep_code`) or size fractions (`analyzed_size_frac`) are possible. The default behavior of `fetchLDM()` is to attempt to return a topologically valid (minimal overlaps) _SoilProfileCollection_. This is achieved by setting `prep_code="S"` ("sieved") and `analyzed_size_frac="<2 mm"`. You may specify alternate or additional preparation codes or fractions as needed, but note that this may cause "duplication" of some layers where measurements were made with different preparation or on fractionated samples
+#' The default behavior joins the `lab_area` tables only for the "Soil Survey
+#' Area" related records. You can specify alternative area records for use in
+#' `x`, `what` or `WHERE` arguments by setting `area_type` to a different value.
 #'
+#' When requesting data from `"lab_major_and_trace_elements_and_oxides"`,
+#' `"lab_mineralogy_glass_count"`, or `"lab_xray_and_thermal"` multiple
+#' preparation codes (`prep_code`) or size fractions (`analyzed_size_frac`) are
+#' possible. The default behavior of `fetchLDM()` is to attempt to return a
+#' topologically valid (minimal overlaps) _SoilProfileCollection_. This is
+#' achieved by setting `prep_code="S"` ("sieved") and `analyzed_size_frac="<2
+#' mm"`. You may specify alternate or additional preparation codes or fractions
+#' as needed, but note that this may cause "duplication" of some layers where
+#' measurements were made with different preparation or on fractionated samples
+#' 
 #' @return a `SoilProfileCollection` for a successful query, a `try-error` if no site/pedon locations can be found or `NULL` for an empty `lab_layer` (within sites/pedons) result
 #' @export
 #' @examplesIf curl::has_internet() && requireNamespace("httr", quietly = TRUE) && requireNamespace("aqp", quietly = TRUE)
@@ -71,7 +121,7 @@ fetchLDM <- function(x = NULL,
            ntries = 3,
            layer_type = c("horizon", "layer", "reporting layer"), 
            area_type = c("ssa", "country", "state", "county", "mlra", "nforest", "npark"),
-           prep_code = c("S", ""), # , `"F"`, `"HM"`, `"HM_SK"` `"GP"`, `"M"`, `"N"`, or `"S"`
+           prep_code = c("S", "", "HM", "M", "N"), # , `"F"`, `"HM"`, `"HM_SK"` `"GP"`, `"M"`, `"N"`, or `"S"`
            analyzed_size_frac = c("<2 mm", ""),#  optional: "<0.002 mm", "0.02-0.05 mm", "0.05-0.1 mm", "0.1-0.25 mm", "0.25-0.5 mm", "0.5-1 mm", "1-2 mm", "0.02-2 mm", "0.05-2 mm"
            dsn = NULL) {
   
