@@ -1,14 +1,14 @@
-# --------------------------------------------
-# CITATION file created with {cffr} R package
+# ------------------------------------------------
+# CITATION.cff file created with {cffr} R package
 # See also: https://docs.ropensci.org/cffr/
-# --------------------------------------------
+# ------------------------------------------------
  
 cff-version: 1.2.0
 message: 'To cite package "soilDB" in publications use:'
 type: software
 license: GPL-3.0-or-later
 title: 'soilDB: Soil Database Interface'
-version: 2.8.13
+version: 2.9.4
 identifiers:
 - type: doi
   value: 10.32614/CRAN.package.soilDB
@@ -48,9 +48,9 @@ preferred-citation:
     given-names: Andrew
     email: andrew.g.brown@usda.gov
     orcid: https://orcid.org/0000-0002-4565-533X
-  notes: R package version 2.8.13
+  notes: R package version 2.9.4
   url: https://CRAN.R-project.org/package=soilDB
-  year: '2025'
+  year: '2026'
 repository: https://CRAN.R-project.org/package=soilDB
 repository-code: https://github.com/ncss-tech/soilDB
 url: https://github.com/ncss-tech/soilDB/
@@ -77,83 +77,28 @@ references:
   url: https://www.R-project.org/
   authors:
   - name: R Core Team
+    website: https://ror.org/02zz1nj61
   institution:
     name: R Foundation for Statistical Computing
+    website: https://ror.org/05qewa988
     address: Vienna, Austria
-  year: '2025'
-  version: '>= 3.5.0'
+  year: '2026'
+  doi: 10.32614/R.manuals
+  version: '>= 4.1.0'
 - type: software
-  title: grDevices
-  abstract: 'R: A Language and Environment for Statistical Computing'
+  title: 'R: A Language and Environment for Statistical Computing'
   notes: Imports
   authors:
   - name: R Core Team
+    website: https://ror.org/02zz1nj61
   institution:
     name: R Foundation for Statistical Computing
+    website: https://ror.org/05qewa988
     address: Vienna, Austria
-  year: '2025'
+  year: '2026'
+  doi: 10.32614/R.manuals
 - type: software
-  title: graphics
-  abstract: 'R: A Language and Environment for Statistical Computing'
-  notes: Imports
-  authors:
-  - name: R Core Team
-  institution:
-    name: R Foundation for Statistical Computing
-    address: Vienna, Austria
-  year: '2025'
-- type: software
-  title: stats
-  abstract: 'R: A Language and Environment for Statistical Computing'
-  notes: Imports
-  authors:
-  - name: R Core Team
-  institution:
-    name: R Foundation for Statistical Computing
-    address: Vienna, Austria
-  year: '2025'
-- type: software
-  title: utils
-  abstract: 'R: A Language and Environment for Statistical Computing'
-  notes: Imports
-  authors:
-  - name: R Core Team
-  institution:
-    name: R Foundation for Statistical Computing
-    address: Vienna, Austria
-  year: '2025'
-- type: software
-  title: methods
-  abstract: 'R: A Language and Environment for Statistical Computing'
-  notes: Imports
-  authors:
-  - name: R Core Team
-  institution:
-    name: R Foundation for Statistical Computing
-    address: Vienna, Austria
-  year: '2025'
-- type: software
-  title: aqp
-  abstract: 'aqp: Algorithms for Quantitative Pedology'
-  notes: Imports
-  url: https://ncss-tech.github.io/aqp/
-  repository: https://CRAN.R-project.org/package=aqp
-  authors:
-  - family-names: Beaudette
-    given-names: Dylan
-    email: dylan.beaudette@usda.gov
-  - family-names: Roudier
-    given-names: Pierre
-    email: roudierp@landcareresearch.co.nz
-  - family-names: Brown
-    given-names: Andrew
-    email: andrew.g.brown@usda.gov
-  year: '2025'
-  doi: 10.32614/CRAN.package.aqp
-  version: '>= 2.1.0'
-- type: software
-  title: data.table
-  abstract: 'data.table: Extension of `data.frame`'
+  title: 'data.table: Extension of `data.frame`'
   notes: Imports
   url: https://r-datatable.com
   repository: https://CRAN.R-project.org/package=data.table
@@ -170,11 +115,14 @@ references:
     email: asrini@pm.me
   - family-names: Gorecki
     given-names: Jan
+    email: j.gorecki@wit.edu.pl
   - family-names: Chirico
     given-names: Michael
+    email: michaelchirico4@gmail.com
     orcid: https://orcid.org/0000-0003-0787-087X
   - family-names: Hocking
     given-names: Toby
+    email: toby.hocking@r-project.org
     orcid: https://orcid.org/0000-0002-3146-0865
   - family-names: Schwendinger
     given-names: Benjamin
@@ -183,11 +131,10 @@ references:
     given-names: Ivan
     email: ikrylov@disroot.org
     orcid: https://orcid.org/0000-0002-0172-3812
-  year: '2025'
+  year: '2026'
   doi: 10.32614/CRAN.package.data.table
 - type: software
-  title: DBI
-  abstract: 'DBI: R Database Interface'
+  title: 'DBI: R Database Interface'
   notes: Imports
   url: https://dbi.r-dbi.org
   repository: https://CRAN.R-project.org/package=DBI
@@ -199,11 +146,10 @@ references:
     given-names: Kirill
     email: kirill@cynkra.com
     orcid: https://orcid.org/0000-0002-1416-3412
-  year: '2025'
+  year: '2026'
   doi: 10.32614/CRAN.package.DBI
 - type: software
-  title: curl
-  abstract: 'curl: A Modern and Flexible Web Client for R'
+  title: 'curl: A Modern and Flexible Web Client for R'
   notes: Imports
   url: https://jeroen.r-universe.dev/curl
   repository: https://CRAN.R-project.org/package=curl
@@ -212,12 +158,11 @@ references:
     given-names: Jeroen
     email: jeroenooms@gmail.com
     orcid: https://orcid.org/0000-0002-4035-0289
-  year: '2025'
+  year: '2026'
   doi: 10.32614/CRAN.package.curl
 - type: software
-  title: jsonlite
-  abstract: 'jsonlite: A Simple and Robust JSON Parser and Generator for R'
-  notes: Suggests
+  title: 'jsonlite: A Simple and Robust JSON Parser and Generator for R'
+  notes: Imports
   url: https://jeroen.r-universe.dev/jsonlite
   repository: https://CRAN.R-project.org/package=jsonlite
   authors:
@@ -228,8 +173,28 @@ references:
   year: '2025'
   doi: 10.32614/CRAN.package.jsonlite
 - type: software
-  title: xml2
-  abstract: 'xml2: Parse XML'
+  title: 'aqp: Algorithms for Quantitative Pedology'
+  notes: Suggests
+  url: https://ncss-tech.github.io/aqp/
+  repository: https://CRAN.R-project.org/package=aqp
+  authors:
+  - family-names: Beaudette
+    given-names: Dylan
+    email: dylan.beaudette@usda.gov
+    orcid: https://orcid.org/0009-0008-2780-4785
+  - family-names: Roudier
+    given-names: Pierre
+    email: roudierp@landcareresearch.co.nz
+  - family-names: Brown
+    given-names: Andrew
+    email: andrew.g.brown@usda.gov
+  - family-names: Roecker
+    given-names: Stephen
+  year: '2026'
+  doi: 10.32614/CRAN.package.aqp
+  version: '>= 2.1.0'
+- type: software
+  title: 'xml2: Parse XML'
   notes: Suggests
   url: https://xml2.r-lib.org
   repository: https://CRAN.R-project.org/package=xml2
@@ -241,11 +206,10 @@ references:
   - family-names: Ooms
     given-names: Jeroen
     email: jeroenooms@gmail.com
-  year: '2025'
+  year: '2026'
   doi: 10.32614/CRAN.package.xml2
 - type: software
-  title: httr
-  abstract: 'httr: Tools for Working with URLs and HTTP'
+  title: 'httr: Tools for Working with URLs and HTTP'
   notes: Suggests
   url: https://httr.r-lib.org/
   repository: https://CRAN.R-project.org/package=httr
@@ -253,11 +217,10 @@ references:
   - family-names: Wickham
     given-names: Hadley
     email: hadley@posit.co
-  year: '2025'
+  year: '2026'
   doi: 10.32614/CRAN.package.httr
 - type: software
-  title: rvest
-  abstract: 'rvest: Easily Harvest (Scrape) Web Pages'
+  title: 'rvest: Easily Harvest (Scrape) Web Pages'
   notes: Suggests
   url: https://rvest.tidyverse.org/
   repository: https://CRAN.R-project.org/package=rvest
@@ -268,8 +231,7 @@ references:
   year: '2025'
   doi: 10.32614/CRAN.package.rvest
 - type: software
-  title: odbc
-  abstract: 'odbc: Connect to ODBC Compatible Databases (using the DBI Interface)'
+  title: 'odbc: Connect to ODBC Compatible Databases (using the DBI Interface)'
   notes: Suggests
   url: https://odbc.r-dbi.org
   repository: https://CRAN.R-project.org/package=odbc
@@ -284,11 +246,10 @@ references:
   - family-names: Couch
     given-names: Simon
     email: simon.couch@posit.co
-  year: '2025'
+  year: '2026'
   doi: 10.32614/CRAN.package.odbc
 - type: software
-  title: RSQLite
-  abstract: 'RSQLite: SQLite Interface for R'
+  title: 'RSQLite: SQLite Interface for R'
   notes: Suggests
   url: https://rsqlite.r-dbi.org
   repository: https://CRAN.R-project.org/package=RSQLite
@@ -303,11 +264,10 @@ references:
     given-names: David A.
   - family-names: Falcon
     given-names: Seth
-  year: '2025'
+  year: '2026'
   doi: 10.32614/CRAN.package.RSQLite
 - type: software
-  title: sf
-  abstract: 'sf: Simple Features for R'
+  title: 'sf: Simple Features for R'
   notes: Suggests
   url: https://r-spatial.github.io/sf/
   repository: https://CRAN.R-project.org/package=sf
@@ -316,11 +276,10 @@ references:
     given-names: Edzer
     email: edzer.pebesma@uni-muenster.de
     orcid: https://orcid.org/0000-0001-8049-7069
-  year: '2025'
+  year: '2026'
   doi: 10.32614/CRAN.package.sf
 - type: software
-  title: wk
-  abstract: 'wk: Lightweight Well-Known Geometry Parsing'
+  title: 'wk: Lightweight Well-Known Geometry Parsing'
   notes: Suggests
   url: https://paleolimbot.github.io/wk/
   repository: https://CRAN.R-project.org/package=wk
@@ -336,8 +295,7 @@ references:
   year: '2025'
   doi: 10.32614/CRAN.package.wk
 - type: software
-  title: terra
-  abstract: 'terra: Spatial Data Analysis'
+  title: 'terra: Spatial Data Analysis'
   notes: Suggests
   url: https://rspatial.org/
   repository: https://CRAN.R-project.org/package=terra
@@ -346,11 +304,22 @@ references:
     given-names: Robert J.
     email: r.hijmans@gmail.com
     orcid: https://orcid.org/0000-0001-5872-2872
-  year: '2025'
+  - family-names: Brown
+    given-names: Andrew
+    orcid: https://orcid.org/0000-0002-4565-533X
+  - family-names: Barbosa
+    given-names: A. Márcia
+    orcid: https://orcid.org/0000-0001-8972-7713
+  - family-names: Cordano
+    given-names: Emanuele
+    orcid: https://orcid.org/0000-0002-3508-5898
+  - family-names: Dyba
+    given-names: Krzysztof
+    orcid: https://orcid.org/0000-0002-8614-3816
+  year: '2026'
   doi: 10.32614/CRAN.package.terra
 - type: software
-  title: raster
-  abstract: 'raster: Geographic Data Analysis and Modeling'
+  title: 'raster: Geographic Data Analysis and Modeling'
   notes: Suggests
   url: https://rspatial.org/raster
   repository: https://CRAN.R-project.org/package=raster
@@ -362,8 +331,7 @@ references:
   year: '2025'
   doi: 10.32614/CRAN.package.raster
 - type: software
-  title: knitr
-  abstract: 'knitr: A General-Purpose Package for Dynamic Report Generation in R'
+  title: 'knitr: A General-Purpose Package for Dynamic Report Generation in R'
   notes: Suggests
   url: https://yihui.org/knitr/
   repository: https://CRAN.R-project.org/package=knitr
@@ -375,8 +343,7 @@ references:
   year: '2025'
   doi: 10.32614/CRAN.package.knitr
 - type: software
-  title: rmarkdown
-  abstract: 'rmarkdown: Dynamic Documents for R'
+  title: 'rmarkdown: Dynamic Documents for R'
   notes: Suggests
   url: https://pkgs.rstudio.com/rmarkdown/
   repository: https://CRAN.R-project.org/package=rmarkdown
@@ -416,11 +383,10 @@ references:
     given-names: Richard
     email: rich@posit.co
     orcid: https://orcid.org/0000-0003-3925-190X
-  year: '2025'
+  year: '2026'
   doi: 10.32614/CRAN.package.rmarkdown
 - type: software
-  title: testthat
-  abstract: 'testthat: Unit Testing for R'
+  title: 'testthat: Unit Testing for R'
   notes: Suggests
   url: https://testthat.r-lib.org
   repository: https://CRAN.R-project.org/package=testthat
@@ -428,6 +394,6 @@ references:
   - family-names: Wickham
     given-names: Hadley
     email: hadley@posit.co
-  year: '2025'
+  year: '2026'
   doi: 10.32614/CRAN.package.testthat
 
