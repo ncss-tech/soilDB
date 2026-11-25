@@ -52,7 +52,7 @@ a \code{SoilProfileCollection} for a successful query, a \code{try-error} if no 
 This function provides access to the Kellogg Soil Survey Laboratory Data Mart via Soil Data Access or a local SQLite snapshot. See details and examples for additional usage instructions.
 }
 \details{
-You can download SQLite or GeoPackage snapshots here: \url{https://ncsslabdatamart.sc.egov.usda.gov/database_download.aspx}. Specify the \code{dsn} argument to use a local copy of the lab data rather than Soil Data Access web service.
+You can download SQLite or GeoPackage snapshots here: \verb{https://ncsslabdatamart.sc.egov.usda.gov/database_download.aspx}. Specify the \code{dsn} argument to use a local copy of the lab data rather than Soil Data Access web service.
 
 If the \code{chunk.size} parameter is set too large and the Soil Data Access request fails, the algorithm will re-try the query with a smaller (halved) \code{chunk.size} argument. This will be attempted up to 3 times before returning \code{NULL}
 

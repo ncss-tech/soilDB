@@ -13,7 +13,7 @@
 #' @param force Force rebuilding of cache. Default: `FALSE`
 #' @source Food and Agriculture Organization of the United Nations (FAO), Soils
 #'   Portal, Harmonized World Soil Database (HWSD) v2.0
-#'   \url{https://www.fao.org/soils-portal/data-hub/soil-maps-and-databases/harmonized-world-soil-database-v20/en/}
+#'   \url{https://www.fao.org/global-soil-partnership/soil-data/harmonized-world-soil-database/en}
 #' @return A _SpatRaster_ object with mapunit-level aggregate information stored
 #'   as categories.
 #' @export
