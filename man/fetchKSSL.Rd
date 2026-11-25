@@ -120,7 +120,7 @@ the link below for the live data.
 \dontshow{\}) # examplesIf}
 }
 \references{
-National Cooperative Soil Survey Soil Characterization Database: \url{https://ncsslabdatamart.sc.egov.usda.gov/}.
+National Cooperative Soil Survey Soil Characterization Database: \verb{https://ncsslabdatamart.sc.egov.usda.gov/}
 }
 \seealso{
 \code{\link{fetchOSD}}

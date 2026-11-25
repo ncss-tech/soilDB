@@ -1,4 +1,4 @@
-# soilDB 2.9.4 (2026-11-12)
+# soilDB 2.9.4 (2026-11-24)
  - SoilWeb Web Coverage Service specifications for `mukey.wcs()`, `issr800.wcs()`, and `soilColor.wcs()` now are available as JSON rather than hard-coded
  - `createSSURGO()` can optionally create MUKEY GeoTIFF rasters with `include_raster = TRUE`. `resolution_m` accepts any cell size (10 m by default); `template` can supply a custom `SpatRaster` grid; and `grid_alignment` accepts `"gssurgo"` (default), `"target_aligned"`, or `"nlcd"` when no template is supplied. 
    - `touches` controls whether rasterization includes every cell touched by polygon boundaries or only cells whose centers fall within polygons.
@@ -10,14 +10,14 @@
  - `downloadSSURGO()` now uses a persistent soilDB Web Soil Survey ZIP cache when `destdir` is omitted, checks `sacatalog.saverest` for freshness, supports `force = TRUE` to bypass cache reuse, and falls back to cached ZIPs with a warning when the remote freshness check is unavailable. Added `list_WSS_cache()` and `clear_WSS_cache()` for cache inventory and manual cleanup. (#487)
 
 # soilDB 2.9.2 (2026-07-10)
- - EDIT base URL (for `get_EDIT_ecoclass_by_geoUnit()` and `make_EDIT_service_URL()`) updated to new USDA-managed server: <https://edit.sc.egov.usda.gov/>
+ - EDIT base URL (for `get_EDIT_ecoclass_by_geoUnit()` and `make_EDIT_service_URL()`) updated to new USDA-managed server `https://edit.sc.egov.usda.gov/`
  - SoilWeb-based Web Coverage Services (`soilColor.wcs()`, `ISSR800.wcs()`, `mukey.wcs()`) have been updated with FY26 maps, now including most OCONUS soil surveys (AK, HI, PR, PW, GU, AS, MP)
  - `downloadSSURGO()` gains arguments `include_spatial` and `include_tabular` that are analogous to arguments of the same name from `createSSURGO()`. Also, added `LAPPLY.FUN` to support arbitrary parallel or progress reporting backends. Thanks to feature request from @dylanbeaudette (#470).
  - `createSSURGO()` improved performance of reading and writing of tabular data and type conversion
  
 # soilDB 2.9.1 (2026-04-01)
  - `ROSETTA()` updates thanks to Todd Skaggs (USDA-ARS):
-   - Now using version 2 of the ROSETTA API (<https://www.handbook60.org/rosetta>)
+   - Now using version 2 of the ROSETTA API (`https://www.handbook60.org/rosetta`)
    - New argument `est.type` for selecting ensemble summary method and resulting units of measure
    - $Ko$ and $L$ parameters now included in model output
  - `fetchGDB()` now supports passing path to SSURGO GeoPackage file via `dsn` argument
@@ -28,7 +28,7 @@
 
 ## Breaking Changes
  - Deprecated `stringsAsFactors` argument has been removed from many query functions, use `NASISChoiceList()` and/or `NASISDomainsAsFactor()` instead for manual or automatic setting of domain values as factors, respectively
- - Deprecated NASIS column aliases have been removed, see <https://ncss-tech.github.io/AQP/soilDB/bulletins/2025.01-1-soilDB-NASIS-column-aliases.html> for details
+ - Deprecated NASIS column aliases have been removed, see `https://ncss-tech.github.io/AQP/soilDB/bulletins/2025.01-1-soilDB-NASIS-column-aliases.html` for details
  - R version >= 4.1.0 is now required
 
 ## Documentation

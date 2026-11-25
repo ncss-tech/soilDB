@@ -79,16 +79,6 @@ of summaries should be weighted by the number of "functional years" (number
 of years with non-missing data after combining data by Julian day) and
 "complete years" (number of years of data with >= 365 days of non-missing
 data).
-
-See:
-\itemize{
-\item \href{http://soilmap2-1.lawr.ucdavis.edu/henry/}{Henry Mount Soil Climate Database}
-\item \href{http://ncss-tech.github.io/AQP/soilDB/Henry-demo.html}{\code{fetchHenry} Tutorial}
-}
-}
-\note{
-This function and the back-end database are very much a work in
-progress.
 }
 \seealso{
 \code{\link{fetchSCAN}}

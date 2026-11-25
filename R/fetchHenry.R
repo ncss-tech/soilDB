@@ -269,16 +269,9 @@ month2season <- function(x) {
 #' timeseries data} \item{airtemp}{a \code{data.frame} object containing air
 #' temperature timeseries data} \item{waterlevel}{a \code{data.frame} object
 #' containing water level timeseries data}
-#' @note This function and the back-end database are very much a work in
-#' progress.
 #' @author D.E. Beaudette
 #' @seealso \code{\link{fetchSCAN}}
 #' @keywords manip
-#'
-#' @details See:
-#'  - [Henry Mount Soil Climate Database](http://soilmap2-1.lawr.ucdavis.edu/henry/)
-#'  - [`fetchHenry` Tutorial](http://ncss-tech.github.io/AQP/soilDB/Henry-demo.html)
-#'
 #' @export fetchHenry
 fetchHenry <- function(what='all', usersiteid=NULL, project=NULL, sso=NULL, gran='day', start.date=NULL, stop.date=NULL, pad.missing.days=TRUE, soiltemp.summaries=TRUE, tz='') {
 

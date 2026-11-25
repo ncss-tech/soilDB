@@ -20,7 +20,7 @@
 #' @param dsn Data source name; either a path to a SQLite database, an open DBIConnection or (default) `NULL` (to use `soilDB::SDA_query`)
 #'
 #' @details 
-#' You can download SQLite or GeoPackage snapshots here: \url{https://ncsslabdatamart.sc.egov.usda.gov/database_download.aspx}. Specify the `dsn` argument to use a local copy of the lab data rather than Soil Data Access web service.
+#' You can download SQLite or GeoPackage snapshots here: `https://ncsslabdatamart.sc.egov.usda.gov/database_download.aspx`. Specify the `dsn` argument to use a local copy of the lab data rather than Soil Data Access web service.
 #'
 #' If the `chunk.size` parameter is set too large and the Soil Data Access request fails, the algorithm will re-try the query with a smaller (halved) `chunk.size` argument. This will be attempted up to 3 times before returning `NULL`
 #'
