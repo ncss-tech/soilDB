@@ -85,6 +85,12 @@ processSDA_WKT <- function(d,
     res <- gsub("mupolygon", what, res)
     if (what %in% c("featpoint", "featline")) {
       res <- gsub("mukey", "featkey", res)
+      if (any(grepl("(^|\\.)featsym$", addFields))) {
+        res <- sub("WITH geom_data \\(geom, featkey\\)",
+                   "WITH geom_data (geom, featkey, featsym)", res)
+        res <- sub("AS geom, featkey\\n",
+                   paste0("AS geom, featkey, ", what, ".featsym\n"), res)
+      }
     }
   }
   res <- .appendFields(res, what, addFields)
@@ -135,11 +141,13 @@ processSDA_WKT <- function(d,
 #'   each feature is uniquely identified by value in `idcol`. Default `FALSE`.
 #' @param idcol Unique IDs used for individual features when `byFeature = TRUE`;
 #'   Default `"gid"`
-#' @param addFields character; Amend result with a query to `mapunit` table for
-#'   additional information? Default: `NULL`. A character vector can be used to
+#' @param addFields character; add columns to tabular and spatial results?
+#'   Default: `NULL`. A character vector can be used to
 #'   specify columns from the `legend`, `mapunit`, and `muaggatt` tables (for
 #'   `mupolygon`, `mupoint`, `muline` and `mukey`), `legend` table for
 #'   areasymbol and sapolygon, and `featdesc` for `featpoint` and `featline`.
+#'   Feature queries also accept `featpoint.featsym` or `featline.featsym`,
+#'   respectively, from the feature source table.
 #'   Mapunit and mapunit aggregate attribute tables are ignored for soil survey
 #'   area polygon results.
 #' @param query_string Default: `FALSE`; if `TRUE` return a character string
@@ -508,40 +516,43 @@ SDA_spatialQuery <- function(geom,
 
 .appendFields <- function(q, what, addFields, include_key = FALSE) {
   if (length(addFields) > 0) {
-    if (!grepl("[^o] AS geom", q))
-      q <- gsub("FROM geom_data", ", NULL AS geom\n FROM geom_data", q)
     if (what %in% c("areasymbol", "sapolygon")) {
       key <- character(0)
       if (include_key) {
         key <- "legend.lkey"
       }
       addFields <- trimws(addFields)
-      addFields <- addFields[!addFields == "lkey"]
+      addFields <- addFields[addFields != "lkey"]
       lecol <- toString(unique(c(key, addFields)))
       q <- paste0(q, "\nINNER JOIN legend ON legend.areasymbol = geom_data.areasymbol")
-      q <- gsub("(\\) SELECT geom_data.*) AS geom", paste0("\\1 AS geom, ", lecol), q)
+      q <- sub("FROM geom_data", paste0(", ", lecol, "\n FROM geom_data"), q)
     } else if (grepl("feat", what)) {
       key <- character(0)
       if (include_key) {
         key <- "featkey"
       }
       addFields <- trimws(addFields)
-      addFields <- addFields[!addFields == "featkey"]
-      mucol <- toString(unique(c(key, addFields)))
-      q <- paste(q, sprintf("INNER JOIN featdesc ON geom_data.featkey = featdesc.featkey", what))
-      q <- gsub("(\\) SELECT geom_data.*) AS geom", paste0("\\1 AS geom, ", mucol), q)
+      addFields <- addFields[addFields != "featkey"]
+      featsym <- addFields[grepl("(^|\\.)featsym$", addFields)]
+      other_fields <- addFields[!grepl("(^|\\.)featsym$", addFields)]
+      mucol <- toString(unique(c(key, if (length(featsym)) "geom_data.featsym",
+                                 other_fields)))
+      if (length(other_fields)) {
+        q <- paste(q, "INNER JOIN featdesc ON geom_data.featkey = featdesc.featkey")
+      }
+      q <- sub("FROM geom_data", paste0(", ", mucol, "\n FROM geom_data"), q)
     } else {
       key <- character(0)
       if (include_key) {
         key <- "mapunit.mukey"
       }
       addFields <- trimws(addFields)
-      addFields <- addFields[!addFields == "mukey"]
+      addFields <- addFields[addFields != "mukey"]
       mucol <- toString(unique(c(key, addFields)))
       q <- paste(q, "INNER JOIN mapunit ON mapunit.mukey = geom_data.mukey
            INNER JOIN muaggatt ON muaggatt.mukey = mapunit.mukey
            INNER JOIN legend ON legend.lkey = mapunit.lkey ")
-      q <- gsub("(\\) SELECT geom_data.*) AS geom", paste0("\\1 AS geom, ", mucol), q)
+      q <- sub("FROM geom_data", paste0(", ", mucol, "\n FROM geom_data"), q)
     }
   }
   gsub(", FROM", " FROM", gsub("NULL AS geom[, ]*", "", q))
