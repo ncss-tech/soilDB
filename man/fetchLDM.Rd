@@ -2,7 +2,7 @@
 % Please edit documentation in R/fetchLDM.R
 \name{fetchLDM}
 \alias{fetchLDM}
-\title{Query data from Kellogg Soil Survey Laboratory Data Mart via Soil Data Access or local SQLite snapshot}
+\title{Query Kellogg Soil Survey Laboratory Data Mart}
 \usage{
 fetchLDM(
   x = NULL,
@@ -15,50 +15,101 @@ fetchLDM(
   ntries = 3,
   layer_type = c("horizon", "layer", "reporting layer"),
   area_type = c("ssa", "country", "state", "county", "mlra", "nforest", "npark"),
-  prep_code = c("S", ""),
+  prep_code = c("S", "", "HM", "M", "N"),
   analyzed_size_frac = c("<2 mm", ""),
   dsn = NULL
 )
 }
 \arguments{
-\item{x}{A vector of values to find in column specified by \code{what}, default \code{NULL} uses no constraints on \code{what}}
+\item{x}{A vector of values to find in column specified by \code{what}, default
+\code{NULL} uses no constraints on \code{what}}
 
-\item{what}{A single column name from tables: \code{lab_combine_nasis_ncss}, \code{lab_webmap}, \code{lab_site}, \code{lab_pedon} or \code{lab_area}. Common choices include \code{pedlabsampnum} (Laboratory Pedon ID), \code{upedonid} (User Pedon ID), \code{corr_name} ('Correlated' Taxon Name), \code{samp_name} ('Sampled As' Taxon Name), or \code{area_code} (area symbol for specified \code{lab_area} records, see \code{area_type}).}
+\item{what}{A single column name from tables: \code{lab_combine_nasis_ncss},
+\code{lab_webmap}, \code{lab_site}, \code{lab_pedon} or \code{lab_area}. Common choices include
+\code{pedlabsampnum} (Laboratory Pedon ID), \code{upedonid} (User Pedon ID),
+\code{corr_name} ('Correlated' Taxon Name), \code{samp_name} ('Sampled As' Taxon
+Name), or \code{area_code} (area symbol for specified \code{lab_area} records, see
+\code{area_type}).}
 
-\item{bycol}{A single column name from \code{lab_layer} used for processing chunks; default: \code{"pedon_key"}}
+\item{bycol}{A single column name from \code{lab_layer} used for processing
+chunks; default: \code{"pedon_key"}}
 
-\item{tables}{A vector of table names; Default is \code{"lab_physical_properties"}, \code{"lab_chemical_properties"}, \code{"lab_calculations_including_estimates_and_default_values"}, and \code{"lab_rosetta_Key"}. May also include one or more of: \code{"lab_mir"}, \code{"lab_mineralogy_glass_count"}, \code{"lab_major_and_trace_elements_and_oxides"}, \code{"lab_xray_and_thermal"} but it will be necessary to select appropriate \code{prep_code} and \code{analyzed_size_frac} for your analysis (see \emph{Details}).}
+\item{tables}{A vector of table names; Default is
+\code{"lab_physical_properties"}, \code{"lab_chemical_properties"},
+\code{"lab_calculations_including_estimates_and_default_values"}, and
+\code{"lab_rosetta_Key"}. May also include one or more of: \code{"lab_mir"},
+\code{"lab_mineralogy_glass_count"},
+\code{"lab_major_and_trace_elements_and_oxides"}, \code{"lab_xray_and_thermal"} but
+it will be necessary to select appropriate \code{prep_code} and
+\code{analyzed_size_frac} for your analysis (see \emph{Details}).}
 
-\item{WHERE}{character. A custom SQL WHERE clause, which overrides \code{x}, \code{what}, and \code{bycol}, such as \verb{CASE WHEN corr_name IS NOT NULL THEN LOWER(corr_name) ELSE LOWER(samp_name) END = 'musick'}}
+\item{WHERE}{character. A custom SQL WHERE clause, which overrides \code{x},
+\code{what}, and \code{bycol}, such as \verb{CASE WHEN corr_name IS NOT NULL THEN LOWER(corr_name) ELSE LOWER(samp_name) END = 'musick'}}
 
-\item{chunk.size}{Number of pedons per chunk (for queries that may exceed \code{maxJsonLength})}
+\item{chunk.size}{Number of pedons per chunk (for queries that may exceed
+\code{maxJsonLength})}
 
-\item{ntries}{Number of tries (times to halve \code{chunk.size}) before returning \code{NULL}; default \code{3}}
+\item{ntries}{Number of tries (times to halve \code{chunk.size}) before returning
+\code{NULL}; default \code{3}}
 
 \item{layer_type}{Default: \code{"horizon"}, \code{"layer"}, and \code{"reporting layer"}}
 
-\item{area_type}{Default: \code{"ssa"} (Soil Survey Area). Other options include (choose one): \code{"country"}, \code{"state"}, \code{"county"}, \code{"mlra"} (Major Land Resource Area), \code{"nforest"} (National Forest), \code{"npark"} (National Park)}
+\item{area_type}{Default: \code{"ssa"} (Soil Survey Area). Other options include
+(choose one): \code{"country"}, \code{"state"}, \code{"county"}, \code{"mlra"} (Major Land
+Resource Area), \code{"nforest"} (National Forest), \code{"npark"} (National Park)}
 
-\item{prep_code}{Default: \code{"S"} and \code{""}. May also include one or more of: \code{"F"}, \code{"HM"}, \code{"HM_SK"} \code{"GP"}, \code{"M"}, \code{"N"}, or \code{"S"}}
+\item{prep_code}{Character vector of laboratory preparation codes accepted
+when querying tables with preparation-specific results. Default: \code{c("S", "", "HM", "M", "N")}. See details below or the SDA \code{lab_preparation} table
+for more information on available options.}
 
-\item{analyzed_size_frac}{Default: \code{"<2 mm"} and \code{""}. May also include one or more of: \code{"<0.002 mm"}, \code{"0.02-0.05 mm"}, \code{"0.05-0.1 mm"}, \code{"0.1-0.25 mm"}, \code{"0.25-0.5 mm"}, \code{"0.5-1 mm"}, \code{"1-2 mm"}, \code{"0.02-2 mm"}, \code{"0.05-2 mm"}}
+\item{analyzed_size_frac}{Default: \code{"<2 mm"} and \code{""}. May also include one
+or more of: \code{"<0.002 mm"}, \code{"0.02-0.05 mm"}, \code{"0.05-0.1 mm"},
+\code{"0.1-0.25 mm"}, \code{"0.25-0.5 mm"}, \code{"0.5-1 mm"}, \code{"1-2 mm"},
+\code{"0.02-2 mm"}, \code{"0.05-2 mm"}}
 
-\item{dsn}{Data source name; either a path to a SQLite database, an open DBIConnection or (default) \code{NULL} (to use \code{soilDB::SDA_query})}
+\item{dsn}{Data source name; either a path to a SQLite database, an open
+DBIConnection or (default) \code{NULL} (to use \code{soilDB::SDA_query})}
 }
 \value{
 a \code{SoilProfileCollection} for a successful query, a \code{try-error} if no site/pedon locations can be found or \code{NULL} for an empty \code{lab_layer} (within sites/pedons) result
 }
 \description{
-This function provides access to the Kellogg Soil Survey Laboratory Data Mart via Soil Data Access or a local SQLite snapshot. See details and examples for additional usage instructions.
+This function provides access to the Kellogg Soil Survey Laboratory Data Mart
+(KSSL LDM) via Soil Data Access (SDA) or a local SQLite snapshot. See details
+and examples for additional usage instructions.
 }
 \details{
-You can download SQLite or GeoPackage snapshots here: \verb{https://ncsslabdatamart.sc.egov.usda.gov/database_download.aspx}. Specify the \code{dsn} argument to use a local copy of the lab data rather than Soil Data Access web service.
+You can download SQLite or GeoPackage snapshots here:
+\verb{https://ncsslabdatamart.sc.egov.usda.gov/database_download.aspx}. Specify
+the \code{dsn} argument to use a local copy of the lab data rather than Soil Data
+Access web service.
 
-If the \code{chunk.size} parameter is set too large and the Soil Data Access request fails, the algorithm will re-try the query with a smaller (halved) \code{chunk.size} argument. This will be attempted up to 3 times before returning \code{NULL}
+If the \code{chunk.size} parameter is set too large and the Soil Data Access
+request fails, the algorithm will re-try the query with a smaller (halved)
+\code{chunk.size} argument. This will be attempted up to 3 times before returning
+\code{NULL}
 
-The default behavior joins the \code{lab_area} tables only for the "Soil Survey Area" related records. You can specify alternative area records for use in \code{x}, \code{what} or \code{WHERE} arguments by setting \code{area_type} to a different value.
+\code{prep_code} \code{"S"} selects sieved, air-dried preparations; \code{""} includes
+records with no recorded preparation code; \code{"HM"} selects preparations for
+heavy-metals analyses, generally intended to limit metal contamination; \code{"M"}
+selects moist samples kept moist; and \code{"N"} selects air-dried preparations
+where coarse-fragment content is unknown or unrecorded. A code can include
+multiple preparation or size variants; use \code{analyzed_size_frac} to select
+size fractions. Other preparation codes (for example, \code{"F"}, \code{"GP"}, and
+\code{"HM_SK"}) are excluded unless explicitly requested.
 
-When requesting data from \code{"lab_major_and_trace_elements_and_oxides"}, \code{"lab_mineralogy_glass_count"}, or \code{"lab_xray_and_thermal"} multiple preparation codes (\code{prep_code}) or size fractions (\code{analyzed_size_frac}) are possible. The default behavior of \code{fetchLDM()} is to attempt to return a topologically valid (minimal overlaps) \emph{SoilProfileCollection}. This is achieved by setting \code{prep_code="S"} ("sieved") and \code{analyzed_size_frac="<2 mm"}. You may specify alternate or additional preparation codes or fractions as needed, but note that this may cause "duplication" of some layers where measurements were made with different preparation or on fractionated samples
+The default behavior joins the \code{lab_area} tables only for the "Soil Survey
+Area" related records. You can specify alternative area records for use in
+\code{x}, \code{what} or \code{WHERE} arguments by setting \code{area_type} to a different value.
+
+When requesting data from \code{"lab_major_and_trace_elements_and_oxides"},
+\code{"lab_mineralogy_glass_count"}, or \code{"lab_xray_and_thermal"} multiple
+preparation codes (\code{prep_code}) or size fractions (\code{analyzed_size_frac}) are
+possible. The default behavior of \code{fetchLDM()} is to attempt to return a
+topologically valid (minimal overlaps) \emph{SoilProfileCollection}. This is
+achieved by setting \code{prep_code="S"} ("sieved") and \code{analyzed_size_frac="<2 mm"}. You may specify alternate or additional preparation codes or fractions
+as needed, but note that this may cause "duplication" of some layers where
+measurements were made with different preparation or on fractionated samples
 }
 \examples{
 \dontshow{if (curl::has_internet() && requireNamespace("httr", quietly = TRUE) && requireNamespace("aqp", quietly = TRUE)) withAutoprint(\{ # examplesIf}
