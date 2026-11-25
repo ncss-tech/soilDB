@@ -116,7 +116,7 @@ the link below for the live data.
 ## References
 
 National Cooperative Soil Survey Soil Characterization Database:
-<https://ncsslabdatamart.sc.egov.usda.gov/>.
+`https://ncsslabdatamart.sc.egov.usda.gov/`
 
 ## See also
 

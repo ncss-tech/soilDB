@@ -22,7 +22,7 @@ get_HWSD_path(what = c("sqlite", "mdb", "raster", "path"), hwsd_version = 2L)
 
 Food and Agriculture Organization of the United Nations (FAO), Soils
 Portal, Harmonized World Soil Database (HWSD) v2.0
-<https://www.fao.org/soils-portal/data-hub/soil-maps-and-databases/harmonized-world-soil-database-v20/en/>
+<https://www.fao.org/global-soil-partnership/soil-data/harmonized-world-soil-database/en>
 
 ## Arguments
 

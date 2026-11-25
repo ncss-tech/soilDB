@@ -25,12 +25,6 @@ been documented in:
   survey for California, Arizona, and Nevada, Comp. & Geo. Sci.,
   35:2119-2128, <https://doi.org/10.1016/j.cageo.2008.10.016>
 
-Note that this vignette as published on CRAN or from a local R package
-installation will not contain output from inline code sections. See the
-Articles tab within the [soilDB package
-website](https://ncss-tech.github.io/soilDB/) for a more comprehensive
-version of this document.
-
 ### Primary Data Sources
 
 - [SSURGO](https://www.nrcs.usda.gov/resources/data-and-reports/soil-survey-geographic-database-ssurgo),
@@ -44,8 +38,6 @@ version of this document.
   (MLRA)](https://www.nrcs.usda.gov/resources/data-and-reports/major-land-resource-area-mlra)
 - Climate ([PRISM](https://prism.oregonstate.edu/)) data and derivatives
 - Digital elevation model (DEM) derivatives
-- [NCSS Lab Data Mart](https://ncsslabdatamart.sc.egov.usda.gov/) (LDM)
-  snapshot
 - NRCS [Rapid Carbon
   Assessment](https://www.nrcs.usda.gov/resources/data-and-reports/rapid-carbon-assessment-raca)
   (RaCA)

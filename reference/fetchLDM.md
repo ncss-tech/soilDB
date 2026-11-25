@@ -110,7 +110,7 @@ site/pedon locations can be found or `NULL` for an empty `lab_layer`
 ## Details
 
 You can download SQLite or GeoPackage snapshots here:
-<https://ncsslabdatamart.sc.egov.usda.gov/database_download.aspx>.
+`https://ncsslabdatamart.sc.egov.usda.gov/database_download.aspx`.
 Specify the `dsn` argument to use a local copy of the lab data rather
 than Soil Data Access web service.
 

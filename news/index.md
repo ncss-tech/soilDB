@@ -1,6 +1,6 @@
 # Changelog
 
-## soilDB 2.9.4 (2026-11-12)
+## soilDB 2.9.4 (2026-11-24)
 
 - SoilWeb Web Coverage Service specifications for
   [`mukey.wcs()`](http://ncss-tech.github.io/soilDB/reference/mukey.wcs.md),
@@ -49,7 +49,7 @@ CRAN release: 2026-07-11
   [`get_EDIT_ecoclass_by_geoUnit()`](http://ncss-tech.github.io/soilDB/reference/get_EDIT_ecoclass_by_geoUnit.md)
   and
   [`make_EDIT_service_URL()`](http://ncss-tech.github.io/soilDB/reference/make_EDIT_service_URL.md))
-  updated to new USDA-managed server: <https://edit.sc.egov.usda.gov/>
+  updated to new USDA-managed server `https://edit.sc.egov.usda.gov/`
 - SoilWeb-based Web Coverage Services
   ([`soilColor.wcs()`](http://ncss-tech.github.io/soilDB/reference/soilColor.wcs.md),
   [`ISSR800.wcs()`](http://ncss-tech.github.io/soilDB/reference/ISSR800.wcs.md),
@@ -75,7 +75,7 @@ CRAN release: 2026-04-03
 - [`ROSETTA()`](http://ncss-tech.github.io/soilDB/reference/ROSETTA.md)
   updates thanks to Todd Skaggs (USDA-ARS):
   - Now using version 2 of the ROSETTA API
-    (<https://www.handbook60.org/rosetta>)
+    (`https://www.handbook60.org/rosetta`)
   - New argument `est.type` for selecting ensemble summary method and
     resulting units of measure
   - $`Ko`$ and $`L`$ parameters now included in model output
@@ -100,7 +100,7 @@ CRAN release: 2026-04-03
   instead for manual or automatic setting of domain values as factors,
   respectively
 - Deprecated NASIS column aliases have been removed, see
-  <https://ncss-tech.github.io/AQP/soilDB/bulletins/2025.01-1-soilDB-NASIS-column-aliases.html>
+  `https://ncss-tech.github.io/AQP/soilDB/bulletins/2025.01-1-soilDB-NASIS-column-aliases.html`
   for details
 - R version \>= 4.1.0 is now required
 

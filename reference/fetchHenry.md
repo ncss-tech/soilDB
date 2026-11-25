@@ -118,19 +118,6 @@ of "functional years" (number of years with non-missing data after
 combining data by Julian day) and "complete years" (number of years of
 data with \>= 365 days of non-missing data).
 
-See:
-
-- [Henry Mount Soil Climate
-  Database](http://soilmap2-1.lawr.ucdavis.edu/henry/)
-
-- [`fetchHenry`
-  Tutorial](http://ncss-tech.github.io/AQP/soilDB/Henry-demo.md)
-
-## Note
-
-This function and the back-end database are very much a work in
-progress.
-
 ## See also
 
 [`fetchSCAN`](http://ncss-tech.github.io/soilDB/reference/fetchSCAN.md)
