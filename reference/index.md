@@ -93,8 +93,7 @@
   : Get Kellogg Soil Survey Laboratory Data from SoilWeb snapshot
 
 - [`fetchLDM()`](http://ncss-tech.github.io/soilDB/reference/fetchLDM.md)
-  : Query data from Kellogg Soil Survey Laboratory Data Mart via Soil
-  Data Access or local SQLite snapshot
+  : Query Kellogg Soil Survey Laboratory Data Mart
 
 - [`fetchNASIS()`](http://ncss-tech.github.io/soilDB/reference/fetchNASIS.md)
   [`get_concentrations_from_NASIS_db()`](http://ncss-tech.github.io/soilDB/reference/fetchNASIS.md)

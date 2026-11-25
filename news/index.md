@@ -1,7 +1,11 @@
 # Changelog
 
-## soilDB 2.9.4 (2026-11-24)
+## soilDB 2.9.4 (2026-11-25)
 
+- [`fetchLDM()`](http://ncss-tech.github.io/soilDB/reference/fetchLDM.md)
+  now includes “HM” (heavy metals), “M” (moist state), and “N” (no
+  coarse fragment reference) preparation codes by default; thanks to
+  Jacob Islieb
 - [`SDA_spatialQuery()`](http://ncss-tech.github.io/soilDB/reference/SDA_spatialQuery.md)
   now supports `addFields` for tabular and feature queries
   ([\#440](https://github.com/ncss-tech/soilDB/issues/440))

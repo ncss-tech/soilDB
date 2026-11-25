@@ -1,8 +1,8 @@
-# Query data from Kellogg Soil Survey Laboratory Data Mart via Soil Data Access or local SQLite snapshot
+# Query Kellogg Soil Survey Laboratory Data Mart
 
 This function provides access to the Kellogg Soil Survey Laboratory Data
-Mart via Soil Data Access or a local SQLite snapshot. See details and
-examples for additional usage instructions.
+Mart (KSSL LDM) via Soil Data Access (SDA) or a local SQLite snapshot.
+See details and examples for additional usage instructions.
 
 ## Usage
 
@@ -18,7 +18,7 @@ fetchLDM(
   ntries = 3,
   layer_type = c("horizon", "layer", "reporting layer"),
   area_type = c("ssa", "country", "state", "county", "mlra", "nforest", "npark"),
-  prep_code = c("S", ""),
+  prep_code = c("S", "", "HM", "M", "N"),
   analyzed_size_frac = c("<2 mm", ""),
   dsn = NULL
 )
@@ -85,8 +85,10 @@ fetchLDM(
 
 - prep_code:
 
-  Default: `"S"` and `""`. May also include one or more of: `"F"`,
-  `"HM"`, `"HM_SK"` `"GP"`, `"M"`, `"N"`, or `"S"`
+  Character vector of laboratory preparation codes accepted when
+  querying tables with preparation-specific results. Default:
+  `c("S", "", "HM", "M", "N")`. See details below or the SDA
+  `lab_preparation` table for more information on available options.
 
 - analyzed_size_frac:
 
@@ -118,6 +120,16 @@ If the `chunk.size` parameter is set too large and the Soil Data Access
 request fails, the algorithm will re-try the query with a smaller
 (halved) `chunk.size` argument. This will be attempted up to 3 times
 before returning `NULL`
+
+`prep_code` `"S"` selects sieved, air-dried preparations; `""` includes
+records with no recorded preparation code; `"HM"` selects preparations
+for heavy-metals analyses, generally intended to limit metal
+contamination; `"M"` selects moist samples kept moist; and `"N"` selects
+air-dried preparations where coarse-fragment content is unknown or
+unrecorded. A code can include multiple preparation or size variants;
+use `analyzed_size_frac` to select size fractions. Other preparation
+codes (for example, `"F"`, `"GP"`, and `"HM_SK"`) are excluded unless
+explicitly requested.
 
 The default behavior joins the `lab_area` tables only for the "Soil
 Survey Area" related records. You can specify alternative area records
