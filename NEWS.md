@@ -1,4 +1,5 @@
 # soilDB 2.9.4 (2026-11-24)
+ - `SDA_spatialQuery()` now supports `addFields` for tabular and feature queries (#440)
  - SoilWeb Web Coverage Service specifications for `mukey.wcs()`, `issr800.wcs()`, and `soilColor.wcs()` now are available as JSON rather than hard-coded
  - `createSSURGO()` can optionally create MUKEY GeoTIFF rasters with `include_raster = TRUE`. `resolution_m` accepts any cell size (10 m by default); `template` can supply a custom `SpatRaster` grid; and `grid_alignment` accepts `"gssurgo"` (default), `"target_aligned"`, or `"nlcd"` when no template is supplied. 
    - `touches` controls whether rasterization includes every cell touched by polygon boundaries or only cells whose centers fall within polygons.

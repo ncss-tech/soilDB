@@ -46,11 +46,13 @@ each feature is uniquely identified by value in \code{idcol}. Default \code{FALS
 \item{idcol}{Unique IDs used for individual features when \code{byFeature = TRUE};
 Default \code{"gid"}}
 
-\item{addFields}{character; Amend result with a query to \code{mapunit} table for
-additional information? Default: \code{NULL}. A character vector can be used to
+\item{addFields}{character; add columns to tabular and spatial results?
+Default: \code{NULL}. A character vector can be used to
 specify columns from the \code{legend}, \code{mapunit}, and \code{muaggatt} tables (for
 \code{mupolygon}, \code{mupoint}, \code{muline} and \code{mukey}), \code{legend} table for
 areasymbol and sapolygon, and \code{featdesc} for \code{featpoint} and \code{featline}.
+Feature queries also accept \code{featpoint.featsym} or \code{featline.featsym},
+respectively, from the feature source table.
 Mapunit and mapunit aggregate attribute tables are ignored for soil survey
 area polygon results.}
 

@@ -305,5 +305,109 @@ test_that("SDA_spatialQuery() validates what and as_Spatial inputs correctly", {
   
 })
   
+addFields_geometry <- function() {
+  skip_if_not_installed("sf")
+  skip_if_not_installed("wk")
+  
+  point <- sf::st_as_sf(
+    data.frame(x = -120.85, y = 37.75),
+    coords = c("x", "y"),
+    crs = 4326
+  )
+  point <- sf::st_transform(point, 32610)
+  sf::st_transform(sf::st_buffer(point, 10000), 4326)
+}
+
+test_that("SDA_spatialQuery addFields generates valid SQL for tabular results", {
+  geom <- addFields_geometry()
+  mukey_sql <- SDA_spatialQuery(
+    geom, what = "mukey", addFields = "legend.areaname",
+    query_string = TRUE
+  )
+  areasymbol_sql <- SDA_spatialQuery(
+    geom, what = "areasymbol", addFields = "legend.areaname",
+    query_string = TRUE
+  )
+  
+  expect_match(mukey_sql, "legend\\.areaname")
+  expect_match(mukey_sql, "INNER JOIN legend ON legend\\.lkey = mapunit\\.lkey")
+  expect_match(areasymbol_sql, "legend\\.areaname")
+  expect_match(areasymbol_sql,
+               "INNER JOIN legend ON legend\\.areasymbol = geom_data\\.areasymbol")
+})
+
+test_that("SDA_spatialQuery addFields generates valid SQL for feature results", {
+  geom <- addFields_geometry()
+  point_sql <- SDA_spatialQuery(
+    geom, what = "featpoint", addFields = "featpoint.featsym",
+    query_string = TRUE
+  )
+  line_sql <- SDA_spatialQuery(
+    geom, what = "featline", addFields = "featline.featsym",
+    query_string = TRUE
+  )
+  featdesc_sql <- SDA_spatialQuery(
+    geom, what = "featpoint", addFields = "featdesc.featdesc",
+    query_string = TRUE
+  )
+  
+  expect_match(point_sql, "featpoint\\.featsym")
+  expect_no_match(point_sql, "INNER JOIN featpoint")
+  expect_match(line_sql, "featline\\.featsym")
+  expect_no_match(line_sql, "INNER JOIN featline")
+  expect_match(featdesc_sql,
+               "INNER JOIN featdesc ON geom_data\\.featkey = featdesc\\.featkey")
+  expect_match(featdesc_sql, "featdesc\\.featdesc")
+})
+
+test_that("SDA_spatialQuery returns requested mukey addFields", {
+  skip_if_offline()
+  skip_on_cran()
+  
+  geom <- addFields_geometry()
+  result <- SDA_spatialQuery(
+    geom, what = "mukey", addFields = "legend.areaname"
+  )
+  expect_true("areaname" %in% names(result))
+})
+
+test_that("SDA_spatialQuery returns requested areasymbol addFields", {
+  skip_if_offline()
+  skip_on_cran()
+  
+  geom <- addFields_geometry()
+  result <- SDA_spatialQuery(
+    geom, what = "areasymbol", addFields = "legend.areaname"
+  )
+  expect_true("areaname" %in% names(result))
+})
+
+test_that("SDA_spatialQuery returns requested featpoint addFields", {
+  skip_if_offline()
+  skip_on_cran()
+  
+  geom <- addFields_geometry()
+  result <- SDA_spatialQuery(
+    geom, what = "featpoint", addFields = "featpoint.featsym"
+  )
+  expect_true("featsym" %in% names(result))
+  plain_result <- SDA_spatialQuery(geom, what = "featpoint")
+  expect_gt(nrow(result), 0)
+  expect_equal(nrow(result), nrow(plain_result))
+})
+
+test_that("SDA_spatialQuery returns requested featline addFields", {
+  skip_if_offline()
+  skip_on_cran()
+  
+  geom <- addFields_geometry()
+  result <- SDA_spatialQuery(
+    geom, what = "featline", addFields = "featline.featsym"
+  )
+  expect_true("featsym" %in% names(result))
+  plain_result <- SDA_spatialQuery(geom, what = "featline")
+  expect_gt(nrow(result), 0)
+  expect_equal(nrow(result), nrow(plain_result))
+})
 
 
