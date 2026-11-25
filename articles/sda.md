@@ -2258,27 +2258,27 @@ agr_weighted <- get_SDA_interpretation(
 head(agr_weighted)
 ```
 
-    ##   areasymbol musym                                          muname  mukey
-    ## 1      MT041  172C         Delpoint complex, 2 to 8 percent slopes 343862
-    ## 2      MT041  221D Hillon-Kevin clay loams, 4 to 15 percent slopes 343876
-    ## 3      MT041   30C              Marvan clay, 2 to 8 percent slopes 343901
-    ## 4      MT041   33A            Phillips loam, 0 to 4 percent slopes 343912
-    ## 5      MT041  441C  Kevin-Hillon clay loams, 2 to 8 percent slopes 343955
-    ## 6      MT041  503B     Telstad-Joplin loams, 0 to 4 percent slopes 343969
+    ##   areasymbol musym                                        muname  mukey
+    ## 1      MT041  205F    Cabba-Macar loams, 15 to 60 percent slopes 343872
+    ## 2      MT041  212F Hillon-Cabbart loams, 15 to 60 percent slopes 343874
+    ## 3      MT041  262A Absher-Gerdrum complex, 0 to 2 percent slopes 343889
+    ## 4      MT041   27B           Attewan loam, 0 to 4 percent slopes 343891
+    ## 5      MT041   32A       Kobase clay loam, 0 to 2 percent slopes 343906
+    ## 6      MT041  442C   Kevin-Elloam complex, 2 to 8 percent slopes 343957
     ##   rating_AGRWinterWheatYieldMT class_AGRWinterWheatYieldMT
-    ## 1                         0.27                        <NA>
-    ## 2                         0.33                        <NA>
-    ## 3                         0.21                        <NA>
-    ## 4                         0.38                        <NA>
-    ## 5                         0.38                        <NA>
-    ## 6                         0.40                        <NA>
-    ##                                                                                                                                                                                                                                                                                                        reason_AGRWinterWheatYieldMT
-    ## 1                                                          -UNKNOWN- (0.209); -UNKNOWN- (0.107); -UNKNOWN- (0.122); -UNKNOWN- (0.107); -UNKNOWN- (0.147); -UNKNOWN- (0.107); -UNKNOWN- (0.229); -UNKNOWN- (0.107); -UNKNOWN- (0.265); -UNKNOWN- (0.107); -UNKNOWN- (0.224); -UNKNOWN- (0.107); -UNKNOWN- (0.215); -UNKNOWN- (0.107)
-    ## 2 -UNKNOWN- (0.203); -UNKNOWN- (0.107); -UNKNOWN- (0.268); -UNKNOWN- (0.107); -UNKNOWN- (0.107); -UNKNOWN- (0.026); -UNKNOWN- (0.158); -UNKNOWN- (0.107); -UNKNOWN- (0.277); -UNKNOWN- (0.107); -UNKNOWN- (0.215); -UNKNOWN- (0.107); -UNKNOWN- (0.107); -UNKNOWN- (0.235); -UNKNOWN- (0.107); -UNKNOWN- (0.261); -UNKNOWN- (0.107)
-    ## 3                                                                                                                                       -UNKNOWN- (0.16); -UNKNOWN- (0.107); -UNKNOWN- (0.262); -UNKNOWN- (0.107); -UNKNOWN- (0.213); -UNKNOWN- (0.107); -UNKNOWN- (0.173); -UNKNOWN- (0.107); -UNKNOWN- (0.193); -UNKNOWN- (0.107)
-    ## 4                                                                                                                   -UNKNOWN- (0.107); -UNKNOWN- (0.107); -UNKNOWN- (0.026); -UNKNOWN- (0.107); -UNKNOWN- (0.071); -UNKNOWN- (0.281); -UNKNOWN- (0.107); -UNKNOWN- (0.271); -UNKNOWN- (0.107); -UNKNOWN- (0.275); -UNKNOWN- (0.107)
-    ## 5                                                                                                                    -UNKNOWN- (0.289); -UNKNOWN- (0.107); -UNKNOWN- (0.234); -UNKNOWN- (0.107); -UNKNOWN- (0.107); -UNKNOWN- (0.274); -UNKNOWN- (0.107); -UNKNOWN- (0.277); -UNKNOWN- (0.107); -UNKNOWN- (0.25); -UNKNOWN- (0.107)
-    ## 6                                                                              -UNKNOWN- (0.245); -UNKNOWN- (0.107); -UNKNOWN- (0.258); -UNKNOWN- (0.107); -UNKNOWN- (0.27); -UNKNOWN- (0.107); -UNKNOWN- (0.119); -UNKNOWN- (0.107); -UNKNOWN- (0.107); -UNKNOWN- (0.281); -UNKNOWN- (0.107); -UNKNOWN- (0.279); -UNKNOWN- (0.107)
+    ## 1                         0.04                        <NA>
+    ## 2                         0.04                        <NA>
+    ## 3                         0.02                        <NA>
+    ## 4                         0.25                        <NA>
+    ## 5                         0.36                        <NA>
+    ## 6                         0.25                        <NA>
+    ##                                                                                                                                                                                                                                                                                     reason_AGRWinterWheatYieldMT
+    ## 1                                                                                                                                      -UNKNOWN- (0.277); -UNKNOWN- (0.122); -UNKNOWN- (0.204); -UNKNOWN- (0.122); -UNKNOWN- (0.258); -UNKNOWN- (0.122); -UNKNOWN- (0.122); -UNKNOWN- (0.122); -UNKNOWN- (0.122)
+    ## 2                    -UNKNOWN- (0.281); -UNKNOWN- (0.107); -UNKNOWN- (0.231); -UNKNOWN- (0.107); -UNKNOWN- (0.107); -UNKNOWN- (0.223); -UNKNOWN- (0.107); -UNKNOWN- (0.196); -UNKNOWN- (0.107); -UNKNOWN- (0.107); -UNKNOWN- (0.103); -UNKNOWN- (0.107); -UNKNOWN- (0.107); -UNKNOWN- (0.107); -UNKNOWN- (0.107)
+    ## 3                                                                                                -UNKNOWN- (0.107); -UNKNOWN- (0.213); -UNKNOWN- (0.107); -UNKNOWN- (0.107); -UNKNOWN- (0.103); -UNKNOWN- (0.107); -UNKNOWN- (0.107); -UNKNOWN- (0.107); -UNKNOWN- (0.068); -UNKNOWN- (0.123); -UNKNOWN- (0.107)
+    ## 4                                                                                                                                      -UNKNOWN- (0.133); -UNKNOWN- (0.107); -UNKNOWN- (0.164); -UNKNOWN- (0.107); -UNKNOWN- (0.107); -UNKNOWN- (0.219); -UNKNOWN- (0.107); -UNKNOWN- (0.219); -UNKNOWN- (0.107)
+    ## 5                                                                                                -UNKNOWN- (0.107); -UNKNOWN- (0.267); -UNKNOWN- (0.107); -UNKNOWN- (0.249); -UNKNOWN- (0.107); -UNKNOWN- (0.206); -UNKNOWN- (0.107); -UNKNOWN- (0.223); -UNKNOWN- (0.107); -UNKNOWN- (0.262); -UNKNOWN- (0.107)
+    ## 6 -UNKNOWN- (0.107); -UNKNOWN- (0.107); -UNKNOWN- (0.102); -UNKNOWN- (0.242); -UNKNOWN- (0.107); -UNKNOWN- (0.268); -UNKNOWN- (0.107); -UNKNOWN- (0.176); -UNKNOWN- (0.107); -UNKNOWN- (0.107); -UNKNOWN- (0.107); -UNKNOWN- (0.005); -UNKNOWN- (0.277); -UNKNOWN- (0.107); -UNKNOWN- (0.281); -UNKNOWN- (0.107)
 
 **Note:** in this example, a regional (Montana-specific) interpretation
 is used, so we used a Montana areasymbol (MT041). Some interpretations

@@ -69,13 +69,15 @@ SDA_spatialQuery(
 
 - addFields:
 
-  character; Amend result with a query to `mapunit` table for additional
-  information? Default: `NULL`. A character vector can be used to
-  specify columns from the `legend`, `mapunit`, and `muaggatt` tables
-  (for `mupolygon`, `mupoint`, `muline` and `mukey`), `legend` table for
-  areasymbol and sapolygon, and `featdesc` for `featpoint` and
-  `featline`. Mapunit and mapunit aggregate attribute tables are ignored
-  for soil survey area polygon results.
+  character; add columns to tabular and spatial results? Default:
+  `NULL`. A character vector can be used to specify columns from the
+  `legend`, `mapunit`, and `muaggatt` tables (for `mupolygon`,
+  `mupoint`, `muline` and `mukey`), `legend` table for areasymbol and
+  sapolygon, and `featdesc` for `featpoint` and `featline`. Feature
+  queries also accept `featpoint.featsym` or `featline.featsym`,
+  respectively, from the feature source table. Mapunit and mapunit
+  aggregate attribute tables are ignored for soil survey area polygon
+  results.
 
 - query_string:
 

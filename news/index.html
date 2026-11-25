@@ -43,7 +43,9 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="2.9.4" id="soildb-294-2026-11-24">soilDB 2.9.4 (2026-11-24)<a class="anchor" aria-label="anchor" href="#soildb-294-2026-11-24"></a></h2>
-<ul><li>SoilWeb Web Coverage Service specifications for <code><a href="../reference/mukey.wcs.html">mukey.wcs()</a></code>, <code>issr800.wcs()</code>, and <code><a href="../reference/soilColor.wcs.html">soilColor.wcs()</a></code> now are available as JSON rather than hard-coded</li>
+<ul><li>
+<code><a href="../reference/SDA_spatialQuery.html">SDA_spatialQuery()</a></code> now supports <code>addFields</code> for tabular and feature queries (<a href="https://github.com/ncss-tech/soilDB/issues/440" class="external-link">#440</a>)</li>
+<li>SoilWeb Web Coverage Service specifications for <code><a href="../reference/mukey.wcs.html">mukey.wcs()</a></code>, <code>issr800.wcs()</code>, and <code><a href="../reference/soilColor.wcs.html">soilColor.wcs()</a></code> now are available as JSON rather than hard-coded</li>
 <li>
 <code><a href="../reference/createSSURGO.html">createSSURGO()</a></code> can optionally create MUKEY GeoTIFF rasters with <code>include_raster = TRUE</code>. <code>resolution_m</code> accepts any cell size (10 m by default); <code>template</code> can supply a custom <code>SpatRaster</code> grid; and <code>grid_alignment</code> accepts <code>"gssurgo"</code> (default), <code>"target_aligned"</code>, or <code>"nlcd"</code> when no template is supplied.
 <ul><li>

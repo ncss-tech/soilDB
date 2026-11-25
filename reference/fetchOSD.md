@@ -239,7 +239,7 @@ D.E. Beaudette, A.G. Brown
 #>  $ climate.annual  :'data.frame':    88 obs. of  12 variables:
 #>  $ climate.monthly :'data.frame':    264 obs. of  14 variables:
 #>  $ NCCPI           :'data.frame':    11 obs. of  16 variables:
-#>  $ soilweb.metadata:'data.frame':    28 obs. of  2 variables:
+#>  $ soilweb.metadata:'data.frame':    29 obs. of  2 variables:
 
 # }
 ```

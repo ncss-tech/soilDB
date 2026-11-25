@@ -2,6 +2,9 @@
 
 ## soilDB 2.9.4 (2026-11-24)
 
+- [`SDA_spatialQuery()`](http://ncss-tech.github.io/soilDB/reference/SDA_spatialQuery.md)
+  now supports `addFields` for tabular and feature queries
+  ([\#440](https://github.com/ncss-tech/soilDB/issues/440))
 - SoilWeb Web Coverage Service specifications for
   [`mukey.wcs()`](http://ncss-tech.github.io/soilDB/reference/mukey.wcs.md),
   `issr800.wcs()`, and

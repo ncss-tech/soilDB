@@ -118,11 +118,13 @@ Default <code>"gid"</code></p></dd>
 
 
 <dt id="arg-addfields">addFields<a class="anchor" aria-label="anchor" href="#arg-addfields"></a></dt>
-<dd><p>character; Amend result with a query to <code>mapunit</code> table for
-additional information? Default: <code>NULL</code>. A character vector can be used to
+<dd><p>character; add columns to tabular and spatial results?
+Default: <code>NULL</code>. A character vector can be used to
 specify columns from the <code>legend</code>, <code>mapunit</code>, and <code>muaggatt</code> tables (for
 <code>mupolygon</code>, <code>mupoint</code>, <code>muline</code> and <code>mukey</code>), <code>legend</code> table for
 areasymbol and sapolygon, and <code>featdesc</code> for <code>featpoint</code> and <code>featline</code>.
+Feature queries also accept <code>featpoint.featsym</code> or <code>featline.featsym</code>,
+respectively, from the feature source table.
 Mapunit and mapunit aggregate attribute tables are ignored for soil survey
 area polygon results.</p></dd>
 
